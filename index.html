@@ -3,1038 +3,570 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeDealize - 정책 관리</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>WeDealize - 스마트 유통 관리 플랫폼</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .header-nav a {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .header-nav a:hover {
+            color: #667eea;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            padding: 100px 40px 60px;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content h1 span {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+
+        .login-card .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .form-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-options a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .form-options a:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+        }
+
+        /* Login Tabs */
+        .login-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #999;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .login-tab:hover {
+            color: #667eea;
+        }
+
+        .login-tab.active {
+            color: #667eea;
+        }
+
+        .login-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .login-tab.retailer.active {
+            color: #48bb78;
+        }
+
+        .login-tab.retailer.active::after {
+            background: #48bb78;
+        }
+
+        .login-form {
+            display: none;
+        }
+
+        .login-form.active {
+            display: block;
+        }
+
+        .btn-retailer {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .btn-retailer:hover {
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .login-divider {
+            text-align: center;
+            margin: 25px 0;
+            color: #999;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .login-divider::before { left: 0; }
+        .login-divider::after { right: 0; }
+
+        .signup-link {
+            text-align: center;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 40px;
+            background: white;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            padding: 30px;
+            border-radius: 16px;
+            background: #f8f9fc;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a2e;
+            color: #999;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-nav {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="app">
-        <!-- 사이드바 -->
-        <aside class="sidebar">
-            <div class="logo">
-                <h1>WeDealize</h1>
-            </div>
-            <nav class="nav-menu">
-                <div class="nav-item active">
-                    <span class="nav-icon">📋</span>
-                    <span>정책 관리</span>
-                </div>
-                <div class="nav-item">
-                    <span class="nav-icon">👥</span>
-                    <span>리셀러 관리</span>
-                </div>
-                <div class="nav-item">
-                    <span class="nav-icon">📦</span>
-                    <span>상품 관리</span>
-                </div>
-                <div class="nav-item">
-                    <span class="nav-icon">📊</span>
-                    <span>주문 관리</span>
-                </div>
-            </nav>
-        </aside>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">WeDealize</div>
+        <nav class="header-nav">
+            <a href="#features">기능 소개</a>
+            <a href="#pricing">요금제</a>
+            <a href="#contact">문의하기</a>
+            <button class="btn btn-outline" onclick="document.querySelector('.login-card').scrollIntoView({behavior: 'smooth'})">로그인</button>
+        </nav>
+    </header>
 
-        <!-- 메인 콘텐츠 -->
-        <main class="main-content">
-            <header class="page-header">
-                <h2>정책 관리</h2>
-                <p class="page-description">가격정책 및 배송정책을 관리합니다.</p>
-            </header>
-
-            <!-- 탭 네비게이션 -->
-            <div class="tab-container">
-                <div class="tab-nav">
-                    <button class="tab-btn active" data-tab="discount">할인율 설정</button>
-                    <button class="tab-btn" data-tab="shipping">배송 설정</button>
-                </div>
-
-                <!-- 서브탭 (할인율 설정) -->
-                <div class="subtab-nav" id="discount-subtabs">
-                    <button class="subtab-btn active" data-subtab="basic">기본</button>
-                    <button class="subtab-btn" data-subtab="custom">커스터마이징</button>
-                </div>
-
-                <!-- 서브탭 (배송 설정) -->
-                <div class="subtab-nav hidden" id="shipping-subtabs">
-                    <button class="subtab-btn active" data-subtab="fulfillment">풀필먼트 설정</button>
-                    <button class="subtab-btn" data-subtab="shipping-policy">배송정책</button>
-                    <button class="subtab-btn" data-subtab="shipping-fee">배송비 설정</button>
-                </div>
-
-                <!-- 탭 콘텐츠 -->
-                <div class="tab-content">
-                    <!-- 할인율 설정 > 기본 -->
-                    <div class="tab-panel active" id="panel-basic">
-                        <div class="panel-section">
-                            <div class="section-header">
-                                <h3>기본 할인율 설정</h3>
-                                <p>거래유형 × 카테고리 단위로 기본 할인율을 설정합니다.</p>
-                            </div>
-
-                            <div class="table-actions">
-                                <button class="btn btn-primary" onclick="openAddDiscountModal()">
-                                    + 카테고리별 할인율 추가
-                                </button>
-                            </div>
-
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>거래유형</th>
-                                        <th>카테고리</th>
-                                        <th>기본 할인율(%)</th>
-                                        <th>적용 대상</th>
-                                        <th>작업</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="discount-table-body">
-                                    <tr>
-                                        <td><span class="badge badge-blue">위탁판매</span></td>
-                                        <td><span class="text-muted">(전체 기본값)</span></td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">35%</span>
-                                                <input type="number" class="edit-input hidden" value="35" min="0" max="100">
-                                            </div>
-                                        </td>
-                                        <td><span class="count-badge">124건</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editRow(this)">수정</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-blue">위탁판매</span></td>
-                                        <td>식품</td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">32%</span>
-                                                <input type="number" class="edit-input hidden" value="32" min="0" max="100">
-                                            </div>
-                                        </td>
-                                        <td><span class="count-badge">18건</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editRow(this)">수정</button>
-                                            <button class="btn btn-sm btn-danger" onclick="deleteRow(this)">삭제</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-green">직매입</span></td>
-                                        <td><span class="text-muted">(전체 기본값)</span></td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">40%</span>
-                                                <input type="number" class="edit-input hidden" value="40" min="0" max="100">
-                                            </div>
-                                        </td>
-                                        <td><span class="count-badge">89건</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editRow(this)">수정</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-orange">샘플</span></td>
-                                        <td><span class="text-muted">(전체 기본값)</span></td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">30%</span>
-                                                <input type="number" class="edit-input hidden" value="30" min="0" max="100">
-                                            </div>
-                                        </td>
-                                        <td><span class="count-badge">45건</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editRow(this)">수정</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <div class="info-box">
-                                <span class="info-icon">ℹ️</span>
-                                <p>적용 우선순위: 리셀러×품목 개별 정책 → 거래유형×카테고리 설정 → 거래유형 기본값</p>
-                            </div>
-                        </div>
-
-                        <div class="panel-section">
-                            <div class="section-header">
-                                <h3>품목별 가산 금액 설정</h3>
-                                <p>출고가 = 상품가 + 가산 금액. 시스템 기본값: 3,000원</p>
-                            </div>
-
-                            <div class="search-filter">
-                                <input type="text" class="search-input" placeholder="품목명 검색..." id="surcharge-search">
-                                <select class="filter-select" id="category-filter">
-                                    <option value="">전체 카테고리</option>
-                                    <option value="food">식품</option>
-                                    <option value="cosmetic">화장품</option>
-                                    <option value="fashion">패션</option>
-                                    <option value="electronics">전자제품</option>
-                                </select>
-                            </div>
-
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>품목코드</th>
-                                        <th>품목명</th>
-                                        <th>카테고리</th>
-                                        <th>상품가</th>
-                                        <th>가산 금액</th>
-                                        <th>출고가</th>
-                                        <th>작업</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="surcharge-table-body">
-                                    <tr>
-                                        <td>ITM-001</td>
-                                        <td>프리미엄 스킨케어 세트</td>
-                                        <td>화장품</td>
-                                        <td class="text-right">50,000원</td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value surcharge-value">3,000원</span>
-                                                <input type="number" class="edit-input hidden surcharge-input" value="3000" min="0" step="100">
-                                            </div>
-                                        </td>
-                                        <td class="text-right calculated-price">53,000원</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editSurcharge(this)">수정</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>ITM-002</td>
-                                        <td>오가닉 그래놀라</td>
-                                        <td>식품</td>
-                                        <td class="text-right">15,000원</td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value surcharge-value">2,500원</span>
-                                                <input type="number" class="edit-input hidden surcharge-input" value="2500" min="0" step="100">
-                                            </div>
-                                        </td>
-                                        <td class="text-right calculated-price">17,500원</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editSurcharge(this)">수정</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>ITM-003</td>
-                                        <td>캐시미어 니트</td>
-                                        <td>패션</td>
-                                        <td class="text-right">120,000원</td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value surcharge-value">5,000원</span>
-                                                <input type="number" class="edit-input hidden surcharge-input" value="5000" min="0" step="100">
-                                            </div>
-                                        </td>
-                                        <td class="text-right calculated-price">125,000원</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editSurcharge(this)">수정</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <div class="pagination">
-                                <button class="btn btn-sm btn-outline" disabled>&lt; 이전</button>
-                                <span class="page-info">1 / 10 페이지</span>
-                                <button class="btn btn-sm btn-outline">다음 &gt;</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 할인율 설정 > 커스터마이징 -->
-                    <div class="tab-panel" id="panel-custom">
-                        <div class="customization-layout">
-                            <!-- 좌측: 정책 목록 및 설정 -->
-                            <div class="policy-list-section">
-                                <div class="section-header">
-                                    <h3>개별 가격정책 관리</h3>
-                                    <p>리셀러 × 품목 × 거래유형 조합에 대한 개별 가격정책을 관리합니다.</p>
-                                </div>
-
-                                <div class="table-actions">
-                                    <button class="btn btn-primary" onclick="openNewPolicyModal()">
-                                        + 신규 정책 등록
-                                    </button>
-                                    <button class="btn btn-outline" onclick="openHistoryModal()">
-                                        📜 정책 이력 조회
-                                    </button>
-                                </div>
-
-                                <div class="search-filter">
-                                    <input type="text" class="search-input" placeholder="리셀러명 또는 품목명 검색...">
-                                    <select class="filter-select">
-                                        <option value="">전체 거래유형</option>
-                                        <option value="consignment">위탁판매</option>
-                                        <option value="direct">직매입</option>
-                                        <option value="sample">샘플</option>
-                                    </select>
-                                    <select class="filter-select">
-                                        <option value="">전체 상태</option>
-                                        <option value="active">활성</option>
-                                        <option value="inactive">비활성</option>
-                                    </select>
-                                </div>
-
-                                <table class="data-table">
-                                    <thead>
-                                        <tr>
-                                            <th>리셀러</th>
-                                            <th>품목</th>
-                                            <th>거래유형</th>
-                                            <th>할인율/할인액</th>
-                                            <th>최종가</th>
-                                            <th>상태</th>
-                                            <th>작업</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="clickable-row" onclick="selectPolicy(this, 'policy1')">
-                                            <td>ABC마트</td>
-                                            <td>프리미엄 스킨케어 세트</td>
-                                            <td><span class="badge badge-blue">위탁판매</span></td>
-                                            <td>38%</td>
-                                            <td class="text-right">32,860원</td>
-                                            <td><span class="status-badge status-active">활성</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); editPolicy('policy1')">수정</button>
-                                            </td>
-                                        </tr>
-                                        <tr class="clickable-row" onclick="selectPolicy(this, 'policy2')">
-                                            <td>XYZ스토어</td>
-                                            <td>오가닉 그래놀라</td>
-                                            <td><span class="badge badge-green">직매입</span></td>
-                                            <td>2,000원</td>
-                                            <td class="text-right">15,500원</td>
-                                            <td><span class="status-badge status-active">활성</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); editPolicy('policy2')">수정</button>
-                                            </td>
-                                        </tr>
-                                        <tr class="clickable-row" onclick="selectPolicy(this, 'policy3')">
-                                            <td>패션플러스</td>
-                                            <td>캐시미어 니트</td>
-                                            <td><span class="badge badge-blue">위탁판매</span></td>
-                                            <td>42%</td>
-                                            <td class="text-right">72,500원</td>
-                                            <td><span class="status-badge status-active">활성</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); editPolicy('policy3')">수정</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <div class="pagination">
-                                    <button class="btn btn-sm btn-outline" disabled>&lt; 이전</button>
-                                    <span class="page-info">1 / 5 페이지</span>
-                                    <button class="btn btn-sm btn-outline">다음 &gt;</button>
-                                </div>
-                            </div>
-
-                            <!-- 우측: 가격 시뮬레이션 -->
-                            <div class="price-simulator">
-                                <div class="simulator-header">
-                                    <h4>가격 시뮬레이션</h4>
-                                    <p class="text-muted">정책 선택 또는 신규 등록 시 가격을 미리 확인합니다.</p>
-                                </div>
-
-                                <div class="simulator-content" id="simulator-content">
-                                    <div class="simulator-placeholder">
-                                        <span class="placeholder-icon">📊</span>
-                                        <p>좌측에서 정책을 선택하거나<br>신규 정책을 등록하세요.</p>
-                                    </div>
-                                </div>
-
-                                <!-- 시뮬레이션 결과 (숨김 상태) -->
-                                <div class="simulator-result hidden" id="simulator-result">
-                                    <div class="result-item">
-                                        <div class="result-row">
-                                            <span class="label">리셀러</span>
-                                            <span class="value" id="sim-reseller">ABC마트</span>
-                                        </div>
-                                        <div class="result-row">
-                                            <span class="label">품목</span>
-                                            <span class="value" id="sim-item">프리미엄 스킨케어 세트</span>
-                                        </div>
-                                        <div class="result-row">
-                                            <span class="label">거래유형</span>
-                                            <span class="value" id="sim-type">위탁판매</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="price-breakdown">
-                                        <div class="breakdown-row">
-                                            <span class="label">상품가 (원본)</span>
-                                            <span class="value" id="sim-base-price">50,000원</span>
-                                        </div>
-                                        <div class="breakdown-row">
-                                            <span class="label">가산 금액</span>
-                                            <span class="value readonly" id="sim-surcharge">+ 3,000원</span>
-                                            <span class="readonly-badge">읽기전용</span>
-                                        </div>
-                                        <div class="breakdown-row highlight">
-                                            <span class="label">출고가</span>
-                                            <span class="value" id="sim-release-price">53,000원</span>
-                                        </div>
-                                        <div class="breakdown-row discount">
-                                            <span class="label">적용 할인</span>
-                                            <span class="value negative" id="sim-discount">-38% → 20,140원 차감</span>
-                                        </div>
-                                        <div class="breakdown-row final">
-                                            <span class="label">최종 리셀러 구매가</span>
-                                            <span class="value final-price" id="sim-final-price">32,860원</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="shipping-note">
-                                        <span class="note-icon">📦</span>
-                                        <p>배송비는 별도 배송정책에서 관리됩니다.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 배송 설정 > 풀필먼트 설정 -->
-                    <div class="tab-panel" id="panel-fulfillment">
-                        <div class="panel-section">
-                            <div class="section-header">
-                                <h3>풀필먼트 사용 설정</h3>
-                                <p>풀필먼트 서비스 사용 여부와 연동할 풀필먼트를 선택합니다.</p>
-                            </div>
-
-                            <div class="fulfillment-toggle-card">
-                                <div class="toggle-card-header">
-                                    <div class="toggle-info">
-                                        <span class="toggle-icon">📦</span>
-                                        <div>
-                                            <h4>풀필먼트 서비스 사용</h4>
-                                            <p>외부 풀필먼트 센터와 연동하여 배송을 위탁합니다.</p>
-                                        </div>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="fulfillment-toggle" onchange="toggleFulfillment()">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- 풀필먼트 선택 (토글 ON 시 표시) -->
-                            <div class="fulfillment-options hidden" id="fulfillment-options">
-                                <div class="section-header">
-                                    <h3>풀필먼트 센터 선택</h3>
-                                    <p>연동할 풀필먼트 센터를 선택하세요.</p>
-                                </div>
-
-                                <div class="fulfillment-cards">
-                                    <div class="fulfillment-card selected" onclick="selectFulfillment(this, 'shipda')">
-                                        <div class="fulfillment-card-header">
-                                            <span class="fulfillment-logo">🚢</span>
-                                            <span class="fulfillment-badge recommended">추천</span>
-                                        </div>
-                                        <h4>쉽다 (ShipDa)</h4>
-                                        <p>디지털 포워딩 & 풀필먼트 서비스</p>
-                                        <ul class="fulfillment-features">
-                                            <li>✓ 실시간 재고 연동</li>
-                                            <li>✓ 자동 출고 처리</li>
-                                            <li>✓ 배송 추적 API</li>
-                                        </ul>
-                                        <div class="fulfillment-status connected">
-                                            <span class="status-dot"></span>
-                                            연동됨
-                                        </div>
-                                    </div>
-
-                                    <div class="fulfillment-card" onclick="selectFulfillment(this, 'coupang')">
-                                        <div class="fulfillment-card-header">
-                                            <span class="fulfillment-logo">📦</span>
-                                        </div>
-                                        <h4>쿠팡 풀필먼트</h4>
-                                        <p>로켓배송 풀필먼트 센터</p>
-                                        <ul class="fulfillment-features">
-                                            <li>✓ 로켓배송 지원</li>
-                                            <li>✓ 대용량 처리</li>
-                                            <li>✓ 전국 당일배송</li>
-                                        </ul>
-                                        <div class="fulfillment-status pending">
-                                            <span class="status-dot"></span>
-                                            연동 대기
-                                        </div>
-                                    </div>
-
-                                    <div class="fulfillment-card disabled" onclick="selectFulfillment(this, 'custom')">
-                                        <div class="fulfillment-card-header">
-                                            <span class="fulfillment-logo">🏭</span>
-                                            <span class="fulfillment-badge coming-soon">준비중</span>
-                                        </div>
-                                        <h4>기타 풀필먼트</h4>
-                                        <p>타 풀필먼트 센터 연동</p>
-                                        <ul class="fulfillment-features">
-                                            <li>○ API 연동 지원</li>
-                                            <li>○ 커스텀 설정</li>
-                                            <li>○ 다중 센터 관리</li>
-                                        </ul>
-                                        <div class="fulfillment-status not-available">
-                                            <span class="status-dot"></span>
-                                            준비중
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="info-box">
-                                    <span class="info-icon">ℹ️</span>
-                                    <p>풀필먼트 사용 시 배송비는 선택한 풀필먼트의 정책에 따라 자동 계산됩니다.</p>
-                                </div>
-                            </div>
-
-                            <!-- 풀필먼트 미사용 안내 (토글 OFF 시 표시) -->
-                            <div class="no-fulfillment-notice" id="no-fulfillment-notice">
-                                <div class="notice-icon">🏠</div>
-                                <h4>자체 배송 모드</h4>
-                                <p>풀필먼트를 사용하지 않고 직접 배송을 관리합니다.<br>
-                                   배송정책 및 배송비는 '배송정책' 탭과 '배송비 설정' 탭에서 직접 설정하세요.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 배송 설정 > 배송정책 -->
-                    <div class="tab-panel" id="panel-shipping-policy">
-                        <div class="panel-section">
-                            <div class="section-header">
-                                <h3>배송정책 설정</h3>
-                                <p>배송비 계산 방식과 무료배송 조건을 설정합니다.</p>
-                            </div>
-
-                            <div class="policy-cards">
-                                <div class="policy-card selected" onclick="selectShippingPolicy(this, 'fixed')">
-                                    <div class="policy-card-icon">💰</div>
-                                    <h4>고정 배송비</h4>
-                                    <p>주문당 동일한 배송비 부과</p>
-                                    <div class="policy-example">예: 3,000원 / 건</div>
-                                </div>
-
-                                <div class="policy-card" onclick="selectShippingPolicy(this, 'quantity')">
-                                    <div class="policy-card-icon">📊</div>
-                                    <h4>수량별 배송비</h4>
-                                    <p>주문 수량에 따라 배송비 차등</p>
-                                    <div class="policy-example">예: 1~5개 3,000원, 6개+ 무료</div>
-                                </div>
-
-                                <div class="policy-card" onclick="selectShippingPolicy(this, 'weight')">
-                                    <div class="policy-card-icon">⚖️</div>
-                                    <h4>중량별 배송비</h4>
-                                    <p>총 중량에 따라 배송비 계산</p>
-                                    <div class="policy-example">예: 1kg당 2,500원</div>
-                                </div>
-
-                                <div class="policy-card" onclick="selectShippingPolicy(this, 'actual')">
-                                    <div class="policy-card-icon">📋</div>
-                                    <h4>실비 청구</h4>
-                                    <p>실제 발생 배송비를 청구</p>
-                                    <div class="policy-example">예: 택배사 청구금액 그대로</div>
-                                </div>
-                            </div>
-
-                            <div class="form-divider"></div>
-
-                            <!-- 무료배송 조건 -->
-                            <div class="section-header">
-                                <h3>무료배송 조건</h3>
-                                <p>무료배송 적용 조건을 설정합니다.</p>
-                            </div>
-
-                            <div class="free-shipping-settings">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label>무료배송 기준</label>
-                                        <select id="free-shipping-type" onchange="toggleFreeShippingOptions()">
-                                            <option value="none">무료배송 미적용</option>
-                                            <option value="amount">금액 기준</option>
-                                            <option value="quantity">수량 기준</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-row hidden" id="free-shipping-amount-row">
-                                    <div class="form-group">
-                                        <label>무료배송 기준 금액</label>
-                                        <div class="input-with-suffix">
-                                            <input type="number" id="free-shipping-amount" value="50000" min="0" step="1000">
-                                            <span class="suffix">원 이상</span>
-                                        </div>
-                                        <span class="help-text">이 금액 이상 주문 시 무료배송 적용</span>
-                                    </div>
-                                </div>
-
-                                <div class="form-row hidden" id="free-shipping-quantity-row">
-                                    <div class="form-group">
-                                        <label>무료배송 기준 수량</label>
-                                        <div class="input-with-suffix">
-                                            <input type="number" id="free-shipping-quantity" value="5" min="1">
-                                            <span class="suffix">개 이상</span>
-                                        </div>
-                                        <span class="help-text">이 수량 이상 주문 시 무료배송 적용</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="panel-actions">
-                                <button class="btn btn-primary" onclick="saveShippingPolicy()">정책 저장</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 배송 설정 > 배송비 설정 -->
-                    <div class="tab-panel" id="panel-shipping-fee">
-                        <div class="panel-section">
-                            <div class="section-header">
-                                <h3>배송비 상세 설정</h3>
-                                <p>배송 지역 및 조건별 배송비를 설정합니다.</p>
-                            </div>
-
-                            <div class="table-actions">
-                                <button class="btn btn-primary" onclick="openAddShippingFeeModal()">
-                                    + 배송비 구간 추가
-                                </button>
-                            </div>
-
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>구간명</th>
-                                        <th>조건</th>
-                                        <th>기본 배송비</th>
-                                        <th>제주/도서산간</th>
-                                        <th>상태</th>
-                                        <th>작업</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="shipping-fee-table-body">
-                                    <tr>
-                                        <td>기본 배송</td>
-                                        <td><span class="text-muted">(전체 기본값)</span></td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">3,000원</span>
-                                                <input type="number" class="edit-input hidden" value="3000" min="0" step="100">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">+3,000원</span>
-                                                <input type="number" class="edit-input hidden" value="3000" min="0" step="100">
-                                            </div>
-                                        </td>
-                                        <td><span class="status-badge status-active">활성</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editShippingFeeRow(this)">수정</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>대량 주문</td>
-                                        <td>5개 이상</td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">무료</span>
-                                                <input type="number" class="edit-input hidden" value="0" min="0" step="100">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">+2,000원</span>
-                                                <input type="number" class="edit-input hidden" value="2000" min="0" step="100">
-                                            </div>
-                                        </td>
-                                        <td><span class="status-badge status-active">활성</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editShippingFeeRow(this)">수정</button>
-                                            <button class="btn btn-sm btn-danger" onclick="deleteShippingFeeRow(this)">삭제</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>프리미엄 배송</td>
-                                        <td>100,000원 이상</td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">무료</span>
-                                                <input type="number" class="edit-input hidden" value="0" min="0" step="100">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-edit">
-                                                <span class="value">무료</span>
-                                                <input type="number" class="edit-input hidden" value="0" min="0" step="100">
-                                            </div>
-                                        </td>
-                                        <td><span class="status-badge status-active">활성</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editShippingFeeRow(this)">수정</button>
-                                            <button class="btn btn-sm btn-danger" onclick="deleteShippingFeeRow(this)">삭제</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <div class="info-box">
-                                <span class="info-icon">ℹ️</span>
-                                <p>적용 우선순위: 구체적인 조건 → 기본 배송비. 제주/도서산간 지역은 기본 배송비에 추가 금액이 부과됩니다.</p>
-                            </div>
-                        </div>
-
-                        <!-- 배송비 시뮬레이터 -->
-                        <div class="panel-section">
-                            <div class="section-header">
-                                <h3>배송비 계산 시뮬레이터</h3>
-                                <p>설정된 정책에 따른 배송비를 미리 확인합니다.</p>
-                            </div>
-
-                            <div class="shipping-simulator">
-                                <div class="simulator-inputs">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>주문 금액</label>
-                                            <div class="input-with-suffix">
-                                                <input type="number" id="sim-order-amount" value="30000" min="0" step="1000" onchange="calculateShippingFee()">
-                                                <span class="suffix">원</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>주문 수량</label>
-                                            <div class="input-with-suffix">
-                                                <input type="number" id="sim-order-quantity" value="2" min="1" onchange="calculateShippingFee()">
-                                                <span class="suffix">개</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>배송 지역</label>
-                                            <select id="sim-region" onchange="calculateShippingFee()">
-                                                <option value="normal">일반 지역</option>
-                                                <option value="jeju">제주도</option>
-                                                <option value="island">도서산간</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="simulator-result-box">
-                                    <div class="result-label">예상 배송비</div>
-                                    <div class="result-value" id="sim-shipping-result">3,000원</div>
-                                    <div class="result-detail" id="sim-shipping-detail">기본 배송비 적용</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>유통 관리의 새로운 기준,<br><span>WeDealize</span></h1>
+                <p>복잡한 유통 구조를 단순하게. 정책 설정부터 리셀러 관리, 주문 처리까지 하나의 플랫폼에서 관리하세요.</p>
+                <div class="hero-buttons">
+                    <a href="#features" class="btn btn-primary">자세히 알아보기</a>
+                    <a href="#contact" class="btn btn-outline">도입 문의</a>
                 </div>
             </div>
-        </main>
-    </div>
 
-    <!-- 모달: 신규 정책 등록 -->
-    <div class="modal-overlay hidden" id="new-policy-modal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>신규 가격정책 등록</h3>
-                <button class="modal-close" onclick="closeModal('new-policy-modal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>리셀러 <span class="required">*</span></label>
-                        <select id="policy-reseller" onchange="updateSimulator()">
-                            <option value="">선택하세요</option>
-                            <option value="abc">ABC마트</option>
-                            <option value="xyz">XYZ스토어</option>
-                            <option value="fashion">패션플러스</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>품목 <span class="required">*</span></label>
-                        <select id="policy-item" onchange="updateSimulator()">
-                            <option value="">선택하세요</option>
-                            <option value="itm001" data-price="50000" data-surcharge="3000">프리미엄 스킨케어 세트</option>
-                            <option value="itm002" data-price="15000" data-surcharge="2500">오가닉 그래놀라</option>
-                            <option value="itm003" data-price="120000" data-surcharge="5000">캐시미어 니트</option>
-                        </select>
-                    </div>
+            <!-- Login Card -->
+            <div class="login-card">
+                <div class="login-tabs">
+                    <button class="login-tab active" onclick="switchLoginTab('distributor')">총판 (Distributor)</button>
+                    <button class="login-tab retailer" onclick="switchLoginTab('retailer')">리테일러 (Retailer)</button>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>거래유형 <span class="required">*</span></label>
-                        <select id="policy-type" onchange="updateSimulator()">
-                            <option value="">선택하세요</option>
-                            <option value="consignment" data-default-discount="35">위탁판매</option>
-                            <option value="direct" data-default-discount="40">직매입</option>
-                            <option value="sample" data-default-discount="30">샘플</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-divider"></div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>할인 방식 <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="discount-method" value="rate" checked onchange="toggleDiscountInput()">
-                                <span>정률 할인 (%)</span>
+                <!-- 총판 로그인 폼 -->
+                <div class="login-form active" id="distributor-form">
+                    <form onsubmit="handleLogin(event, 'distributor')">
+                        <div class="form-group">
+                            <label for="dist-email">이메일</label>
+                            <input type="email" id="dist-email" placeholder="example@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dist-password">비밀번호</label>
+                            <input type="password" id="dist-password" placeholder="비밀번호를 입력하세요" required>
+                        </div>
+                        <div class="form-options">
+                            <label>
+                                <input type="checkbox" id="dist-remember"> 로그인 상태 유지
                             </label>
-                            <label class="radio-label">
-                                <input type="radio" name="discount-method" value="amount" onchange="toggleDiscountInput()">
-                                <span>정액 할인 (원)</span>
+                            <a href="#">비밀번호 찾기</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary login-btn">로그인</button>
+                    </form>
+                    <div class="login-divider">또는</div>
+                    <p class="signup-link">
+                        아직 계정이 없으신가요? <a href="#">총판 등록 신청</a>
+                    </p>
+                </div>
+
+                <!-- 리테일러 로그인 폼 -->
+                <div class="login-form" id="retailer-form">
+                    <form onsubmit="handleLogin(event, 'retailer')">
+                        <div class="form-group">
+                            <label for="ret-email">이메일</label>
+                            <input type="email" id="ret-email" placeholder="example@retailshop.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ret-password">비밀번호</label>
+                            <input type="password" id="ret-password" placeholder="비밀번호를 입력하세요" required>
+                        </div>
+                        <div class="form-options">
+                            <label>
+                                <input type="checkbox" id="ret-remember"> 로그인 상태 유지
                             </label>
+                            <a href="#">비밀번호 찾기</a>
                         </div>
-                    </div>
+                        <button type="submit" class="btn btn-primary btn-retailer login-btn">로그인</button>
+                    </form>
+                    <div class="login-divider">또는</div>
+                    <p class="signup-link">
+                        아직 계정이 없으신가요? <a href="#">리테일러 등록 신청</a>
+                    </p>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group" id="rate-input-group">
-                        <label>할인율 (%)</label>
-                        <div class="input-with-suffix">
-                            <input type="number" id="discount-rate" value="35" min="0" max="100" onchange="updateSimulator()">
-                            <span class="suffix">%</span>
-                        </div>
-                        <span class="help-text" id="default-rate-hint">기본 할인율: 35%</span>
-                    </div>
-                    <div class="form-group hidden" id="amount-input-group">
-                        <label>할인 금액 (원)</label>
-                        <div class="input-with-suffix">
-                            <input type="number" id="discount-amount" value="0" min="0" step="100" onchange="updateSimulator()">
-                            <span class="suffix">원</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 모달 내 가격 미리보기 -->
-                <div class="modal-price-preview" id="modal-price-preview">
-                    <h4>가격 미리보기</h4>
-                    <div class="preview-content">
-                        <div class="preview-row">
-                            <span>상품가</span>
-                            <span id="preview-base">-</span>
-                        </div>
-                        <div class="preview-row">
-                            <span>가산 금액 <span class="readonly-tag">읽기전용</span></span>
-                            <span id="preview-surcharge">-</span>
-                        </div>
-                        <div class="preview-row highlight">
-                            <span>출고가</span>
-                            <span id="preview-release">-</span>
-                        </div>
-                        <div class="preview-row discount">
-                            <span>할인 적용</span>
-                            <span id="preview-discount">-</span>
-                        </div>
-                        <div class="preview-row final">
-                            <span>최종 리셀러 구매가</span>
-                            <span id="preview-final">-</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeModal('new-policy-modal')">취소</button>
-                <button class="btn btn-primary" onclick="savePolicy()">등록</button>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- 모달: 중복 정책 경고 -->
-    <div class="modal-overlay hidden" id="duplicate-modal">
-        <div class="modal modal-sm">
-            <div class="modal-header warning">
-                <h3>⚠️ 기존 정책 존재</h3>
-                <button class="modal-close" onclick="closeModal('duplicate-modal')">&times;</button>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2>WeDealize가 제공하는 기능</h2>
+                <p>효율적인 유통 관리를 위한 모든 것</p>
             </div>
-            <div class="modal-body">
-                <p>기존 정책이 존재합니다.</p>
-                <div class="existing-policy-info">
-                    <p><strong>리셀러:</strong> ABC마트</p>
-                    <p><strong>품목:</strong> 프리미엄 스킨케어 세트</p>
-                    <p><strong>거래유형:</strong> 위탁판매</p>
-                    <p><strong>현재 할인율:</strong> 35%</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>정책 관리</h3>
+                    <p>거래 유형별, 카테고리별 할인율과 배송 정책을 유연하게 설정하세요.</p>
                 </div>
-                <p class="warning-text">기존 정책을 비활성화하고 신규 정책을 등록하시겠습니까?</p>
-                <p class="text-muted text-sm">비활성화된 정책은 이력에서 확인 가능합니다.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeModal('duplicate-modal')">취소</button>
-                <button class="btn btn-warning" onclick="confirmReplacePolicy()">비활성화 후 등록</button>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>리셀러 관리</h3>
+                    <p>리셀러 등록, 등급 관리, 개별 정책 적용까지 한 곳에서 관리합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>상품 관리</h3>
+                    <p>상품 등록, 재고 관리, 카테고리 분류를 효율적으로 처리합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>주문 관리</h3>
+                    <p>주문 접수부터 배송까지 전 과정을 실시간으로 추적합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>풀필먼트 연동</h3>
+                    <p>물류 센터 연동으로 자동화된 출고 프로세스를 구축합니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>통계 & 리포트</h3>
+                    <p>매출, 주문, 리셀러 실적을 한눈에 파악하는 대시보드를 제공합니다.</p>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- 모달: 정책 이력 -->
-    <div class="modal-overlay hidden" id="history-modal">
-        <div class="modal modal-lg">
-            <div class="modal-header">
-                <h3>📜 정책 변경 이력</h3>
-                <button class="modal-close" onclick="closeModal('history-modal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="search-filter">
-                    <input type="text" class="search-input" placeholder="리셀러명 또는 품목명 검색...">
-                </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>정책명</th>
-                            <th>리셀러</th>
-                            <th>품목</th>
-                            <th>거래유형</th>
-                            <th>할인 조건</th>
-                            <th>적용 기간</th>
-                            <th>비활성화 일시</th>
-                            <th>비활성화 사유</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>POL-2024-001</td>
-                            <td>ABC마트</td>
-                            <td>프리미엄 스킨케어 세트</td>
-                            <td><span class="badge badge-blue">위탁판매</span></td>
-                            <td>32%</td>
-                            <td>2024.01.01 ~ 2024.06.30</td>
-                            <td>2024.07.01 10:30</td>
-                            <td>신규 정책 등록으로 인한 대체</td>
-                        </tr>
-                        <tr>
-                            <td>POL-2024-002</td>
-                            <td>XYZ스토어</td>
-                            <td>오가닉 그래놀라</td>
-                            <td><span class="badge badge-green">직매입</span></td>
-                            <td>1,500원</td>
-                            <td>2024.02.15 ~ 2024.08.31</td>
-                            <td>2024.09.01 14:20</td>
-                            <td>신규 정책 등록으로 인한 대체</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeModal('history-modal')">닫기</button>
-            </div>
-        </div>
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logo">WeDealize</div>
+        <p>&copy; 2025 WeDealize. All rights reserved.</p>
+    </footer>
 
-    <!-- 모달: 카테고리별 할인율 추가 -->
-    <div class="modal-overlay hidden" id="add-discount-modal">
-        <div class="modal modal-sm">
-            <div class="modal-header">
-                <h3>카테고리별 할인율 추가</h3>
-                <button class="modal-close" onclick="closeModal('add-discount-modal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>거래유형 <span class="required">*</span></label>
-                    <select id="add-trans-type">
-                        <option value="">선택하세요</option>
-                        <option value="consignment">위탁판매</option>
-                        <option value="direct">직매입</option>
-                        <option value="sample">샘플</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>카테고리 <span class="required">*</span></label>
-                    <select id="add-category">
-                        <option value="">선택하세요</option>
-                        <option value="food">식품</option>
-                        <option value="cosmetic">화장품</option>
-                        <option value="fashion">패션</option>
-                        <option value="electronics">전자제품</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>할인율 (%) <span class="required">*</span></label>
-                    <div class="input-with-suffix">
-                        <input type="number" id="add-discount-rate" value="35" min="0" max="100">
-                        <span class="suffix">%</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeModal('add-discount-modal')">취소</button>
-                <button class="btn btn-primary" onclick="addCategoryDiscount()">추가</button>
-            </div>
-        </div>
-    </div>
+    <script>
+        function switchLoginTab(type) {
+            // 탭 활성화 전환
+            document.querySelectorAll('.login-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`.login-tab${type === 'retailer' ? '.retailer' : ':not(.retailer)'}`).classList.add('active');
 
-    <!-- 모달: 배송비 구간 추가 -->
-    <div class="modal-overlay hidden" id="add-shipping-fee-modal">
-        <div class="modal modal-sm">
-            <div class="modal-header">
-                <h3>배송비 구간 추가</h3>
-                <button class="modal-close" onclick="closeModal('add-shipping-fee-modal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>구간명 <span class="required">*</span></label>
-                    <input type="text" id="shipping-fee-name" placeholder="예: 소량 주문">
-                </div>
-                <div class="form-group">
-                    <label>적용 조건 <span class="required">*</span></label>
-                    <select id="shipping-fee-condition-type" onchange="toggleShippingCondition()">
-                        <option value="">선택하세요</option>
-                        <option value="amount">주문 금액 기준</option>
-                        <option value="quantity">주문 수량 기준</option>
-                        <option value="weight">중량 기준</option>
-                    </select>
-                </div>
-                <div class="form-group hidden" id="condition-amount-group">
-                    <label>기준 금액</label>
-                    <div class="input-with-suffix">
-                        <input type="number" id="condition-amount" value="0" min="0" step="1000">
-                        <span class="suffix">원 이상</span>
-                    </div>
-                </div>
-                <div class="form-group hidden" id="condition-quantity-group">
-                    <label>기준 수량</label>
-                    <div class="input-with-suffix">
-                        <input type="number" id="condition-quantity" value="1" min="1">
-                        <span class="suffix">개 이상</span>
-                    </div>
-                </div>
-                <div class="form-group hidden" id="condition-weight-group">
-                    <label>기준 중량</label>
-                    <div class="input-with-suffix">
-                        <input type="number" id="condition-weight" value="1" min="0" step="0.1">
-                        <span class="suffix">kg 이상</span>
-                    </div>
-                </div>
-                <div class="form-divider"></div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>기본 배송비 <span class="required">*</span></label>
-                        <div class="input-with-suffix">
-                            <input type="number" id="base-shipping-fee" value="3000" min="0" step="100">
-                            <span class="suffix">원</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>제주/도서산간 추가</label>
-                        <div class="input-with-suffix">
-                            <input type="number" id="extra-shipping-fee" value="3000" min="0" step="100">
-                            <span class="suffix">원</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" onclick="closeModal('add-shipping-fee-modal')">취소</button>
-                <button class="btn btn-primary" onclick="addShippingFee()">추가</button>
-            </div>
-        </div>
-    </div>
+            // 폼 활성화 전환
+            document.querySelectorAll('.login-form').forEach(form => form.classList.remove('active'));
+            document.getElementById(`${type}-form`).classList.add('active');
+        }
 
-    <!-- 토스트 알림 -->
-    <div class="toast hidden" id="toast">
-        <span class="toast-icon">✓</span>
-        <span class="toast-message">저장되었습니다.</span>
-    </div>
-
-    <script src="app.js"></script>
+        function handleLogin(e, userType) {
+            e.preventDefault();
+            // 실제 구현 시 인증 로직 추가
+            if (userType === 'distributor') {
+                window.location.href = './distributor/';
+            } else {
+                window.location.href = './retailer/';
+            }
+        }
+    </script>
 </body>
 </html>

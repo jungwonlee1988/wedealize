@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeDealize - Supplier Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <div class="portal-app">
+        <!-- Header -->
+        <header class="portal-header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>WeDealize</h1>
+                    <span class="portal-badge" data-i18n="header.supplierPortal">Supplier Portal</span>
+                </div>
+                <nav class="header-nav">
+                    <!-- Language Selector Dropdown -->
+                    <div class="language-dropdown" id="language-dropdown">
+                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">
+                            🇺🇸 English <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="language-menu" id="language-menu">
+                            <div class="language-search">
+                                <input type="text" id="language-search" placeholder="Search language..." oninput="filterLanguages(this.value)">
+                            </div>
+                            <div class="language-list" id="language-list">
+                                <!-- Languages will be populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-menu" id="user-menu" style="display: none;">
+                        <span class="user-name" id="user-name"></span>
+                        <button class="btn-logout" onclick="logout()" data-i18n="header.logout">Logout</button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="portal-main">
+            <!-- Login/Register Section (초기 화면) -->
+            <section class="auth-section" id="auth-section">
+                <div class="auth-card">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login" data-i18n="auth.login">Login</button>
+                        <button class="auth-tab" data-tab="register" data-i18n="auth.register">Register</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form class="auth-form active" id="login-form" onsubmit="handleLogin(event)">
+                        <h2 data-i18n="auth.welcomeBack">Welcome Back</h2>
+                        <p class="auth-subtitle" data-i18n="auth.accessDashboard">Access your supplier dashboard</p>
+
+                        <!-- Google Sign-In Button -->
+                        <div class="social-login">
+                            <button type="button" class="btn btn-google" onclick="handleGoogleLogin()">
+                                <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
+                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                </svg>
+                                <span data-i18n="auth.continueWithGoogle">Continue with Google</span>
+                            </button>
+                        </div>
+
+                        <div class="auth-divider">
+                            <span data-i18n="auth.or">or</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="login-email" data-i18n="auth.email">Email</label>
+                            <input type="email" id="login-email" placeholder="your@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password" data-i18n="auth.password">Password</label>
+                            <input type="password" id="login-password" placeholder="Enter password" required>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox"> <span data-i18n="auth.rememberMe">Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-link" onclick="showForgotPassword(event)" data-i18n="auth.forgotPassword">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full" data-i18n="auth.login" onclick="handleLogin(event)">Login</button>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form class="auth-form" id="register-form" onsubmit="handleRegister(event)">
+                        <h2 data-i18n="auth.joinWedealize">Join WeDealize</h2>
+                        <p class="auth-subtitle" data-i18n="auth.registerSubtitle">Register as a supplier partner</p>
+
+                        <!-- Google Sign-In Button -->
+                        <div class="social-login">
+                            <button type="button" class="btn btn-google" onclick="handleGoogleLogin()">
+                                <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
+                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                </svg>
+                                <span data-i18n="auth.continueWithGoogle">Continue with Google</span>
+                            </button>
+                        </div>
+
+                        <div class="auth-divider">
+                            <span data-i18n="auth.or">or</span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reg-company"><span data-i18n="auth.companyName">Company Name</span> *</label>
+                                <input type="text" id="reg-company" placeholder="Your Company Ltd." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-country"><span data-i18n="auth.country">Country</span> *</label>
+                                <select id="reg-country" required>
+                                    <option value="" data-i18n="auth.selectCountry">Select country</option>
+                                    <option value="IT" data-i18n="countries.IT">Italy</option>
+                                    <option value="FR" data-i18n="countries.FR">France</option>
+                                    <option value="JP" data-i18n="countries.JP">Japan</option>
+                                    <option value="US" data-i18n="countries.US">United States</option>
+                                    <option value="NZ" data-i18n="countries.NZ">New Zealand</option>
+                                    <option value="ES" data-i18n="countries.ES">Spain</option>
+                                    <option value="DE" data-i18n="countries.DE">Germany</option>
+                                    <option value="CN" data-i18n="countries.CN">China</option>
+                                    <option value="KR" data-i18n="countries.KR">South Korea</option>
+                                    <option value="OTHER" data-i18n="countries.OTHER">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-email"><span data-i18n="auth.businessEmail">Business Email</span> *</label>
+                            <input type="email" id="reg-email" placeholder="sales@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-password"><span data-i18n="auth.password">Password</span> *</label>
+                            <input type="password" id="reg-password" placeholder="Min 8 characters" required minlength="8">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-category"><span data-i18n="auth.productCategory">Product Category</span> *</label>
+                            <select id="reg-category" required>
+                                <option value="" data-i18n="auth.selectCategory">Select category</option>
+                                <option value="oils" data-i18n="categories.oils">Oils & Vinegars</option>
+                                <option value="dairy" data-i18n="categories.dairy">Dairy & Cheese</option>
+                                <option value="beverages" data-i18n="categories.beverages">Beverages & Tea</option>
+                                <option value="snacks" data-i18n="categories.snacks">Snacks & Confectionery</option>
+                                <option value="sauces" data-i18n="categories.sauces">Sauces & Condiments</option>
+                                <option value="organic" data-i18n="categories.organic">Organic & Health Foods</option>
+                                <option value="frozen" data-i18n="categories.frozen">Frozen Foods</option>
+                                <option value="other" data-i18n="categories.other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" required> <span data-i18n="auth.agreeTerms">I agree to the</span> <a href="#" data-i18n="auth.termsOfService">Terms of Service</a>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full" data-i18n="auth.createAccount">Create Account</button>
+                    </form>
+
+                    <!-- Email Verification Form -->
+                    <div class="auth-form" id="verify-form" style="display: none;">
+                        <h2 data-i18n="verification.verifyEmail">Verify Your Email</h2>
+                        <p class="auth-subtitle"><span data-i18n="verification.codeSentTo">We sent a verification code to</span> <strong id="verify-email-display"></strong></p>
+
+                        <div class="verification-icon">📧</div>
+
+                        <div class="form-group">
+                            <label data-i18n="verification.enterCode">Enter 6-digit code</label>
+                            <div class="verification-code-inputs">
+                                <input type="text" maxlength="1" class="code-input" data-index="0" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)">
+                                <input type="text" maxlength="1" class="code-input" data-index="1" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)">
+                                <input type="text" maxlength="1" class="code-input" data-index="2" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)">
+                                <input type="text" maxlength="1" class="code-input" data-index="3" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)">
+                                <input type="text" maxlength="1" class="code-input" data-index="4" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)">
+                                <input type="text" maxlength="1" class="code-input" data-index="5" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)">
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">Verify Email</button>
+
+                        <div class="resend-section">
+                            <p><span data-i18n="verification.didntReceive">Didn't receive the code?</span> <button type="button" class="link-btn" id="resend-btn" onclick="resendVerificationCode()" data-i18n="verification.resend">Resend</button></p>
+                            <p class="resend-timer" id="resend-timer" style="display: none;"><span data-i18n="verification.resendIn">Resend available in</span> <span id="timer-count">60</span>s</p>
+                        </div>
+
+                        <button type="button" class="btn btn-outline btn-full" onclick="backToRegister()" data-i18n="verification.backToRegister">Back to Register</button>
+                    </div>
+
+                    <!-- Forgot Password Form -->
+                    <div class="auth-form" id="forgot-form" style="display: none;">
+                        <h2 data-i18n="passwordReset.resetPassword">Reset Password</h2>
+                        <p class="auth-subtitle" data-i18n="passwordReset.enterEmail">Enter your email to receive a reset link</p>
+
+                        <div class="form-group">
+                            <label for="forgot-email" data-i18n="auth.email">Email</label>
+                            <input type="email" id="forgot-email" placeholder="your@company.com" required>
+                        </div>
+
+                        <button type="button" class="btn btn-primary btn-full" onclick="sendResetLink()" data-i18n="passwordReset.sendResetLink">Send Reset Link</button>
+
+                        <button type="button" class="btn btn-outline btn-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
+                    </div>
+
+                    <!-- Password Reset Sent -->
+                    <div class="auth-form" id="reset-sent-form" style="display: none;">
+                        <div class="success-icon">✓</div>
+                        <h2 data-i18n="passwordReset.checkEmail">Check Your Email</h2>
+                        <p class="auth-subtitle"><span data-i18n="passwordReset.resetLinkSent">We sent a password reset link to</span> <strong id="reset-email-display"></strong></p>
+
+                        <div class="reset-instructions">
+                            <p data-i18n="passwordReset.linkExpires">Click the link in the email to reset your password. The link will expire in 24 hours.</p>
+                        </div>
+
+                        <button type="button" class="btn btn-outline btn-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Section (로그인 후) -->
+            <section class="dashboard-section" id="dashboard-section" style="display: none;">
+                <div class="dashboard-container">
+                    <!-- Sidebar -->
+                    <aside class="dashboard-sidebar">
+                        <nav class="sidebar-nav">
+                            <button class="nav-btn active" data-section="overview">
+                                <span class="nav-icon">📊</span>
+                                <span data-i18n="dashboard.overview">Overview</span>
+                            </button>
+
+                            <!-- Product Management with Submenu -->
+                            <div class="nav-group">
+                                <button class="nav-btn nav-parent" data-section="products" onclick="toggleSubmenu(this)">
+                                    <span class="nav-icon">📦</span>
+                                    <span data-i18n="dashboard.productManagement">Product Management</span>
+                                    <span class="nav-arrow">▼</span>
+                                </button>
+                                <div class="nav-submenu">
+                                    <button class="nav-btn nav-child" data-section="catalog">
+                                        <span class="nav-icon">📁</span>
+                                        <span data-i18n="dashboard.catalogRegistration">Catalog Registration</span>
+                                    </button>
+                                    <button class="nav-btn nav-child" data-section="product-list">
+                                        <span class="nav-icon">📋</span>
+                                        <span data-i18n="dashboard.productList">Product List</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button class="nav-btn" data-section="inquiries">
+                                <span class="nav-icon">💬</span>
+                                <span data-i18n="dashboard.inquiries">Inquiries</span>
+                                <span class="badge-count">3</span>
+                            </button>
+                            <button class="nav-btn" data-section="profile">
+                                <span class="nav-icon">⚙️</span>
+                                <span data-i18n="dashboard.companyProfile">Company Profile</span>
+                            </button>
+                        </nav>
+                    </aside>
+
+                    <!-- Main Dashboard Content -->
+                    <div class="dashboard-content">
+                        <!-- Overview -->
+                        <div class="dashboard-panel active" id="panel-overview">
+                            <div class="panel-header">
+                                <h2 data-i18n="dashboard.dashboardOverview">Dashboard Overview</h2>
+                                <p data-i18n="dashboard.welcomeStatus">Welcome back! Here's your supplier status.</p>
+                            </div>
+
+                            <!-- 데이터 완성도 알림 -->
+                            <div class="alert alert-warning" id="data-completeness-alert">
+                                <div class="alert-icon">⚠️</div>
+                                <div class="alert-content">
+                                    <h4 data-i18n="dashboard.completeProfile">Complete Your Profile</h4>
+                                    <p id="completeness-message">Your product data is <strong>65% complete</strong>. Add missing information to increase visibility to buyers.</p>
+                                    <div class="missing-items">
+                                        <span class="missing-tag">MOQ for 5 products</span>
+                                        <span class="missing-tag" data-i18n="modal.certifications">Certifications</span>
+                                        <span class="missing-tag" data-i18n="products.missingImages">Product images</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-warning" onclick="showSection('product-list')" data-i18n="dashboard.completeNow">Complete Now</button>
+                                </div>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon">📦</div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="stat-products">24</span>
+                                        <span class="stat-label" data-i18n="dashboard.productsListed">Products Listed</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">👁️</div>
+                                    <div class="stat-info">
+                                        <span class="stat-value">1,247</span>
+                                        <span class="stat-label" data-i18n="dashboard.profileViews">Profile Views (30d)</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">💬</div>
+                                    <div class="stat-info">
+                                        <span class="stat-value">3</span>
+                                        <span class="stat-label" data-i18n="dashboard.newInquiries">New Inquiries</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">✅</div>
+                                    <div class="stat-info">
+                                        <span class="stat-value">65%</span>
+                                        <span class="stat-label" data-i18n="dashboard.dataCompleteness">Data Completeness</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="recent-activity">
+                                <h3 data-i18n="dashboard.recentActivity">Recent Activity</h3>
+                                <div class="activity-list">
+                                    <div class="activity-item">
+                                        <span class="activity-icon">💬</span>
+                                        <div class="activity-content">
+                                            <p><strong data-i18n="inquiry.new">New inquiry</strong> from ABC Distribution (Korea)</p>
+                                            <span class="activity-time">2 <span data-i18n="time.hoursAgo">hours ago</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <span class="activity-icon">📄</span>
+                                        <div class="activity-content">
+                                            <p><strong>Catalog processed</strong> - 24 products extracted</p>
+                                            <span class="activity-time">1 <span data-i18n="time.dayAgo">day ago</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <span class="activity-icon">⚠️</span>
+                                        <div class="activity-content">
+                                            <p><strong>Missing data</strong> - Please add MOQ for 5 products</p>
+                                            <span class="activity-time">2 <span data-i18n="time.daysAgo">days ago</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Catalog Registration -->
+                        <div class="dashboard-panel" id="panel-catalog">
+                            <div class="panel-header">
+                                <h2 data-i18n="catalog.registrationTitle">Catalog Registration</h2>
+                                <p data-i18n="catalog.registrationSubtitle">Upload your product catalog to automatically extract and register products.</p>
+                            </div>
+
+                            <!-- Step Indicator -->
+                            <div class="catalog-steps">
+                                <div class="step-item active" id="step-indicator-1">
+                                    <div class="step-number"><span>1</span></div>
+                                    <div class="step-label" data-i18n="catalog.step1">Upload Catalog</div>
+                                </div>
+                                <div class="step-connector" id="connector-1"></div>
+                                <div class="step-item" id="step-indicator-2">
+                                    <div class="step-number"><span>2</span></div>
+                                    <div class="step-label" data-i18n="catalog.step2">Review Products</div>
+                                </div>
+                                <div class="step-connector" id="connector-2"></div>
+                                <div class="step-item" id="step-indicator-3">
+                                    <div class="step-number"><span>3</span></div>
+                                    <div class="step-label" data-i18n="catalog.step3">Match Prices</div>
+                                </div>
+                                <div class="step-connector" id="connector-3"></div>
+                                <div class="step-item" id="step-indicator-4">
+                                    <div class="step-number"><span>4</span></div>
+                                    <div class="step-label" data-i18n="catalog.step4">Complete</div>
+                                </div>
+                            </div>
+
+                            <!-- Step 1: Upload Catalog -->
+                            <div class="catalog-step-content" id="catalog-step-1">
+                                <div class="step-card">
+                                    <div class="step-card-header">
+                                        <span class="step-icon">📁</span>
+                                        <h3 data-i18n="catalog.uploadCatalogTitle">Upload Product Catalog</h3>
+                                    </div>
+                                    <p class="step-description" data-i18n="catalog.catalogDescription">Upload your product catalog file. We'll automatically extract product information including names, descriptions, and specifications.</p>
+
+                                    <div class="upload-dropzone upload-dropzone-large" id="catalog-dropzone"
+                                         ondrop="handleDrop(event, 'catalog')"
+                                         ondragover="handleDragOver(event)"
+                                         ondragleave="handleDragLeave(event)">
+                                        <input type="file" id="catalog-file" accept=".pdf,.xlsx,.xls,.csv" onchange="handleFileSelect(event, 'catalog')" hidden>
+                                        <span class="dropzone-icon-large">📤</span>
+                                        <p class="dropzone-text"><span data-i18n="catalog.dragDrop">Drag & drop or</span> <label for="catalog-file" class="browse-link" data-i18n="catalog.browse">browse</label></p>
+                                        <span class="file-types">PDF, Excel, CSV (<span data-i18n="catalog.maxSize">Max</span> 50MB)</span>
+                                    </div>
+                                    <div class="uploaded-file-large" id="catalog-uploaded" style="display: none;">
+                                        <span class="file-icon-large">📄</span>
+                                        <div class="file-info">
+                                            <span class="file-name" id="catalog-filename"></span>
+                                            <span class="file-size" id="catalog-filesize"></span>
+                                        </div>
+                                        <button class="btn btn-outline btn-sm" onclick="removeFile('catalog')">✕ <span data-i18n="catalog.remove">Remove</span></button>
+                                    </div>
+
+                                    <div class="step-actions">
+                                        <button class="btn btn-primary btn-lg" onclick="extractCatalog()" id="extract-btn" disabled>
+                                            <span data-i18n="catalog.extractProducts">Extract Products</span>
+                                            <span class="btn-arrow">→</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Review Extracted Products -->
+                            <div class="catalog-step-content" id="catalog-step-2" style="display: none;">
+                                <div class="step-card">
+                                    <div class="step-card-header">
+                                        <span class="step-icon">📋</span>
+                                        <h3 data-i18n="catalog.reviewExtracted">Review Extracted Products</h3>
+                                        <div class="extracted-count">
+                                            <span id="extracted-total">0</span> <span data-i18n="catalog.productsExtracted">products extracted</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="extracted-summary">
+                                        <div class="summary-item complete">
+                                            <span class="summary-icon">✓</span>
+                                            <span class="summary-count" id="complete-count">0</span>
+                                            <span data-i18n="products.complete">Complete</span>
+                                        </div>
+                                        <div class="summary-item incomplete">
+                                            <span class="summary-icon">!</span>
+                                            <span class="summary-count" id="incomplete-count">0</span>
+                                            <span data-i18n="products.incomplete">Incomplete</span>
+                                        </div>
+                                    </div>
+
+                                    <table class="data-table product-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-checkbox"><input type="checkbox" id="select-all-extracted" onchange="toggleSelectAllExtracted()"></th>
+                                                <th data-i18n="products.product">Product</th>
+                                                <th data-i18n="modal.category">Category</th>
+                                                <th data-i18n="catalog.price">Price</th>
+                                                <th data-i18n="catalog.status">Status</th>
+                                                <th data-i18n="catalog.actions">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="extracted-products-tbody">
+                                            <!-- Dynamic content -->
+                                        </tbody>
+                                    </table>
+
+                                    <div class="step-actions step-actions-between">
+                                        <button class="btn btn-outline" onclick="goToCatalogStep(1)">
+                                            <span class="btn-arrow">←</span>
+                                            <span data-i18n="catalog.uploadDifferent">Upload Different File</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-lg" onclick="goToCatalogStep(3)">
+                                            <span data-i18n="catalog.nextMatchPrices">Next: Match Prices</span>
+                                            <span class="btn-arrow">→</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Match Prices -->
+                            <div class="catalog-step-content" id="catalog-step-3" style="display: none;">
+                                <div class="step-card">
+                                    <div class="step-card-header">
+                                        <span class="step-icon">💰</span>
+                                        <h3 data-i18n="catalog.matchPrices">Match Prices</h3>
+                                        <span class="optional-badge" data-i18n="catalog.optional">Optional</span>
+                                    </div>
+
+                                    <!-- Price List Upload Section -->
+                                    <div class="pricelist-upload-section">
+                                        <div class="pricelist-upload-row" id="pricelist-upload-area">
+                                            <div class="upload-info">
+                                                <p data-i18n="catalog.priceMatchDescription">Upload a price list to automatically match prices with your extracted products.</p>
+                                            </div>
+                                            <div class="upload-dropzone-inline" id="pricelist-dropzone"
+                                                 ondrop="handleDrop(event, 'pricelist')"
+                                                 ondragover="handleDragOver(event)"
+                                                 ondragleave="handleDragLeave(event)">
+                                                <input type="file" id="pricelist-file" accept=".pdf,.xlsx,.xls,.csv" onchange="handleFileSelect(event, 'pricelist')" hidden>
+                                                <span class="dropzone-icon">📤</span>
+                                                <p><span data-i18n="catalog.dragDrop">Drag & drop or</span> <label for="pricelist-file" class="browse-link" data-i18n="catalog.browse">browse</label></p>
+                                                <span class="file-types">PDF, Excel, CSV</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Uploaded file info -->
+                                        <div class="pricelist-uploaded-row" id="pricelist-uploaded-area" style="display: none;">
+                                            <div class="uploaded-file-info">
+                                                <span class="file-icon">📄</span>
+                                                <span class="file-name" id="pricelist-filename"></span>
+                                                <span class="matched-count-badge"><span id="price-matched-count">0</span>/<span id="price-total-count">0</span> <span data-i18n="catalog.pricesMatched">matched</span></span>
+                                            </div>
+                                            <button class="btn btn-outline btn-sm btn-danger" onclick="resetPriceList()">
+                                                <span data-i18n="catalog.resetPriceList">Reset</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Products Table with Price Columns -->
+                                    <table class="data-table product-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-checkbox"></th>
+                                                <th data-i18n="products.product">Product</th>
+                                                <th data-i18n="modal.category">Category</th>
+                                                <th data-i18n="catalog.price">Price</th>
+                                                <th data-i18n="catalog.newPrice">New Price</th>
+                                                <th data-i18n="catalog.actions">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="price-match-tbody">
+                                            <!-- Dynamic content -->
+                                        </tbody>
+                                    </table>
+
+                                    <div class="step-actions step-actions-between">
+                                        <button class="btn btn-outline" onclick="goToCatalogStep(2)">
+                                            <span class="btn-arrow">←</span>
+                                            <span data-i18n="catalog.backToReview">Back to Review</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-lg" onclick="goToCatalogStep(4)">
+                                            <span data-i18n="catalog.finishRegistration">Finish Registration</span>
+                                            <span class="btn-arrow">→</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Complete -->
+                            <div class="catalog-step-content" id="catalog-step-4" style="display: none;">
+                                <div class="step-card step-card-complete">
+                                    <div class="complete-icon">✓</div>
+                                    <h3 data-i18n="catalog.registrationComplete">Registration Complete!</h3>
+                                    <p class="complete-message">
+                                        <span id="registered-count">0</span> <span data-i18n="catalog.productsRegistered">products have been registered.</span>
+                                    </p>
+
+                                    <div class="complete-summary">
+                                        <div class="summary-row">
+                                            <span data-i18n="products.complete">Complete</span>
+                                            <span id="final-complete-count">0</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span data-i18n="products.incomplete">Incomplete</span>
+                                            <span id="final-incomplete-count">0</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span data-i18n="catalog.pricesMatched">Prices matched</span>
+                                            <span id="final-price-count">0</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="step-actions">
+                                        <button class="btn btn-outline" onclick="startNewCatalog()">
+                                            <span data-i18n="catalog.registerAnother">Register Another Catalog</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-lg" onclick="showSection('product-list')">
+                                            <span data-i18n="catalog.viewProductList">View Product List</span>
+                                            <span class="btn-arrow">→</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upload History -->
+                            <div class="upload-history">
+                                <h3 data-i18n="catalog.uploadHistory">Upload History</h3>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th data-i18n="catalog.fileName">File Name</th>
+                                            <th data-i18n="catalog.type">Type</th>
+                                            <th data-i18n="catalog.uploaded">Uploaded</th>
+                                            <th data-i18n="catalog.status">Status</th>
+                                            <th data-i18n="catalog.products">Products</th>
+                                            <th data-i18n="catalog.actions">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="upload-history-tbody">
+                                        <tr>
+                                            <td>
+                                                <span class="file-icon">📄</span>
+                                                product_catalog_2024.pdf
+                                            </td>
+                                            <td><span class="badge badge-blue" data-i18n="catalog.productCatalog">Catalog</span></td>
+                                            <td>Feb 2, 2025</td>
+                                            <td><span class="status-badge success" data-i18n="status.processed">Processed</span></td>
+                                            <td>24 extracted</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline" data-i18n="inquiry.viewDetails">View</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="file-icon">📄</span>
+                                                price_list_Q1_2025.xlsx
+                                            </td>
+                                            <td><span class="badge badge-green" data-i18n="catalog.priceList">Price List</span></td>
+                                            <td>Feb 1, 2025</td>
+                                            <td><span class="status-badge success" data-i18n="status.matched">Matched</span></td>
+                                            <td>18 matched</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline" data-i18n="inquiry.viewDetails">View</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Product List -->
+                        <div class="dashboard-panel" id="panel-product-list">
+                            <div class="panel-header">
+                                <h2 data-i18n="products.listTitle">Product List</h2>
+                                <p data-i18n="products.listSubtitle">Manage your registered products. Required fields: Category, Product Name.</p>
+                            </div>
+
+                            <!-- Data Quality Alert -->
+                            <div class="data-quality-section">
+                                <div class="quality-summary">
+                                    <div class="quality-chart">
+                                        <div class="quality-ring" style="--percentage: 65;">
+                                            <span class="quality-value">65%</span>
+                                        </div>
+                                    </div>
+                                    <div class="quality-details">
+                                        <h4 data-i18n="products.dataCompleteness">Data Completeness</h4>
+                                        <ul class="quality-checklist">
+                                            <li class="complete">✓ <span data-i18n="products.requiredFields">Required fields</span> (24/24)</li>
+                                            <li class="complete">✓ <span data-i18n="catalog.priceList">Prices</span> (20/24)</li>
+                                            <li class="incomplete">✗ MOQ (19/24) - <a href="#" onclick="filterMissing('moq')"><span data-i18n="products.addMissing">Add missing</span></a></li>
+                                            <li class="incomplete">✗ <span data-i18n="products.missingImages">Images</span> (12/24) - <a href="#" onclick="filterMissing('images')"><span data-i18n="products.addMissing">Add missing</span></a></li>
+                                            <li class="incomplete">✗ <span data-i18n="modal.certifications">Certifications</span> (8/24) - <a href="#" onclick="filterMissing('cert')"><span data-i18n="products.addMissing">Add missing</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Filter Bar -->
+                            <div class="filter-bar">
+                                <div class="filter-group">
+                                    <select id="product-list-filter" onchange="filterProductList()">
+                                        <option value="all" data-i18n="products.allProducts">All Products</option>
+                                        <option value="complete" data-i18n="products.complete">Complete</option>
+                                        <option value="incomplete" data-i18n="products.incompleteData">Incomplete Data</option>
+                                        <option value="no-moq" data-i18n="products.missingMOQ">Missing MOQ</option>
+                                        <option value="no-image" data-i18n="products.missingImages">Missing Images</option>
+                                        <option value="no-cert" data-i18n="products.missingCerts">Missing Certifications</option>
+                                    </select>
+                                </div>
+                                <div class="filter-actions">
+                                    <button class="btn btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
+                                    <button class="btn btn-primary" onclick="openAddProductModal()">+ <span data-i18n="products.addProduct">Add Product</span></button>
+                                </div>
+                            </div>
+
+                            <!-- Products Table -->
+                            <table class="data-table products-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="products.product">Product</th>
+                                        <th data-i18n="modal.category">Category</th>
+                                        <th data-i18n="products.sku">SKU</th>
+                                        <th data-i18n="products.priceFOB">Price (FOB)</th>
+                                        <th data-i18n="products.moq">MOQ</th>
+                                        <th data-i18n="modal.certifications">Certifications</th>
+                                        <th data-i18n="catalog.status">Status</th>
+                                        <th data-i18n="catalog.actions">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="product-list-tbody">
+                                    <tr>
+                                        <td>
+                                            <div class="product-cell">
+                                                <span class="product-thumb">🫒</span>
+                                                <div>
+                                                    <span class="product-name">Extra Virgin Olive Oil 500ml</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="category-badge" data-i18n="categories.oils">Oils & Vinegars</span></td>
+                                        <td>OIL-001</td>
+                                        <td>$7.20 - $8.50</td>
+                                        <td>200 <span data-i18n="units.bottles">bottles</span></td>
+                                        <td>
+                                            <span class="cert-badge">Organic</span>
+                                            <span class="cert-badge">HACCP</span>
+                                        </td>
+                                        <td><span class="status-dot complete"></span> <span data-i18n="products.complete">Complete</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline" onclick="editProduct(1)" data-i18n="products.edit">Edit</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="incomplete-row">
+                                        <td>
+                                            <div class="product-cell">
+                                                <span class="product-thumb">🧀</span>
+                                                <div>
+                                                    <span class="product-name">Aged Parmesan 24 months</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span class="category-badge" data-i18n="categories.dairy">Dairy & Cheese</span></td>
+                                        <td>CHE-003</td>
+                                        <td>$18.00 - $22.00</td>
+                                        <td class="missing-data">
+                                            <span class="missing-indicator" data-i18n="products.missing">Missing</span>
+                                            <button class="btn-add-inline" onclick="addMOQ(3)">+ <span data-i18n="products.add">Add</span></button>
+                                        </td>
+                                        <td>
+                                            <span class="cert-badge">DOP</span>
+                                        </td>
+                                        <td><span class="status-dot incomplete"></span> <span data-i18n="products.incomplete">Incomplete</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning" onclick="editProduct(3)" data-i18n="products.fillIn">Fill in</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <!-- Inquiries -->
+                        <div class="dashboard-panel" id="panel-inquiries">
+                            <div class="panel-header">
+                                <h2 data-i18n="inquiry.title">Inquiries</h2>
+                                <p data-i18n="inquiry.subtitle">Manage buyer inquiries and sample requests.</p>
+                            </div>
+
+                            <div class="inquiries-list">
+                                <div class="inquiry-card new">
+                                    <div class="inquiry-header">
+                                        <span class="inquiry-badge new" data-i18n="inquiry.new">New</span>
+                                        <span class="inquiry-date">2 <span data-i18n="time.hoursAgo">hours ago</span></span>
+                                    </div>
+                                    <div class="inquiry-content">
+                                        <h4><span data-i18n="inquiry.quotationRequest">Quotation Request</span> - Extra Virgin Olive Oil</h4>
+                                        <p class="inquiry-from"><span data-i18n="inquiry.from">From</span>: ABC Distribution Co. (South Korea)</p>
+                                        <div class="inquiry-details">
+                                            <span><span data-i18n="inquiry.quantity">Quantity</span>: 500 <span data-i18n="units.bottles">bottles</span></span>
+                                            <span><span data-i18n="inquiry.incoterm">Incoterm</span>: CIF Busan</span>
+                                        </div>
+                                        <p class="inquiry-message">"We are interested in your organic olive oil for the Korean market..."</p>
+                                    </div>
+                                    <div class="inquiry-actions">
+                                        <button class="btn btn-outline" data-i18n="inquiry.viewDetails">View Details</button>
+                                        <button class="btn btn-primary" data-i18n="inquiry.sendQuotation">Send Quotation</button>
+                                    </div>
+                                </div>
+
+                                <div class="inquiry-card">
+                                    <div class="inquiry-header">
+                                        <span class="inquiry-badge sample" data-i18n="inquiry.sampleRequest">Sample Request</span>
+                                        <span class="inquiry-date">1 <span data-i18n="time.dayAgo">day ago</span></span>
+                                    </div>
+                                    <div class="inquiry-content">
+                                        <h4><span data-i18n="inquiry.sampleRequest">Sample Request</span> - Aged Parmesan</h4>
+                                        <p class="inquiry-from"><span data-i18n="inquiry.from">From</span>: XYZ Foods Ltd. (Japan)</p>
+                                        <div class="inquiry-details">
+                                            <span><span data-i18n="inquiry.samples">Samples</span>: 3 units</span>
+                                        </div>
+                                    </div>
+                                    <div class="inquiry-actions">
+                                        <button class="btn btn-outline" data-i18n="inquiry.viewDetails">View Details</button>
+                                        <button class="btn btn-primary" data-i18n="inquiry.approveSample">Approve Sample</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Company Profile -->
+                        <div class="dashboard-panel" id="panel-profile">
+                            <div class="panel-header">
+                                <h2 data-i18n="profile.title">Company Profile</h2>
+                                <p data-i18n="profile.subtitle">Manage your company information visible to buyers.</p>
+                            </div>
+
+                            <form class="profile-form" onsubmit="saveProfile(event)">
+                                <div class="form-section">
+                                    <h3 data-i18n="profile.basicInfo">Basic Information</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label><span data-i18n="auth.companyName">Company Name</span> *</label>
+                                            <input type="text" value="Oleificio Ferrara S.r.l." required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label><span data-i18n="auth.country">Country</span> *</label>
+                                            <select required>
+                                                <option value="IT" selected data-i18n="countries.IT">Italy</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label><span data-i18n="auth.businessEmail">Business Email</span> *</label>
+                                            <input type="email" value="sales@oleificio-ferrara.it" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label data-i18n="profile.phone">Phone</label>
+                                            <input type="tel" value="+39 0123 456789">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label data-i18n="profile.website">Website</label>
+                                        <input type="url" value="https://www.oleificio-ferrara.it">
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h3 data-i18n="profile.companyDetails">Company Details</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label data-i18n="profile.yearEstablished">Year Established</label>
+                                            <input type="number" value="1985" min="1800" max="2025">
+                                        </div>
+                                        <div class="form-group">
+                                            <label data-i18n="profile.employees">Number of Employees</label>
+                                            <select>
+                                                <option value="1-10">1-10</option>
+                                                <option value="11-50" selected>11-50</option>
+                                                <option value="51-200">51-200</option>
+                                                <option value="201-500">201-500</option>
+                                                <option value="500+">500+</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label data-i18n="profile.description">Company Description</label>
+                                        <textarea rows="4" data-i18n-placeholder="profile.descPlaceholder">Family-owned olive oil producer since 1985, specializing in premium extra virgin olive oil from Puglia region. Our products are certified organic and HACCP compliant.</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h3 data-i18n="profile.companyCertifications">Company Certifications</h3>
+                                    <p class="section-description" data-i18n="profile.companyCertsDesc">Certifications that apply to your entire company. Product-specific certifications can be added when editing each product.</p>
+
+                                    <div class="cert-checkboxes">
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" checked>
+                                            <span class="checkbox-label">HACCP</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" checked>
+                                            <span class="checkbox-label">ISO 22000</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox" checked>
+                                            <span class="checkbox-label">Organic (EU)</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox">
+                                            <span class="checkbox-label">Halal</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox">
+                                            <span class="checkbox-label">Kosher</span>
+                                        </label>
+                                        <label class="checkbox-card">
+                                            <input type="checkbox">
+                                            <span class="checkbox-label">Non-GMO</span>
+                                        </label>
+                                    </div>
+
+                                    <!-- 인증서 파일 업로드 -->
+                                    <div class="cert-upload-section">
+                                        <h4 data-i18n="profile.uploadCertDocs">Upload Certification Documents</h4>
+                                        <div class="upload-dropzone compact" id="company-cert-dropzone"
+                                             ondrop="handleDrop(event, 'company-cert')"
+                                             ondragover="handleDragOver(event)"
+                                             ondragleave="handleDragLeave(event)">
+                                            <input type="file" id="company-cert-file" accept=".pdf,.jpg,.png" onchange="handleFileSelect(event, 'company-cert')" hidden multiple>
+                                            <span class="dropzone-icon">📤</span>
+                                            <p><span data-i18n="catalog.dragDrop">Drag & drop or</span> <label for="company-cert-file" class="browse-link" data-i18n="catalog.browse">browse</label></p>
+                                            <span class="file-types">PDF, JPG, PNG (<span data-i18n="catalog.maxSize">Max</span> 10MB)</span>
+                                        </div>
+                                        <div class="uploaded-certs-list" id="company-cert-list">
+                                            <div class="uploaded-cert-item">
+                                                <span class="cert-icon">📄</span>
+                                                <span class="cert-name">HACCP_Certificate_2024.pdf</span>
+                                                <span class="cert-status valid" data-i18n="profile.valid">Valid</span>
+                                                <button class="btn-remove" onclick="removeCert('haccp')">×</button>
+                                            </div>
+                                            <div class="uploaded-cert-item">
+                                                <span class="cert-icon">📄</span>
+                                                <span class="cert-name">Organic_EU_Certificate.pdf</span>
+                                                <span class="cert-status valid" data-i18n="profile.valid">Valid</span>
+                                                <button class="btn-remove" onclick="removeCert('organic')">×</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h3 data-i18n="profile.tradeTerms">Trade Terms</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label data-i18n="profile.minOrderValue">Minimum Order Value</label>
+                                            <div class="input-with-prefix">
+                                                <span class="prefix">$</span>
+                                                <input type="number" value="1000" min="0">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label data-i18n="profile.leadTime">Lead Time (days)</label>
+                                            <input type="number" value="14" min="1">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label data-i18n="profile.paymentTerms">Payment Terms</label>
+                                        <div class="checkbox-group">
+                                            <label><input type="checkbox" checked> T/T</label>
+                                            <label><input type="checkbox" checked> L/C</label>
+                                            <label><input type="checkbox"> PayPal</label>
+                                            <label><input type="checkbox"> Western Union</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary" data-i18n="profile.saveChanges">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Product Edit Modal -->
+        <div class="modal-overlay" id="product-modal" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 data-i18n="modal.editProduct">Edit Product</h3>
+                    <button class="modal-close" onclick="closeProductModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="missing-alert" id="modal-missing-alert">
+                        <span class="alert-icon">⚠️</span>
+                        <p data-i18n="modal.fillMissing">Please fill in the missing information below:</p>
+                    </div>
+                    <form id="product-edit-form">
+                        <div class="form-group">
+                            <label data-i18n="modal.productName">Product Name</label>
+                            <input type="text" id="edit-product-name" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label data-i18n="products.sku">SKU</label>
+                                <input type="text" id="edit-product-sku">
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="modal.category">Category</label>
+                                <select id="edit-product-category">
+                                    <option value="oils" data-i18n="categories.oils">Oils & Vinegars</option>
+                                    <option value="dairy" data-i18n="categories.dairy">Dairy & Cheese</option>
+                                    <option value="beverages" data-i18n="categories.beverages">Beverages</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label data-i18n="modal.priceMin">Price Min (FOB USD)</label>
+                                <input type="number" id="edit-price-min" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="modal.priceMax">Price Max (FOB USD)</label>
+                                <input type="number" id="edit-price-max" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row highlight-missing">
+                            <div class="form-group">
+                                <label><span data-i18n="modal.moqLabel">MOQ (Minimum Order Quantity)</span> <span class="required-badge" data-i18n="modal.required">Required</span></label>
+                                <input type="number" id="edit-moq" placeholder="e.g., 100">
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="modal.moqUnit">MOQ Unit</label>
+                                <select id="edit-moq-unit">
+                                    <option value="pieces" data-i18n="units.pieces">Pieces</option>
+                                    <option value="bottles" data-i18n="units.bottles">Bottles</option>
+                                    <option value="cases" data-i18n="units.cases">Cases</option>
+                                    <option value="kg" data-i18n="units.kg">Kg</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="modal.specifications">Specifications</label>
+                            <textarea id="edit-specs" rows="3" data-i18n-placeholder="modal.specsPlaceholder"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label><span data-i18n="modal.productCertifications">Product Certifications</span></label>
+                            <p class="field-description" data-i18n="modal.productCertsDesc">Certifications specific to this product</p>
+                            <div class="cert-checkboxes-small">
+                                <label><input type="checkbox" value="organic"> Organic</label>
+                                <label><input type="checkbox" value="haccp"> HACCP</label>
+                                <label><input type="checkbox" value="halal"> Halal</label>
+                                <label><input type="checkbox" value="kosher"> Kosher</label>
+                                <label><input type="checkbox" value="vegan"> Vegan</label>
+                                <label><input type="checkbox" value="non-gmo"> Non-GMO</label>
+                                <label><input type="checkbox" value="dop"> DOP/PDO</label>
+                                <label><input type="checkbox" value="igp"> IGP/PGI</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="modal.productImage">Product Image</label>
+                            <div class="image-upload-zone">
+                                <input type="file" id="edit-product-image" accept="image/*">
+                                <span data-i18n="modal.clickUpload">Click to upload product image</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" onclick="closeProductModal()" data-i18n="modal.cancel">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveProduct()" data-i18n="modal.saveProduct">Save Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="i18n.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // 언어 드롭다운 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            initI18n();
+            renderLanguageList();
+        });
+
+        // 언어 드롭다운 토글
+        function toggleLanguageDropdown() {
+            const menu = document.getElementById('language-menu');
+            const dropdown = document.getElementById('language-dropdown');
+            menu.classList.toggle('show');
+            dropdown.classList.toggle('active');
+        }
+
+        // 외부 클릭 시 드롭다운 닫기
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('language-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                document.getElementById('language-menu').classList.remove('show');
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // 언어 목록 렌더링
+        function renderLanguageList(filter = '') {
+            const list = document.getElementById('language-list');
+            const filterLower = filter.toLowerCase();
+
+            const filtered = supportedLanguages.filter(lang =>
+                lang.name.toLowerCase().includes(filterLower) ||
+                lang.nativeName.toLowerCase().includes(filterLower) ||
+                lang.code.toLowerCase().includes(filterLower)
+            );
+
+            list.innerHTML = filtered.map(lang => `
+                <div class="language-item ${lang.code === currentLanguage ? 'active' : ''}"
+                     onclick="selectLanguage('${lang.code}')">
+                    <span class="lang-flag">${lang.flag}</span>
+                    <span class="lang-name">${lang.nativeName}</span>
+                    <span class="lang-code">${lang.name}</span>
+                    ${lang.code === currentLanguage ? '<span class="lang-check">✓</span>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // 언어 선택
+        function selectLanguage(code) {
+            setLanguage(code);
+            renderLanguageList();
+            document.getElementById('language-menu').classList.remove('show');
+            document.getElementById('language-dropdown').classList.remove('active');
+        }
+
+        // 언어 필터링
+        function filterLanguages(value) {
+            renderLanguageList(value);
+        }
+    </script>
+</body>
+</html>
