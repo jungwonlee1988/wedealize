@@ -83,9 +83,9 @@ let pendingRegistration = null;
 let verificationTimer = null;
 
 // Auth Tab 전환
-document.querySelectorAll('.auth-tab').forEach(tab => {
+document.querySelectorAll('.wd-auth-tab').forEach(tab => {
     tab.addEventListener('click', () => {
-        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.wd-auth-tab').forEach(t => t.classList.remove('active'));
         hideAllAuthForms();
 
         tab.classList.add('active');
@@ -182,16 +182,16 @@ async function handleRegister(e) {
 // 이메일 인증 화면 표시
 function showVerificationForm(email) {
     hideAllAuthForms();
-    document.querySelector('.auth-tabs').style.display = 'none';
+    document.querySelector('.wd-auth-tabs').style.display = 'none';
     document.getElementById('verify-form').style.display = 'block';
     document.getElementById('verify-email-display').textContent = email;
 
     // 인증 코드 입력 필드 초기화
-    document.querySelectorAll('.code-input').forEach(input => {
+    document.querySelectorAll('.wd-code-input').forEach(input => {
         input.value = '';
         input.classList.remove('filled', 'error');
     });
-    document.querySelector('.code-input').focus();
+    document.querySelector('.wd-code-input').focus();
 
     // 재전송 타이머 시작
     startResendTimer();
@@ -210,7 +210,7 @@ function handleCodeInput(e) {
         input.classList.add('filled');
         // 다음 입력 필드로 포커스 이동
         if (index < 5) {
-            const nextInput = document.querySelector(`.code-input[data-index="${index + 1}"]`);
+            const nextInput = document.querySelector(`.wd-code-input[data-index="${index + 1}"]`);
             if (nextInput) nextInput.focus();
         }
     } else {
@@ -218,7 +218,7 @@ function handleCodeInput(e) {
     }
 
     // 모든 필드 입력 완료 시 자동 인증
-    const allInputs = document.querySelectorAll('.code-input');
+    const allInputs = document.querySelectorAll('.wd-code-input');
     const code = Array.from(allInputs).map(i => i.value).join('');
     if (code.length === 6) {
         verifyEmail();
@@ -232,7 +232,7 @@ function handleCodePaste(e) {
     const digits = pastedData.replace(/[^0-9]/g, '').slice(0, 6);
 
     if (digits.length > 0) {
-        const allInputs = document.querySelectorAll('.code-input');
+        const allInputs = document.querySelectorAll('.wd-code-input');
         digits.split('').forEach((digit, i) => {
             if (allInputs[i]) {
                 allInputs[i].value = digit;
@@ -257,7 +257,7 @@ function handleCodeKeydown(e) {
     const index = parseInt(input.dataset.index);
 
     if (e.key === 'Backspace' && !input.value && index > 0) {
-        const prevInput = document.querySelector(`.code-input[data-index="${index - 1}"]`);
+        const prevInput = document.querySelector(`.wd-code-input[data-index="${index - 1}"]`);
         if (prevInput) {
             prevInput.focus();
             prevInput.value = '';
@@ -268,7 +268,7 @@ function handleCodeKeydown(e) {
 
 // 이메일 인증 확인
 async function verifyEmail() {
-    const allInputs = document.querySelectorAll('.code-input');
+    const allInputs = document.querySelectorAll('.wd-code-input');
     const code = Array.from(allInputs).map(i => i.value).join('');
 
     if (code.length !== 6) {
@@ -318,7 +318,7 @@ function completeRegistration(response) {
     }
 
     pendingRegistration = null;
-    document.querySelector('.auth-tabs').style.display = 'flex';
+    document.querySelector('.wd-auth-tabs').style.display = 'flex';
     showDashboard();
     showToast('Email verified! Welcome to WeDealize.');
 }
@@ -381,9 +381,9 @@ function backToRegister() {
         verificationTimer = null;
     }
     hideAllAuthForms();
-    document.querySelector('.auth-tabs').style.display = 'flex';
+    document.querySelector('.wd-auth-tabs').style.display = 'flex';
     document.getElementById('register-form').classList.add('active');
-    document.querySelector('.auth-tab[data-tab="register"]').click();
+    document.querySelector('.wd-auth-tab[data-tab="register"]').click();
 }
 
 // 알림 로드
@@ -570,7 +570,7 @@ async function processGoogleUserInfo(userInfo) {
 function showForgotPassword(e) {
     e.preventDefault();
     hideAllAuthForms();
-    document.querySelector('.auth-tabs').style.display = 'none';
+    document.querySelector('.wd-auth-tabs').style.display = 'none';
     document.getElementById('forgot-form').style.display = 'block';
 }
 
@@ -608,10 +608,10 @@ function showResetSent(email) {
 // 로그인으로 돌아가기
 function backToLogin() {
     hideAllAuthForms();
-    document.querySelector('.auth-tabs').style.display = 'flex';
+    document.querySelector('.wd-auth-tabs').style.display = 'flex';
     document.getElementById('login-form').classList.add('active');
-    document.querySelector('.auth-tab[data-tab="login"]').classList.add('active');
-    document.querySelector('.auth-tab[data-tab="register"]').classList.remove('active');
+    document.querySelector('.wd-auth-tab[data-tab="login"]').classList.add('active');
+    document.querySelector('.wd-auth-tab[data-tab="register"]').classList.remove('active');
 }
 
 // 로그아웃
