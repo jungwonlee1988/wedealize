@@ -91,7 +91,7 @@
                             </label>
                             <a href="#" class="wd-link" onclick="showForgotPassword(event)" data-i18n="auth.forgotPassword">Forgot password?</a>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-md w-full" data-i18n="auth.login" onclick="handleLogin(event)">Login</button>
+                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.login" onclick="handleLogin(event)">Login</button>
                     </form>
 
                     <!-- Register Form -->
@@ -393,7 +393,7 @@
                                 <input type="checkbox" required> <span data-i18n="auth.agreeTerms">I agree to the</span> <a href="#" class="wd-link" data-i18n="auth.termsOfService">Terms of Service</a>
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-md w-full" data-i18n="auth.createAccount">Create Account</button>
+                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.createAccount">Create Account</button>
                     </form>
 
                     <!-- Email Verification Form -->
@@ -417,14 +417,14 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-primary btn-md w-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">Verify Email</button>
+                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">Verify Email</button>
 
                         <div class="wd-resend-section">
                             <p><span data-i18n="verification.didntReceive">Didn't receive the code?</span> <button type="button" class="wd-btn-link" id="resend-btn" onclick="resendVerificationCode()" data-i18n="verification.resend">Resend</button></p>
                             <p class="wd-resend-timer" id="resend-timer" style="display: none;"><span data-i18n="verification.resendIn">Resend available in</span> <span id="timer-count">60</span>s</p>
                         </div>
 
-                        <button type="button" class="btn btn-tertiary btn-md w-full" onclick="backToRegister()" data-i18n="verification.backToRegister">Back to Register</button>
+                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToRegister()" data-i18n="verification.backToRegister">Back to Register</button>
                     </div>
 
                     <!-- Forgot Password Form -->
@@ -437,9 +437,9 @@
                             <input type="email" class="wd-input" id="forgot-email" placeholder="your@company.com" required>
                         </div>
 
-                        <button type="button" class="btn btn-primary btn-md w-full" onclick="sendResetLink()" data-i18n="passwordReset.sendResetLink">Send Reset Link</button>
+                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="sendResetLink()" data-i18n="passwordReset.sendResetLink">Send Reset Link</button>
 
-                        <button type="button" class="btn btn-tertiary btn-md w-full" style="margin-top: 12px;" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
+                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" style="margin-top: 12px;" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
                     </div>
 
                     <!-- Password Reset Sent -->
@@ -454,7 +454,7 @@
                             <p data-i18n="passwordReset.linkExpires">Click the link in the email to reset your password. The link will expire in 24 hours.</p>
                         </div>
 
-                        <button type="button" class="btn btn-tertiary btn-md w-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
+                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
                     </div>
                 </div>
             </section>
@@ -551,13 +551,16 @@
                         <!-- Overview -->
                         <div class="dashboard-panel active" id="panel-overview">
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="dashboard.dashboardOverview">Dashboard</h2>
+                                <div>
+                                    <h2 class="wd-page-title" data-i18n="dashboard.dashboardOverview">Dashboard</h2>
+                                    <p class="wd-page-subtitle" data-i18n="dashboard.overviewSubtitle">Overview of your supplier activities</p>
+                                </div>
                             </div>
 
                             <!-- Summary Stats Cards -->
-                            <div class="wd-stats-grid" style="padding: 0 24px 24px;">
+                            <div class="wd-stats-grid" style="padding: 24px;">
                                 <div class="wd-stat-card">
-                                    <div class="wd-stat-icon" style="background: var(--success-light); color: var(--success);">
+                                    <div class="wd-stat-icon wd-stat-icon-success">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                                     </div>
                                     <div class="wd-stat-content">
@@ -566,7 +569,7 @@
                                     </div>
                                 </div>
                                 <div class="wd-stat-card">
-                                    <div class="wd-stat-icon" style="background: var(--primary-light); color: var(--primary);">
+                                    <div class="wd-stat-icon wd-stat-icon-primary">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
                                     </div>
                                     <div class="wd-stat-content">
@@ -575,7 +578,7 @@
                                     </div>
                                 </div>
                                 <div class="wd-stat-card">
-                                    <div class="wd-stat-icon" style="background: #E8F5E9; color: #43A047;">
+                                    <div class="wd-stat-icon wd-stat-icon-teal">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                     </div>
                                     <div class="wd-stat-content">
@@ -584,7 +587,7 @@
                                     </div>
                                 </div>
                                 <div class="wd-stat-card">
-                                    <div class="wd-stat-icon" style="background: #E3F2FD; color: #1976D2;">
+                                    <div class="wd-stat-icon wd-stat-icon-blue">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                                     </div>
                                     <div class="wd-stat-content">
@@ -594,7 +597,7 @@
                                 </div>
                             </div>
 
-                            <div class="wd-dashboard-grid" style="padding: 0 24px 24px;">
+                            <div class="wd-dashboard-grid" style="padding: 0 24px 24px; border-top: 1px solid var(--wd-gray-100);">
                                 <!-- Left Column -->
                                 <div class="wd-dashboard-left">
                                     <!-- Action Required -->
@@ -608,11 +611,11 @@
                                         <div class="wd-card-body">
                                             <div class="wd-action-list">
                                                 <a href="#" class="wd-action-item" onclick="showSection('po-management'); return false;">
-                                                    <div class="wd-action-icon wd-action-icon-warning">
+                                                    <div class="wd-action-icon wd-action-icon-info">
                                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                                     </div>
                                                     <div class="wd-action-content">
-                                                        <span class="wd-action-title" data-i18n="dashboard.pendingPO">Pending PO</span>
+                                                        <span class="wd-action-title" data-i18n="dashboard.receivedPO">Received PO</span>
                                                         <span class="wd-action-desc">3 orders waiting for confirmation</span>
                                                     </div>
                                                     <span class="wd-action-badge">3</span>
@@ -700,7 +703,7 @@
                                                     <span class="wd-incomplete-count">8 products</span>
                                                 </div>
                                             </div>
-                                            <button class="btn btn-tertiary btn-sm" onclick="showSection('product-list')" style="width: 100%; margin-top: 12px;">
+                                            <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="showSection('product-list')" style="width: 100%; margin-top: 12px;">
                                                 <span data-i18n="dashboard.completeNow">Complete Now</span>
                                             </button>
                                         </div>
@@ -797,7 +800,7 @@
                                                 <span class="wd-keyword-tag">truffle oil <em>98</em></span>
                                                 <span class="wd-keyword-tag">dried pasta <em>87</em></span>
                                             </div>
-                                            <button class="btn btn-primary btn-sm" onclick="showSection('buyer-discovery')" style="width: 100%; margin-top: 16px;">
+                                            <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="showSection('buyer-discovery')" style="width: 100%; margin-top: 16px;">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
                                                 <span data-i18n="dashboard.findBuyers">Find Potential Buyers</span>
                                             </button>
@@ -811,7 +814,10 @@
                         <div class="dashboard-panel" id="panel-catalog">
                             <!-- Page Header -->
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="catalog.registrationTitle">Catalog Registration</h2>
+                                <div class="wd-page-header-content">
+                                    <h2 class="wd-page-title" data-i18n="catalog.registrationTitle">Catalog Registration</h2>
+                                    <p class="wd-page-subtitle" data-i18n="catalog.registrationSubtitle">Upload and manage your product catalog</p>
+                                </div>
                             </div>
 
                             <!-- Step Indicator -->
@@ -838,7 +844,7 @@
                             </div>
 
                             <!-- Step 1: Upload Catalog -->
-                            <div class="catalog-step-content" id="catalog-step-1" style="padding: 0 24px 24px;">
+                            <div class="catalog-step-content" id="catalog-step-1" class="wd-page-content">
                                 <div class="wd-card">
                                     <div class="wd-card-header" style="display: flex; align-items: center; gap: 12px;">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -872,7 +878,7 @@
                                         </div>
 
                                         <div style="margin-top: 24px; text-align: right;">
-                                            <button class="btn btn-primary btn-lg" onclick="extractCatalog()" id="extract-btn" disabled>
+                                            <button class="wd-btn wd-btn-primary wd-btn-lg" onclick="extractCatalog()" id="extract-btn" disabled>
                                                 <span data-i18n="catalog.extractProducts">Extract Products</span>
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                             </button>
@@ -923,11 +929,11 @@
                                         </table>
 
                                         <div style="display: flex; justify-content: space-between; margin-top: 24px;">
-                                            <button class="btn btn-tertiary btn-md" onclick="goToCatalogStep(1)">
+                                            <button class="wd-btn wd-btn-outline" onclick="goToCatalogStep(1)">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                                                 <span data-i18n="catalog.uploadDifferent">Upload Different File</span>
                                             </button>
-                                            <button class="btn btn-primary btn-lg" onclick="goToCatalogStep(3)">
+                                            <button class="wd-btn wd-btn-primary wd-btn-lg" onclick="goToCatalogStep(3)">
                                                 <span data-i18n="catalog.nextMatchPrices">Next: Match Prices</span>
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                             </button>
@@ -969,7 +975,7 @@
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                                 <span class="wd-file-name" id="pricelist-filename"></span>
                                                 <span class="wd-badge wd-badge-success"><span id="price-matched-count">0</span>/<span id="price-total-count">0</span> matched</span>
-                                                <button type="button" class="btn btn-tertiary btn-sm" onclick="resetPriceList()">Reset</button>
+                                                <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="resetPriceList()">Reset</button>
                                             </div>
                                         </div>
 
@@ -991,11 +997,11 @@
                                         </table>
 
                                         <div style="display: flex; justify-content: space-between; margin-top: 24px;">
-                                            <button class="btn btn-tertiary btn-md" onclick="goToCatalogStep(2)">
+                                            <button class="wd-btn wd-btn-outline" onclick="goToCatalogStep(2)">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                                                 <span data-i18n="catalog.backToReview">Back to Review</span>
                                             </button>
-                                            <button class="btn btn-primary btn-lg" onclick="goToCatalogStep(4)">
+                                            <button class="wd-btn wd-btn-primary wd-btn-lg" onclick="goToCatalogStep(4)">
                                                 <span data-i18n="catalog.finishRegistration">Finish Registration</span>
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                             </button>
@@ -1031,10 +1037,10 @@
                                     </div>
 
                                     <div style="display: flex; gap: 12px; justify-content: center;">
-                                        <button class="btn btn-tertiary btn-md" onclick="startNewCatalog()">
+                                        <button class="wd-btn wd-btn-outline" onclick="startNewCatalog()">
                                             <span data-i18n="catalog.registerAnother">Register Another Catalog</span>
                                         </button>
-                                        <button class="btn btn-primary btn-md" onclick="showSection('product-list')">
+                                        <button class="wd-btn wd-btn-primary" onclick="showSection('product-list')">
                                             <span data-i18n="catalog.viewProductList">View Product List</span>
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                         </button>
@@ -1043,7 +1049,7 @@
                             </div>
 
                             <!-- Upload History -->
-                            <div class="wd-card" style="margin: 0 24px 24px;">
+                            <div class="wd-card">
                                 <div class="wd-card-header">
                                     <h3 class="wd-card-title" data-i18n="catalog.uploadHistory">Upload History</h3>
                                 </div>
@@ -1072,7 +1078,7 @@
                                                 <td><span class="wd-badge wd-badge-success" data-i18n="status.processed">Processed</span></td>
                                                 <td>24 extracted</td>
                                                 <td>
-                                                    <button class="btn btn-tertiary btn-sm" data-i18n="inquiry.viewDetails">View Details</button>
+                                                    <button class="wd-btn wd-btn-outline wd-btn-sm" data-i18n="inquiry.viewDetails">View Details</button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1087,7 +1093,7 @@
                                                 <td><span class="wd-badge wd-badge-success" data-i18n="status.matched">Matched</span></td>
                                                 <td>18 matched</td>
                                                 <td>
-                                                    <button class="btn btn-tertiary btn-sm" data-i18n="inquiry.viewDetails">View Details</button>
+                                                    <button class="wd-btn wd-btn-outline wd-btn-sm" data-i18n="inquiry.viewDetails">View Details</button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -1100,15 +1106,20 @@
                         <div class="dashboard-panel" id="panel-product-list">
                             <!-- Page Header -->
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="products.listTitle">Product List</h2>
-                                <button class="btn btn-primary btn-md" onclick="openAddProductModal()">
-                                    <span>+</span>
-                                    <span data-i18n="products.addProduct">Add Product</span>
-                                </button>
+                                <div class="wd-page-header-content">
+                                    <h2 class="wd-page-title" data-i18n="products.listTitle">Product List</h2>
+                                    <p class="wd-page-subtitle" data-i18n="products.listSubtitle">Manage your product catalog and inventory</p>
+                                </div>
+                                <div class="wd-page-actions">
+                                    <button class="wd-btn wd-btn-primary" onclick="openAddProductModal()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                        <span data-i18n="products.addProduct">Add Product</span>
+                                    </button>
+                                </div>
                             </div>
 
                             <!-- Data Quality Summary Card -->
-                            <div class="wd-card" style="margin: 0 24px 24px;">
+                            <div class="wd-card">
                                 <div class="wd-card-body" style="display: flex; gap: 32px; align-items: flex-start;">
                                     <div class="wd-quality-chart">
                                         <div class="wd-quality-ring" style="--percentage: 65;">
@@ -1156,12 +1167,12 @@
                                     </select>
                                 </div>
                                 <div class="wd-filter-actions" style="display: flex; gap: 8px;">
-                                    <button class="btn btn-tertiary btn-md" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
+                                    <button class="wd-btn wd-btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
                                 </div>
                             </div>
 
                             <!-- Products Table -->
-                            <div style="padding: 0 24px;">
+                            <div class="wd-section-x">
                                 <table class="wd-table">
                                     <thead>
                                         <tr>
@@ -1197,7 +1208,7 @@
                                             </td>
                                             <td><span class="wd-badge wd-badge-success">Complete</span></td>
                                             <td>
-                                                <button class="btn btn-tertiary btn-sm" onclick="editProduct(1)" data-i18n="products.edit">Edit</button>
+                                                <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editProduct(1)" data-i18n="products.edit">Edit</button>
                                             </td>
                                         </tr>
                                         <tr class="wd-row-warning">
@@ -1255,11 +1266,16 @@
                         <div class="dashboard-panel" id="panel-po-management">
                             <!-- Page Header -->
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="sales.poManagement">PO Management</h2>
-                                <button class="btn btn-primary btn-md" onclick="openAddPOModal()">
-                                    <span>+</span>
-                                    <span data-i18n="sales.addPO">Add PO</span>
-                                </button>
+                                <div class="wd-page-header-content">
+                                    <h2 class="wd-page-title" data-i18n="sales.poManagement">PO Management</h2>
+                                    <p class="wd-page-subtitle" data-i18n="sales.poSubtitle">Track and manage Purchase Orders from buyers</p>
+                                </div>
+                                <div class="wd-page-actions">
+                                    <button class="wd-btn wd-btn-primary" onclick="openAddPOModal()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                        <span data-i18n="sales.addPO">Add PO</span>
+                                    </button>
+                                </div>
                             </div>
 
                             <!-- Tabs -->
@@ -1284,7 +1300,7 @@
                             <input type="hidden" id="po-status-filter" value="all">
 
                             <!-- PO Table -->
-                            <div style="padding: 0 24px;">
+                            <div class="wd-section-x">
                                 <table class="wd-table">
                                     <thead>
                                         <tr>
@@ -1306,20 +1322,16 @@
                                                             <span>All</span>
                                                         </label>
                                                         <label class="wd-filter-option">
-                                                            <input type="radio" name="status-filter" value="pending" onchange="applyStatusFilter('pending')">
-                                                            <span>Registered</span>
+                                                            <input type="radio" name="status-filter" value="received" onchange="applyStatusFilter('received')">
+                                                            <span>Received</span>
                                                         </label>
                                                         <label class="wd-filter-option">
                                                             <input type="radio" name="status-filter" value="confirmed" onchange="applyStatusFilter('confirmed')">
-                                                            <span>Shipping Requested</span>
+                                                            <span>Confirmed</span>
                                                         </label>
                                                         <label class="wd-filter-option">
-                                                            <input type="radio" name="status-filter" value="shipping" onchange="applyStatusFilter('shipping')">
-                                                            <span>In Shipping</span>
-                                                        </label>
-                                                        <label class="wd-filter-option">
-                                                            <input type="radio" name="status-filter" value="completed" onchange="applyStatusFilter('completed')">
-                                                            <span>Completed</span>
+                                                            <input type="radio" name="status-filter" value="cancelled" onchange="applyStatusFilter('cancelled')">
+                                                            <span>Cancelled</span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -1346,9 +1358,9 @@
                                         </tr>
                                     </thead>
                                 <tbody id="po-list-tbody">
-                                    <tr data-status="pending" data-po="20260202171" onclick="viewPODetail('20260202171')" style="cursor: pointer;">
+                                    <tr data-status="received" data-po="20260202171" onclick="viewPODetail('20260202171')" style="cursor: pointer;">
                                         <td>20260202171</td>
-                                        <td><span class="wd-badge wd-badge-gray">Registered</span></td>
+                                        <td><span class="wd-badge wd-badge-info">Received</span></td>
                                         <td>Thin Banana Slices 60g</td>
                                         <td>USD 1,128</td>
                                         <td>CJ UNIWORLD CORPORATION</td>
@@ -1364,7 +1376,7 @@
                                     </tr>
                                     <tr data-status="confirmed" data-po="PO20260203048953" onclick="viewPODetail('PO20260203048953')" style="cursor: pointer;">
                                         <td>PO20260203048953</td>
-                                        <td><span class="wd-badge wd-badge-primary">Shipping Requested</span></td>
+                                        <td><span class="wd-badge wd-badge-success">Confirmed</span></td>
                                         <td>Frozen Butter Croissant Dough (24% Butter)</td>
                                         <td>EUR 806.4</td>
                                         <td>DELIFRANCE</td>
@@ -1380,7 +1392,7 @@
                                     </tr>
                                     <tr data-status="confirmed" data-po="PO2026012800A2C" onclick="viewPODetail('PO2026012800A2C')" style="cursor: pointer;">
                                         <td>PO2026012800A2C</td>
-                                        <td><span class="wd-badge wd-badge-primary">Shipping Requested</span></td>
+                                        <td><span class="wd-badge wd-badge-success">Confirmed</span></td>
                                         <td>
                                             Pistachio Spread 1KG
                                             <a href="#" class="wd-link" onclick="event.stopPropagation();">+1 more</a>
@@ -1445,7 +1457,7 @@
                                         <span class="status-badge shipping-requested" id="po-detail-status">Shipping Requested</span>
                                         <span class="po-detail-date" id="po-detail-date">2026.02.03 13:44</span>
                                     </div>
-                                    <button class="btn btn-destructive btn-md" onclick="cancelPO()" data-i18n="po.cancelOrder">Cancel Order</button>
+                                    <button class="wd-btn wd-btn-danger" onclick="cancelPO()" data-i18n="po.cancelOrder">Cancel Order</button>
                                 </div>
 
                                 <!-- Exporter Info -->
@@ -1697,7 +1709,7 @@
                                         <div class="wd-form-section">
                                             <h4 class="wd-form-section-title">
                                                 <span data-i18n="po.orderItems">Order Items</span>
-                                                <button type="button" class="btn btn-tertiary btn-sm" onclick="addPOItemRow()" style="margin-left: auto;">
+                                                <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="addPOItemRow()" style="margin-left: auto;">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                                     <span data-i18n="po.addItem">Add Item</span>
                                                 </button>
@@ -1762,8 +1774,8 @@
                                     </form>
                                 </div>
                                 <div class="wd-modal-footer">
-                                    <button class="btn btn-tertiary btn-md" onclick="closeAddPOModal()" data-i18n="common.cancel">Cancel</button>
-                                    <button class="btn btn-primary btn-md" onclick="savePO()" data-i18n="po.savePO">Save PO</button>
+                                    <button class="wd-btn wd-btn-outline" onclick="closeAddPOModal()" data-i18n="common.cancel">Cancel</button>
+                                    <button class="wd-btn wd-btn-primary" onclick="savePO()" data-i18n="po.savePO">Save PO</button>
                                 </div>
                             </div>
                         </div>
@@ -1777,7 +1789,7 @@
                                     <p class="wd-page-subtitle" data-i18n="pi.subtitle">Create and manage Proforma Invoices based on Purchase Orders</p>
                                 </div>
                                 <div class="wd-page-actions">
-                                    <button class="btn btn-primary btn-md" onclick="openPIModal()">
+                                    <button class="wd-btn wd-btn-primary" onclick="openPIModal()">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                         <span data-i18n="pi.createPI">Create PI</span>
                                     </button>
@@ -1785,7 +1797,7 @@
                             </div>
 
                             <!-- PI Summary Cards -->
-                            <div style="padding: 0 24px 24px;">
+                            <div class="wd-page-content">
                                 <div class="wd-stats-grid">
                                     <div class="wd-stat-card">
                                         <div class="wd-stat-icon" style="background: var(--warning-light); color: var(--warning);">
@@ -1842,7 +1854,7 @@
                                     </div>
                                 </div>
                                 <div class="wd-filter-actions">
-                                    <button class="btn btn-tertiary btn-sm" onclick="exportPIList()">
+                                    <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="exportPIList()">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                         <span data-i18n="pi.export">Export</span>
                                     </button>
@@ -1850,7 +1862,7 @@
                             </div>
 
                             <!-- PI Table -->
-                            <div style="padding: 0 24px 24px;">
+                            <div class="wd-page-content">
                                 <div class="wd-table-container">
                                     <table class="wd-table">
                                         <thead>
@@ -1890,10 +1902,10 @@
                                                 </td>
                                                 <td>
                                                     <div class="wd-action-buttons">
-                                                        <button class="btn btn-tertiary btn-sm" onclick="editPI('PI-2024-0089')" title="Edit">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editPI('PI-2024-0089')" title="Edit">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm" onclick="sendPI('PI-2024-0089')" title="Send">
+                                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="sendPI('PI-2024-0089')" title="Send">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                                                         </button>
                                                     </div>
@@ -1921,10 +1933,10 @@
                                                 </td>
                                                 <td>
                                                     <div class="wd-action-buttons">
-                                                        <button class="btn btn-tertiary btn-sm" onclick="viewPI('PI-2024-0088')" title="View">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewPI('PI-2024-0088')" title="View">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                                         </button>
-                                                        <button class="btn btn-tertiary btn-sm" onclick="downloadPI('PI-2024-0088')" title="Download PDF">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="downloadPI('PI-2024-0088')" title="Download PDF">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                                         </button>
                                                     </div>
@@ -1952,10 +1964,10 @@
                                                 </td>
                                                 <td>
                                                     <div class="wd-action-buttons">
-                                                        <button class="btn btn-tertiary btn-sm" onclick="viewPI('PI-2024-0087')" title="View">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewPI('PI-2024-0087')" title="View">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                                         </button>
-                                                        <button class="btn btn-tertiary btn-sm" onclick="downloadPI('PI-2024-0087')" title="Download PDF">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="downloadPI('PI-2024-0087')" title="Download PDF">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                                         </button>
                                                     </div>
@@ -2064,11 +2076,11 @@
                                                         <option value="HON-001" data-name="Raw Honey 500g" data-price="22.00" data-unit="jars">Raw Honey 500g (HON-001)</option>
                                                     </select>
                                                 </div>
-                                                <button type="button" class="btn btn-primary btn-md" onclick="addProductToPI()" style="white-space: nowrap;">
+                                                <button type="button" class="wd-btn wd-btn-primary" onclick="addProductToPI()" style="white-space: nowrap;">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                                     <span data-i18n="pi.addProduct">Add Product</span>
                                                 </button>
-                                                <button type="button" class="btn btn-secondary btn-md" onclick="addManualItemToPI()" style="white-space: nowrap;">
+                                                <button type="button" class="wd-btn wd-btn-secondary" onclick="addManualItemToPI()" style="white-space: nowrap;">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                     <span data-i18n="pi.addManual">Add Manual</span>
                                                 </button>
@@ -2181,9 +2193,9 @@
                                     </form>
                                 </div>
                                 <div class="wd-modal-footer">
-                                    <button class="btn btn-tertiary btn-md" onclick="closePIModal()" data-i18n="common.cancel">Cancel</button>
-                                    <button class="btn btn-secondary btn-md" onclick="saveAsDraft()" data-i18n="pi.saveAsDraft">Save as Draft</button>
-                                    <button class="btn btn-primary btn-md" onclick="createAndSendPI()" data-i18n="pi.createAndSend">Create & Send PI</button>
+                                    <button class="wd-btn wd-btn-outline" onclick="closePIModal()" data-i18n="common.cancel">Cancel</button>
+                                    <button class="wd-btn wd-btn-secondary" onclick="saveAsDraft()" data-i18n="pi.saveAsDraft">Save as Draft</button>
+                                    <button class="wd-btn wd-btn-primary" onclick="createAndSendPI()" data-i18n="pi.createAndSend">Create & Send PI</button>
                                 </div>
                             </div>
                         </div>
@@ -2197,7 +2209,7 @@
                                     <p class="wd-page-subtitle" data-i18n="credit.subtitle">Manage product claims and credits for invoice deductions</p>
                                 </div>
                                 <div class="wd-page-actions">
-                                    <button class="btn btn-primary btn-md" onclick="openCreditModal()">
+                                    <button class="wd-btn wd-btn-primary" onclick="openCreditModal()">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                         <span data-i18n="credit.newCredit">New Credit</span>
                                     </button>
@@ -2205,7 +2217,7 @@
                             </div>
 
                             <!-- Credit Summary Cards -->
-                            <div style="padding: 0 24px 24px;">
+                            <div class="wd-page-content">
                                 <div class="wd-stats-grid">
                                     <div class="wd-stat-card">
                                         <div class="wd-stat-icon" style="background: var(--warning-light); color: var(--warning);">
@@ -2262,7 +2274,7 @@
                                     </div>
                                 </div>
                                 <div class="wd-filter-actions">
-                                    <button class="btn btn-tertiary btn-sm" onclick="exportCredits()">
+                                    <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="exportCredits()">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                         <span data-i18n="credit.export">Export</span>
                                     </button>
@@ -2270,7 +2282,7 @@
                             </div>
 
                             <!-- Credit Table -->
-                            <div style="padding: 0 24px 24px;">
+                            <div class="wd-page-content">
                                 <div class="wd-table-container">
                                     <table class="wd-table">
                                         <thead>
@@ -2303,10 +2315,10 @@
                                                 <td>2024-02-01</td>
                                                 <td>
                                                     <div class="wd-action-buttons">
-                                                        <button class="btn btn-tertiary btn-sm" onclick="viewCreditDetail('CR-2024-001')" title="View">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewCreditDetail('CR-2024-001')" title="View">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                                         </button>
-                                                        <button class="btn btn-tertiary btn-sm" onclick="editCredit('CR-2024-001')" title="Edit">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editCredit('CR-2024-001')" title="Edit">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                         </button>
                                                     </div>
@@ -2328,10 +2340,10 @@
                                                 <td>2024-01-28</td>
                                                 <td>
                                                     <div class="wd-action-buttons">
-                                                        <button class="btn btn-tertiary btn-sm" onclick="viewCreditDetail('CR-2024-002')" title="View">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewCreditDetail('CR-2024-002')" title="View">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                                         </button>
-                                                        <button class="btn btn-tertiary btn-sm" onclick="editCredit('CR-2024-002')" title="Edit">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editCredit('CR-2024-002')" title="Edit">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                         </button>
                                                     </div>
@@ -2353,10 +2365,10 @@
                                                 <td>2024-01-20</td>
                                                 <td>
                                                     <div class="wd-action-buttons">
-                                                        <button class="btn btn-tertiary btn-sm" onclick="viewCreditDetail('CR-2024-003')" title="View">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewCreditDetail('CR-2024-003')" title="View">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                                         </button>
-                                                        <button class="btn btn-tertiary btn-sm disabled" title="Edit">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" disabled title="Edit">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                         </button>
                                                     </div>
@@ -2432,8 +2444,8 @@
                                     </form>
                                 </div>
                                 <div class="wd-modal-footer">
-                                    <button class="btn btn-tertiary btn-md" onclick="closeCreditModal()" data-i18n="common.cancel">Cancel</button>
-                                    <button class="btn btn-primary btn-md" onclick="saveCredit()" data-i18n="credit.submitCredit">Submit Credit</button>
+                                    <button class="wd-btn wd-btn-outline" onclick="closeCreditModal()" data-i18n="common.cancel">Cancel</button>
+                                    <button class="wd-btn wd-btn-primary" onclick="saveCredit()" data-i18n="credit.submitCredit">Submit Credit</button>
                                 </div>
                             </div>
                         </div>
@@ -2447,7 +2459,7 @@
                                     <p class="wd-page-subtitle" data-i18n="accounts.subtitle">Manage your buyer accounts and trade relationships</p>
                                 </div>
                                 <div class="wd-page-actions">
-                                    <button class="btn btn-primary btn-md" onclick="openAccountModal()">
+                                    <button class="wd-btn wd-btn-primary" onclick="openAccountModal()">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                         <span data-i18n="accounts.addAccount">Add Account</span>
                                     </button>
@@ -2455,7 +2467,7 @@
                             </div>
 
                             <!-- Account Summary Cards -->
-                            <div style="padding: 0 24px 24px;">
+                            <div class="wd-page-content">
                                 <div class="wd-stats-grid">
                                     <div class="wd-stat-card">
                                         <div class="wd-stat-icon" style="background: var(--primary-light); color: var(--primary);">
@@ -2510,7 +2522,7 @@
                                     </div>
                                 </div>
                                 <div class="wd-filter-actions">
-                                    <button class="btn btn-tertiary btn-sm" onclick="exportAccounts()">
+                                    <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="exportAccounts()">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                         <span data-i18n="accounts.export">Export</span>
                                     </button>
@@ -2518,7 +2530,7 @@
                             </div>
 
                             <!-- Account Table -->
-                            <div style="padding: 0 24px 24px;">
+                            <div class="wd-page-content">
                                 <div class="wd-table-container">
                                     <table class="wd-table">
                                         <thead>
@@ -2561,13 +2573,13 @@
                                                 <td><span class="wd-badge wd-badge-success">Active</span></td>
                                                 <td>
                                                     <div class="wd-action-buttons">
-                                                        <button class="btn btn-tertiary btn-sm" onclick="viewAccount('ACC-001')" title="View">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewAccount('ACC-001')" title="View">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                                         </button>
-                                                        <button class="btn btn-tertiary btn-sm" onclick="editAccount('ACC-001')" title="Edit">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editAccount('ACC-001')" title="Edit">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm" onclick="createPIForAccount('ACC-001')" title="Create PI">
+                                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="createPIForAccount('ACC-001')" title="Create PI">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
                                                         </button>
                                                     </div>
@@ -2599,13 +2611,13 @@
                                                 <td><span class="wd-badge wd-badge-success">Active</span></td>
                                                 <td>
                                                     <div class="wd-action-buttons">
-                                                        <button class="btn btn-tertiary btn-sm" onclick="viewAccount('ACC-002')" title="View">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewAccount('ACC-002')" title="View">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                                         </button>
-                                                        <button class="btn btn-tertiary btn-sm" onclick="editAccount('ACC-002')" title="Edit">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editAccount('ACC-002')" title="Edit">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm" onclick="createPIForAccount('ACC-002')" title="Create PI">
+                                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="createPIForAccount('ACC-002')" title="Create PI">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
                                                         </button>
                                                     </div>
@@ -2637,13 +2649,13 @@
                                                 <td><span class="wd-badge wd-badge-success">Active</span></td>
                                                 <td>
                                                     <div class="wd-action-buttons">
-                                                        <button class="btn btn-tertiary btn-sm" onclick="viewAccount('ACC-003')" title="View">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewAccount('ACC-003')" title="View">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                                         </button>
-                                                        <button class="btn btn-tertiary btn-sm" onclick="editAccount('ACC-003')" title="Edit">
+                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editAccount('ACC-003')" title="Edit">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                         </button>
-                                                        <button class="btn btn-primary btn-sm" onclick="createPIForAccount('ACC-003')" title="Create PI">
+                                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="createPIForAccount('ACC-003')" title="Create PI">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
                                                         </button>
                                                     </div>
@@ -2766,8 +2778,8 @@
                                     </form>
                                 </div>
                                 <div class="wd-modal-footer">
-                                    <button class="btn btn-tertiary btn-md" onclick="closeAccountModal()" data-i18n="common.cancel">Cancel</button>
-                                    <button class="btn btn-primary btn-md" onclick="saveAccount()" data-i18n="accounts.saveAccount">Save Account</button>
+                                    <button class="wd-btn wd-btn-outline" onclick="closeAccountModal()" data-i18n="common.cancel">Cancel</button>
+                                    <button class="wd-btn wd-btn-primary" onclick="saveAccount()" data-i18n="accounts.saveAccount">Save Account</button>
                                 </div>
                             </div>
                         </div>
@@ -2825,8 +2837,8 @@
                                             </div>
                                         </div>
                                         <div class="wd-discovery-footer">
-                                            <button class="btn btn-tertiary btn-sm" onclick="viewInquiryFromBuyer('ABC')">View Inquiry</button>
-                                            <button class="btn btn-primary btn-sm" onclick="createPIForAccount('ACC-001')">Create PI</button>
+                                            <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewInquiryFromBuyer('ABC')">View Inquiry</button>
+                                            <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="createPIForAccount('ACC-001')">Create PI</button>
                                         </div>
                                     </div>
 
@@ -2859,8 +2871,8 @@
                                             </div>
                                         </div>
                                         <div class="wd-discovery-footer">
-                                            <button class="btn btn-tertiary btn-sm" onclick="viewInquiryFromBuyer('XYZ')">View Inquiry</button>
-                                            <button class="btn btn-primary btn-sm" onclick="createPIForAccount('ACC-002')">Create PI</button>
+                                            <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewInquiryFromBuyer('XYZ')">View Inquiry</button>
+                                            <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="createPIForAccount('ACC-002')">Create PI</button>
                                         </div>
                                     </div>
                                 </div>
@@ -2880,7 +2892,7 @@
                                             <h4 data-i18n="buyerDiscovery.unlockTitle">Unlock Potential Buyers</h4>
                                             <p data-i18n="buyerDiscovery.unlockDesc">Subscribe to see buyers actively searching for products like yours</p>
                                         </div>
-                                        <button class="btn btn-primary btn-md" onclick="showSubscriptionModal()">
+                                        <button class="wd-btn wd-btn-primary" onclick="showSubscriptionModal()">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                                             <span data-i18n="buyerDiscovery.subscribe">Subscribe Now</span>
                                         </button>
@@ -2981,7 +2993,7 @@
                                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                             <h4>23 potential buyers found</h4>
                                             <p>Subscribe to unlock contact information</p>
-                                            <button class="btn btn-primary btn-md" onclick="showSubscriptionModal()">Unlock for $29/month</button>
+                                            <button class="wd-btn wd-btn-primary" onclick="showSubscriptionModal()">Unlock for $29/month</button>
                                         </div>
                                     </div>
                                 </div>
@@ -3032,8 +3044,8 @@
                                             <p class="wd-inquiry-message">"We are interested in your organic olive oil for the Korean market..."</p>
                                         </div>
                                         <div class="wd-inquiry-footer">
-                                            <button class="btn btn-tertiary btn-md" data-i18n="inquiry.viewDetails">View Details</button>
-                                            <button class="btn btn-primary btn-md" data-i18n="inquiry.sendQuotation">Send Quotation</button>
+                                            <button class="wd-btn wd-btn-outline" data-i18n="inquiry.viewDetails">View Details</button>
+                                            <button class="wd-btn wd-btn-primary" data-i18n="inquiry.sendQuotation">Send Quotation</button>
                                         </div>
                                     </div>
 
@@ -3058,8 +3070,8 @@
                                             </div>
                                         </div>
                                         <div class="wd-inquiry-footer">
-                                            <button class="btn btn-tertiary btn-md" data-i18n="inquiry.viewDetails">View Details</button>
-                                            <button class="btn btn-primary btn-md" data-i18n="inquiry.approveSample">Approve Sample</button>
+                                            <button class="wd-btn wd-btn-outline" data-i18n="inquiry.viewDetails">View Details</button>
+                                            <button class="wd-btn wd-btn-primary" data-i18n="inquiry.approveSample">Approve Sample</button>
                                         </div>
                                     </div>
                                 </div>
@@ -3071,15 +3083,15 @@
                             <!-- Page Header -->
                             <div class="wd-page-header">
                                 <h2 class="wd-page-title" data-i18n="profile.title">Company Profile</h2>
-                                <button class="btn btn-primary btn-md" onclick="saveProfile(event)">
+                                <button class="wd-btn wd-btn-primary" onclick="saveProfile(event)">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                                     <span data-i18n="profile.saveChanges">Save Changes</span>
                                 </button>
                             </div>
 
-                            <form class="wd-form" id="profile-form" onsubmit="saveProfile(event)">
+                            <form class="wd-form wd-page-content" id="profile-form" onsubmit="saveProfile(event)">
                                 <!-- Company Logo Section -->
-                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                <div class="wd-card">
                                     <div class="wd-card-header">
                                         <h3 class="wd-card-title" data-i18n="profile.companyLogo">Company Logo</h3>
                                     </div>
@@ -3098,7 +3110,7 @@
                                             </div>
                                             <div class="wd-logo-actions">
                                                 <input type="file" id="logo-input" accept="image/*" style="display: none;" onchange="handleLogoSelect(event)">
-                                                <button type="button" class="btn btn-tertiary btn-md" onclick="document.getElementById('logo-input').click()">
+                                                <button type="button" class="wd-btn wd-btn-outline" onclick="document.getElementById('logo-input').click()">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                                         <polyline points="17 8 12 3 7 8"/>
@@ -3106,7 +3118,7 @@
                                                     </svg>
                                                     <span data-i18n="profile.uploadLogo">Upload Logo</span>
                                                 </button>
-                                                <button type="button" class="btn btn-destructive btn-md" id="remove-logo-btn" style="display: none;" onclick="removeLogo()">
+                                                <button type="button" class="wd-btn wd-btn-danger" id="remove-logo-btn" style="display: none;" onclick="removeLogo()">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                         <polyline points="3 6 5 6 21 6"/>
                                                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -3120,7 +3132,7 @@
                                 </div>
 
                                 <!-- Basic Info Section -->
-                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                <div class="wd-card">
                                     <div class="wd-card-header">
                                         <h3 class="wd-card-title" data-i18n="profile.basicInfo">Basic Information</h3>
                                     </div>
@@ -3155,7 +3167,7 @@
                                 </div>
 
                                 <!-- Company Details Section -->
-                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                <div class="wd-card">
                                     <div class="wd-card-header">
                                         <h3 class="wd-card-title" data-i18n="profile.companyDetails">Company Details</h3>
                                     </div>
@@ -3184,7 +3196,7 @@
                                 </div>
 
                                 <!-- Company Certifications Section -->
-                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                <div class="wd-card">
                                     <div class="wd-card-header">
                                         <h3 class="wd-card-title" data-i18n="profile.companyCertifications">Company Certifications</h3>
                                     </div>
@@ -3257,7 +3269,7 @@
                                 </div>
 
                                 <!-- Trade Terms Section -->
-                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                <div class="wd-card">
                                     <div class="wd-card-header">
                                         <h3 class="wd-card-title" data-i18n="profile.tradeTerms">Trade Terms</h3>
                                     </div>
@@ -3292,12 +3304,23 @@
                         <!-- Settings -->
                         <div class="dashboard-panel" id="panel-settings">
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="settings.title">Settings</h2>
+                                <div class="wd-page-header-content">
+                                    <h2 class="wd-page-title" data-i18n="settings.title">Settings</h2>
+                                    <p class="wd-page-subtitle" data-i18n="settings.subtitle">Manage your account, team, and subscription</p>
+                                </div>
                             </div>
 
-                            <div class="wd-settings-content" style="padding: 0 24px 24px;">
+                            <!-- Settings Sub Tabs -->
+                            <div class="wd-sub-tabs">
+                                <button class="wd-sub-tab active" onclick="switchSettingsTab('subscription')" data-i18n="settings.subscriptionTab">Subscription</button>
+                                <button class="wd-sub-tab" onclick="switchSettingsTab('team')" data-i18n="settings.teamTab">Team</button>
+                                <button class="wd-sub-tab" onclick="switchSettingsTab('logs')" data-i18n="settings.logsTab">Activity Log</button>
+                            </div>
+
+                            <!-- Team Tab Panel -->
+                            <div class="wd-sub-panel" id="settings-team-panel">
                                 <!-- Team Management Section -->
-                                <div class="wd-card" style="margin-bottom: 24px;">
+                                <div class="wd-card">
                                     <div class="wd-card-header" style="display: flex; justify-content: space-between; align-items: center;">
                                         <div style="display: flex; align-items: center; gap: 12px;">
                                             <h3 class="wd-card-title" data-i18n="settings.teamManagement">Team Management</h3>
@@ -3390,9 +3413,12 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
+                            <!-- Subscription Tab Panel -->
+                            <div class="wd-sub-panel active" id="settings-subscription-panel">
                                 <!-- Subscription Section -->
-                                <div class="wd-card" style="margin-bottom: 24px;">
+                                <div class="wd-card">
                                     <div class="wd-card-header">
                                         <h3 class="wd-card-title" data-i18n="settings.subscription">Subscription</h3>
                                     </div>
@@ -3467,7 +3493,7 @@
                                                         <span>Unlimited team members</span>
                                                     </li>
                                                 </ul>
-                                                <button class="wd-btn wd-btn-primary w-full" onclick="startCheckout('premium')">
+                                                <button class="wd-btn wd-btn-primary wd-btn-full" onclick="startCheckout('premium')">
                                                     Start Free Trial
                                                 </button>
                                             </div>
@@ -3476,7 +3502,7 @@
                                 </div>
 
                                 <!-- Billing History -->
-                                <div class="wd-card" style="margin-bottom: 24px;">
+                                <div class="wd-card">
                                     <div class="wd-card-header">
                                         <h3 class="wd-card-title" data-i18n="settings.billingHistory">Billing History</h3>
                                     </div>
@@ -3487,7 +3513,10 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
+                            <!-- Logs Tab Panel -->
+                            <div class="wd-sub-panel" id="settings-logs-panel">
                                 <!-- Activity Log -->
                                 <div class="wd-card">
                                     <div class="wd-card-header" style="display: flex; justify-content: space-between; align-items: center;">
@@ -3589,7 +3618,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div><!-- end panel-settings -->
                     </div>
                 </div>
             </section>
@@ -3730,8 +3759,8 @@
                     </form>
                 </div>
                 <div class="wd-modal-footer">
-                    <button class="btn btn-tertiary btn-md" onclick="closeProductModal()" data-i18n="modal.cancel">Cancel</button>
-                    <button class="btn btn-primary btn-md" onclick="saveProduct()" data-i18n="modal.saveProduct">Save</button>
+                    <button class="wd-btn wd-btn-outline" onclick="closeProductModal()" data-i18n="modal.cancel">Cancel</button>
+                    <button class="wd-btn wd-btn-primary" onclick="saveProduct()" data-i18n="modal.saveProduct">Save</button>
                 </div>
             </div>
         </div>
@@ -3817,8 +3846,8 @@
                 </div>
             </div>
             <div class="wd-modal-footer">
-                <button type="button" class="btn btn-tertiary btn-md" onclick="closeCropModal()" data-i18n="common.cancel">Cancel</button>
-                <button type="button" class="btn btn-primary btn-md" onclick="applyCrop()" data-i18n="profile.applyCrop">Apply</button>
+                <button type="button" class="wd-btn wd-btn-outline" onclick="closeCropModal()" data-i18n="common.cancel">Cancel</button>
+                <button type="button" class="wd-btn wd-btn-primary" onclick="applyCrop()" data-i18n="profile.applyCrop">Apply</button>
             </div>
         </div>
     </div>

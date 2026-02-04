@@ -137,6 +137,23 @@ async function handleLogin(e) {
         showDashboard();
     } catch (apiError) {
         console.error('Login failed:', apiError.message);
+
+        // 로컬 테스트용: API 실패 시 데모 모드로 로그인
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.log('Demo mode login (localhost)');
+            localStorage.setItem('supplier_logged_in', 'true');
+            localStorage.setItem('supplier_token', 'demo_token');
+            localStorage.setItem('supplier_id', 'demo_supplier');
+            localStorage.setItem('supplier_email', email);
+            localStorage.setItem('supplier_name', email.split('@')[0] || 'Demo User');
+            localStorage.setItem('wedealize_email', email);
+            localStorage.setItem('wedealize_name', email.split('@')[0] || 'Demo User');
+
+            showToast('Demo mode: Logged in successfully!', 'success');
+            showDashboard();
+            return;
+        }
+
         showToast('Invalid email or password', 'error');
     }
 }

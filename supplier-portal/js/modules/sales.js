@@ -2810,4 +2810,25 @@ window.filterActivityLog = () => salesModule.filterActivityLog();
 window.loadMoreActivities = () => salesModule.loadMoreActivities();
 window.viewActivityTarget = (type, targetId) => salesModule.viewActivityTarget(type, targetId);
 
+// Settings Tab Navigation
+window.switchSettingsTab = (tabName) => {
+    // Update tab buttons
+    const tabs = document.querySelectorAll('.wd-sub-tabs .wd-sub-tab');
+    tabs.forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('onclick')?.includes(tabName)) {
+            tab.classList.add('active');
+        }
+    });
+
+    // Update panels
+    const panels = document.querySelectorAll('[id^="settings-"][id$="-panel"]');
+    panels.forEach(panel => {
+        panel.classList.remove('active');
+        if (panel.id === `settings-${tabName}-panel`) {
+            panel.classList.add('active');
+        }
+    });
+};
+
 export default salesModule;
