@@ -10,7 +10,7 @@ export class EmailService {
 
   constructor(private configService: ConfigService) {
     const apiToken = this.configService.get<string>('postmark.apiToken');
-    this.fromEmail = this.configService.get<string>('email.from') || 'noreply@wedealize.com';
+    this.fromEmail = this.configService.get<string>('email.from') || 'cs@wedealize.com';
 
     if (apiToken) {
       this.client = new postmark.ServerClient(apiToken);

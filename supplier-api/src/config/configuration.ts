@@ -24,7 +24,7 @@ export default () => ({
   },
 
   email: {
-    from: process.env.EMAIL_FROM || 'noreply@wedealize.com',
+    from: process.env.EMAIL_FROM || 'cs@wedealize.com',
   },
 
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
