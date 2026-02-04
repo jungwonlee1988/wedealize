@@ -7,36 +7,39 @@
 }
 
 :root {
-    --primary: #6366f1;
-    --primary-light: #818cf8;
-    --primary-dark: #4f46e5;
-    --primary-bg: #eef2ff;
+    /* WeDealize Brand Colors */
+    --primary: #FFE500;
+    --primary-light: #FFF176;
+    --primary-dark: #E6CE00;
+    --primary-bg: #FFFDE7;
+    --accent: #1a1a1a;
+    --accent-light: #333333;
+    /* Status Colors */
     --success: #10b981;
     --success-light: #d1fae5;
     --warning: #f59e0b;
     --warning-light: #fef3c7;
     --danger: #ef4444;
     --danger-light: #fee2e2;
-    --info: #06b6d4;
-    --info-light: #cffafe;
-    --purple: #8b5cf6;
-    --purple-light: #ede9fe;
-    --pink: #ec4899;
-    --pink-light: #fce7f3;
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
-    --gray-500: #6b7280;
-    --gray-600: #4b5563;
-    --gray-700: #374151;
-    --gray-800: #1f2937;
-    --gray-900: #111827;
+    --info: #3b82f6;
+    --info-light: #dbeafe;
+    /* Grayscale */
+    --gray-50: #fafafa;
+    --gray-100: #f5f5f5;
+    --gray-200: #e5e5e5;
+    --gray-300: #d4d4d4;
+    --gray-400: #a3a3a3;
+    --gray-500: #737373;
+    --gray-600: #525252;
+    --gray-700: #404040;
+    --gray-800: #262626;
+    --gray-900: #171717;
+    /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    /* Border Radius */
     --radius-sm: 6px;
     --radius: 10px;
     --radius-lg: 16px;
@@ -45,7 +48,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    background: #f5f5f5;
     color: var(--gray-800);
     line-height: 1.6;
     min-height: 100vh;
@@ -107,7 +110,7 @@ body.dashboard-mode .portal-badge {
 
 .portal-badge {
     background: var(--primary);
-    color: white;
+    color: var(--gray-900);
     font-size: 0.7rem;
     padding: 4px 10px;
     border-radius: 12px;
@@ -312,7 +315,7 @@ body.dashboard-mode .portal-badge {
     align-items: center;
     min-height: calc(100vh - 70px);
     padding: 40px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gray-900);
 }
 
 .auth-card {
@@ -352,8 +355,8 @@ body.dashboard-mode .portal-badge {
 }
 
 .auth-tab.active {
-    background: white;
-    color: var(--primary);
+    background: var(--primary);
+    color: var(--gray-900);
     font-weight: 600;
     box-shadow: var(--shadow-sm);
 }
@@ -576,7 +579,7 @@ body.dashboard-mode .portal-badge {
     outline: none;
     border-color: var(--primary);
     background: white;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+    box-shadow: 0 0 0 4px rgba(255, 229, 0, 0.2);
 }
 
 .form-group input::placeholder {
@@ -635,13 +638,14 @@ body.dashboard-mode .portal-badge {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: white;
+    background: var(--primary);
+    color: var(--gray-900);
+    font-weight: 600;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    background: var(--primary-light);
+    box-shadow: 0 4px 12px rgba(255, 229, 0, 0.4);
 }
 
 .btn-outline {
@@ -701,7 +705,7 @@ body.dashboard-mode .portal-badge {
 
 .dashboard-sidebar {
     width: 260px;
-    background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%);
+    background: var(--gray-900);
     padding: 20px 0;
     flex-shrink: 0;
 }
@@ -720,7 +724,7 @@ body.dashboard-mode .portal-badge {
     padding: 14px 16px;
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.6);
     font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
@@ -736,9 +740,10 @@ body.dashboard-mode .portal-badge {
 }
 
 .nav-btn.active {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    background: var(--primary);
+    color: var(--gray-900);
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 229, 0, 0.3);
 }
 
 .nav-icon {
@@ -750,13 +755,12 @@ body.dashboard-mode .portal-badge {
 .badge-count {
     position: absolute;
     right: 14px;
-    background: linear-gradient(135deg, var(--pink) 0%, var(--danger) 100%);
+    background: var(--danger);
     color: white;
     font-size: 0.7rem;
     font-weight: 600;
     padding: 3px 8px;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);
 }
 
 /* Sidebar Submenu */
@@ -803,7 +807,7 @@ body.dashboard-mode .portal-badge {
     flex: 1;
     padding: 30px;
     overflow-y: auto;
-    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    background: var(--gray-100);
 }
 
 .dashboard-panel {
@@ -864,7 +868,7 @@ body.dashboard-mode .portal-badge {
 .stat-icon {
     width: 52px;
     height: 52px;
-    background: linear-gradient(135deg, var(--primary-bg) 0%, #ddd6fe 100%);
+    background: var(--primary-bg);
     border-radius: var(--radius);
     display: flex;
     align-items: center;
@@ -872,11 +876,13 @@ body.dashboard-mode .portal-badge {
     font-size: 1.6rem;
 }
 
-.stat-icon.success { background: linear-gradient(135deg, var(--success-light) 0%, #a7f3d0 100%); }
-.stat-icon.warning { background: linear-gradient(135deg, var(--warning-light) 0%, #fde68a 100%); }
-.stat-icon.info { background: linear-gradient(135deg, var(--info-light) 0%, #a5f3fc 100%); }
-.stat-icon.purple { background: linear-gradient(135deg, var(--purple-light) 0%, #ddd6fe 100%); }
-.stat-icon.pink { background: linear-gradient(135deg, var(--pink-light) 0%, #fbcfe8 100%); }
+.stat-icon.primary { background: var(--primary); }
+.stat-icon.success { background: var(--success-light); }
+.stat-icon.warning { background: var(--warning-light); }
+.stat-icon.info { background: var(--info-light); }
+.stat-icon.dark { background: var(--gray-800); }
+.stat-icon.purple { background: #ede9fe; }
+.stat-icon.pink { background: #fce7f3; }
 
 .stat-value {
     display: block;
@@ -1405,7 +1411,7 @@ body.dashboard-mode .portal-badge {
 }
 
 .data-table tbody tr:hover {
-    background: linear-gradient(90deg, var(--primary-bg) 0%, transparent 100%);
+    background: var(--primary-bg);
 }
 
 .incomplete-row {
