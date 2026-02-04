@@ -7,11 +7,22 @@
 }
 
 :root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --primary-dark: #4f46e5;
+    --primary-bg: #eef2ff;
     --success: #10b981;
+    --success-light: #d1fae5;
     --warning: #f59e0b;
+    --warning-light: #fef3c7;
     --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --info: #06b6d4;
+    --info-light: #cffafe;
+    --purple: #8b5cf6;
+    --purple-light: #ede9fe;
+    --pink: #ec4899;
+    --pink-light: #fce7f3;
     --gray-50: #f9fafb;
     --gray-100: #f3f4f6;
     --gray-200: #e5e7eb;
@@ -22,14 +33,26 @@
     --gray-700: #374151;
     --gray-800: #1f2937;
     --gray-900: #111827;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--gray-50);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
     color: var(--gray-800);
-    line-height: 1.5;
+    line-height: 1.6;
+    min-height: 100vh;
 }
+
+/* Google Fonts - Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* Portal App */
 .portal-app {
@@ -294,17 +317,21 @@ body.dashboard-mode .portal-badge {
 
 .auth-card {
     background: white;
-    border-radius: 16px;
-    padding: 40px;
+    border-radius: var(--radius-xl);
+    padding: 44px;
     width: 100%;
     max-width: 480px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .auth-tabs {
     display: flex;
     margin-bottom: 30px;
-    border-bottom: 1px solid var(--gray-200);
+    background: var(--gray-100);
+    border-radius: var(--radius);
+    padding: 4px;
+    gap: 4px;
 }
 
 .auth-tab {
@@ -313,24 +340,22 @@ body.dashboard-mode .portal-badge {
     background: none;
     border: none;
     font-size: 1rem;
-    color: var(--gray-400);
+    color: var(--gray-500);
     cursor: pointer;
-    position: relative;
+    border-radius: var(--radius-sm);
+    transition: all 0.25s ease;
+    font-weight: 500;
+}
+
+.auth-tab:hover {
+    color: var(--gray-700);
 }
 
 .auth-tab.active {
+    background: white;
     color: var(--primary);
     font-weight: 600;
-}
-
-.auth-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--primary);
+    box-shadow: var(--shadow-sm);
 }
 
 .auth-form {
@@ -339,16 +364,19 @@ body.dashboard-mode .portal-badge {
 
 .auth-form.active {
     display: block;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .auth-form h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
     margin-bottom: 8px;
+    color: var(--gray-800);
 }
 
 .auth-subtitle {
     color: var(--gray-500);
-    margin-bottom: 25px;
+    margin-bottom: 28px;
 }
 
 /* Social Login */
@@ -513,14 +541,14 @@ body.dashboard-mode .portal-badge {
 
 /* Forms */
 .form-group {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    font-size: 0.9rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
     color: var(--gray-700);
 }
 
@@ -528,11 +556,18 @@ body.dashboard-mode .portal-badge {
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--gray-200);
-    border-radius: 8px;
+    padding: 14px 16px;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
     font-size: 0.95rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.25s ease;
+    background: var(--gray-50);
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    border-color: var(--gray-300);
 }
 
 .form-group input:focus,
@@ -540,7 +575,12 @@ body.dashboard-mode .portal-badge {
 .form-group textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+.form-group input::placeholder {
+    color: var(--gray-400);
 }
 
 .form-row {
@@ -572,39 +612,61 @@ body.dashboard-mode .portal-badge {
 /* Buttons */
 .btn {
     padding: 12px 24px;
-    border-radius: 8px;
+    border-radius: var(--radius);
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     border: none;
-    transition: all 0.2s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+}
+
+.btn:active {
+    transform: translateY(0);
 }
 
 .btn-primary {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark);
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
 }
 
 .btn-outline {
     background: white;
-    border: 1px solid var(--gray-200);
+    border: 2px solid var(--gray-200);
     color: var(--gray-700);
 }
 
 .btn-outline:hover {
     background: var(--gray-50);
+    border-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+    color: white;
+}
+
+.btn-success:hover {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
 .btn-warning {
-    background: var(--warning);
+    background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
     color: white;
 }
 
@@ -613,8 +675,9 @@ body.dashboard-mode .portal-badge {
 }
 
 .btn-sm {
-    padding: 6px 12px;
+    padding: 8px 14px;
     font-size: 0.85rem;
+    border-radius: var(--radius-sm);
 }
 
 .btn-lg {
@@ -638,7 +701,7 @@ body.dashboard-mode .portal-badge {
 
 .dashboard-sidebar {
     width: 260px;
-    background: var(--gray-900);
+    background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%);
     padding: 20px 0;
     flex-shrink: 0;
 }
@@ -646,45 +709,54 @@ body.dashboard-mode .portal-badge {
 .sidebar-nav {
     display: flex;
     flex-direction: column;
+    gap: 4px;
+    padding: 0 12px;
 }
 
 .nav-btn {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 14px 24px;
+    padding: 14px 16px;
     background: none;
     border: none;
-    color: var(--gray-400);
+    color: rgba(255, 255, 255, 0.65);
     font-size: 0.95rem;
+    font-weight: 500;
     cursor: pointer;
     text-align: left;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
     position: relative;
+    border-radius: var(--radius);
 }
 
 .nav-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     color: white;
 }
 
 .nav-btn.active {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
     color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .nav-icon {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
+    width: 28px;
+    text-align: center;
 }
 
 .badge-count {
     position: absolute;
-    right: 20px;
-    background: var(--danger);
+    right: 14px;
+    background: linear-gradient(135deg, var(--pink) 0%, var(--danger) 100%);
     color: white;
     font-size: 0.7rem;
-    padding: 2px 8px;
+    font-weight: 600;
+    padding: 3px 8px;
     border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);
 }
 
 /* Sidebar Submenu */
@@ -731,6 +803,7 @@ body.dashboard-mode .portal-badge {
     flex: 1;
     padding: 30px;
     overflow-y: auto;
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .dashboard-panel {
@@ -739,19 +812,28 @@ body.dashboard-mode .portal-badge {
 
 .dashboard-panel.active {
     display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .panel-header {
-    margin-bottom: 25px;
+    margin-bottom: 28px;
 }
 
 .panel-header h2 {
-    font-size: 1.6rem;
-    margin-bottom: 5px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--gray-800);
 }
 
 .panel-header p {
     color: var(--gray-500);
+    font-size: 0.95rem;
 }
 
 /* Stats Grid */
@@ -764,34 +846,49 @@ body.dashboard-mode .portal-badge {
 
 .stat-card {
     background: white;
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: var(--radius-lg);
+    padding: 22px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    gap: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .stat-icon {
-    width: 50px;
-    height: 50px;
-    background: var(--gray-100);
-    border-radius: 10px;
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--primary-bg) 0%, #ddd6fe 100%);
+    border-radius: var(--radius);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
 }
+
+.stat-icon.success { background: linear-gradient(135deg, var(--success-light) 0%, #a7f3d0 100%); }
+.stat-icon.warning { background: linear-gradient(135deg, var(--warning-light) 0%, #fde68a 100%); }
+.stat-icon.info { background: linear-gradient(135deg, var(--info-light) 0%, #a5f3fc 100%); }
+.stat-icon.purple { background: linear-gradient(135deg, var(--purple-light) 0%, #ddd6fe 100%); }
+.stat-icon.pink { background: linear-gradient(135deg, var(--pink-light) 0%, #fbcfe8 100%); }
 
 .stat-value {
     display: block;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 700;
+    color: var(--gray-800);
 }
 
 .stat-label {
     font-size: 0.85rem;
     color: var(--gray-500);
+    font-weight: 500;
 }
 
 /* Alerts */
@@ -1281,30 +1378,34 @@ body.dashboard-mode .portal-badge {
 .data-table {
     width: 100%;
     background: white;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .data-table th,
 .data-table td {
-    padding: 14px 16px;
+    padding: 16px 18px;
     text-align: left;
 }
 
 .data-table th {
-    background: var(--gray-50);
+    background: linear-gradient(180deg, var(--gray-50) 0%, var(--gray-100) 100%);
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .data-table tbody tr {
     border-bottom: 1px solid var(--gray-100);
+    transition: all 0.2s ease;
 }
 
 .data-table tbody tr:hover {
-    background: var(--gray-50);
+    background: linear-gradient(90deg, var(--primary-bg) 0%, transparent 100%);
 }
 
 .incomplete-row {
@@ -2438,36 +2539,46 @@ body.dashboard-mode .portal-badge {
 }
 
 .status-badge {
-    display: inline-block;
-    padding: 4px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
     border-radius: 20px;
     font-size: 0.8rem;
-    font-weight: 500;
+    font-weight: 600;
     text-transform: capitalize;
 }
 
+.status-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
 .status-badge.pending {
-    background: #fef3c7;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     color: #92400e;
 }
 
 .status-badge.confirmed {
-    background: #dbeafe;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
     color: #1e40af;
 }
 
 .status-badge.shipping {
-    background: #e0e7ff;
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
     color: #3730a3;
 }
 
 .status-badge.completed {
-    background: #d1fae5;
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
     color: #065f46;
 }
 
 .status-badge.cancelled {
-    background: #fee2e2;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
     color: #991b1b;
 }
 
