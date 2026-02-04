@@ -2571,6 +2571,14 @@ body.dashboard-mode .portal-badge {
     color: #6b7280;
 }
 
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px !important;
+    color: var(--gray-500);
+    font-style: italic;
+}
+
 /* Company Logo Upload */
 .logo-upload-container {
     display: flex;

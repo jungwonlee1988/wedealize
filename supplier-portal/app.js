@@ -2074,38 +2074,65 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
 
 // ==================== PO Management ====================
 
-// PO 목록 필터링
-function filterPOList() {
-    const filter = document.getElementById('po-status-filter').value;
+// PO 목록 필터링 및 검색 적용
+function applyPOFilters() {
+    const statusFilter = document.getElementById('po-status-filter').value;
+    const searchTerm = document.getElementById('po-search').value.toLowerCase().trim();
     const rows = document.querySelectorAll('#po-list-tbody tr');
+    let visibleCount = 0;
 
     rows.forEach(row => {
-        const statusBadge = row.querySelector('.status-badge');
-        const status = statusBadge ? statusBadge.classList[1] : '';
+        const status = row.dataset.status || '';
+        const poNumber = (row.dataset.po || '').toLowerCase();
+        const buyerName = (row.dataset.buyer || '').toLowerCase();
 
-        if (filter === 'all' || status === filter) {
+        // 상태 필터 조건
+        const matchesStatus = statusFilter === 'all' || status === statusFilter;
+
+        // 검색 조건
+        const matchesSearch = !searchTerm ||
+            poNumber.includes(searchTerm) ||
+            buyerName.includes(searchTerm);
+
+        // 둘 다 만족해야 표시
+        if (matchesStatus && matchesSearch) {
             row.style.display = '';
+            visibleCount++;
         } else {
             row.style.display = 'none';
         }
     });
+
+    // 결과 없음 표시
+    updatePOEmptyState(visibleCount === 0);
+}
+
+// 빈 상태 표시
+function updatePOEmptyState(isEmpty) {
+    let emptyRow = document.getElementById('po-empty-row');
+
+    if (isEmpty) {
+        if (!emptyRow) {
+            const tbody = document.getElementById('po-list-tbody');
+            emptyRow = document.createElement('tr');
+            emptyRow.id = 'po-empty-row';
+            emptyRow.innerHTML = '<td colspan="7" class="empty-state">No orders found matching your criteria.</td>';
+            tbody.appendChild(emptyRow);
+        }
+        emptyRow.style.display = '';
+    } else if (emptyRow) {
+        emptyRow.style.display = 'none';
+    }
+}
+
+// PO 목록 필터링
+function filterPOList() {
+    applyPOFilters();
 }
 
 // PO 검색
 function searchPO() {
-    const searchTerm = document.getElementById('po-search').value.toLowerCase();
-    const rows = document.querySelectorAll('#po-list-tbody tr');
-
-    rows.forEach(row => {
-        const poNumber = row.querySelector('.po-number')?.textContent.toLowerCase() || '';
-        const buyerName = row.querySelector('.buyer-name')?.textContent.toLowerCase() || '';
-
-        if (poNumber.includes(searchTerm) || buyerName.includes(searchTerm)) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
+    applyPOFilters();
 }
 
 // PO 상세 보기
