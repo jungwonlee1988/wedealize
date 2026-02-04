@@ -1016,7 +1016,7 @@
                                         <span class="status-badge shipping-requested" id="po-detail-status">운송요청완료</span>
                                         <span class="po-detail-date" id="po-detail-date">2026.02.03 13:44</span>
                                     </div>
-                                    <button class="btn btn-outline btn-cancel" onclick="cancelPO()" data-i18n="po.cancelOrder">발주 취소</button>
+                                    <button class="wd-btn wd-btn-outline wd-btn-danger" onclick="cancelPO()" data-i18n="po.cancelOrder">발주 취소</button>
                                 </div>
 
                                 <!-- Exporter Info -->
@@ -1608,20 +1608,22 @@
     </script>
 
     <!-- Logo Crop Modal -->
-    <div class="modal-overlay" id="crop-modal" style="display: none;">
-        <div class="modal-content crop-modal-content">
-            <div class="modal-header">
-                <h3 data-i18n="profile.cropLogo">Crop Logo</h3>
-                <button type="button" class="modal-close" onclick="closeCropModal()">&times;</button>
+    <div class="wd-modal-overlay" id="crop-modal" style="display: none;">
+        <div class="wd-modal" style="max-width: 500px;">
+            <div class="wd-modal-header">
+                <h3 class="wd-modal-title" data-i18n="profile.cropLogo">로고 자르기</h3>
+                <button type="button" class="wd-btn-icon" onclick="closeCropModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
-            <div class="modal-body">
+            <div class="wd-modal-body">
                 <div class="crop-container">
                     <img id="crop-image" src="" alt="Crop preview">
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline" onclick="closeCropModal()" data-i18n="common.cancel">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="applyCrop()" data-i18n="profile.applyCrop">Apply Crop</button>
+            <div class="wd-modal-footer">
+                <button type="button" class="wd-btn wd-btn-outline" onclick="closeCropModal()" data-i18n="common.cancel">취소</button>
+                <button type="button" class="wd-btn wd-btn-primary" onclick="applyCrop()" data-i18n="profile.applyCrop">적용</button>
             </div>
         </div>
     </div>
