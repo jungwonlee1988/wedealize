@@ -5,46 +5,142 @@
 
 /* ==================== Design Tokens ==================== */
 :root {
+    /* ===== System Colors (Design System V2) ===== */
+
+    /* Text Colors */
+    --wd-sys-text-1: #000000;
+    --wd-sys-text-2: #3d3d3d;
+    --wd-sys-text-3: #707070;
+    --wd-sys-text-4: #a3a3a3;
+    --wd-sys-text-5: #ffffff;
+
+    /* Surface Colors */
+    --wd-sys-surface-1: #ffffff;
+    --wd-sys-surface-2: #fafafa;
+    --wd-sys-surface-3: #f0f0f0;
+    --wd-sys-surface-4: #d6d6d6;
+    --wd-sys-surface-5: #575757;
+    --wd-sys-surface-6: #3d3d3d;
+    --wd-sys-surface-7: #242424;
+
+    /* Border Colors */
+    --wd-sys-border-1: #ffffff;
+    --wd-sys-border-2: #f0f0f0;
+    --wd-sys-border-3: #d6d6d6;
+    --wd-sys-border-4: #000000;
+
+    /* Icon Colors */
+    --wd-sys-icon-1: #000000;
+    --wd-sys-icon-2: #707070;
+    --wd-sys-icon-3: #a3a3a3;
+    --wd-sys-icon-4: #d6d6d6;
+    --wd-sys-icon-5: #ffffff;
+
+    /* Brand Colors (Yellow) */
+    --wd-sys-brand-1: #fffae0;
+    --wd-sys-brand-2: #ffee8a;
+    --wd-sys-brand-3: #ffe654;
+    --wd-sys-brand-4: #ffe133;
+    --wd-sys-brand-5: #ffd900;
+
+    /* Tone Colors - Red */
+    --wd-sys-tone-red-1: #ffe8e0;
+    --wd-sys-tone-red-2: #ffc4b0;
+    --wd-sys-tone-red-3: #ff4000;
+    --wd-sys-tone-red-4: #e83a00;
+    --wd-sys-tone-red-5: #b52d00;
+
+    /* Tone Colors - Green */
+    --wd-sys-tone-green-1: #eaf6eb;
+    --wd-sys-tone-green-2: #c8e6c9;
+    --wd-sys-tone-green-3: #4caf50;
+    --wd-sys-tone-green-4: #459f49;
+
+    /* Tone Colors - Blue */
+    --wd-sys-tone-blue-1: #e2f2fe;
+    --wd-sys-tone-blue-2: #badefb;
+    --wd-sys-tone-blue-3: #2196f3;
+    --wd-sys-tone-blue-4: #1e89dd;
+
+    /* Tone Colors - Yellow */
+    --wd-sys-tone-yellow-1: #fffae0;
+    --wd-sys-tone-yellow-2: #ffee8a;
+    --wd-sys-tone-yellow-3: #ffd900;
+    --wd-sys-tone-yellow-4: #e8c500;
+
+    /* ===== Button Component Colors ===== */
+
+    /* Primary Button */
+    --wd-btn-primary-surface-enabled: var(--wd-sys-brand-5);
+    --wd-btn-primary-surface-hover: var(--wd-sys-brand-3);
+    --wd-btn-primary-surface-focus: var(--wd-sys-brand-3);
+    --wd-btn-primary-surface-pressed: var(--wd-sys-brand-2);
+    --wd-btn-primary-text: var(--wd-sys-text-1);
+
+    /* Secondary Button */
+    --wd-btn-secondary-surface-enabled: var(--wd-sys-surface-7);
+    --wd-btn-secondary-surface-hover: var(--wd-sys-surface-6);
+    --wd-btn-secondary-surface-focus: var(--wd-sys-surface-6);
+    --wd-btn-secondary-surface-pressed: var(--wd-sys-surface-5);
+    --wd-btn-secondary-text: var(--wd-sys-text-5);
+
+    /* Tertiary Button */
+    --wd-btn-tertiary-surface-enabled: var(--wd-sys-surface-1);
+    --wd-btn-tertiary-surface-hover: var(--wd-sys-surface-2);
+    --wd-btn-tertiary-surface-focus: var(--wd-sys-surface-2);
+    --wd-btn-tertiary-surface-pressed: var(--wd-sys-surface-3);
+    --wd-btn-tertiary-text: var(--wd-sys-text-1);
+    --wd-btn-tertiary-border: var(--wd-sys-border-3);
+
+    /* Destructive Button */
+    --wd-btn-destructive-surface-enabled: var(--wd-sys-tone-red-5);
+    --wd-btn-destructive-surface-hover: var(--wd-sys-tone-red-4);
+    --wd-btn-destructive-surface-focus: var(--wd-sys-tone-red-4);
+    --wd-btn-destructive-surface-pressed: var(--wd-sys-tone-red-3);
+    --wd-btn-destructive-text: var(--wd-sys-text-5);
+
+    /* ===== Legacy Colors (Backward Compatibility) ===== */
+
     /* Brand Colors */
-    --wd-primary: #FFE500;
-    --wd-primary-hover: #F5DC00;
-    --wd-primary-light: #FFF9C4;
-    --wd-primary-bg: #FFFDE7;
+    --wd-primary: #ffd900;
+    --wd-primary-hover: #ffe654;
+    --wd-primary-light: #ffee8a;
+    --wd-primary-bg: #fffae0;
 
     /* Neutral Colors */
-    --wd-black: #1a1a1a;
+    --wd-black: #000000;
     --wd-gray-900: #212121;
-    --wd-gray-800: #424242;
-    --wd-gray-700: #616161;
-    --wd-gray-600: #757575;
-    --wd-gray-500: #9e9e9e;
+    --wd-gray-800: #3d3d3d;
+    --wd-gray-700: #575757;
+    --wd-gray-600: #707070;
+    --wd-gray-500: #a3a3a3;
     --wd-gray-400: #bdbdbd;
-    --wd-gray-300: #e0e0e0;
-    --wd-gray-200: #eeeeee;
-    --wd-gray-100: #f5f5f5;
+    --wd-gray-300: #d6d6d6;
+    --wd-gray-200: #f0f0f0;
+    --wd-gray-100: #fafafa;
     --wd-gray-50: #fafafa;
     --wd-white: #ffffff;
 
     /* Status Colors */
     --wd-success: #4caf50;
-    --wd-success-light: #e8f5e9;
+    --wd-success-light: #eaf6eb;
     --wd-warning: #ff9800;
     --wd-warning-light: #fff3e0;
-    --wd-error: #f44336;
-    --wd-error-light: #ffebee;
+    --wd-error: #b52d00;
+    --wd-error-light: #ffe8e0;
     --wd-info: #2196f3;
-    --wd-info-light: #e3f2fd;
+    --wd-info-light: #e2f2fe;
 
     /* Typography */
-    --wd-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --wd-font-size-xs: 11px;
+    --wd-font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --wd-font-size-xs: 10px;
     --wd-font-size-sm: 12px;
     --wd-font-size-base: 14px;
-    --wd-font-size-md: 15px;
-    --wd-font-size-lg: 16px;
-    --wd-font-size-xl: 18px;
-    --wd-font-size-2xl: 20px;
-    --wd-font-size-3xl: 24px;
+    --wd-font-size-md: 16px;
+    --wd-font-size-lg: 18px;
+    --wd-font-size-xl: 20px;
+    --wd-font-size-2xl: 24px;
+    --wd-font-size-3xl: 32px;
 
     /* Font Weights */
     --wd-font-normal: 400;
@@ -53,6 +149,8 @@
     --wd-font-bold: 700;
 
     /* Spacing */
+    --wd-space-0: 0px;
+    --wd-space-50: 2px;
     --wd-space-1: 4px;
     --wd-space-2: 8px;
     --wd-space-3: 12px;
@@ -62,13 +160,16 @@
     --wd-space-8: 32px;
     --wd-space-10: 40px;
     --wd-space-12: 48px;
+    --wd-space-16: 64px;
+    --wd-space-20: 80px;
 
     /* Border Radius */
-    --wd-radius-sm: 4px;
-    --wd-radius-md: 6px;
+    --wd-radius-sm: 2px;
+    --wd-radius-md: 4px;
     --wd-radius-lg: 8px;
     --wd-radius-xl: 12px;
-    --wd-radius-full: 9999px;
+    --wd-radius-2xl: 16px;
+    --wd-radius-full: 999px;
 
     /* Shadows */
     --wd-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -140,20 +241,23 @@
     color: var(--wd-black);
 }
 
-/* ==================== Buttons ==================== */
+/* ==================== Buttons (Design System V2) ==================== */
+
+/* ===== ActionButton Base ===== */
 .wd-btn {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--wd-space-2);
-    padding: 8px 16px;
-    font-size: var(--wd-font-size-base);
-    font-weight: var(--wd-font-medium);
-    border-radius: var(--wd-radius-md);
-    border: 1px solid transparent;
+    flex-shrink: 0;
+    border-radius: var(--wd-radius-full);
+    border: none;
     cursor: pointer;
-    transition: all var(--wd-transition-fast);
+    transition: all var(--wd-transition-normal);
     white-space: nowrap;
+    font-family: var(--wd-font-family);
+    font-weight: var(--wd-font-medium);
+    position: relative;
+    z-index: 0;
 }
 
 .wd-btn:disabled {
@@ -161,46 +265,295 @@
     cursor: not-allowed;
 }
 
+.wd-btn[data-loading='true'] {
+    pointer-events: none;
+    cursor: progress;
+}
+
+/* ===== ActionButton Sizes ===== */
+
+/* Small (sm) */
+.wd-btn-sm {
+    height: 36px;
+    padding-left: 24px;
+    padding-right: 24px;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.wd-btn-sm.wd-btn-icon-only {
+    width: 36px;
+    padding: 0;
+}
+
+/* Medium (md) - Default */
+.wd-btn-md,
+.wd-btn {
+    height: 44px;
+    padding-left: 32px;
+    padding-right: 32px;
+    gap: 16px;
+    font-size: 18px;
+}
+
+.wd-btn-md.wd-btn-icon-only {
+    width: 44px;
+    padding: 0;
+}
+
+/* Large (lg) */
+.wd-btn-lg {
+    height: 52px;
+    padding-left: 40px;
+    padding-right: 40px;
+    gap: 32px;
+    font-size: 18px;
+}
+
+.wd-btn-lg.wd-btn-icon-only {
+    width: 52px;
+    padding: 0;
+}
+
+/* ===== ActionButton Variants ===== */
+
+/* Primary Variant */
 .wd-btn-primary {
-    background: var(--wd-primary);
-    color: var(--wd-black);
-    border-color: var(--wd-primary);
+    background: var(--wd-btn-primary-surface-enabled);
+    color: var(--wd-btn-primary-text);
 }
 
 .wd-btn-primary:hover:not(:disabled) {
-    background: var(--wd-primary-hover);
-    border-color: var(--wd-primary-hover);
+    background: var(--wd-btn-primary-surface-hover);
 }
 
+.wd-btn-primary:focus-visible:not(:disabled) {
+    background: var(--wd-btn-primary-surface-focus);
+    outline: none;
+}
+
+.wd-btn-primary:active:not(:disabled) {
+    background: var(--wd-btn-primary-surface-pressed);
+}
+
+/* Secondary Variant */
+.wd-btn-secondary {
+    background: var(--wd-btn-secondary-surface-enabled);
+    color: var(--wd-btn-secondary-text);
+}
+
+.wd-btn-secondary:hover:not(:disabled) {
+    background: var(--wd-btn-secondary-surface-hover);
+}
+
+.wd-btn-secondary:focus-visible:not(:disabled) {
+    background: var(--wd-btn-secondary-surface-focus);
+    outline: none;
+}
+
+.wd-btn-secondary:active:not(:disabled) {
+    background: var(--wd-btn-secondary-surface-pressed);
+}
+
+/* Tertiary Variant */
+.wd-btn-tertiary {
+    background: var(--wd-btn-tertiary-surface-enabled);
+    color: var(--wd-btn-tertiary-text);
+    border: 1px solid var(--wd-btn-tertiary-border);
+}
+
+.wd-btn-tertiary:hover:not(:disabled) {
+    background: var(--wd-btn-tertiary-surface-hover);
+}
+
+.wd-btn-tertiary:focus-visible:not(:disabled) {
+    background: var(--wd-btn-tertiary-surface-focus);
+    outline: none;
+}
+
+.wd-btn-tertiary:active:not(:disabled) {
+    background: var(--wd-btn-tertiary-surface-pressed);
+}
+
+/* Destructive Variant */
+.wd-btn-destructive {
+    background: var(--wd-btn-destructive-surface-enabled);
+    color: var(--wd-btn-destructive-text);
+}
+
+.wd-btn-destructive:hover:not(:disabled) {
+    background: var(--wd-btn-destructive-surface-hover);
+}
+
+.wd-btn-destructive:focus-visible:not(:disabled) {
+    background: var(--wd-btn-destructive-surface-focus);
+    outline: none;
+}
+
+.wd-btn-destructive:active:not(:disabled) {
+    background: var(--wd-btn-destructive-surface-pressed);
+}
+
+/* ===== Legacy Variants (Backward Compatibility) ===== */
+
+/* Outline (maps to Tertiary) */
 .wd-btn-outline {
-    background: var(--wd-white);
-    color: var(--wd-gray-700);
-    border-color: var(--wd-gray-300);
+    background: var(--wd-btn-tertiary-surface-enabled);
+    color: var(--wd-btn-tertiary-text);
+    border: 1px solid var(--wd-btn-tertiary-border);
 }
 
 .wd-btn-outline:hover:not(:disabled) {
-    background: var(--wd-gray-50);
-    border-color: var(--wd-gray-400);
+    background: var(--wd-btn-tertiary-surface-hover);
 }
 
+.wd-btn-outline:focus-visible:not(:disabled) {
+    background: var(--wd-btn-tertiary-surface-focus);
+    outline: none;
+}
+
+.wd-btn-outline:active:not(:disabled) {
+    background: var(--wd-btn-tertiary-surface-pressed);
+}
+
+/* Ghost (transparent variant) */
 .wd-btn-ghost {
     background: transparent;
-    color: var(--wd-gray-700);
-    border-color: transparent;
+    color: var(--wd-sys-text-2);
+    border: none;
 }
 
 .wd-btn-ghost:hover:not(:disabled) {
-    background: var(--wd-gray-100);
+    background: var(--wd-sys-surface-3);
 }
 
-.wd-btn-sm {
-    padding: 6px 12px;
-    font-size: var(--wd-font-size-sm);
+.wd-btn-ghost:focus-visible:not(:disabled) {
+    background: var(--wd-sys-surface-3);
+    outline: none;
 }
 
-.wd-btn-lg {
-    padding: 12px 24px;
-    font-size: var(--wd-font-size-lg);
+.wd-btn-ghost:active:not(:disabled) {
+    background: var(--wd-sys-surface-4);
+}
+
+/* ===== IconButton ===== */
+.wd-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--wd-sys-surface-1);
+    color: var(--wd-sys-icon-2);
+    border-radius: var(--wd-radius-full);
+    border: none;
+    cursor: pointer;
+    transition: all var(--wd-transition-normal);
+    padding: 16px;
+}
+
+.wd-icon-btn:hover:not(:disabled) {
+    color: var(--wd-sys-icon-1);
+    background: var(--wd-sys-surface-3);
+}
+
+.wd-icon-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.wd-icon-btn[data-loading='true'] {
+    pointer-events: none;
+    cursor: progress;
+}
+
+/* IconButton Small */
+.wd-icon-btn-sm {
+    width: 28px;
+    height: 28px;
+}
+
+/* IconButton Medium */
+.wd-icon-btn-md {
+    width: 32px;
+    height: 32px;
+}
+
+/* ===== TextButton ===== */
+.wd-text-btn {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all var(--wd-transition-normal);
+    text-decoration: underline;
+    font-family: var(--wd-font-family);
+    font-weight: var(--wd-font-medium);
+}
+
+.wd-text-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.wd-text-btn[data-loading='true'] {
+    pointer-events: none;
+    cursor: progress;
+}
+
+/* TextButton has-icon (no underline) */
+.wd-text-btn.has-icon {
+    text-decoration: none;
+}
+
+/* TextButton Black */
+.wd-text-btn-black {
+    color: var(--wd-sys-text-1);
+}
+
+.wd-text-btn-black:hover:not(:disabled) {
+    color: var(--wd-sys-text-3);
+}
+
+/* TextButton White */
+.wd-text-btn-white {
+    color: var(--wd-sys-text-5);
+}
+
+.wd-text-btn-white:hover:not(:disabled) {
+    color: rgba(255, 255, 255, 0.64);
+}
+
+/* TextButton Medium */
+.wd-text-btn-md {
+    font-size: 14px;
+    gap: 8px;
+}
+
+/* TextButton Large */
+.wd-text-btn-lg {
+    font-size: 18px;
+    gap: 16px;
+}
+
+/* ===== Button Icon Styles ===== */
+.wd-btn-icon {
+    flex-shrink: 0;
+}
+
+.wd-btn-sm .wd-btn-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.wd-btn-md .wd-btn-icon,
+.wd-btn .wd-btn-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.wd-btn-lg .wd-btn-icon {
+    width: 32px;
+    height: 32px;
 }
 
 /* ==================== Tables ==================== */
@@ -1595,7 +1948,8 @@
     color: var(--wd-gray-700);
 }
 
-.wd-btn-icon {
+/* Small icon action button (for close, delete, etc.) */
+.wd-icon-btn-tiny {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1604,15 +1958,15 @@
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: var(--wd-radius-sm);
-    color: var(--wd-gray-400);
+    border-radius: var(--wd-radius-md);
+    color: var(--wd-sys-icon-3);
     cursor: pointer;
     transition: all var(--wd-transition-fast);
 }
 
-.wd-btn-icon:hover {
-    background: var(--wd-gray-200);
-    color: var(--wd-gray-600);
+.wd-icon-btn-tiny:hover {
+    background: var(--wd-sys-surface-3);
+    color: var(--wd-sys-icon-1);
 }
 
 /* ==================== Button Link ==================== */
@@ -1624,35 +1978,63 @@
     background: none;
     border: none;
     font-size: var(--wd-font-size-sm);
-    color: var(--wd-info);
+    color: var(--wd-sys-tone-blue-3);
     cursor: pointer;
     transition: color var(--wd-transition-fast);
+    text-decoration: underline;
 }
 
 .wd-btn-link:hover {
-    color: #1565c0;
-    text-decoration: underline;
+    color: var(--wd-sys-tone-blue-4);
+}
+
+.wd-btn-link.has-icon {
+    text-decoration: none;
 }
 
 /* ==================== Button Variations ==================== */
 .wd-btn-warning {
     background: var(--wd-warning);
     color: var(--wd-white);
-    border-color: var(--wd-warning);
+    border: none;
 }
 
 .wd-btn-warning:hover:not(:disabled) {
     background: #f57c00;
-    border-color: #f57c00;
 }
 
+.wd-btn-warning:active:not(:disabled) {
+    background: #ef6c00;
+}
+
+/* Danger (alias for Destructive) */
 .wd-btn-danger {
-    color: var(--wd-error);
-    border-color: var(--wd-error);
+    background: var(--wd-btn-destructive-surface-enabled);
+    color: var(--wd-btn-destructive-text);
+    border: none;
 }
 
 .wd-btn-danger:hover:not(:disabled) {
-    background: var(--wd-error-light);
+    background: var(--wd-btn-destructive-surface-hover);
+}
+
+.wd-btn-danger:active:not(:disabled) {
+    background: var(--wd-btn-destructive-surface-pressed);
+}
+
+/* Danger Outline variant */
+.wd-btn-danger-outline {
+    background: transparent;
+    color: var(--wd-sys-tone-red-5);
+    border: 1px solid var(--wd-sys-tone-red-5);
+}
+
+.wd-btn-danger-outline:hover:not(:disabled) {
+    background: var(--wd-sys-tone-red-1);
+}
+
+.wd-btn-danger-outline:active:not(:disabled) {
+    background: var(--wd-sys-tone-red-2);
 }
 
 /* ==================== Table Row Variations ==================== */
@@ -1892,10 +2274,9 @@
     color: var(--wd-gray-400);
 }
 
-/* ==================== Button Large ==================== */
-.wd-btn-lg {
-    padding: 12px 24px;
-    font-size: var(--wd-font-size-md);
+/* ==================== Button Full Width ==================== */
+.wd-btn-full {
+    width: 100%;
 }
 
 /* ==================== Auth Section ==================== */
@@ -2020,10 +2401,6 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
-}
-
-.wd-btn-full {
-    width: 100%;
 }
 
 /* Verification Code Inputs */
