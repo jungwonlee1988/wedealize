@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeDealize - Supplier Portal</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="design-system.css">
     <!-- Cropper.js for image cropping -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
     <!-- Google Sign-In -->
@@ -742,50 +743,30 @@
 
                         <!-- PO Management -->
                         <div class="dashboard-panel" id="panel-po-management">
-                            <div class="panel-header">
-                                <h2 data-i18n="sales.poManagement">PO Management</h2>
-                                <p data-i18n="sales.poSubtitle">Manage purchase orders from buyers.</p>
+                            <!-- Page Header -->
+                            <div class="wd-page-header">
+                                <h2 class="wd-page-title" data-i18n="sales.poManagement">발주서</h2>
+                                <button class="wd-btn wd-btn-primary" onclick="openAddPOModal()">
+                                    <span>+</span>
+                                    <span data-i18n="sales.addPO">발주서 등록</span>
+                                </button>
                             </div>
 
-                            <!-- PO Stats -->
-                            <div class="stats-row">
-                                <div class="stat-card">
-                                    <div class="stat-icon pending">📋</div>
-                                    <div class="stat-info">
-                                        <span class="stat-value" id="po-pending-count">3</span>
-                                        <span class="stat-label" data-i18n="sales.pendingPO">Pending</span>
-                                    </div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon confirmed">✓</div>
-                                    <div class="stat-info">
-                                        <span class="stat-value" id="po-confirmed-count">8</span>
-                                        <span class="stat-label" data-i18n="sales.confirmedPO">Confirmed</span>
-                                    </div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon shipping">🚚</div>
-                                    <div class="stat-info">
-                                        <span class="stat-value" id="po-shipping-count">5</span>
-                                        <span class="stat-label" data-i18n="sales.inShipping">In Shipping</span>
-                                    </div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon completed">✅</div>
-                                    <div class="stat-info">
-                                        <span class="stat-value" id="po-completed-count">24</span>
-                                        <span class="stat-label" data-i18n="sales.completedPO">Completed</span>
-                                    </div>
-                                </div>
+                            <!-- Tabs -->
+                            <div class="wd-tabs" style="padding: 0 24px;">
+                                <button class="wd-tab active" onclick="filterPOByTab('active')" data-i18n="sales.activePO">진행중 발주서</button>
+                                <button class="wd-tab" onclick="filterPOByTab('cancelled')" data-i18n="sales.cancelledPO">취소된 발주서</button>
                             </div>
 
-                            <!-- PO Filter Bar -->
-                            <div class="filter-bar">
-                                <div class="filter-group">
-                                    <input type="text" id="po-search" class="search-input" placeholder="Search PO#, Buyer..." data-i18n-placeholder="sales.searchPO" oninput="searchPO()">
-                                </div>
-                                <div class="filter-actions">
-                                    <button class="btn btn-outline" onclick="exportPOList()" data-i18n="sales.exportPO">Export</button>
+                            <!-- Filter Bar -->
+                            <div class="po-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                                <div></div>
+                                <div class="wd-search">
+                                    <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <path d="m21 21-4.3-4.3"></path>
+                                    </svg>
+                                    <input type="text" id="po-search" class="wd-input" placeholder="검색어를 입력하세요" style="width: 280px;" oninput="searchPO()">
                                 </div>
                             </div>
 
@@ -793,129 +774,120 @@
                             <input type="hidden" id="po-status-filter" value="all">
 
                             <!-- PO Table -->
-                            <table class="data-table po-table">
-                                <thead>
-                                    <tr>
-                                        <th data-i18n="sales.poNumber">PO #</th>
-                                        <th data-i18n="sales.buyer">Buyer</th>
-                                        <th data-i18n="sales.orderDate">Order Date</th>
-                                        <th data-i18n="sales.items">Items</th>
-                                        <th data-i18n="sales.totalAmount">Total Amount</th>
-                                        <th class="th-filter">
-                                            <span data-i18n="sales.status">Status</span>
-                                            <div class="column-filter">
-                                                <button class="filter-icon-btn" onclick="toggleStatusFilter(event)">
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                                                    </svg>
-                                                </button>
-                                                <div class="filter-dropdown" id="status-filter-dropdown">
-                                                    <label class="filter-option">
-                                                        <input type="radio" name="status-filter" value="all" checked onchange="applyStatusFilter('all')">
-                                                        <span data-i18n="sales.allOrders">All</span>
-                                                    </label>
-                                                    <label class="filter-option">
-                                                        <input type="radio" name="status-filter" value="pending" onchange="applyStatusFilter('pending')">
-                                                        <span data-i18n="sales.pendingPO">Pending</span>
-                                                    </label>
-                                                    <label class="filter-option">
-                                                        <input type="radio" name="status-filter" value="confirmed" onchange="applyStatusFilter('confirmed')">
-                                                        <span data-i18n="sales.confirmedPO">Confirmed</span>
-                                                    </label>
-                                                    <label class="filter-option">
-                                                        <input type="radio" name="status-filter" value="shipping" onchange="applyStatusFilter('shipping')">
-                                                        <span data-i18n="sales.inShipping">In Shipping</span>
-                                                    </label>
-                                                    <label class="filter-option">
-                                                        <input type="radio" name="status-filter" value="completed" onchange="applyStatusFilter('completed')">
-                                                        <span data-i18n="sales.completedPO">Completed</span>
-                                                    </label>
-                                                    <label class="filter-option">
-                                                        <input type="radio" name="status-filter" value="cancelled" onchange="applyStatusFilter('cancelled')">
-                                                        <span data-i18n="sales.cancelledPO">Cancelled</span>
-                                                    </label>
+                            <div style="padding: 0 24px;">
+                                <table class="wd-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="sortable" onclick="sortPOTable('poNumber')">
+                                                <span data-i18n="sales.poNumber">발주 번호</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th class="th-filter">
+                                                <span data-i18n="sales.status">발주 상태</span>
+                                                <div class="wd-column-filter">
+                                                    <button class="wd-filter-btn" onclick="toggleStatusFilter(event)">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="wd-filter-dropdown" id="status-filter-dropdown">
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="status-filter" value="all" checked onchange="applyStatusFilter('all')">
+                                                            <span>전체</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="status-filter" value="pending" onchange="applyStatusFilter('pending')">
+                                                            <span>등록완료</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="status-filter" value="confirmed" onchange="applyStatusFilter('confirmed')">
+                                                            <span>운송요청완료</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="status-filter" value="shipping" onchange="applyStatusFilter('shipping')">
+                                                            <span>운송중</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="status-filter" value="completed" onchange="applyStatusFilter('completed')">
+                                                            <span>완료</span>
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </th>
-                                        <th data-i18n="sales.actions">Actions</th>
-                                    </tr>
-                                </thead>
+                                            </th>
+                                            <th class="sortable" onclick="sortPOTable('productName')">
+                                                <span data-i18n="sales.productName">품목명</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th class="sortable" onclick="sortPOTable('totalAmount')">
+                                                <span data-i18n="sales.totalAmount">총 금액</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th class="sortable" onclick="sortPOTable('exporter')">
+                                                <span data-i18n="sales.exporter">수출자 회사명</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th data-i18n="sales.paymentTerms">결제 조건</th>
+                                            <th data-i18n="sales.incoterms">인코텀즈</th>
+                                            <th class="sortable" onclick="sortPOTable('modifiedDate')">
+                                                <span data-i18n="sales.modifiedDate">변경일시</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
                                 <tbody id="po-list-tbody">
-                                    <tr data-status="pending" data-po="PO-2026-0042" data-buyer="Global Foods Inc.">
-                                        <td><span class="po-number">PO-2026-0042</span></td>
-                                        <td>
-                                            <div class="buyer-cell">
-                                                <span class="buyer-name">Global Foods Inc.</span>
-                                                <span class="buyer-country">🇺🇸 USA</span>
-                                            </div>
-                                        </td>
-                                        <td>2026-02-03</td>
-                                        <td>5 items</td>
-                                        <td><span class="amount">$12,450.00</span></td>
-                                        <td><span class="status-badge pending" data-i18n="sales.pendingPO">Pending</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary" onclick="viewPODetail('PO-2026-0042')" data-i18n="sales.view">View</button>
-                                            <button class="btn btn-sm btn-success" onclick="confirmPO('PO-2026-0042')" data-i18n="sales.confirm">Confirm</button>
-                                        </td>
+                                    <tr data-status="pending" data-po="20260202171" onclick="viewPODetail('20260202171')" style="cursor: pointer;">
+                                        <td>20260202171</td>
+                                        <td><span class="wd-badge wd-badge-gray">등록완료</span></td>
+                                        <td>얇은 바나나 슬라이스 60g</td>
+                                        <td>USD 1,128</td>
+                                        <td>CJ UNIWORLD CORPORATION</td>
+                                        <td>T/T</td>
+                                        <td>EXW</td>
+                                        <td>2026.02.04 15:51</td>
                                     </tr>
-                                    <tr data-status="confirmed" data-po="PO-2026-0041" data-buyer="Euro Delicatessen GmbH">
-                                        <td><span class="po-number">PO-2026-0041</span></td>
-                                        <td>
-                                            <div class="buyer-cell">
-                                                <span class="buyer-name">Euro Delicatessen GmbH</span>
-                                                <span class="buyer-country">🇩🇪 Germany</span>
-                                            </div>
-                                        </td>
-                                        <td>2026-02-02</td>
-                                        <td>3 items</td>
-                                        <td><span class="amount">$8,200.00</span></td>
-                                        <td><span class="status-badge confirmed" data-i18n="sales.confirmedPO">Confirmed</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary" onclick="viewPODetail('PO-2026-0041')" data-i18n="sales.view">View</button>
-                                            <button class="btn btn-sm btn-outline" onclick="updateShipping('PO-2026-0041')" data-i18n="sales.shipment">Shipment</button>
-                                        </td>
+                                    <tr data-status="confirmed" data-po="PO20260203048953" onclick="viewPODetail('PO20260203048953')" style="cursor: pointer;">
+                                        <td>PO20260203048953</td>
+                                        <td><span class="wd-badge wd-badge-primary">운송요청완료</span></td>
+                                        <td>냉동 버터 크로아상 생지(버터 24%)</td>
+                                        <td>EUR 806.4</td>
+                                        <td>DELIFRANCE</td>
+                                        <td>T/T</td>
+                                        <td>FCA</td>
+                                        <td>2026.02.03 13:44</td>
                                     </tr>
-                                    <tr data-status="shipping" data-po="PO-2026-0040" data-buyer="Asian Market Co.">
-                                        <td><span class="po-number">PO-2026-0040</span></td>
+                                    <tr data-status="confirmed" data-po="PO2026012800A2C" onclick="viewPODetail('PO2026012800A2C')" style="cursor: pointer;">
+                                        <td>PO2026012800A2C</td>
+                                        <td><span class="wd-badge wd-badge-primary">운송요청완료</span></td>
                                         <td>
-                                            <div class="buyer-cell">
-                                                <span class="buyer-name">Asian Market Co.</span>
-                                                <span class="buyer-country">🇯🇵 Japan</span>
-                                            </div>
+                                            대용량 피스타치오 스프레드 1KG
+                                            <a href="#" class="wd-link" onclick="event.stopPropagation();">외 1건</a>
                                         </td>
-                                        <td>2026-02-01</td>
-                                        <td>8 items</td>
-                                        <td><span class="amount">$24,800.00</span></td>
-                                        <td><span class="status-badge shipping" data-i18n="sales.inShipping">In Shipping</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary" onclick="viewPODetail('PO-2026-0040')" data-i18n="sales.view">View</button>
-                                            <button class="btn btn-sm btn-outline" onclick="trackShipment('PO-2026-0040')" data-i18n="sales.track">Track</button>
-                                        </td>
-                                    </tr>
-                                    <tr data-status="completed" data-po="PO-2026-0039" data-buyer="Fresh & Fine Ltd.">
-                                        <td><span class="po-number">PO-2026-0039</span></td>
-                                        <td>
-                                            <div class="buyer-cell">
-                                                <span class="buyer-name">Fresh & Fine Ltd.</span>
-                                                <span class="buyer-country">🇬🇧 UK</span>
-                                            </div>
-                                        </td>
-                                        <td>2026-01-28</td>
-                                        <td>4 items</td>
-                                        <td><span class="amount">$6,750.00</span></td>
-                                        <td><span class="status-badge completed" data-i18n="sales.completedPO">Completed</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary" onclick="viewPODetail('PO-2026-0039')" data-i18n="sales.view">View</button>
-                                        </td>
+                                        <td>EUR 16,272</td>
+                                        <td>Amorelli Spreads BV</td>
+                                        <td>T/T</td>
+                                        <td>EXW</td>
+                                        <td>2026.02.03 10:21</td>
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
 
                             <!-- Pagination -->
-                            <div class="pagination">
-                                <button class="btn btn-sm btn-outline" disabled>&lt; Prev</button>
-                                <span class="page-info">Page 1 of 3</span>
-                                <button class="btn btn-sm btn-outline">Next &gt;</button>
+                            <div class="wd-pagination" style="padding: 16px 24px;">
+                                <div class="wd-pagination-info">
+                                    <span>총 3개 중</span>
+                                    <select class="wd-input wd-select" style="width: 80px; padding: 6px 10px;">
+                                        <option>20</option>
+                                        <option>50</option>
+                                        <option>100</option>
+                                    </select>
+                                    <span>개씩 보기</span>
+                                </div>
+                                <div class="wd-pagination-pages">
+                                    <button class="wd-pagination-btn" disabled>&lt;</button>
+                                    <button class="wd-pagination-btn active">1</button>
+                                    <button class="wd-pagination-btn">&gt;</button>
+                                </div>
                             </div>
                         </div>
 

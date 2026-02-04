@@ -2371,7 +2371,7 @@ function applyStatusFilter(status) {
     applyPOFilters();
 
     // 필터 아이콘 활성화 상태 업데이트
-    const filterBtn = document.querySelector('.filter-icon-btn');
+    const filterBtn = document.querySelector('.wd-filter-btn');
     if (filterBtn) {
         if (status !== 'all') {
             filterBtn.classList.add('active');
@@ -2385,4 +2385,34 @@ function applyStatusFilter(status) {
     if (dropdown) {
         dropdown.classList.remove('show');
     }
+}
+
+// 탭으로 PO 필터
+function filterPOByTab(tabType) {
+    // 탭 활성화 상태 업데이트
+    const tabs = document.querySelectorAll('.wd-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // 필터 적용
+    const rows = document.querySelectorAll('#po-list-tbody tr');
+    rows.forEach(row => {
+        const status = row.dataset.status || '';
+        if (tabType === 'active') {
+            row.style.display = status !== 'cancelled' ? '' : 'none';
+        } else if (tabType === 'cancelled') {
+            row.style.display = status === 'cancelled' ? '' : 'none';
+        }
+    });
+}
+
+// PO 테이블 정렬
+function sortPOTable(column) {
+    console.log('Sorting by:', column);
+    // TODO: 정렬 로직 구현
+}
+
+// 발주서 등록 모달
+function openAddPOModal() {
+    showToast('발주서 등록 기능 준비 중입니다.', 'info');
 }
