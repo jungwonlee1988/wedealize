@@ -328,6 +328,183 @@ const supportedLanguages = [
     { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳' }
 ];
 
+// 브랜드명 포함 문구의 사전 번역 (AI 번역 대신 사용)
+// WeDealize 브랜드명을 유지하면서 정확한 번역 보장
+const preTranslatedPhrases = {
+    ko: {
+        auth: {
+            joinWedealize: "WeDealize 가입하기",
+            welcomeBack: "다시 오신 것을 환영합니다",
+            accessDashboard: "공급자 대시보드에 접속하세요",
+            registerSubtitle: "공급자 파트너로 등록하세요",
+            login: "로그인",
+            register: "회원가입",
+            email: "이메일",
+            password: "비밀번호",
+            rememberMe: "로그인 유지",
+            forgotPassword: "비밀번호 찾기",
+            companyName: "회사명",
+            country: "국가",
+            selectCountry: "국가 선택",
+            businessEmail: "업무용 이메일",
+            productCategory: "상품 카테고리",
+            selectCategory: "카테고리 선택",
+            agreeTerms: "약관에 동의합니다",
+            termsOfService: "이용약관",
+            createAccount: "계정 만들기",
+            continueWithGoogle: "Google로 계속하기",
+            or: "또는",
+            enterPassword: "비밀번호 입력",
+            searchCountry: "국가 검색...",
+            minChars: "최소 8자"
+        },
+        header: {
+            supplierPortal: "공급자 포털",
+            logout: "로그아웃",
+            selectLanguage: "언어 선택"
+        },
+        verification: {
+            verifyEmail: "이메일 인증",
+            codeSentTo: "인증 코드를 발송했습니다:",
+            enterCode: "6자리 코드 입력",
+            verifyButton: "이메일 인증",
+            didntReceive: "코드를 받지 못하셨나요?",
+            resend: "재전송",
+            resendIn: "재전송 가능:",
+            backToRegister: "회원가입으로 돌아가기"
+        },
+        passwordReset: {
+            resetPassword: "비밀번호 재설정",
+            enterEmail: "재설정 링크를 받을 이메일을 입력하세요",
+            sendResetLink: "재설정 링크 보내기",
+            backToLogin: "로그인으로 돌아가기",
+            checkEmail: "이메일을 확인하세요",
+            resetLinkSent: "비밀번호 재설정 링크를 보냈습니다:",
+            linkExpires: "이메일의 링크를 클릭하여 비밀번호를 재설정하세요. 링크는 24시간 후 만료됩니다."
+        }
+    },
+    ja: {
+        auth: {
+            joinWedealize: "WeDealizeに参加",
+            welcomeBack: "おかえりなさい",
+            accessDashboard: "サプライヤーダッシュボードにアクセス",
+            registerSubtitle: "サプライヤーパートナーとして登録",
+            login: "ログイン",
+            register: "登録",
+            createAccount: "アカウント作成",
+            continueWithGoogle: "Googleで続ける"
+        },
+        header: {
+            supplierPortal: "サプライヤーポータル"
+        }
+    },
+    zh: {
+        auth: {
+            joinWedealize: "加入WeDealize",
+            welcomeBack: "欢迎回来",
+            accessDashboard: "访问您的供应商仪表板",
+            registerSubtitle: "注册成为供应商合作伙伴",
+            login: "登录",
+            register: "注册",
+            createAccount: "创建账户",
+            continueWithGoogle: "使用Google继续"
+        },
+        header: {
+            supplierPortal: "供应商门户"
+        }
+    },
+    es: {
+        auth: {
+            joinWedealize: "Únete a WeDealize",
+            welcomeBack: "Bienvenido de nuevo",
+            login: "Iniciar sesión",
+            register: "Registrarse",
+            createAccount: "Crear cuenta",
+            continueWithGoogle: "Continuar con Google"
+        }
+    },
+    de: {
+        auth: {
+            joinWedealize: "WeDealize beitreten",
+            welcomeBack: "Willkommen zurück",
+            login: "Anmelden",
+            register: "Registrieren",
+            createAccount: "Konto erstellen",
+            continueWithGoogle: "Mit Google fortfahren"
+        }
+    },
+    fr: {
+        auth: {
+            joinWedealize: "Rejoindre WeDealize",
+            welcomeBack: "Bon retour",
+            login: "Connexion",
+            register: "S'inscrire",
+            createAccount: "Créer un compte",
+            continueWithGoogle: "Continuer avec Google"
+        }
+    },
+    it: {
+        auth: {
+            joinWedealize: "Unisciti a WeDealize",
+            welcomeBack: "Bentornato",
+            login: "Accedi",
+            register: "Registrati",
+            createAccount: "Crea account",
+            continueWithGoogle: "Continua con Google"
+        }
+    },
+    pt: {
+        auth: {
+            joinWedealize: "Junte-se ao WeDealize",
+            welcomeBack: "Bem-vindo de volta",
+            login: "Entrar",
+            register: "Registrar",
+            createAccount: "Criar conta",
+            continueWithGoogle: "Continuar com Google"
+        }
+    },
+    ru: {
+        auth: {
+            joinWedealize: "Присоединиться к WeDealize",
+            welcomeBack: "С возвращением",
+            login: "Войти",
+            register: "Регистрация",
+            createAccount: "Создать аккаунт",
+            continueWithGoogle: "Продолжить с Google"
+        }
+    },
+    vi: {
+        auth: {
+            joinWedealize: "Tham gia WeDealize",
+            welcomeBack: "Chào mừng trở lại",
+            login: "Đăng nhập",
+            register: "Đăng ký",
+            createAccount: "Tạo tài khoản",
+            continueWithGoogle: "Tiếp tục với Google"
+        }
+    },
+    th: {
+        auth: {
+            joinWedealize: "เข้าร่วม WeDealize",
+            welcomeBack: "ยินดีต้อนรับกลับ",
+            login: "เข้าสู่ระบบ",
+            register: "ลงทะเบียน",
+            createAccount: "สร้างบัญชี",
+            continueWithGoogle: "ดำเนินการต่อด้วย Google"
+        }
+    },
+    id: {
+        auth: {
+            joinWedealize: "Bergabung dengan WeDealize",
+            welcomeBack: "Selamat datang kembali",
+            login: "Masuk",
+            register: "Daftar",
+            createAccount: "Buat akun",
+            continueWithGoogle: "Lanjutkan dengan Google"
+        }
+    }
+};
+
 // 번역 진행 메시지 (각 언어별)
 const translationProgressMessages = {
     en: 'Applying your selected language...',
@@ -357,7 +534,7 @@ function getTranslationProgressMessage(langCode) {
 
 // 번역 캐시 (localStorage 기반)
 const CACHE_KEY = 'wedealize_translations_cache';
-const CACHE_VERSION = '1.4';  // 영어 원본 변경 시 버전 올리면 캐시 자동 초기화
+const CACHE_VERSION = '1.5';  // 사전 번역 추가로 캐시 초기화
 
 // 캐시 로드
 function loadTranslationCache() {
@@ -441,6 +618,29 @@ async function translateWithGoogleFree(text, targetLang) {
     return text;
 }
 
+// 사전 번역을 AI 번역 결과에 병합 (사전 번역이 우선)
+function mergeWithPreTranslations(aiResult, targetLang) {
+    const preTranslated = preTranslatedPhrases[targetLang];
+    if (!preTranslated) return aiResult;
+
+    // 깊은 복사 후 사전 번역으로 덮어쓰기
+    const merged = JSON.parse(JSON.stringify(aiResult));
+
+    function deepMerge(target, source) {
+        for (const key of Object.keys(source)) {
+            if (typeof source[key] === 'object' && source[key] !== null && !Array.isArray(source[key])) {
+                if (!target[key]) target[key] = {};
+                deepMerge(target[key], source[key]);
+            } else {
+                target[key] = source[key];
+            }
+        }
+    }
+
+    deepMerge(merged, preTranslated);
+    return merged;
+}
+
 // 전체 번역 생성
 async function generateTranslations(targetLang) {
     if (targetLang === 'en') {
@@ -450,7 +650,8 @@ async function generateTranslations(targetLang) {
     // 캐시 확인
     if (translationCache[targetLang]) {
         console.log(`Using cached translations for: ${targetLang}`);
-        return translationCache[targetLang];
+        // 캐시된 결과에도 사전 번역 병합 (사전 번역이 업데이트되었을 수 있음)
+        return mergeWithPreTranslations(translationCache[targetLang], targetLang);
     }
 
     // 해당 언어의 진행 메시지 사용
@@ -461,7 +662,10 @@ async function generateTranslations(targetLang) {
 
     try {
         // 1차: 백엔드 AI 번역 API 시도
-        const result = await translateWithBackend(englishTranslations, targetLang);
+        let result = await translateWithBackend(englishTranslations, targetLang);
+
+        // 사전 번역으로 덮어쓰기 (브랜드명 등 정확한 번역 보장)
+        result = mergeWithPreTranslations(result, targetLang);
 
         // 캐시에 저장
         translationCache[targetLang] = result;
@@ -477,7 +681,10 @@ async function generateTranslations(targetLang) {
         try {
             // 폴백 시에도 해당 언어 메시지 유지
             updateTranslationProgress(0, progressMessage);
-            const result = await translateWithGoogleFallback(englishTranslations, targetLang);
+            let result = await translateWithGoogleFallback(englishTranslations, targetLang);
+
+            // 사전 번역으로 덮어쓰기
+            result = mergeWithPreTranslations(result, targetLang);
 
             translationCache[targetLang] = result;
             saveTranslationCache(translationCache);
@@ -486,7 +693,8 @@ async function generateTranslations(targetLang) {
         } catch (fallbackError) {
             console.error('All translation methods failed:', fallbackError);
             showToast(t('toast.translationError'), 'error');
-            return englishTranslations;
+            // 실패 시에도 사전 번역만이라도 적용
+            return mergeWithPreTranslations(englishTranslations, targetLang);
         }
     } finally {
         showTranslationProgress(false);
