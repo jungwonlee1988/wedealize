@@ -1766,3 +1766,134 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* ==================== Modal ==================== */
+.wd-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+}
+
+.wd-modal {
+    background: var(--wd-white);
+    border-radius: var(--wd-radius-xl);
+    box-shadow: var(--wd-shadow-xl);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.wd-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--wd-space-5) var(--wd-space-6);
+    border-bottom: 1px solid var(--wd-gray-200);
+}
+
+.wd-modal-title {
+    font-size: var(--wd-font-size-lg);
+    font-weight: var(--wd-font-semibold);
+    color: var(--wd-black);
+    margin: 0;
+}
+
+.wd-modal-body {
+    flex: 1;
+    padding: var(--wd-space-6);
+    overflow-y: auto;
+}
+
+.wd-modal-footer {
+    display: flex;
+    gap: var(--wd-space-3);
+    justify-content: flex-end;
+    padding: var(--wd-space-4) var(--wd-space-6);
+    border-top: 1px solid var(--wd-gray-200);
+    background: var(--wd-gray-50);
+}
+
+/* ==================== Steps Indicator ==================== */
+.wd-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.wd-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--wd-space-2);
+}
+
+.wd-step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--wd-gray-200);
+    color: var(--wd-gray-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--wd-font-size-sm);
+    font-weight: var(--wd-font-semibold);
+    transition: all var(--wd-transition-fast);
+}
+
+.wd-step.active .wd-step-number {
+    background: var(--wd-primary);
+    color: var(--wd-black);
+}
+
+.wd-step.completed .wd-step-number {
+    background: var(--wd-success);
+    color: var(--wd-white);
+}
+
+.wd-step-label {
+    font-size: var(--wd-font-size-sm);
+    color: var(--wd-gray-500);
+    white-space: nowrap;
+}
+
+.wd-step.active .wd-step-label {
+    color: var(--wd-black);
+    font-weight: var(--wd-font-medium);
+}
+
+.wd-step-connector {
+    width: 60px;
+    height: 2px;
+    background: var(--wd-gray-200);
+    margin: 0 var(--wd-space-2);
+    margin-bottom: 24px;
+}
+
+.wd-step-connector.completed {
+    background: var(--wd-success);
+}
+
+/* ==================== File Size ==================== */
+.wd-file-size {
+    font-size: var(--wd-font-size-xs);
+    color: var(--wd-gray-400);
+}
+
+/* ==================== Button Large ==================== */
+.wd-btn-lg {
+    padding: 12px 24px;
+    font-size: var(--wd-font-size-md);
+}
