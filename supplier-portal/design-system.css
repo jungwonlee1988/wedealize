@@ -1,50 +1,234 @@
-/* WeDealize Design System
- * Reference: Screenshots 4.png, 5.png, 6.png
- * Clean, minimal design with yellow accents
+/* WeDealize Design System V2
+ * Based on design-system-v2 tokens
+ * Clean, minimal design with yellow brand accents
  */
 
-/* ==================== Design Tokens ==================== */
+/* ==================== Design Tokens V2 ==================== */
 :root {
+    /* ===== System Text Colors ===== */
+    --sys-color-text-1: #000000;  /* Primary text */
+    --sys-color-text-2: #3d3d3d;  /* Secondary text */
+    --sys-color-text-3: #707070;  /* Tertiary text */
+    --sys-color-text-4: #a3a3a3;  /* Quaternary text */
+    --sys-color-text-5: #ffffff;  /* Inverse text */
+
+    /* ===== System Surface Colors ===== */
+    --sys-color-surface-1: #ffffff;  /* Default background */
+    --sys-color-surface-2: #fafafa;  /* Hover background */
+    --sys-color-surface-3: #f0f0f0;  /* Selected background */
+    --sys-color-surface-4: #d6d6d6;  /* Disabled background */
+    --sys-color-surface-5: #575757;  /* Dark mode background */
+    --sys-color-surface-6: #3d3d3d;  /* Dark mode hover */
+    --sys-color-surface-7: #242424;  /* Dark mode selected */
+
+    /* ===== System Border Colors ===== */
+    --sys-color-border-1: #ffffff;  /* Default border */
+    --sys-color-border-2: #f0f0f0;  /* Hover border */
+    --sys-color-border-3: #d6d6d6;  /* Active border */
+    --sys-color-border-4: #000000;  /* Emphasis border */
+
+    /* ===== System Icon Colors ===== */
+    --sys-color-icon-1: #000000;  /* Primary icon */
+    --sys-color-icon-2: #707070;  /* Secondary icon */
+    --sys-color-icon-3: #a3a3a3;  /* Tertiary icon */
+    --sys-color-icon-4: #d6d6d6;  /* Quaternary icon */
+    --sys-color-icon-5: #ffffff;  /* Inverse icon */
+
+    /* ===== Brand Colors ===== */
+    --sys-color-brand-1: #fffae0;
+    --sys-color-brand-2: #ffee8a;
+    --sys-color-brand-3: #ffe654;
+    --sys-color-brand-4: #ffe133;
+    --sys-color-brand-5: #ffd900;
+
+    /* ===== Tone Colors - Red ===== */
+    --sys-color-tone-red-1: #ffe8e0;
+    --sys-color-tone-red-2: #ffc4b0;
+    --sys-color-tone-red-3: #ff4000;
+    --sys-color-tone-red-4: #e83a00;
+
+    /* ===== Tone Colors - Yellow ===== */
+    --sys-color-tone-yellow-1: #fffae0;
+    --sys-color-tone-yellow-2: #ffee8a;
+    --sys-color-tone-yellow-3: #ffd900;
+    --sys-color-tone-yellow-4: #e8c500;
+
+    /* ===== Tone Colors - Green ===== */
+    --sys-color-tone-green-1: #eaf6eb;
+    --sys-color-tone-green-2: #c8e6c9;
+    --sys-color-tone-green-3: #4caf50;
+    --sys-color-tone-green-4: #459f49;
+
+    /* ===== Tone Colors - Blue ===== */
+    --sys-color-tone-blue-1: #e2f2fe;
+    --sys-color-tone-blue-2: #badefb;
+    --sys-color-tone-blue-3: #2196f3;
+    --sys-color-tone-blue-4: #1e89dd;
+
+    /* ===== Tone Colors - Teal ===== */
+    --sys-color-tone-teal-1: #e6f5f3;
+    --sys-color-tone-teal-2: #b0deda;
+    --sys-color-tone-teal-3: #009688;
+    --sys-color-tone-teal-4: #00897c;
+
+    /* ===== Tone Colors - Indigo ===== */
+    --sys-color-tone-indigo-1: #e9ebf7;
+    --sys-color-tone-indigo-2: #c3c9e8;
+    --sys-color-tone-indigo-3: #3f51b5;
+    --sys-color-tone-indigo-4: #394aa5;
+
+    /* ===== Tone Colors - Purple ===== */
+    --sys-color-tone-purple-1: #eee8f7;
+    --sys-color-tone-purple-2: #d0c2e9;
+    --sys-color-tone-purple-3: #673ab7;
+    --sys-color-tone-purple-4: #5e35a7;
+
+    /* ===== Typography - Font Sizes ===== */
+    --font-size-1: 10px;
+    --font-size-2: 12px;
+    --font-size-3: 14px;
+    --font-size-4: 16px;
+    --font-size-5: 18px;
+    --font-size-6: 20px;
+    --font-size-7: 24px;
+    --font-size-8: 32px;
+    --font-size-9: 36px;
+    --font-size-10: 40px;
+    --font-size-11: 56px;
+
+    /* ===== Typography - Line Heights ===== */
+    --line-height-1: 12px;
+    --line-height-2: 14px;
+    --line-height-3: 16px;
+    --line-height-4: 18px;
+    --line-height-5: 20px;
+    --line-height-6: 22px;
+    --line-height-7: 24px;
+    --line-height-8: 26px;
+    --line-height-9: 28px;
+    --line-height-10: 32px;
+    --line-height-11: 40px;
+    --line-height-12: 52px;
+    --line-height-13: 72px;
+
+    /* ===== Spacing ===== */
+    --spacing-0: 0px;
+    --spacing-50: 2px;
+    --spacing-100: 4px;
+    --spacing-200: 8px;
+    --spacing-300: 12px;
+    --spacing-400: 16px;
+    --spacing-500: 20px;
+    --spacing-600: 24px;
+    --spacing-800: 32px;
+    --spacing-1000: 40px;
+    --spacing-1200: 48px;
+    --spacing-1600: 64px;
+    --spacing-2000: 80px;
+
+    /* ===== Border Radius ===== */
+    --radius-50: 2px;
+    --radius-100: 4px;
+    --radius-200: 8px;
+    --radius-300: 12px;
+    --radius-400: 16px;
+    --radius-full: 999px;
+
+    /* ===== Z-Index ===== */
+    --z-below: -1;
+    --z-base: 0;
+    --z-sheet: 2000;
+    --z-sticky: 2100;
+    --z-drawer: 2200;
+    --z-overlay: 2250;
+    --z-dialog: 2300;
+    --z-dropdownmenu: 2400;
+    --z-panel: 2450;
+    --z-topbanner: 2500;
+    --z-alertdialog: 2600;
+    --z-snackbar: 2700;
+    --z-toast: 2800;
+    --z-popover: 2900;
+    --z-tooltip: 3000;
+
+    /* ===== Elevation ===== */
+    --elevation-0: none;
+    --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --elevation-2: 0 4px 6px rgba(0, 0, 0, 0.16);
+    --elevation-3: 0 10px 20px rgba(0, 0, 0, 0.19);
+    --elevation-4: 0 14px 28px rgba(0, 0, 0, 0.25);
+
+    /* ===== Button Component Colors ===== */
+    /* Primary Button */
+    --button-surface-primary-enabled: var(--sys-color-brand-5);
+    --button-surface-primary-hover: var(--sys-color-brand-3);
+    --button-surface-primary-focus: var(--sys-color-brand-3);
+    --button-surface-primary-pressed: var(--sys-color-brand-2);
+    --button-text-primary: var(--sys-color-text-1);
+
+    /* Secondary Button */
+    --button-surface-secondary-enabled: var(--sys-color-surface-7);
+    --button-surface-secondary-hover: var(--sys-color-surface-6);
+    --button-surface-secondary-focus: var(--sys-color-surface-6);
+    --button-surface-secondary-pressed: var(--sys-color-surface-5);
+    --button-text-secondary: var(--sys-color-text-5);
+
+    /* Tertiary Button */
+    --button-surface-tertiary-enabled: var(--sys-color-surface-1);
+    --button-surface-tertiary-hover: var(--sys-color-surface-2);
+    --button-surface-tertiary-focus: var(--sys-color-surface-2);
+    --button-surface-tertiary-pressed: var(--sys-color-surface-3);
+    --button-text-tertiary: var(--sys-color-text-1);
+    --button-border-tertiary: var(--sys-color-border-3);
+
+    /* Destructive Button */
+    --button-surface-destructive-enabled: var(--sys-color-tone-red-4);
+    --button-surface-destructive-hover: var(--sys-color-tone-red-3);
+    --button-surface-destructive-focus: var(--sys-color-tone-red-3);
+    --button-surface-destructive-pressed: var(--sys-color-tone-red-2);
+    --button-text-destructive: var(--sys-color-text-5);
+
+    /* ===== Legacy Variables (for backward compatibility) ===== */
     /* Brand Colors */
-    --wd-primary: #FFE500;
-    --wd-primary-hover: #F5DC00;
-    --wd-primary-light: #FFF9C4;
-    --wd-primary-bg: #FFFDE7;
+    --wd-primary: var(--sys-color-brand-5);
+    --wd-primary-hover: var(--sys-color-brand-3);
+    --wd-primary-light: var(--sys-color-brand-1);
+    --wd-primary-bg: var(--sys-color-brand-1);
 
     /* Neutral Colors */
-    --wd-black: #1a1a1a;
+    --wd-black: var(--sys-color-text-1);
     --wd-gray-900: #212121;
-    --wd-gray-800: #424242;
+    --wd-gray-800: var(--sys-color-text-2);
     --wd-gray-700: #616161;
-    --wd-gray-600: #757575;
-    --wd-gray-500: #9e9e9e;
+    --wd-gray-600: var(--sys-color-text-3);
+    --wd-gray-500: var(--sys-color-text-4);
     --wd-gray-400: #bdbdbd;
-    --wd-gray-300: #e0e0e0;
-    --wd-gray-200: #eeeeee;
-    --wd-gray-100: #f5f5f5;
-    --wd-gray-50: #fafafa;
-    --wd-white: #ffffff;
+    --wd-gray-300: var(--sys-color-border-3);
+    --wd-gray-200: var(--sys-color-border-2);
+    --wd-gray-100: var(--sys-color-surface-3);
+    --wd-gray-50: var(--sys-color-surface-2);
+    --wd-white: var(--sys-color-surface-1);
 
     /* Status Colors */
-    --wd-success: #4caf50;
-    --wd-success-light: #e8f5e9;
+    --wd-success: var(--sys-color-tone-green-3);
+    --wd-success-light: var(--sys-color-tone-green-1);
     --wd-warning: #ff9800;
     --wd-warning-light: #fff3e0;
-    --wd-error: #f44336;
-    --wd-error-light: #ffebee;
-    --wd-info: #2196f3;
-    --wd-info-light: #e3f2fd;
+    --wd-error: var(--sys-color-tone-red-3);
+    --wd-error-light: var(--sys-color-tone-red-1);
+    --wd-info: var(--sys-color-tone-blue-3);
+    --wd-info-light: var(--sys-color-tone-blue-1);
 
     /* Typography */
-    --wd-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --wd-font-size-xs: 11px;
-    --wd-font-size-sm: 12px;
-    --wd-font-size-base: 14px;
-    --wd-font-size-md: 15px;
-    --wd-font-size-lg: 16px;
-    --wd-font-size-xl: 18px;
-    --wd-font-size-2xl: 20px;
-    --wd-font-size-3xl: 24px;
+    --wd-font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --wd-font-size-xs: var(--font-size-1);
+    --wd-font-size-sm: var(--font-size-2);
+    --wd-font-size-base: var(--font-size-3);
+    --wd-font-size-md: var(--font-size-4);
+    --wd-font-size-lg: var(--font-size-4);
+    --wd-font-size-xl: var(--font-size-5);
+    --wd-font-size-2xl: var(--font-size-6);
+    --wd-font-size-3xl: var(--font-size-7);
 
     /* Font Weights */
     --wd-font-normal: 400;
@@ -53,28 +237,28 @@
     --wd-font-bold: 700;
 
     /* Spacing */
-    --wd-space-1: 4px;
-    --wd-space-2: 8px;
-    --wd-space-3: 12px;
-    --wd-space-4: 16px;
-    --wd-space-5: 20px;
-    --wd-space-6: 24px;
-    --wd-space-8: 32px;
-    --wd-space-10: 40px;
-    --wd-space-12: 48px;
+    --wd-space-1: var(--spacing-100);
+    --wd-space-2: var(--spacing-200);
+    --wd-space-3: var(--spacing-300);
+    --wd-space-4: var(--spacing-400);
+    --wd-space-5: var(--spacing-500);
+    --wd-space-6: var(--spacing-600);
+    --wd-space-8: var(--spacing-800);
+    --wd-space-10: var(--spacing-1000);
+    --wd-space-12: var(--spacing-1200);
 
     /* Border Radius */
-    --wd-radius-sm: 4px;
-    --wd-radius-md: 6px;
-    --wd-radius-lg: 8px;
-    --wd-radius-xl: 12px;
-    --wd-radius-full: 9999px;
+    --wd-radius-sm: var(--radius-100);
+    --wd-radius-md: var(--radius-100);
+    --wd-radius-lg: var(--radius-200);
+    --wd-radius-xl: var(--radius-300);
+    --wd-radius-full: var(--radius-full);
 
     /* Shadows */
-    --wd-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --wd-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.08);
-    --wd-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --wd-shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --wd-shadow-sm: var(--elevation-1);
+    --wd-shadow-md: var(--elevation-2);
+    --wd-shadow-lg: var(--elevation-3);
+    --wd-shadow-xl: var(--elevation-4);
 
     /* Transitions */
     --wd-transition-fast: 0.15s ease;
@@ -201,6 +385,225 @@
 .wd-btn-lg {
     padding: 12px 24px;
     font-size: var(--wd-font-size-lg);
+}
+
+/* ==================== Action Buttons (V2) ==================== */
+/* Base Action Button */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: none;
+    border-radius: var(--radius-100);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--wd-font-family);
+    font-weight: 500;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn[data-loading='true'] {
+    cursor: progress;
+}
+
+/* Primary Button */
+.btn-primary {
+    background: var(--button-surface-primary-enabled);
+    color: var(--button-text-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--button-surface-primary-hover);
+}
+
+.btn-primary:focus-visible:not(:disabled) {
+    background: var(--button-surface-primary-focus);
+}
+
+.btn-primary:active:not(:disabled) {
+    background: var(--button-surface-primary-pressed);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background: var(--button-surface-secondary-enabled);
+    color: var(--button-text-secondary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--button-surface-secondary-hover);
+}
+
+.btn-secondary:focus-visible:not(:disabled) {
+    background: var(--button-surface-secondary-focus);
+}
+
+.btn-secondary:active:not(:disabled) {
+    background: var(--button-surface-secondary-pressed);
+}
+
+/* Tertiary Button */
+.btn-tertiary {
+    background: var(--button-surface-tertiary-enabled);
+    color: var(--button-text-tertiary);
+    border: 1px solid var(--button-border-tertiary);
+}
+
+.btn-tertiary:hover:not(:disabled) {
+    background: var(--button-surface-tertiary-hover);
+}
+
+.btn-tertiary:focus-visible:not(:disabled) {
+    background: var(--button-surface-tertiary-focus);
+}
+
+.btn-tertiary:active:not(:disabled) {
+    background: var(--button-surface-tertiary-pressed);
+}
+
+/* Destructive Button */
+.btn-destructive {
+    background: var(--button-surface-destructive-enabled);
+    color: var(--button-text-destructive);
+}
+
+.btn-destructive:hover:not(:disabled) {
+    background: var(--button-surface-destructive-hover);
+}
+
+.btn-destructive:focus-visible:not(:disabled) {
+    background: var(--button-surface-destructive-focus);
+}
+
+.btn-destructive:active:not(:disabled) {
+    background: var(--button-surface-destructive-pressed);
+}
+
+/* Button Sizes */
+.btn-sm {
+    height: 36px;
+    padding-left: var(--spacing-600);
+    padding-right: var(--spacing-600);
+    gap: var(--spacing-200);
+    font-size: var(--font-size-3);
+}
+
+.btn-md {
+    height: 44px;
+    padding-left: var(--spacing-800);
+    padding-right: var(--spacing-800);
+    gap: var(--spacing-400);
+    font-size: var(--font-size-5);
+}
+
+.btn-lg {
+    height: 52px;
+    padding-left: var(--spacing-1000);
+    padding-right: var(--spacing-1000);
+    gap: var(--spacing-800);
+    font-size: var(--font-size-5);
+}
+
+/* Icon Only Button */
+.btn-icon-only.btn-sm {
+    width: 36px;
+    padding: 0;
+}
+
+.btn-icon-only.btn-md {
+    width: 44px;
+    padding: 0;
+}
+
+.btn-icon-only.btn-lg {
+    width: 52px;
+    padding: 0;
+}
+
+/* ==================== Icon Buttons (V2) ==================== */
+.icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sys-color-surface-1);
+    color: var(--sys-color-icon-2);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover:not(:disabled) {
+    color: var(--sys-color-icon-1);
+    background: var(--sys-color-surface-3);
+}
+
+.icon-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.icon-btn-sm {
+    width: 28px;
+    height: 28px;
+    padding: var(--spacing-100);
+}
+
+.icon-btn-md {
+    width: 32px;
+    height: 32px;
+    padding: var(--spacing-100);
+}
+
+/* ==================== Text Buttons (V2) ==================== */
+.text-btn {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.text-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.text-btn.has-icon {
+    text-decoration: none;
+}
+
+.text-btn-black {
+    color: var(--sys-color-text-1);
+}
+
+.text-btn-black:hover:not(:disabled) {
+    color: var(--sys-color-text-3);
+}
+
+.text-btn-white {
+    color: var(--sys-color-text-5);
+}
+
+.text-btn-white:hover:not(:disabled) {
+    color: rgba(255, 255, 255, 0.64);
+}
+
+.text-btn-md {
+    font-size: var(--font-size-3);
+    gap: var(--spacing-200);
+}
+
+.text-btn-lg {
+    font-size: var(--font-size-5);
+    gap: var(--spacing-200);
 }
 
 /* ==================== Tables ==================== */
