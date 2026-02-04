@@ -437,6 +437,43 @@ class SalesModule {
     }
 
     /**
+     * Toggle Credit status filter dropdown
+     */
+    toggleCreditStatusFilter(event) {
+        event.stopPropagation();
+        const dropdown = $('#credit-status-filter-dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('show');
+        }
+        const closeDropdown = (e) => {
+            if (!e.target.closest('.wd-column-filter')) {
+                dropdown?.classList.remove('show');
+                document.removeEventListener('click', closeDropdown);
+            }
+        };
+        setTimeout(() => document.addEventListener('click', closeDropdown), 0);
+    }
+
+    /**
+     * Apply Credit status filter
+     */
+    applyCreditStatusFilter(status) {
+        const filterInput = $('#credit-status-filter');
+        if (filterInput) filterInput.value = status;
+        this.filterCredits();
+        const dropdown = $('#credit-status-filter-dropdown');
+        dropdown?.classList.remove('show');
+    }
+
+    /**
+     * Sort Credit table
+     */
+    sortCreditTable(column) {
+        toast.info(`Sorting credits by ${column}`);
+        // TODO: Implement Credit table sorting
+    }
+
+    /**
      * View credit detail
      */
     viewCreditDetail(creditId) {
@@ -766,7 +803,52 @@ class SalesModule {
     }
 
     /**
-     * View PI detail
+     * Toggle PI status filter dropdown
+     */
+    togglePIStatusFilter(event) {
+        event.stopPropagation();
+        const dropdown = $('#pi-status-filter-dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('show');
+        }
+        const closeDropdown = (e) => {
+            if (!e.target.closest('.wd-column-filter')) {
+                dropdown?.classList.remove('show');
+                document.removeEventListener('click', closeDropdown);
+            }
+        };
+        setTimeout(() => document.addEventListener('click', closeDropdown), 0);
+    }
+
+    /**
+     * Apply PI status filter
+     */
+    applyPIStatusFilter(status) {
+        const filterInput = $('#pi-status-filter');
+        if (filterInput) filterInput.value = status;
+        this.filterPIList();
+        const dropdown = $('#pi-status-filter-dropdown');
+        dropdown?.classList.remove('show');
+    }
+
+    /**
+     * Sort PI table
+     */
+    sortPITable(column) {
+        toast.info(`Sorting by ${column}`);
+        // TODO: Implement PI table sorting
+    }
+
+    /**
+     * View PI detail (click row)
+     */
+    viewPIDetail(piNumber) {
+        toast.info(`Viewing details for ${piNumber}`);
+        // TODO: Show PI detail drawer/modal
+    }
+
+    /**
+     * View PI
      */
     viewPI(piNumber) {
         toast.info(`Viewing PI ${piNumber}`);
@@ -1244,6 +1326,33 @@ class SalesModule {
     }
 
     /**
+     * Handle PO product selection from dropdown
+     */
+    onPOProductSelect(rowIndex) {
+        const tbody = $('#add-po-items-tbody');
+        if (!tbody) return;
+
+        const row = tbody.querySelector(`tr[data-row="${rowIndex}"]`);
+        if (!row) return;
+
+        const select = row.querySelector('.po-item-product');
+        if (!select) return;
+
+        const selectedOption = select.options[select.selectedIndex];
+        const price = parseFloat(selectedOption?.dataset.price) || 0;
+        const unit = selectedOption?.dataset.unit || 'pcs';
+
+        // Auto-fill price and unit from selected product
+        const priceInput = row.querySelector('.po-item-price');
+        const unitSelect = row.querySelector('.po-item-unit');
+
+        if (priceInput) priceInput.value = price;
+        if (unitSelect) unitSelect.value = unit;
+
+        this.calculatePOItemSubtotal(rowIndex);
+    }
+
+    /**
      * Update PO total
      */
     updatePOTotal() {
@@ -1522,6 +1631,197 @@ class SalesModule {
 
             row.style.display = (matchesStatus && matchesSearch) ? '' : 'none';
         });
+    }
+
+    /**
+     * Toggle Account PI filter dropdown
+     */
+    toggleAccountPIFilter(event) {
+        event.stopPropagation();
+        const dropdown = $('#account-pi-filter-dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('show');
+        }
+        const closeDropdown = (e) => {
+            if (!e.target.closest('.wd-column-filter')) {
+                dropdown?.classList.remove('show');
+                document.removeEventListener('click', closeDropdown);
+            }
+        };
+        setTimeout(() => document.addEventListener('click', closeDropdown), 0);
+    }
+
+    /**
+     * Apply Account PI status filter
+     */
+    applyAccountPIFilter(status) {
+        const filterInput = $('#account-pi-status-filter');
+        if (filterInput) filterInput.value = status;
+
+        const rows = $$('#accounts-table-body tr');
+        rows.forEach(row => {
+            const piStatus = row.dataset.piStatus || '';
+            const matchesFilter = status === 'all' || piStatus === status;
+            row.style.display = matchesFilter ? '' : 'none';
+        });
+
+        const dropdown = $('#account-pi-filter-dropdown');
+        dropdown?.classList.remove('show');
+    }
+
+    /**
+     * Filter accounts by month
+     */
+    filterAccountsByMonth() {
+        const month = $('#account-month-filter')?.value || 'all';
+        toast.info(`Filtering by ${month === 'all' ? 'all time' : month}`);
+        // TODO: Filter accounts by selected month and reload data
+    }
+
+    /**
+     * Sort Account table
+     */
+    sortAccountTable(column) {
+        toast.info(`Sorting accounts by ${column}`);
+        // TODO: Implement Account table sorting
+    }
+
+    /**
+     * View account detail (drawer)
+     */
+    viewAccountDetail(accountId) {
+        const drawer = $('#account-detail-drawer');
+        const overlay = $('#account-drawer-overlay');
+        if (drawer) {
+            drawer.classList.add('active');
+            if (overlay) overlay.classList.add('active');
+            window.currentAccountId = accountId;
+            // TODO: Load account detail data based on accountId
+        }
+    }
+
+    /**
+     * View account products breakdown
+     */
+    viewAccountProducts(accountId) {
+        toast.info(`Viewing product breakdown for ${accountId}`);
+        this.viewAccountDetail(accountId);
+    }
+
+    /**
+     * Close account detail drawer
+     */
+    closeAccountDrawer() {
+        const drawer = $('#account-detail-drawer');
+        const overlay = $('#account-drawer-overlay');
+        if (drawer) {
+            drawer.classList.remove('active');
+        }
+        if (overlay) {
+            overlay.classList.remove('active');
+        }
+    }
+
+    /**
+     * Show product tooltip on month hover
+     */
+    showProductTooltip(event, month) {
+        const tooltip = $('#product-tooltip');
+        if (!tooltip) return;
+
+        // Demo data - in production, this would come from API
+        const monthlyData = {
+            '2026-01': {
+                label: 'January 2026',
+                total: '$9,700',
+                products: [
+                    { name: 'Extra Virgin Olive Oil 500ml', qty: '140 pcs', amount: '$3,500' },
+                    { name: 'Aged Parmesan 24 months', qty: '50 pcs', amount: '$3,250' },
+                    { name: 'Organic Honey 350g', qty: '100 pcs', amount: '$1,800' },
+                    { name: 'Balsamic Vinegar 250ml', qty: '36 pcs', amount: '$1,150' }
+                ]
+            },
+            '2026-02': {
+                label: 'February 2026',
+                total: '$5,420',
+                products: [
+                    { name: 'Extra Virgin Olive Oil 500ml', qty: '80 pcs', amount: '$2,000' },
+                    { name: 'Aged Parmesan 24 months', qty: '30 pcs', amount: '$1,950' },
+                    { name: 'Organic Honey 350g', qty: '50 pcs', amount: '$900' },
+                    { name: 'Balsamic Vinegar 250ml', qty: '18 pcs', amount: '$570' }
+                ]
+            }
+        };
+
+        const data = monthlyData[month];
+        if (!data) return;
+
+        // Update tooltip content
+        tooltip.querySelector('.wd-tooltip-month').textContent = data.label;
+        tooltip.querySelector('.wd-tooltip-total').textContent = data.total;
+
+        const productsContainer = $('#tooltip-products');
+        productsContainer.innerHTML = data.products.map(p => `
+            <div class="wd-tooltip-product">
+                <div class="wd-tooltip-product-info">
+                    <span class="wd-tooltip-product-name">${p.name}</span>
+                    <span class="wd-tooltip-product-qty">${p.qty}</span>
+                </div>
+                <span class="wd-tooltip-product-amount">${p.amount}</span>
+            </div>
+        `).join('');
+
+        // Position tooltip
+        const rect = event.target.closest('.wd-sales-cell').getBoundingClientRect();
+        tooltip.style.display = 'block';
+        tooltip.style.left = `${rect.left}px`;
+        tooltip.style.top = `${rect.bottom + 8}px`;
+
+        // Adjust if going off screen
+        const tooltipRect = tooltip.getBoundingClientRect();
+        if (tooltipRect.right > window.innerWidth - 20) {
+            tooltip.style.left = `${window.innerWidth - tooltipRect.width - 20}px`;
+        }
+        if (tooltipRect.bottom > window.innerHeight - 20) {
+            tooltip.style.top = `${rect.top - tooltipRect.height - 8}px`;
+        }
+    }
+
+    /**
+     * Hide product tooltip
+     */
+    hideProductTooltip() {
+        const tooltip = $('#product-tooltip');
+        if (tooltip) {
+            tooltip.style.display = 'none';
+        }
+    }
+
+    /**
+     * Toggle PI products detail view
+     */
+    togglePIProducts(element) {
+        const detail = element.querySelector('.wd-pi-products-detail');
+        if (!detail) return;
+
+        const isExpanded = element.classList.contains('expanded');
+
+        if (isExpanded) {
+            element.classList.remove('expanded');
+            detail.style.display = 'none';
+        } else {
+            element.classList.add('expanded');
+            detail.style.display = 'block';
+        }
+    }
+
+    /**
+     * Change account sales year
+     */
+    changeAccountSalesYear() {
+        const year = $('#account-sales-year')?.value || '2024';
+        toast.info(`Loading sales data for ${year}...`);
+        // TODO: Load sales data for selected year from API
     }
 
     /**
@@ -2730,6 +3030,9 @@ window.viewCreditDetail = (creditId) => salesModule.viewCreditDetail(creditId);
 window.editCredit = (creditId) => salesModule.editCredit(creditId);
 window.viewInvoiceFromCredit = (invoiceNumber) => salesModule.viewInvoiceFromCredit(invoiceNumber);
 window.exportCredits = () => salesModule.exportCredits();
+window.toggleCreditStatusFilter = (event) => salesModule.toggleCreditStatusFilter(event);
+window.applyCreditStatusFilter = (status) => salesModule.applyCreditStatusFilter(status);
+window.sortCreditTable = (column) => salesModule.sortCreditTable(column);
 
 // PI (Proforma Invoice) Management global functions
 window.openPIModal = (piId) => salesModule.openPIModal(piId);
@@ -2739,6 +3042,7 @@ window.updatePIItemTotal = (index) => salesModule.updatePIItemTotal(index);
 window.updatePISummary = () => salesModule.updatePISummary();
 window.filterPIList = () => salesModule.filterPIList();
 window.viewPI = (piNumber) => salesModule.viewPI(piNumber);
+window.viewPIDetail = (piNumber) => salesModule.viewPIDetail(piNumber);
 window.editPI = (piNumber) => salesModule.editPI(piNumber);
 window.sendPI = (piNumber) => salesModule.sendPI(piNumber);
 window.downloadPI = (piNumber) => salesModule.downloadPI(piNumber);
@@ -2746,6 +3050,9 @@ window.saveAsDraft = () => salesModule.saveAsDraft();
 window.createAndSendPI = () => salesModule.createAndSendPI();
 window.viewPOFromPI = (poNumber) => salesModule.viewPOFromPI(poNumber);
 window.exportPIList = () => salesModule.exportPIList();
+window.togglePIStatusFilter = (event) => salesModule.togglePIStatusFilter(event);
+window.applyPIStatusFilter = (status) => salesModule.applyPIStatusFilter(status);
+window.sortPITable = (column) => salesModule.sortPITable(column);
 
 // Enhanced PI functions
 window.togglePISource = (source) => salesModule.togglePISource(source);
@@ -2766,6 +3073,13 @@ window.editAccount = (accountId) => salesModule.editAccount(accountId);
 window.filterAccounts = () => salesModule.filterAccounts();
 window.exportAccounts = () => salesModule.exportAccounts();
 window.createPIForAccount = (accountId) => salesModule.createPIForAccount(accountId);
+window.viewAccountDetail = (accountId) => salesModule.viewAccountDetail(accountId);
+window.viewAccountProducts = (accountId) => salesModule.viewAccountProducts(accountId);
+window.closeAccountDrawer = () => salesModule.closeAccountDrawer();
+window.filterAccountsByMonth = () => salesModule.filterAccountsByMonth();
+window.toggleAccountPIFilter = (event) => salesModule.toggleAccountPIFilter(event);
+window.applyAccountPIFilter = (status) => salesModule.applyAccountPIFilter(status);
+window.sortAccountTable = (column) => salesModule.sortAccountTable(column);
 
 // PO Manual Registration global functions
 window.openAddPOModal = () => salesModule.openAddPOModal();
@@ -2778,6 +3092,7 @@ window.calculatePOItemSubtotal = (rowIndex) => salesModule.calculatePOItemSubtot
 window.updatePOTotal = () => salesModule.updatePOTotal();
 window.updatePOCurrency = () => salesModule.updatePOTotal();
 window.savePO = () => salesModule.savePO();
+window.onPOProductSelect = (rowIndex) => salesModule.onPOProductSelect(rowIndex);
 
 // Buyer Discovery global functions
 window.switchBuyerTab = (tab) => salesModule.switchBuyerTab(tab);

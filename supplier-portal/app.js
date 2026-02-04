@@ -2558,3 +2558,260 @@ function sortPOTable(column) {
 function openAddPOModal() {
     showToast('발주서 등록 기능 준비 중입니다.', 'info');
 }
+
+// ==================== PI Management ====================
+
+// PI 탭 필터 (Active/Cancelled)
+function filterPIByTab(tabType) {
+    // 탭 활성화 상태 업데이트
+    const tabs = document.querySelectorAll('#panel-pi-management .wd-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Hidden filter 업데이트
+    const tabFilter = document.getElementById('pi-tab-filter');
+    if (tabFilter) tabFilter.value = tabType;
+
+    // 테이블 필터링
+    const rows = document.querySelectorAll('#pi-table-body tr');
+    rows.forEach(row => {
+        const rowTab = row.dataset.tab || 'active';
+        if (tabType === 'active') {
+            row.style.display = rowTab !== 'cancelled' ? '' : 'none';
+        } else if (tabType === 'cancelled') {
+            row.style.display = rowTab === 'cancelled' ? '' : 'none';
+        }
+    });
+}
+
+// PI Status 필터 토글
+function togglePIStatusFilter(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('pi-status-filter-dropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+    // 다른 드롭다운 닫기
+    const paymentDropdown = document.getElementById('pi-payment-filter-dropdown');
+    if (paymentDropdown) paymentDropdown.classList.remove('show');
+}
+
+// PI Status 필터 적용
+function applyPIStatusFilter(status) {
+    const dropdown = document.getElementById('pi-status-filter-dropdown');
+    const hiddenFilter = document.getElementById('pi-status-filter');
+
+    if (dropdown) dropdown.classList.remove('show');
+    if (hiddenFilter) hiddenFilter.value = status;
+
+    applyPIFilters();
+}
+
+// PI Payment 필터 토글
+function togglePIPaymentFilter(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('pi-payment-filter-dropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+    // 다른 드롭다운 닫기
+    const statusDropdown = document.getElementById('pi-status-filter-dropdown');
+    if (statusDropdown) statusDropdown.classList.remove('show');
+}
+
+// PI Payment 필터 적용
+function applyPIPaymentFilter(payment) {
+    const dropdown = document.getElementById('pi-payment-filter-dropdown');
+    if (dropdown) dropdown.classList.remove('show');
+
+    // Hidden filter에 저장
+    window.piPaymentFilter = payment;
+
+    applyPIFilters();
+}
+
+// PI 통합 필터 적용
+function applyPIFilters() {
+    const tabFilter = document.getElementById('pi-tab-filter')?.value || 'active';
+    const statusFilter = document.getElementById('pi-status-filter')?.value || 'all';
+    const paymentFilter = window.piPaymentFilter || 'all';
+
+    const rows = document.querySelectorAll('#pi-table-body tr');
+    rows.forEach(row => {
+        const rowTab = row.dataset.tab || 'active';
+        const rowStatus = row.dataset.status || '';
+        const rowPayment = row.dataset.payment || '';
+
+        let showByTab = tabFilter === 'active' ? rowTab !== 'cancelled' : rowTab === 'cancelled';
+        let showByStatus = statusFilter === 'all' || rowStatus === statusFilter;
+        let showByPayment = paymentFilter === 'all' || rowPayment === paymentFilter;
+
+        row.style.display = (showByTab && showByStatus && showByPayment) ? '' : 'none';
+    });
+}
+
+// PI 테이블 정렬
+function sortPITable(column) {
+    console.log('Sorting PI by:', column);
+    // TODO: 정렬 로직 구현
+}
+
+// ==================== Account Management ====================
+
+// Account detail drawer 열기
+function viewAccountDetail(accountId) {
+    const drawer = document.getElementById('account-detail-drawer');
+    const overlay = document.getElementById('account-drawer-overlay');
+    if (drawer) {
+        drawer.classList.add('active');
+        if (overlay) overlay.classList.add('active');
+        window.currentAccountId = accountId;
+        // TODO: Load account detail data based on accountId
+        console.log('Opening account detail for:', accountId);
+    }
+}
+
+// Account detail drawer 닫기
+function closeAccountDrawer() {
+    const drawer = document.getElementById('account-detail-drawer');
+    const overlay = document.getElementById('account-drawer-overlay');
+    if (drawer) {
+        drawer.classList.remove('active');
+    }
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+}
+
+// Account products 보기
+function viewAccountProducts(accountId) {
+    showToast(`Viewing product breakdown for ${accountId}`, 'info');
+    viewAccountDetail(accountId);
+}
+
+// Account PI status 필터 토글
+function toggleAccountPIFilter(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('account-pi-filter-dropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+}
+
+// Account PI status 필터 적용
+function applyAccountPIFilter(status) {
+    const dropdown = document.getElementById('account-pi-filter-dropdown');
+    const filterBtn = document.getElementById('account-pi-filter-btn');
+
+    if (dropdown) dropdown.classList.remove('show');
+
+    // 필터 버튼 텍스트 업데이트
+    if (filterBtn) {
+        const statusText = status === 'all' ? 'All Status' :
+                          status === 'completed' ? 'Completed' : 'In Progress';
+        filterBtn.querySelector('.wd-filter-text').textContent = statusText;
+    }
+
+    // 테이블 필터링
+    const rows = document.querySelectorAll('#accounts-table-body tr');
+    rows.forEach(row => {
+        const rowStatus = row.dataset.piStatus || '';
+        if (status === 'all') {
+            row.style.display = '';
+        } else {
+            row.style.display = rowStatus === status ? '' : 'none';
+        }
+    });
+}
+
+// Account 테이블 정렬
+function sortAccountTable(column) {
+    console.log('Sorting accounts by:', column);
+    // TODO: 정렬 로직 구현
+}
+
+// Account sales year 변경
+function changeAccountSalesYear() {
+    const yearSelect = document.getElementById('account-sales-year');
+    if (yearSelect) {
+        console.log('Changed to year:', yearSelect.value);
+        // TODO: Load sales data for selected year
+    }
+}
+
+// Product tooltip 표시
+function showProductTooltip(event, month) {
+    const tooltip = document.getElementById('product-tooltip');
+    if (!tooltip) return;
+
+    // Demo data - in production, this would come from API
+    const monthlyData = {
+        '2026-01': {
+            label: 'January 2026',
+            total: '$9,700',
+            products: [
+                { name: 'Extra Virgin Olive Oil 500ml', qty: '140 pcs', amount: '$3,500' },
+                { name: 'Aged Parmesan 24 months', qty: '50 pcs', amount: '$3,250' },
+                { name: 'Organic Honey 350g', qty: '100 pcs', amount: '$1,800' },
+                { name: 'Balsamic Vinegar 250ml', qty: '36 pcs', amount: '$1,150' }
+            ]
+        },
+        '2026-02': {
+            label: 'February 2026',
+            total: '$5,420',
+            products: [
+                { name: 'Extra Virgin Olive Oil 500ml', qty: '80 pcs', amount: '$2,000' },
+                { name: 'Truffle Oil 100ml', qty: '24 pcs', amount: '$1,920' },
+                { name: 'Aged Parmesan 24 months', qty: '20 pcs', amount: '$1,500' }
+            ]
+        }
+    };
+
+    const data = monthlyData[month];
+    if (!data) {
+        tooltip.style.display = 'none';
+        return;
+    }
+
+    // Update tooltip content
+    const headerMonth = tooltip.querySelector('.wd-tooltip-month');
+    const headerTotal = tooltip.querySelector('.wd-tooltip-total');
+    const productsList = tooltip.querySelector('.wd-tooltip-products');
+
+    if (headerMonth) headerMonth.textContent = data.label;
+    if (headerTotal) headerTotal.textContent = data.total;
+    if (productsList) {
+        productsList.innerHTML = data.products.map(p => `
+            <div class="wd-tooltip-product">
+                <span class="wd-tooltip-product-name">${p.name}</span>
+                <span class="wd-tooltip-product-qty">${p.qty}</span>
+                <span class="wd-tooltip-product-amount">${p.amount}</span>
+            </div>
+        `).join('');
+    }
+
+    // Position tooltip
+    const rect = event.target.getBoundingClientRect();
+    tooltip.style.display = 'block';
+    tooltip.style.top = (rect.bottom + 8) + 'px';
+    tooltip.style.left = rect.left + 'px';
+
+    // Adjust if going off screen
+    const tooltipRect = tooltip.getBoundingClientRect();
+    if (tooltipRect.right > window.innerWidth) {
+        tooltip.style.left = (window.innerWidth - tooltipRect.width - 16) + 'px';
+    }
+}
+
+// Product tooltip 숨기기
+function hideProductTooltip() {
+    const tooltip = document.getElementById('product-tooltip');
+    if (tooltip) {
+        tooltip.style.display = 'none';
+    }
+}
+
+// PI history 상품 상세 토글
+function togglePIProducts(element) {
+    element.classList.toggle('expanded');
+}

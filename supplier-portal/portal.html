@@ -598,27 +598,28 @@
                             </div>
 
                             <div class="wd-dashboard-grid" style="padding: 0 24px 24px; border-top: 1px solid var(--wd-gray-100);">
-                                <!-- Left Column -->
+                                <!-- Left Column: Action-Focused (Workflow Priority) -->
                                 <div class="wd-dashboard-left">
-                                    <!-- Action Required -->
+                                    <!-- 1. Action Required (Highest Priority - Urgent Items) -->
                                     <div class="wd-card wd-card-action-required">
                                         <div class="wd-card-header">
                                             <h3 class="wd-card-title">
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                                                 <span data-i18n="dashboard.actionRequired">Action Required</span>
                                             </h3>
+                                            <span class="wd-badge wd-badge-warning">6</span>
                                         </div>
                                         <div class="wd-card-body">
                                             <div class="wd-action-list">
                                                 <a href="#" class="wd-action-item" onclick="showSection('po-management'); return false;">
-                                                    <div class="wd-action-icon wd-action-icon-info">
+                                                    <div class="wd-action-icon wd-action-icon-warning">
                                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                                     </div>
                                                     <div class="wd-action-content">
                                                         <span class="wd-action-title" data-i18n="dashboard.receivedPO">Received PO</span>
                                                         <span class="wd-action-desc">3 orders waiting for confirmation</span>
                                                     </div>
-                                                    <span class="wd-action-badge">3</span>
+                                                    <span class="wd-action-badge wd-action-badge-urgent">3</span>
                                                 </a>
                                                 <a href="#" class="wd-action-item" onclick="showSection('pi-management'); return false;">
                                                     <div class="wd-action-icon wd-action-icon-info">
@@ -644,7 +645,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Quick Actions -->
+                                    <!-- 2. Quick Actions (Frequently Used Tasks) -->
                                     <div class="wd-card">
                                         <div class="wd-card-header">
                                             <h3 class="wd-card-title">
@@ -670,7 +671,152 @@
                                         </div>
                                     </div>
 
-                                    <!-- Product Status -->
+                                    <!-- 3. Recent Activity (Workflow Timeline) -->
+                                    <div class="wd-card">
+                                        <div class="wd-card-header">
+                                            <h3 class="wd-card-title">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                                <span data-i18n="dashboard.recentActivity">Recent Activity</span>
+                                            </h3>
+                                            <a href="#" class="wd-card-link" onclick="showSection('po-management'); return false;" data-i18n="common.viewAll">View All</a>
+                                        </div>
+                                        <div class="wd-card-body">
+                                            <div class="wd-activity-list">
+                                                <div class="wd-activity-item">
+                                                    <div class="wd-activity-icon wd-activity-icon-success">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                                    </div>
+                                                    <div class="wd-activity-content">
+                                                        <span class="wd-activity-title">PI #PI-2024-0089 sent</span>
+                                                        <span class="wd-activity-meta">ABC Distribution · 2 hours ago</span>
+                                                    </div>
+                                                </div>
+                                                <div class="wd-activity-item">
+                                                    <div class="wd-activity-icon wd-activity-icon-info">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                                    </div>
+                                                    <div class="wd-activity-content">
+                                                        <span class="wd-activity-title">PO #PO-2024-0156 received</span>
+                                                        <span class="wd-activity-meta">XYZ Foods Ltd · 5 hours ago</span>
+                                                    </div>
+                                                </div>
+                                                <div class="wd-activity-item">
+                                                    <div class="wd-activity-icon wd-activity-icon-primary">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                                    </div>
+                                                    <div class="wd-activity-content">
+                                                        <span class="wd-activity-title">New inquiry from Global Trade</span>
+                                                        <span class="wd-activity-meta">Global Trade Co · Yesterday</span>
+                                                    </div>
+                                                </div>
+                                                <div class="wd-activity-item">
+                                                    <div class="wd-activity-icon wd-activity-icon-success">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                                    </div>
+                                                    <div class="wd-activity-content">
+                                                        <span class="wd-activity-title">PO #PO-2024-0155 confirmed</span>
+                                                        <span class="wd-activity-meta">ABC Distribution · Yesterday</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column: Performance & Insights -->
+                                <div class="wd-dashboard-right">
+                                    <!-- 1. This Month Performance (Key Metrics) -->
+                                    <div class="wd-card">
+                                        <div class="wd-card-header">
+                                            <h3 class="wd-card-title">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                                                <span data-i18n="dashboard.thisMonth">This Month</span>
+                                            </h3>
+                                        </div>
+                                        <div class="wd-card-body">
+                                            <div class="wd-performance-grid">
+                                                <div class="wd-performance-item">
+                                                    <span class="wd-performance-value">12</span>
+                                                    <span class="wd-performance-label" data-i18n="dashboard.ordersReceived">Orders Received</span>
+                                                </div>
+                                                <div class="wd-performance-item">
+                                                    <span class="wd-performance-value">$45,600</span>
+                                                    <span class="wd-performance-label" data-i18n="dashboard.orderAmount">Order Amount</span>
+                                                </div>
+                                                <div class="wd-performance-item">
+                                                    <span class="wd-performance-value">8</span>
+                                                    <span class="wd-performance-label" data-i18n="dashboard.piIssued">PI Issued</span>
+                                                </div>
+                                                <div class="wd-performance-item">
+                                                    <span class="wd-performance-value">$38,200</span>
+                                                    <span class="wd-performance-label" data-i18n="dashboard.piAmount">PI Amount</span>
+                                                </div>
+                                            </div>
+                                            <!-- Top Buyers inline -->
+                                            <div class="wd-top-buyers-compact">
+                                                <div class="wd-section-divider"></div>
+                                                <div class="wd-compact-header">
+                                                    <span class="wd-compact-title" data-i18n="dashboard.topBuyers">Top Buyers</span>
+                                                    <a href="#" class="wd-card-link" onclick="showSection('accounts'); return false;" data-i18n="common.viewAll">View All</a>
+                                                </div>
+                                                <div class="wd-buyer-list-compact">
+                                                    <div class="wd-buyer-compact">
+                                                        <span class="wd-buyer-rank-sm">1</span>
+                                                        <span class="wd-buyer-name-sm">ABC Distribution</span>
+                                                        <span class="wd-buyer-amount-sm">$45,600</span>
+                                                    </div>
+                                                    <div class="wd-buyer-compact">
+                                                        <span class="wd-buyer-rank-sm">2</span>
+                                                        <span class="wd-buyer-name-sm">XYZ Foods Ltd</span>
+                                                        <span class="wd-buyer-amount-sm">$38,200</span>
+                                                    </div>
+                                                    <div class="wd-buyer-compact">
+                                                        <span class="wd-buyer-rank-sm">3</span>
+                                                        <span class="wd-buyer-name-sm">Global Trade Co</span>
+                                                        <span class="wd-buyer-amount-sm">$28,500</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Payment Collection Rate -->
+                                    <div class="wd-card">
+                                        <div class="wd-card-header">
+                                            <h3 class="wd-card-title">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                                <span data-i18n="dashboard.paymentCollection">Payment Collection</span>
+                                            </h3>
+                                            <a href="#" class="wd-card-link" onclick="showSection('pi-management'); return false;" data-i18n="common.viewAll">View All</a>
+                                        </div>
+                                        <div class="wd-card-body">
+                                            <div class="wd-progress-section">
+                                                <div class="wd-progress-header">
+                                                    <span data-i18n="dashboard.collectionRate">Collection Rate</span>
+                                                    <span class="wd-progress-value wd-text-success">68%</span>
+                                                </div>
+                                                <div class="wd-progress-bar">
+                                                    <div class="wd-progress-fill wd-progress-fill-success" style="width: 68%;"></div>
+                                                </div>
+                                            </div>
+                                            <div class="wd-payment-stats" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;">
+                                                <div class="wd-payment-stat">
+                                                    <span class="wd-payment-stat-value">$29,475</span>
+                                                    <span class="wd-payment-stat-label wd-text-muted" data-i18n="dashboard.totalSent">Total Sent</span>
+                                                </div>
+                                                <div class="wd-payment-stat">
+                                                    <span class="wd-payment-stat-value wd-text-success">$20,043</span>
+                                                    <span class="wd-payment-stat-label wd-text-muted" data-i18n="dashboard.collected">Collected</span>
+                                                </div>
+                                                <div class="wd-payment-stat">
+                                                    <span class="wd-payment-stat-value wd-text-warning">$9,432</span>
+                                                    <span class="wd-payment-stat-label wd-text-muted" data-i18n="dashboard.outstanding">Outstanding</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2. Product Status (Data Quality - Maintenance) -->
                                     <div class="wd-card">
                                         <div class="wd-card-header">
                                             <h3 class="wd-card-title">
@@ -708,80 +854,8 @@
                                             </button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- Right Column -->
-                                <div class="wd-dashboard-right">
-                                    <!-- This Month Performance -->
-                                    <div class="wd-card">
-                                        <div class="wd-card-header">
-                                            <h3 class="wd-card-title">
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                                                <span data-i18n="dashboard.thisMonth">This Month</span>
-                                            </h3>
-                                        </div>
-                                        <div class="wd-card-body">
-                                            <div class="wd-performance-grid">
-                                                <div class="wd-performance-item">
-                                                    <span class="wd-performance-value">12</span>
-                                                    <span class="wd-performance-label" data-i18n="dashboard.ordersReceived">Orders Received</span>
-                                                </div>
-                                                <div class="wd-performance-item">
-                                                    <span class="wd-performance-value">$45,600</span>
-                                                    <span class="wd-performance-label" data-i18n="dashboard.orderAmount">Order Amount</span>
-                                                </div>
-                                                <div class="wd-performance-item">
-                                                    <span class="wd-performance-value">8</span>
-                                                    <span class="wd-performance-label" data-i18n="dashboard.piIssued">PI Issued</span>
-                                                </div>
-                                                <div class="wd-performance-item">
-                                                    <span class="wd-performance-value">$38,200</span>
-                                                    <span class="wd-performance-label" data-i18n="dashboard.piAmount">PI Amount</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Top Buyers -->
-                                    <div class="wd-card">
-                                        <div class="wd-card-header">
-                                            <h3 class="wd-card-title">
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                                                <span data-i18n="dashboard.topBuyers">Top Buyers</span>
-                                            </h3>
-                                            <a href="#" class="wd-card-link" onclick="showSection('accounts'); return false;" data-i18n="common.viewAll">View All</a>
-                                        </div>
-                                        <div class="wd-card-body">
-                                            <div class="wd-buyer-list">
-                                                <div class="wd-buyer-item">
-                                                    <div class="wd-buyer-rank">1</div>
-                                                    <div class="wd-buyer-info">
-                                                        <span class="wd-buyer-name">ABC Distribution</span>
-                                                        <span class="wd-buyer-country">South Korea</span>
-                                                    </div>
-                                                    <span class="wd-buyer-amount">$45,600</span>
-                                                </div>
-                                                <div class="wd-buyer-item">
-                                                    <div class="wd-buyer-rank">2</div>
-                                                    <div class="wd-buyer-info">
-                                                        <span class="wd-buyer-name">XYZ Foods Ltd</span>
-                                                        <span class="wd-buyer-country">Japan</span>
-                                                    </div>
-                                                    <span class="wd-buyer-amount">$38,200</span>
-                                                </div>
-                                                <div class="wd-buyer-item">
-                                                    <div class="wd-buyer-rank">3</div>
-                                                    <div class="wd-buyer-info">
-                                                        <span class="wd-buyer-name">Global Trade Co</span>
-                                                        <span class="wd-buyer-country">United States</span>
-                                                    </div>
-                                                    <span class="wd-buyer-amount">$28,500</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Opportunity - Trending Keywords -->
+                                    <!-- 3. Opportunity (Growth Potential) -->
                                     <div class="wd-card wd-card-opportunity">
                                         <div class="wd-card-header">
                                             <h3 class="wd-card-title">
@@ -1709,6 +1783,7 @@
                                         <div class="wd-form-section">
                                             <h4 class="wd-form-section-title">
                                                 <span data-i18n="po.orderItems">Order Items</span>
+                                                <span class="wd-badge wd-badge-info" style="margin-left: 8px; font-weight: normal;">Only completed products</span>
                                                 <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="addPOItemRow()" style="margin-left: auto;">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                                     <span data-i18n="po.addItem">Add Item</span>
@@ -1718,7 +1793,7 @@
                                                 <table class="wd-table wd-table-sm" id="add-po-items-table">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width: 35%;" data-i18n="po.productName">Product Name *</th>
+                                                            <th style="width: 35%;" data-i18n="po.selectProduct">Select Product *</th>
                                                             <th style="width: 12%;" data-i18n="po.quantity">Qty *</th>
                                                             <th style="width: 12%;" data-i18n="po.unit">Unit</th>
                                                             <th style="width: 15%;" data-i18n="po.unitPrice">Unit Price *</th>
@@ -1728,7 +1803,18 @@
                                                     </thead>
                                                     <tbody id="add-po-items-tbody">
                                                         <tr data-row="0">
-                                                            <td><input type="text" class="wd-input wd-input-sm po-item-name" required placeholder="Product name"></td>
+                                                            <td>
+                                                                <select class="wd-select wd-select-sm po-item-product" required onchange="onPOProductSelect(0)">
+                                                                    <option value="">Select a product...</option>
+                                                                    <!-- Only COMPLETED products will be shown -->
+                                                                    <option value="PROD-001" data-price="25.00" data-unit="pcs">Extra Virgin Olive Oil 500ml</option>
+                                                                    <option value="PROD-002" data-price="65.00" data-unit="pcs">Aged Parmesan 24 months 1kg</option>
+                                                                    <option value="PROD-003" data-price="18.00" data-unit="pcs">Organic Honey 350g</option>
+                                                                    <option value="PROD-004" data-price="32.00" data-unit="pcs">Balsamic Vinegar 250ml</option>
+                                                                    <option value="PROD-005" data-price="45.00" data-unit="pcs">Truffle Oil 100ml</option>
+                                                                    <option value="PROD-006" data-price="12.00" data-unit="boxes">Dried Pasta 500g</option>
+                                                                </select>
+                                                            </td>
                                                             <td><input type="number" class="wd-input wd-input-sm po-item-qty" required min="1" value="1" onchange="calculatePOItemSubtotal(0)"></td>
                                                             <td>
                                                                 <select class="wd-select wd-select-sm po-item-unit">
@@ -1762,6 +1848,10 @@
                                                     </tfoot>
                                                 </table>
                                             </div>
+                                            <p class="wd-text-muted wd-text-sm" style="margin-top: 8px;">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                                Only products with "Completed" status can be selected. <a href="#" class="wd-link" onclick="showSection('product-list'); closeAddPOModal(); return false;">Manage products →</a>
+                                            </p>
                                         </div>
 
                                         <!-- Notes -->
@@ -1796,186 +1886,215 @@
                                 </div>
                             </div>
 
-                            <!-- PI Summary Cards -->
-                            <div class="wd-page-content">
-                                <div class="wd-stats-grid">
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-warning">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="pi-draft-count">2</span>
-                                            <span class="wd-stat-label" data-i18n="pi.draftPI">Draft PI</span>
-                                        </div>
-                                    </div>
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-primary">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="pi-sent-count">8</span>
-                                            <span class="wd-stat-label" data-i18n="pi.sentPI">Sent PI</span>
-                                        </div>
-                                    </div>
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-success">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="pi-total-amount">$45,230</span>
-                                            <span class="wd-stat-label" data-i18n="pi.totalPIAmount">Total PI Amount</span>
-                                        </div>
-                                    </div>
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-warning">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="pi-credit-applied">$1,250</span>
-                                            <span class="wd-stat-label" data-i18n="pi.creditApplied">Credit Applied</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <!-- Tabs -->
+                            <div class="wd-tabs" style="padding: 0 24px;">
+                                <button class="wd-tab active" onclick="filterPIByTab('active')" data-i18n="pi.activePI">Active PIs</button>
+                                <button class="wd-tab" onclick="filterPIByTab('cancelled')" data-i18n="pi.cancelledPI">Cancelled PIs</button>
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="margin: 0 24px 16px;">
-                                <div class="wd-filter-group">
-                                    <select class="wd-select" id="pi-status-filter" onchange="filterPIList()">
-                                        <option value="all" data-i18n="pi.allStatus">All Status</option>
-                                        <option value="draft" data-i18n="pi.draft">Draft</option>
-                                        <option value="sent" data-i18n="pi.sent">Sent</option>
-                                        <option value="confirmed" data-i18n="pi.confirmed">Confirmed</option>
-                                        <option value="paid" data-i18n="pi.paid">Paid</option>
-                                    </select>
-                                    <div class="wd-search-box">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                        <input type="text" id="pi-search" placeholder="Search by PI number or buyer..." oninput="filterPIList()">
-                                    </div>
-                                </div>
-                                <div class="wd-filter-actions">
-                                    <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="exportPIList()">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                        <span data-i18n="pi.export">Export</span>
-                                    </button>
+                            <div class="po-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                                <div></div>
+                                <div class="wd-search">
+                                    <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <path d="m21 21-4.3-4.3"></path>
+                                    </svg>
+                                    <input type="text" id="pi-search" class="wd-input" placeholder="Search PI#, PO#, Buyer..." style="width: 280px;" oninput="filterPIList()">
                                 </div>
                             </div>
 
+                            <!-- Hidden filter value holder -->
+                            <input type="hidden" id="pi-status-filter" value="all">
+                            <input type="hidden" id="pi-tab-filter" value="active">
+
                             <!-- PI Table -->
-                            <div class="wd-page-content">
-                                <div class="wd-table-container">
-                                    <table class="wd-table">
-                                        <thead>
-                                            <tr>
-                                                <th data-i18n="pi.piNumber">PI Number</th>
-                                                <th data-i18n="pi.poReference">PO Reference</th>
-                                                <th data-i18n="pi.buyer">Buyer</th>
-                                                <th data-i18n="pi.issueDate">Issue Date</th>
-                                                <th data-i18n="pi.subtotal">Subtotal</th>
-                                                <th data-i18n="pi.creditDiscount">Credit/Discount</th>
-                                                <th data-i18n="pi.totalAmount">Total Amount</th>
-                                                <th data-i18n="pi.status">Status</th>
-                                                <th data-i18n="sales.createdBy">Created By</th>
-                                                <th data-i18n="pi.actions">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="pi-table-body">
-                                            <tr data-status="draft">
-                                                <td><span class="wd-text-mono">PI-2024-0089</span></td>
-                                                <td><a href="#" class="wd-link" onclick="viewPOFromPI('PO-2024-0156')">PO-2024-0156</a></td>
-                                                <td>
-                                                    <div class="wd-buyer-cell">
-                                                        <span class="wd-buyer-name">ABC Distribution</span>
-                                                        <span class="wd-buyer-country">🇰🇷 South Korea</span>
+                            <div class="wd-section-x">
+                                <table class="wd-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="sortable" onclick="sortPITable('piNumber')">
+                                                <span data-i18n="pi.piNumber">PI Number</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th class="th-filter">
+                                                <span data-i18n="pi.status">Status</span>
+                                                <div class="wd-column-filter">
+                                                    <button class="wd-filter-btn" onclick="togglePIStatusFilter(event)">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="wd-filter-dropdown" id="pi-status-filter-dropdown">
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pi-status-filter" value="all" checked onchange="applyPIStatusFilter('all')">
+                                                            <span>All</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pi-status-filter" value="draft" onchange="applyPIStatusFilter('draft')">
+                                                            <span>Draft</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pi-status-filter" value="sent" onchange="applyPIStatusFilter('sent')">
+                                                            <span>Sent</span>
+                                                        </label>
                                                     </div>
-                                                </td>
-                                                <td>2024-02-04</td>
-                                                <td>$3,250.00</td>
-                                                <td><span class="wd-text-success">-$125.00</span></td>
-                                                <td><span class="wd-text-bold">$3,125.00</span></td>
-                                                <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
-                                                <td>
-                                                    <div class="wd-author-cell">
-                                                        <div class="wd-author-avatar">JL</div>
-                                                        <span class="wd-author-name">Jungwon Lee</span>
+                                                </div>
+                                            </th>
+                                            <th class="th-filter">
+                                                <span data-i18n="pi.payment">Payment</span>
+                                                <div class="wd-column-filter">
+                                                    <button class="wd-filter-btn" onclick="togglePIPaymentFilter(event)">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="wd-filter-dropdown" id="pi-payment-filter-dropdown">
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pi-payment-filter" value="all" checked onchange="applyPIPaymentFilter('all')">
+                                                            <span>All</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pi-payment-filter" value="paid" onchange="applyPIPaymentFilter('paid')">
+                                                            <span>Paid</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pi-payment-filter" value="unpaid" onchange="applyPIPaymentFilter('unpaid')">
+                                                            <span>Unpaid</span>
+                                                        </label>
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    <div class="wd-action-buttons">
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editPI('PI-2024-0089')" title="Edit">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="sendPI('PI-2024-0089')" title="Send">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr data-status="sent">
-                                                <td><span class="wd-text-mono">PI-2024-0088</span></td>
-                                                <td><a href="#" class="wd-link" onclick="viewPOFromPI('PO-2024-0142')">PO-2024-0142</a></td>
-                                                <td>
-                                                    <div class="wd-buyer-cell">
-                                                        <span class="wd-buyer-name">XYZ Foods Ltd</span>
-                                                        <span class="wd-buyer-country">🇯🇵 Japan</span>
-                                                    </div>
-                                                </td>
-                                                <td>2024-02-01</td>
-                                                <td>$8,450.00</td>
-                                                <td><span class="wd-text-success">-$320.00</span></td>
-                                                <td><span class="wd-text-bold">$8,130.00</span></td>
-                                                <td><span class="wd-badge wd-badge-primary">Sent</span></td>
-                                                <td>
-                                                    <div class="wd-author-cell">
-                                                        <div class="wd-author-avatar">MK</div>
-                                                        <span class="wd-author-name">Minjun Kim</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="wd-action-buttons">
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewPI('PI-2024-0088')" title="View">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="downloadPI('PI-2024-0088')" title="Download PDF">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr data-status="confirmed">
-                                                <td><span class="wd-text-mono">PI-2024-0087</span></td>
-                                                <td><a href="#" class="wd-link" onclick="viewPOFromPI('PO-2024-0138')">PO-2024-0138</a></td>
-                                                <td>
-                                                    <div class="wd-buyer-cell">
-                                                        <span class="wd-buyer-name">Global Trade Co</span>
-                                                        <span class="wd-buyer-country">🇺🇸 United States</span>
-                                                    </div>
-                                                </td>
-                                                <td>2024-01-28</td>
-                                                <td>$12,800.00</td>
-                                                <td><span class="wd-text-secondary">$0.00</span></td>
-                                                <td><span class="wd-text-bold">$12,800.00</span></td>
-                                                <td><span class="wd-badge wd-badge-success">Confirmed</span></td>
-                                                <td>
-                                                    <div class="wd-author-cell">
-                                                        <div class="wd-author-avatar">JL</div>
-                                                        <span class="wd-author-name">Jungwon Lee</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="wd-action-buttons">
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewPI('PI-2024-0087')" title="View">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="downloadPI('PI-2024-0087')" title="Download PDF">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                </div>
+                                            </th>
+                                            <th data-i18n="pi.poReference">PO Reference</th>
+                                            <th class="sortable" onclick="sortPITable('buyer')">
+                                                <span data-i18n="pi.buyer">Buyer</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th class="sortable" onclick="sortPITable('totalAmount')">
+                                                <span data-i18n="pi.totalAmount">Total Amount</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th class="sortable" onclick="sortPITable('issueDate')">
+                                                <span data-i18n="pi.issueDate">Issue Date</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th data-i18n="sales.createdBy">Created By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pi-table-body">
+                                        <tr data-status="draft" data-payment="unpaid" data-tab="active" data-pi="PI-2026-0089" onclick="viewPIDetail('PI-2026-0089')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">PI-2026-0089</span></td>
+                                            <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
+                                            <td><span class="wd-badge wd-badge-outline">-</span></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0156')">PO-2026-0156</a></td>
+                                            <td>ABC Distribution</td>
+                                            <td>$3,125.00</td>
+                                            <td>2026-02-04</td>
+                                            <td>
+                                                <div class="wd-author-cell">
+                                                    <div class="wd-author-avatar">JL</div>
+                                                    <span class="wd-author-name">Jungwon Lee</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr data-status="sent" data-payment="unpaid" data-tab="active" data-pi="PI-2026-0088" onclick="viewPIDetail('PI-2026-0088')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">PI-2026-0088</span></td>
+                                            <td><span class="wd-badge wd-badge-primary">Sent</span></td>
+                                            <td>
+                                                <span class="wd-badge wd-badge-warning-light">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                                    Unpaid
+                                                </span>
+                                            </td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0142')">PO-2026-0142</a></td>
+                                            <td>XYZ Foods Ltd</td>
+                                            <td>$8,130.00</td>
+                                            <td>2026-02-01</td>
+                                            <td>
+                                                <div class="wd-author-cell">
+                                                    <div class="wd-author-avatar">MK</div>
+                                                    <span class="wd-author-name">Minjun Kim</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr data-status="sent" data-payment="paid" data-tab="active" data-pi="PI-2026-0087" onclick="viewPIDetail('PI-2026-0087')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">PI-2026-0087</span></td>
+                                            <td><span class="wd-badge wd-badge-primary">Sent</span></td>
+                                            <td>
+                                                <span class="wd-badge wd-badge-success-light">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                                    Paid
+                                                </span>
+                                            </td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0138')">PO-2026-0138</a></td>
+                                            <td>Global Trade Co</td>
+                                            <td>$12,800.00</td>
+                                            <td>2026-01-28</td>
+                                            <td>
+                                                <div class="wd-author-cell">
+                                                    <div class="wd-author-avatar">JL</div>
+                                                    <span class="wd-author-name">Jungwon Lee</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr data-status="sent" data-payment="paid" data-tab="active" data-pi="PI-2026-0086" onclick="viewPIDetail('PI-2026-0086')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">PI-2026-0086</span></td>
+                                            <td><span class="wd-badge wd-badge-primary">Sent</span></td>
+                                            <td>
+                                                <span class="wd-badge wd-badge-success-light">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                                    Paid
+                                                </span>
+                                            </td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0130')">PO-2026-0130</a></td>
+                                            <td>ABC Distribution</td>
+                                            <td>$5,420.00</td>
+                                            <td>2026-01-20</td>
+                                            <td>
+                                                <div class="wd-author-cell">
+                                                    <div class="wd-author-avatar">JL</div>
+                                                    <span class="wd-author-name">Jungwon Lee</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr data-status="sent" data-payment="unpaid" data-tab="active" data-pi="PI-2026-0085" onclick="viewPIDetail('PI-2026-0085')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">PI-2026-0085</span></td>
+                                            <td><span class="wd-badge wd-badge-primary">Sent</span></td>
+                                            <td>
+                                                <span class="wd-badge wd-badge-warning-light">
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                                    Unpaid
+                                                </span>
+                                            </td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0125')">PO-2026-0125</a></td>
+                                            <td>Fresh Foods Inc</td>
+                                            <td>$1,302.00</td>
+                                            <td>2026-01-15</td>
+                                            <td>
+                                                <div class="wd-author-cell">
+                                                    <div class="wd-author-avatar">MK</div>
+                                                    <span class="wd-author-name">Minjun Kim</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <!-- Cancelled PIs (hidden by default) -->
+                                        <tr data-status="cancelled" data-payment="unpaid" data-tab="cancelled" data-pi="PI-2026-0082" onclick="viewPIDetail('PI-2026-0082')" class="wd-cursor-pointer" style="display: none;">
+                                            <td><span class="wd-text-mono">PI-2026-0082</span></td>
+                                            <td><span class="wd-badge wd-badge-danger">Cancelled</span></td>
+                                            <td><span class="wd-badge wd-badge-outline">-</span></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0118')">PO-2026-0118</a></td>
+                                            <td>Metro Imports</td>
+                                            <td>$4,500.00</td>
+                                            <td>2026-01-10</td>
+                                            <td>
+                                                <div class="wd-author-cell">
+                                                    <div class="wd-author-avatar">JL</div>
+                                                    <span class="wd-author-name">Jungwon Lee</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
@@ -2061,30 +2180,32 @@
                                             <h4 class="wd-form-section-title">
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                                                 <span data-i18n="pi.orderItems">Order Items</span>
+                                                <span class="wd-badge wd-badge-info" style="margin-left: 8px; font-weight: normal;">Only completed products</span>
                                             </h4>
 
-                                            <!-- Product Search/Add -->
+                                            <!-- Product Search/Add (Only Completed Products) -->
                                             <div class="wd-product-add-row" style="display: flex; gap: 12px; margin-bottom: 16px;">
                                                 <div class="wd-form-group" style="flex: 3; margin-bottom: 0;">
                                                     <select class="wd-select" id="pi-product-select" onchange="previewProductToAdd()">
-                                                        <option value="">Search & add registered product...</option>
-                                                        <option value="OIL-001" data-name="Extra Virgin Olive Oil 500ml" data-price="25.00" data-unit="bottles">Extra Virgin Olive Oil 500ml (OIL-001)</option>
-                                                        <option value="OIL-002" data-name="Balsamic Vinegar 250ml" data-price="18.00" data-unit="bottles">Balsamic Vinegar 250ml (OIL-002)</option>
-                                                        <option value="CHE-003" data-name="Aged Parmesan 24 months" data-price="160.00" data-unit="pcs">Aged Parmesan 24 months (CHE-003)</option>
-                                                        <option value="CHE-001" data-name="Mozzarella Fresh 200g" data-price="12.00" data-unit="pcs">Mozzarella Fresh 200g (CHE-001)</option>
-                                                        <option value="HON-002" data-name="Organic Honey 350g" data-price="18.00" data-unit="jars">Organic Honey 350g (HON-002)</option>
-                                                        <option value="HON-001" data-name="Raw Honey 500g" data-price="22.00" data-unit="jars">Raw Honey 500g (HON-001)</option>
+                                                        <option value="">Select a completed product to add...</option>
+                                                        <!-- Only COMPLETED status products are shown -->
+                                                        <option value="PROD-001" data-name="Extra Virgin Olive Oil 500ml" data-price="25.00" data-unit="bottles">Extra Virgin Olive Oil 500ml (PROD-001)</option>
+                                                        <option value="PROD-002" data-name="Aged Parmesan 24 months 1kg" data-price="65.00" data-unit="pcs">Aged Parmesan 24 months 1kg (PROD-002)</option>
+                                                        <option value="PROD-003" data-name="Organic Honey 350g" data-price="18.00" data-unit="jars">Organic Honey 350g (PROD-003)</option>
+                                                        <option value="PROD-004" data-name="Balsamic Vinegar 250ml" data-price="32.00" data-unit="bottles">Balsamic Vinegar 250ml (PROD-004)</option>
+                                                        <option value="PROD-005" data-name="Truffle Oil 100ml" data-price="45.00" data-unit="bottles">Truffle Oil 100ml (PROD-005)</option>
+                                                        <option value="PROD-006" data-name="Dried Pasta 500g" data-price="12.00" data-unit="boxes">Dried Pasta 500g (PROD-006)</option>
                                                     </select>
                                                 </div>
-                                                <button type="button" class="wd-btn wd-btn-primary" onclick="addProductToPI()" class="wd-whitespace-nowrap">
+                                                <button type="button" class="wd-btn wd-btn-primary" onclick="addProductToPI()" style="white-space: nowrap;">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                                     <span data-i18n="pi.addProduct">Add Product</span>
                                                 </button>
-                                                <button type="button" class="wd-btn wd-btn-secondary" onclick="addManualItemToPI()" class="wd-whitespace-nowrap">
-                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                    <span data-i18n="pi.addManual">Add Manual</span>
-                                                </button>
                                             </div>
+                                            <p class="wd-text-muted wd-text-sm" style="margin-bottom: 16px;">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                                Only products with "Completed" status can be added. <a href="#" class="wd-link" onclick="showSection('product-list'); closePIModal(); return false;">Manage products →</a>
+                                            </p>
 
                                             <!-- Items Table -->
                                             <div class="wd-table-container">
@@ -2216,167 +2337,112 @@
                                 </div>
                             </div>
 
-                            <!-- Credit Summary Cards -->
-                            <div class="wd-page-content">
-                                <div class="wd-stats-grid">
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-warning">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="credit-pending-count">3</span>
-                                            <span class="wd-stat-label" data-i18n="credit.pendingCredits">Pending Credits</span>
-                                        </div>
-                                    </div>
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-success">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="credit-approved-count">12</span>
-                                            <span class="wd-stat-label" data-i18n="credit.approvedCredits">Approved Credits</span>
-                                        </div>
-                                    </div>
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-primary">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="credit-total-amount">$2,450</span>
-                                            <span class="wd-stat-label" data-i18n="credit.totalCreditAmount">Total Credit Amount</span>
-                                        </div>
-                                    </div>
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-info">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="credit-used-amount">$1,200</span>
-                                            <span class="wd-stat-label" data-i18n="credit.usedInInvoices">Used in Invoices</span>
-                                        </div>
-                                    </div>
+                            <!-- Filter Bar -->
+                            <div class="po-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                                <div></div>
+                                <div class="wd-search">
+                                    <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <path d="m21 21-4.3-4.3"></path>
+                                    </svg>
+                                    <input type="text" id="credit-search" class="wd-input" placeholder="Search Credit#, Invoice, Buyer..." style="width: 280px;" oninput="filterCredits()">
                                 </div>
                             </div>
 
-                            <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="margin: 0 24px 16px;">
-                                <div class="wd-filter-group">
-                                    <select class="wd-select" id="credit-status-filter" onchange="filterCredits()">
-                                        <option value="all" data-i18n="credit.allStatus">All Status</option>
-                                        <option value="pending" data-i18n="credit.pending">Pending</option>
-                                        <option value="approved" data-i18n="credit.approved">Approved</option>
-                                        <option value="used" data-i18n="credit.used">Used</option>
-                                        <option value="rejected" data-i18n="credit.rejected">Rejected</option>
-                                    </select>
-                                    <div class="wd-search-box">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                        <input type="text" id="credit-search" placeholder="Search by Invoice, Buyer or Product..." oninput="filterCredits()">
-                                    </div>
-                                </div>
-                                <div class="wd-filter-actions">
-                                    <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="exportCredits()">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                        <span data-i18n="credit.export">Export</span>
-                                    </button>
-                                </div>
-                            </div>
+                            <!-- Hidden filter value holder -->
+                            <input type="hidden" id="credit-status-filter" value="all">
 
                             <!-- Credit Table -->
-                            <div class="wd-page-content">
-                                <div class="wd-table-container">
-                                    <table class="wd-table">
-                                        <thead>
-                                            <tr>
-                                                <th data-i18n="credit.creditId">Credit ID</th>
-                                                <th data-i18n="credit.invoiceNumber">Invoice Number</th>
-                                                <th data-i18n="credit.buyer">Buyer</th>
-                                                <th data-i18n="credit.product">Product</th>
-                                                <th data-i18n="credit.claimReason">Claim Reason</th>
-                                                <th data-i18n="credit.amount">Amount</th>
-                                                <th data-i18n="credit.status">Status</th>
-                                                <th data-i18n="credit.createdDate">Created Date</th>
-                                                <th data-i18n="credit.actions">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="credit-table-body">
-                                            <tr data-buyer="ABC Distribution">
-                                                <td><span class="wd-text-mono">CR-2024-001</span></td>
-                                                <td><a href="#" class="wd-link" onclick="viewInvoiceFromCredit('INV-2024-0089')">INV-2024-0089</a></td>
-                                                <td><span class="buyer-name">ABC Distribution</span></td>
-                                                <td>
-                                                    <div class="wd-product-cell">
-                                                        <span class="wd-product-name">Extra Virgin Olive Oil 500ml</span>
-                                                        <span class="wd-product-sku">SKU: OIL-001</span>
+                            <div class="wd-section-x">
+                                <table class="wd-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="sortable" onclick="sortCreditTable('creditId')">
+                                                <span data-i18n="credit.creditId">Credit ID</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th class="th-filter">
+                                                <span data-i18n="credit.status">Status</span>
+                                                <div class="wd-column-filter">
+                                                    <button class="wd-filter-btn" onclick="toggleCreditStatusFilter(event)">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="wd-filter-dropdown" id="credit-status-filter-dropdown">
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="credit-status-filter" value="all" checked onchange="applyCreditStatusFilter('all')">
+                                                            <span>All</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="credit-status-filter" value="pending" onchange="applyCreditStatusFilter('pending')">
+                                                            <span>Pending</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="credit-status-filter" value="approved" onchange="applyCreditStatusFilter('approved')">
+                                                            <span>Approved</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="credit-status-filter" value="used" onchange="applyCreditStatusFilter('used')">
+                                                            <span>Used</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="credit-status-filter" value="rejected" onchange="applyCreditStatusFilter('rejected')">
+                                                            <span>Rejected</span>
+                                                        </label>
                                                     </div>
-                                                </td>
-                                                <td><span class="wd-text-secondary">Damaged packaging (5 units)</span></td>
-                                                <td><span class="wd-text-bold">$125.00</span></td>
-                                                <td><span class="wd-badge wd-badge-warning">Pending</span></td>
-                                                <td>2024-02-01</td>
-                                                <td>
-                                                    <div class="wd-action-buttons">
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewCreditDetail('CR-2024-001')" title="View">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editCredit('CR-2024-001')" title="Edit">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr data-buyer="XYZ Foods Ltd">
-                                                <td><span class="wd-text-mono">CR-2024-002</span></td>
-                                                <td><a href="#" class="wd-link" onclick="viewInvoiceFromCredit('INV-2024-0088')">INV-2024-0088</a></td>
-                                                <td><span class="buyer-name">XYZ Foods Ltd</span></td>
-                                                <td>
-                                                    <div class="wd-product-cell">
-                                                        <span class="wd-product-name">Aged Parmesan 24 months</span>
-                                                        <span class="wd-product-sku">SKU: CHE-003</span>
-                                                    </div>
-                                                </td>
-                                                <td><span class="wd-text-secondary">Quality issue - mold (2 units)</span></td>
-                                                <td><span class="wd-text-bold">$320.00</span></td>
-                                                <td><span class="wd-badge wd-badge-success">Approved</span></td>
-                                                <td>2024-01-28</td>
-                                                <td>
-                                                    <div class="wd-action-buttons">
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewCreditDetail('CR-2024-002')" title="View">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editCredit('CR-2024-002')" title="Edit">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr data-buyer="Global Trade Co">
-                                                <td><span class="wd-text-mono">CR-2024-003</span></td>
-                                                <td><a href="#" class="wd-link" onclick="viewInvoiceFromCredit('INV-2024-0087')">INV-2024-0087</a></td>
-                                                <td><span class="buyer-name">Global Trade Co</span></td>
-                                                <td>
-                                                    <div class="wd-product-cell">
-                                                        <span class="wd-product-name">Organic Honey 350g</span>
-                                                        <span class="wd-product-sku">SKU: HON-002</span>
-                                                    </div>
-                                                </td>
-                                                <td><span class="wd-text-secondary">Short shipment (10 units)</span></td>
-                                                <td><span class="wd-text-bold">$180.00</span></td>
-                                                <td><span class="wd-badge wd-badge-info">Used</span></td>
-                                                <td>2024-01-20</td>
-                                                <td>
-                                                    <div class="wd-action-buttons">
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewCreditDetail('CR-2024-003')" title="View">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" disabled title="Edit">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                </div>
+                                            </th>
+                                            <th data-i18n="credit.invoiceNumber">Invoice/PI</th>
+                                            <th class="sortable" onclick="sortCreditTable('buyer')">
+                                                <span data-i18n="credit.buyer">Buyer</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th data-i18n="credit.product">Product</th>
+                                            <th data-i18n="credit.claimReason">Claim Reason</th>
+                                            <th class="sortable" onclick="sortCreditTable('amount')">
+                                                <span data-i18n="credit.amount">Amount</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th class="sortable" onclick="sortCreditTable('createdDate')">
+                                                <span data-i18n="credit.createdDate">Created Date</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="credit-table-body">
+                                        <tr data-status="pending" data-credit="CR-2024-001" onclick="viewCreditDetail('CR-2024-001')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">CR-2024-001</span></td>
+                                            <td><span class="wd-badge wd-badge-warning">Pending</span></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0089')">PI-2024-0089</a></td>
+                                            <td>ABC Distribution</td>
+                                            <td>Extra Virgin Olive Oil 500ml</td>
+                                            <td>Damaged packaging (5 units)</td>
+                                            <td><span class="wd-text-bold">$125.00</span></td>
+                                            <td>2024-02-01</td>
+                                        </tr>
+                                        <tr data-status="approved" data-credit="CR-2024-002" onclick="viewCreditDetail('CR-2024-002')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">CR-2024-002</span></td>
+                                            <td><span class="wd-badge wd-badge-success">Approved</span></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0088')">PI-2024-0088</a></td>
+                                            <td>XYZ Foods Ltd</td>
+                                            <td>Aged Parmesan 24 months</td>
+                                            <td>Quality issue - mold (2 units)</td>
+                                            <td><span class="wd-text-bold">$320.00</span></td>
+                                            <td>2024-01-28</td>
+                                        </tr>
+                                        <tr data-status="used" data-credit="CR-2024-003" onclick="viewCreditDetail('CR-2024-003')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">CR-2024-003</span></td>
+                                            <td><span class="wd-badge wd-badge-info">Used</span></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0087')">PI-2024-0087</a></td>
+                                            <td>Global Trade Co</td>
+                                            <td>Organic Honey 350g</td>
+                                            <td>Short shipment (10 units)</td>
+                                            <td><span class="wd-text-bold">$180.00</span></td>
+                                            <td>2024-01-20</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
@@ -2456,7 +2522,7 @@
                             <div class="wd-page-header">
                                 <div class="wd-page-header-content">
                                     <h2 class="wd-page-title" data-i18n="accounts.title">Account Management</h2>
-                                    <p class="wd-page-subtitle" data-i18n="accounts.subtitle">Manage your buyer accounts and trade relationships</p>
+                                    <p class="wd-page-subtitle" data-i18n="accounts.subtitle">View buyer accounts, sales performance and transaction history</p>
                                 </div>
                                 <div class="wd-page-actions">
                                     <button class="wd-btn wd-btn-primary" onclick="openAccountModal()">
@@ -2466,203 +2532,409 @@
                                 </div>
                             </div>
 
-                            <!-- Account Summary Cards -->
-                            <div class="wd-page-content">
-                                <div class="wd-stats-grid">
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-primary">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="accounts-total-count">8</span>
-                                            <span class="wd-stat-label" data-i18n="accounts.totalAccounts">Total Accounts</span>
-                                        </div>
-                                    </div>
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-success">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="accounts-active-count">6</span>
-                                            <span class="wd-stat-label" data-i18n="accounts.activeAccounts">Active Accounts</span>
-                                        </div>
-                                    </div>
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-warning">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="accounts-total-sales">$245,800</span>
-                                            <span class="wd-stat-label" data-i18n="accounts.totalSales">Total Sales (YTD)</span>
-                                        </div>
-                                    </div>
-                                    <div class="wd-stat-card">
-                                        <div class="wd-stat-icon wd-stat-icon-warning">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                                        </div>
-                                        <div class="wd-stat-content">
-                                            <span class="wd-stat-value" id="accounts-pending-credits">$625</span>
-                                            <span class="wd-stat-label" data-i18n="accounts.pendingCredits">Pending Credits</span>
-                                        </div>
-                                    </div>
+                            <!-- Filter Bar -->
+                            <div class="po-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                                <div class="wd-filter-group" style="display: flex; gap: 12px; align-items: center;">
+                                    <select class="wd-select" id="account-month-filter" onchange="filterAccountsByMonth()" style="width: 140px;">
+                                        <option value="all">All Time</option>
+                                        <option value="2024-02" selected>Feb 2024</option>
+                                        <option value="2024-01">Jan 2024</option>
+                                        <option value="2023-12">Dec 2023</option>
+                                        <option value="2023-11">Nov 2023</option>
+                                    </select>
+                                </div>
+                                <div class="wd-search">
+                                    <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <path d="m21 21-4.3-4.3"></path>
+                                    </svg>
+                                    <input type="text" id="account-search" class="wd-input" placeholder="Search company, contact..." style="width: 280px;" oninput="filterAccounts()">
                                 </div>
                             </div>
 
-                            <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="margin: 0 24px 16px;">
-                                <div class="wd-filter-group">
-                                    <select class="wd-select" id="account-status-filter" onchange="filterAccounts()">
-                                        <option value="all" data-i18n="accounts.allAccounts">All Accounts</option>
-                                        <option value="active" data-i18n="accounts.active">Active</option>
-                                        <option value="inactive" data-i18n="accounts.inactive">Inactive</option>
-                                    </select>
-                                    <div class="wd-search-box">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                        <input type="text" id="account-search" placeholder="Search company, contact..." oninput="filterAccounts()">
+                            <!-- Hidden filter value holder -->
+                            <input type="hidden" id="account-pi-status-filter" value="all">
+
+                            <!-- Account Table with PI Status and Monthly Sales -->
+                            <div class="wd-section-x">
+                                <table class="wd-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="sortable" onclick="sortAccountTable('company')">
+                                                <span data-i18n="accounts.companyName">Company Name</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th data-i18n="accounts.country">Country</th>
+                                            <th class="th-filter">
+                                                <span data-i18n="accounts.piStatus">PI Status</span>
+                                                <div class="wd-column-filter">
+                                                    <button class="wd-filter-btn" onclick="toggleAccountPIFilter(event)">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="wd-filter-dropdown" id="account-pi-filter-dropdown">
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="account-pi-filter" value="all" checked onchange="applyAccountPIFilter('all')">
+                                                            <span>All</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="account-pi-filter" value="completed" onchange="applyAccountPIFilter('completed')">
+                                                            <span>PI Completed</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="account-pi-filter" value="in-progress" onchange="applyAccountPIFilter('in-progress')">
+                                                            <span>PI In Progress</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th class="sortable" onclick="sortAccountTable('monthlySales')">
+                                                <span data-i18n="accounts.monthlySales">Monthly Sales</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th class="sortable" onclick="sortAccountTable('totalSales')">
+                                                <span data-i18n="accounts.totalSales">Total Sales</span>
+                                                <span class="sort-icon">↕</span>
+                                            </th>
+                                            <th data-i18n="accounts.topProducts">Top Products</th>
+                                            <th data-i18n="accounts.lastOrder">Last PI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="accounts-table-body">
+                                        <tr data-account-id="ACC-001" data-pi-status="in-progress" onclick="viewAccountDetail('ACC-001')" class="wd-cursor-pointer">
+                                            <td>
+                                                <div class="wd-company-cell">
+                                                    <span class="wd-company-name">ABC Distribution</span>
+                                                    <span class="wd-company-code">🇰🇷 South Korea</span>
+                                                </div>
+                                            </td>
+                                            <td>Kim Min-jun</td>
+                                            <td>
+                                                <div class="wd-pi-status-cell">
+                                                    <span class="wd-badge wd-badge-primary">2 In Progress</span>
+                                                    <span class="wd-badge wd-badge-success">5 Completed</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="wd-text-bold">$8,545</span></td>
+                                            <td>$45,600</td>
+                                            <td>
+                                                <div class="wd-products-preview">
+                                                    <span class="wd-product-chip">Olive Oil 500ml</span>
+                                                    <span class="wd-product-chip">Parmesan 24mo</span>
+                                                    <a href="#" class="wd-link" onclick="event.stopPropagation(); viewAccountProducts('ACC-001')">+3</a>
+                                                </div>
+                                            </td>
+                                            <td>2024-02-04</td>
+                                        </tr>
+                                        <tr data-account-id="ACC-002" data-pi-status="in-progress" onclick="viewAccountDetail('ACC-002')" class="wd-cursor-pointer">
+                                            <td>
+                                                <div class="wd-company-cell">
+                                                    <span class="wd-company-name">XYZ Foods Ltd</span>
+                                                    <span class="wd-company-code">🇯🇵 Japan</span>
+                                                </div>
+                                            </td>
+                                            <td>Tanaka Yuki</td>
+                                            <td>
+                                                <div class="wd-pi-status-cell">
+                                                    <span class="wd-badge wd-badge-primary">1 In Progress</span>
+                                                    <span class="wd-badge wd-badge-success">8 Completed</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="wd-text-bold">$12,130</span></td>
+                                            <td>$78,200</td>
+                                            <td>
+                                                <div class="wd-products-preview">
+                                                    <span class="wd-product-chip">Honey 350g</span>
+                                                    <span class="wd-product-chip">Truffle Oil</span>
+                                                    <a href="#" class="wd-link" onclick="event.stopPropagation(); viewAccountProducts('ACC-002')">+5</a>
+                                                </div>
+                                            </td>
+                                            <td>2024-02-01</td>
+                                        </tr>
+                                        <tr data-account-id="ACC-003" data-pi-status="completed" onclick="viewAccountDetail('ACC-003')" class="wd-cursor-pointer">
+                                            <td>
+                                                <div class="wd-company-cell">
+                                                    <span class="wd-company-name">Global Trade Co</span>
+                                                    <span class="wd-company-code">🇺🇸 United States</span>
+                                                </div>
+                                            </td>
+                                            <td>John Smith</td>
+                                            <td>
+                                                <div class="wd-pi-status-cell">
+                                                    <span class="wd-badge wd-badge-success">12 Completed</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="wd-text-bold">$18,800</span></td>
+                                            <td>$122,000</td>
+                                            <td>
+                                                <div class="wd-products-preview">
+                                                    <span class="wd-product-chip">Balsamic Vinegar</span>
+                                                    <span class="wd-product-chip">Dried Pasta</span>
+                                                    <a href="#" class="wd-link" onclick="event.stopPropagation(); viewAccountProducts('ACC-003')">+8</a>
+                                                </div>
+                                            </td>
+                                            <td>2024-01-28</td>
+                                        </tr>
+                                        <tr data-account-id="ACC-004" data-pi-status="completed" onclick="viewAccountDetail('ACC-004')" class="wd-cursor-pointer">
+                                            <td>
+                                                <div class="wd-company-cell">
+                                                    <span class="wd-company-name">Euro Gourmet GmbH</span>
+                                                    <span class="wd-company-code">🇩🇪 Germany</span>
+                                                </div>
+                                            </td>
+                                            <td>Hans Mueller</td>
+                                            <td>
+                                                <div class="wd-pi-status-cell">
+                                                    <span class="wd-badge wd-badge-success">6 Completed</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="wd-text-bold">$5,200</span></td>
+                                            <td>$38,500</td>
+                                            <td>
+                                                <div class="wd-products-preview">
+                                                    <span class="wd-product-chip">Olive Oil 1L</span>
+                                                    <a href="#" class="wd-link" onclick="event.stopPropagation(); viewAccountProducts('ACC-004')">+2</a>
+                                                </div>
+                                            </td>
+                                            <td>2024-01-15</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Account Detail Drawer Overlay -->
+                            <div class="wd-drawer-overlay" id="account-drawer-overlay" onclick="closeAccountDrawer()"></div>
+
+                            <!-- Account Detail Drawer (shows when clicking a row) -->
+                            <div class="wd-drawer wd-drawer-lg" id="account-detail-drawer">
+                                <div class="wd-drawer-header">
+                                    <div class="wd-drawer-header-content">
+                                        <h3 class="wd-drawer-title" id="account-drawer-title">ABC Distribution</h3>
+                                        <span class="wd-drawer-subtitle" id="account-drawer-subtitle">🇰🇷 South Korea</span>
                                     </div>
-                                </div>
-                                <div class="wd-filter-actions">
-                                    <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="exportAccounts()">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                        <span data-i18n="accounts.export">Export</span>
+                                    <button class="wd-drawer-close" onclick="closeAccountDrawer()">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                                     </button>
                                 </div>
-                            </div>
+                                <div class="wd-drawer-body">
+                                    <!-- Basic Account Info -->
+                                    <div class="wd-drawer-section">
+                                        <h4 class="wd-drawer-section-title">Basic Information</h4>
+                                        <div class="wd-info-grid" id="account-drawer-info">
+                                            <div class="wd-info-item">
+                                                <span class="wd-info-label">Contact Person</span>
+                                                <span class="wd-info-value">Kim Min-jun</span>
+                                            </div>
+                                            <div class="wd-info-item">
+                                                <span class="wd-info-label">Email</span>
+                                                <span class="wd-info-value">kim@abcdist.co.kr</span>
+                                            </div>
+                                            <div class="wd-info-item">
+                                                <span class="wd-info-label">Trade Terms</span>
+                                                <span class="wd-info-value">CIF / T/T 30%</span>
+                                            </div>
+                                            <div class="wd-info-item">
+                                                <span class="wd-info-label">Total Completed Sales</span>
+                                                <span class="wd-info-value wd-text-bold">$45,600</span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                            <!-- Account Table -->
-                            <div class="wd-page-content">
-                                <div class="wd-table-container">
-                                    <table class="wd-table">
-                                        <thead>
-                                            <tr>
-                                                <th data-i18n="accounts.companyName">Company Name</th>
-                                                <th data-i18n="accounts.country">Country</th>
-                                                <th data-i18n="accounts.contactPerson">Contact Person</th>
-                                                <th data-i18n="accounts.tradeTerms">Trade Terms</th>
-                                                <th data-i18n="accounts.lastOrder">Last Order</th>
-                                                <th data-i18n="accounts.totalOrders">Total Orders</th>
-                                                <th data-i18n="accounts.availableCredit">Available Credit</th>
-                                                <th data-i18n="accounts.status">Status</th>
-                                                <th data-i18n="accounts.actions">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="accounts-table-body">
-                                            <tr data-account-id="ACC-001" data-status="active">
-                                                <td>
-                                                    <div class="wd-company-cell">
-                                                        <span class="wd-company-name">ABC Distribution</span>
-                                                        <span class="wd-company-code">ACC-001</span>
+                                    <!-- Year/Month Sales Statistics (Completed PI Only) -->
+                                    <div class="wd-drawer-section">
+                                        <div class="wd-section-header">
+                                            <h4 class="wd-drawer-section-title">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                                Monthly Sales (Completed PI)
+                                            </h4>
+                                            <select class="wd-select wd-select-sm" id="account-sales-year" onchange="changeAccountSalesYear()" style="width: 100px;">
+                                                <option value="2026" selected>2026</option>
+                                                <option value="2025">2025</option>
+                                                <option value="2024">2024</option>
+                                                <option value="2023">2023</option>
+                                            </select>
+                                        </div>
+                                        <p class="wd-text-muted wd-text-sm" style="margin-bottom: 12px;">Hover over amount to see product breakdown</p>
+
+                                        <!-- Monthly Sales Grid -->
+                                        <div class="wd-monthly-sales-grid" id="account-monthly-sales">
+                                            <!-- Q1 -->
+                                            <div class="wd-sales-cell wd-sales-cell-hoverable" data-month="2026-01" onmouseenter="showProductTooltip(event, '2026-01')" onmouseleave="hideProductTooltip()">
+                                                <span class="wd-sales-month">Jan</span>
+                                                <span class="wd-sales-amount">$9,700</span>
+                                                <span class="wd-sales-count">3 PI</span>
+                                            </div>
+                                            <div class="wd-sales-cell wd-sales-cell-hoverable wd-sales-cell-current" data-month="2026-02" onmouseenter="showProductTooltip(event, '2026-02')" onmouseleave="hideProductTooltip()">
+                                                <span class="wd-sales-month">Feb</span>
+                                                <span class="wd-sales-amount">$5,420</span>
+                                                <span class="wd-sales-count">2 PI</span>
+                                            </div>
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-03">
+                                                <span class="wd-sales-month">Mar</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                            <!-- Q2 -->
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-04">
+                                                <span class="wd-sales-month">Apr</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-05">
+                                                <span class="wd-sales-month">May</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-06">
+                                                <span class="wd-sales-month">Jun</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                            <!-- Q3 -->
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-07">
+                                                <span class="wd-sales-month">Jul</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-08">
+                                                <span class="wd-sales-month">Aug</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-09">
+                                                <span class="wd-sales-month">Sep</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                            <!-- Q4 -->
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-10">
+                                                <span class="wd-sales-month">Oct</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-11">
+                                                <span class="wd-sales-month">Nov</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                            <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-12">
+                                                <span class="wd-sales-month">Dec</span>
+                                                <span class="wd-sales-amount">-</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Year Total -->
+                                        <div class="wd-sales-year-total">
+                                            <span class="wd-year-total-label">2024 Total (Completed)</span>
+                                            <span class="wd-year-total-amount">$45,600</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Recent Completed PI List -->
+                                    <div class="wd-drawer-section">
+                                        <h4 class="wd-drawer-section-title">Recent Completed Invoices</h4>
+                                        <div class="wd-pi-history" id="account-pi-history">
+                                            <div class="wd-pi-history-item wd-pi-expandable" onclick="togglePIProducts(this)">
+                                                <div class="wd-pi-history-main">
+                                                    <div class="wd-pi-history-info">
+                                                        <span class="wd-pi-number">PI-2024-0086</span>
+                                                        <span class="wd-pi-date">Jan 20, 2024</span>
                                                     </div>
-                                                </td>
-                                                <td><span class="wd-country-badge">🇰🇷 South Korea</span></td>
-                                                <td>
-                                                    <div class="wd-contact-cell">
-                                                        <span class="wd-contact-name">Kim Min-jun</span>
-                                                        <span class="wd-contact-email">kim@abcdist.co.kr</span>
+                                                    <span class="wd-pi-amount">$5,420</span>
+                                                    <svg class="wd-pi-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                                </div>
+                                                <div class="wd-pi-products-detail" style="display: none;">
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Extra Virgin Olive Oil 500ml</span>
+                                                        <span class="wd-pi-product-qty">80 pcs</span>
+                                                        <span class="wd-pi-product-amount">$2,000</span>
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    <div class="wd-terms-cell">
-                                                        <span class="wd-term-badge">CIF</span>
-                                                        <span class="wd-term-badge">T/T 30%</span>
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Aged Parmesan 24 months</span>
+                                                        <span class="wd-pi-product-qty">30 pcs</span>
+                                                        <span class="wd-pi-product-amount">$1,950</span>
                                                     </div>
-                                                </td>
-                                                <td>2024-02-01</td>
-                                                <td><span class="wd-text-bold">$45,600</span></td>
-                                                <td><span class="wd-text-success">$125.00</span></td>
-                                                <td><span class="wd-badge wd-badge-success">Active</span></td>
-                                                <td>
-                                                    <div class="wd-action-buttons">
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewAccount('ACC-001')" title="View">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editAccount('ACC-001')" title="Edit">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="createPIForAccount('ACC-001')" title="Create PI">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-                                                        </button>
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Organic Honey 350g</span>
+                                                        <span class="wd-pi-product-qty">50 pcs</span>
+                                                        <span class="wd-pi-product-amount">$900</span>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                            <tr data-account-id="ACC-002" data-status="active">
-                                                <td>
-                                                    <div class="wd-company-cell">
-                                                        <span class="wd-company-name">XYZ Foods Ltd</span>
-                                                        <span class="wd-company-code">ACC-002</span>
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Balsamic Vinegar 250ml</span>
+                                                        <span class="wd-pi-product-qty">18 pcs</span>
+                                                        <span class="wd-pi-product-amount">$570</span>
                                                     </div>
-                                                </td>
-                                                <td><span class="wd-country-badge">🇯🇵 Japan</span></td>
-                                                <td>
-                                                    <div class="wd-contact-cell">
-                                                        <span class="wd-contact-name">Tanaka Yuki</span>
-                                                        <span class="wd-contact-email">tanaka@xyzfoods.jp</span>
+                                                </div>
+                                            </div>
+                                            <div class="wd-pi-history-item wd-pi-expandable" onclick="togglePIProducts(this)">
+                                                <div class="wd-pi-history-main">
+                                                    <div class="wd-pi-history-info">
+                                                        <span class="wd-pi-number">PI-2024-0078</span>
+                                                        <span class="wd-pi-date">Jan 08, 2024</span>
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    <div class="wd-terms-cell">
-                                                        <span class="wd-term-badge">FOB</span>
-                                                        <span class="wd-term-badge">L/C</span>
+                                                    <span class="wd-pi-amount">$4,280</span>
+                                                    <svg class="wd-pi-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                                </div>
+                                                <div class="wd-pi-products-detail" style="display: none;">
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Extra Virgin Olive Oil 500ml</span>
+                                                        <span class="wd-pi-product-qty">60 pcs</span>
+                                                        <span class="wd-pi-product-amount">$1,500</span>
                                                     </div>
-                                                </td>
-                                                <td>2024-01-25</td>
-                                                <td><span class="wd-text-bold">$78,200</span></td>
-                                                <td><span class="wd-text-success">$320.00</span></td>
-                                                <td><span class="wd-badge wd-badge-success">Active</span></td>
-                                                <td>
-                                                    <div class="wd-action-buttons">
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewAccount('ACC-002')" title="View">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editAccount('ACC-002')" title="Edit">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="createPIForAccount('ACC-002')" title="Create PI">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-                                                        </button>
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Truffle Oil 100ml</span>
+                                                        <span class="wd-pi-product-qty">40 pcs</span>
+                                                        <span class="wd-pi-product-amount">$1,800</span>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                            <tr data-account-id="ACC-003" data-status="active">
-                                                <td>
-                                                    <div class="wd-company-cell">
-                                                        <span class="wd-company-name">Global Trade Co</span>
-                                                        <span class="wd-company-code">ACC-003</span>
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Dried Pasta 500g</span>
+                                                        <span class="wd-pi-product-qty">80 boxes</span>
+                                                        <span class="wd-pi-product-amount">$980</span>
                                                     </div>
-                                                </td>
-                                                <td><span class="wd-country-badge">🇺🇸 United States</span></td>
-                                                <td>
-                                                    <div class="wd-contact-cell">
-                                                        <span class="wd-contact-name">John Smith</span>
-                                                        <span class="wd-contact-email">j.smith@globaltrade.com</span>
+                                                </div>
+                                            </div>
+                                            <div class="wd-pi-history-item wd-pi-expandable" onclick="togglePIProducts(this)">
+                                                <div class="wd-pi-history-main">
+                                                    <div class="wd-pi-history-info">
+                                                        <span class="wd-pi-number">PI-2023-0412</span>
+                                                        <span class="wd-pi-date">Dec 15, 2023</span>
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    <div class="wd-terms-cell">
-                                                        <span class="wd-term-badge">CIF</span>
-                                                        <span class="wd-term-badge">T/T 50%</span>
+                                                    <span class="wd-pi-amount">$8,000</span>
+                                                    <svg class="wd-pi-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                                </div>
+                                                <div class="wd-pi-products-detail" style="display: none;">
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Aged Parmesan 24 months</span>
+                                                        <span class="wd-pi-product-qty">60 pcs</span>
+                                                        <span class="wd-pi-product-amount">$3,900</span>
                                                     </div>
-                                                </td>
-                                                <td>2024-01-18</td>
-                                                <td><span class="wd-text-bold">$122,000</span></td>
-                                                <td><span class="wd-text-secondary">$0.00</span></td>
-                                                <td><span class="wd-badge wd-badge-success">Active</span></td>
-                                                <td>
-                                                    <div class="wd-action-buttons">
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="viewAccount('ACC-003')" title="View">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editAccount('ACC-003')" title="Edit">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                        </button>
-                                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="createPIForAccount('ACC-003')" title="Create PI">
-                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-                                                        </button>
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Extra Virgin Olive Oil 500ml</span>
+                                                        <span class="wd-pi-product-qty">100 pcs</span>
+                                                        <span class="wd-pi-product-amount">$2,500</span>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                    <div class="wd-pi-product-row">
+                                                        <span class="wd-pi-product-name">Organic Honey 350g</span>
+                                                        <span class="wd-pi-product-qty">90 pcs</span>
+                                                        <span class="wd-pi-product-amount">$1,600</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wd-drawer-footer">
+                                    <button class="wd-btn wd-btn-outline" onclick="editAccount(currentAccountId)">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                        Edit Account
+                                    </button>
+                                    <button class="wd-btn wd-btn-primary" onclick="createPIForAccount(currentAccountId)">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                                        Create PI
+                                    </button>
+                                </div>
+
+                                <!-- Product Tooltip (appears on hover) -->
+                                <div class="wd-product-tooltip" id="product-tooltip" style="display: none;">
+                                    <div class="wd-tooltip-header">
+                                        <span class="wd-tooltip-month">January 2024</span>
+                                        <span class="wd-tooltip-total">$9,700</span>
+                                    </div>
+                                    <div class="wd-tooltip-body" id="tooltip-products">
+                                        <!-- Products will be populated dynamically -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
