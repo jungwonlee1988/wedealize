@@ -6,6 +6,20 @@ const API_BASE_URL = window.API_BASE_URL || 'https://supplier-api-theta.vercel.a
 
 // 영어 원본 (Source of Truth)
 const englishTranslations = {
+    common: {
+        all: "All",
+        filter: "Filter",
+        search: "Search",
+        save: "Save",
+        cancel: "Cancel",
+        delete: "Delete",
+        edit: "Edit",
+        view: "View",
+        close: "Close",
+        confirm: "Confirm",
+        back: "Back",
+        next: "Next"
+    },
     header: {
         supplierPortal: "Supplier Portal",
         logout: "Logout",

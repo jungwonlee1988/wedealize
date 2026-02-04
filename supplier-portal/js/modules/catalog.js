@@ -314,6 +314,7 @@ class CatalogModule {
 
         const tbody = $('#extracted-products-tbody');
         const totalEl = $('#extracted-total');
+        const allCountEl = $('#extracted-all-count');
         const completeEl = $('#complete-count');
         const incompleteEl = $('#incomplete-count');
 
@@ -321,6 +322,7 @@ class CatalogModule {
         const incompleteCount = extractedProducts.length - completeCount;
 
         if (totalEl) totalEl.textContent = extractedProducts.length;
+        if (allCountEl) allCountEl.textContent = extractedProducts.length;
         if (completeEl) completeEl.textContent = completeCount;
         if (incompleteEl) incompleteEl.textContent = incompleteCount;
 
@@ -328,7 +330,7 @@ class CatalogModule {
             tbody.innerHTML = extractedProducts.map(product => {
                 const isIncomplete = product.status === 'incomplete';
                 return `
-                    <tr class="${isIncomplete ? 'incomplete-row' : ''}">
+                    <tr class="${isIncomplete ? 'incomplete-row' : ''}" data-status="${product.status}">
                         <td class="col-checkbox"><input type="checkbox" class="extract-checkbox" data-id="${product.id}" onchange="updateSelectedCount()" checked></td>
                         <td>
                             <div class="product-cell">
@@ -354,6 +356,39 @@ class CatalogModule {
                 `;
             }).join('');
         }
+
+        // Reset filter to 'all' when loading
+        this.filterExtractedProducts('all');
+    }
+
+    /**
+     * Filter extracted products by status
+     */
+    filterExtractedProducts(status) {
+        const rows = $$('#extracted-products-tbody tr');
+        const filterTabs = $$('.wd-filter-tabs .wd-filter-tab');
+
+        // Update active tab
+        filterTabs.forEach(tab => {
+            if (tab.dataset.filter === status) {
+                addClass(tab, 'active');
+            } else {
+                removeClass(tab, 'active');
+            }
+        });
+
+        // Filter rows
+        rows.forEach(row => {
+            const rowStatus = row.dataset.status;
+            if (status === 'all' || rowStatus === status) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Store current filter
+        store.set('catalog.currentFilter', status);
     }
 
     /**
@@ -578,5 +613,6 @@ window.extractCatalog = () => catalogModule.extractCatalog();
 window.resetPriceList = () => catalogModule.resetPriceList();
 window.skipPriceMatching = () => catalogModule.skipPriceMatching();
 window.startNewCatalog = () => catalogModule.startNewCatalog();
+window.filterExtractedProducts = (status) => catalogModule.filterExtractedProducts(status);
 
 export default catalogModule;
