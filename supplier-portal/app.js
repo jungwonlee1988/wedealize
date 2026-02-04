@@ -1276,9 +1276,181 @@ function openAddProductModal() {
     showToast('Add product feature coming soon');
 }
 
-function exportProducts() {
-    showToast('Exporting products to CSV...');
-    // CSV 다운로드 구현
+async function exportProducts() {
+    showToast('Exporting products to CSV...', 'info');
+
+    try {
+        // 전체 상품 데이터 수집 (status, 페이지네이션 관계없이 모두)
+        let products = await getAllProducts();
+
+        if (!products || products.length === 0) {
+            showToast('No products to export', 'warning');
+            return;
+        }
+
+        // CSV 헤더 정의
+        const headers = ['Product Name', 'Category', 'SKU', 'Min Price (FOB)', 'Max Price (FOB)', 'MOQ', 'Certifications', 'Status'];
+
+        // CSV 데이터 생성
+        const csvRows = [];
+        csvRows.push(headers.join(','));
+
+        products.forEach(product => {
+            const { minPrice, maxPrice } = parsePriceRange(product.price);
+            const row = [
+                escapeCsvField(product.name || ''),
+                escapeCsvField(product.category || ''),
+                escapeCsvField(product.sku || ''),
+                escapeCsvField(minPrice),
+                escapeCsvField(maxPrice),
+                escapeCsvField(product.moq || ''),
+                escapeCsvField(Array.isArray(product.certifications) ? product.certifications.join('; ') : (product.certifications || '')),
+                escapeCsvField(product.status || '')
+            ];
+            csvRows.push(row.join(','));
+        });
+
+        const csvContent = csvRows.join('\n');
+
+        // BOM 추가 (한글 등 유니코드 지원)
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+
+        // 다운로드 실행
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        const timestamp = new Date().toISOString().slice(0, 10);
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', `products_export_${timestamp}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        showToast(`Successfully exported ${products.length} products`, 'success');
+
+    } catch (error) {
+        console.error('Export error:', error);
+        showToast('Failed to export products', 'error');
+    }
+}
+
+// CSV 필드 이스케이프 (쉼표, 따옴표, 줄바꿈 처리)
+function escapeCsvField(field) {
+    if (field === null || field === undefined) return '';
+    const str = String(field);
+    if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+}
+
+// 가격 범위 파싱 (예: "$7.20 - $8.50" → { minPrice: "7.20", maxPrice: "8.50" })
+function parsePriceRange(priceStr) {
+    if (!priceStr) return { minPrice: '', maxPrice: '' };
+
+    const str = String(priceStr).trim();
+
+    // 범위 형식 확인 (예: "$7.20 - $8.50", "7.20-8.50", "$7.20~$8.50")
+    const rangeMatch = str.match(/\$?\s*([\d,.]+)\s*[-~]\s*\$?\s*([\d,.]+)/);
+    if (rangeMatch) {
+        return {
+            minPrice: rangeMatch[1].replace(/,/g, ''),
+            maxPrice: rangeMatch[2].replace(/,/g, '')
+        };
+    }
+
+    // 단일 가격 (예: "$18.00", "18.00")
+    const singleMatch = str.match(/\$?\s*([\d,.]+)/);
+    if (singleMatch) {
+        const price = singleMatch[1].replace(/,/g, '');
+        return { minPrice: price, maxPrice: price };
+    }
+
+    return { minPrice: '', maxPrice: '' };
+}
+
+// 전체 상품 목록 가져오기 (status, 페이지네이션 관계없이)
+async function getAllProducts() {
+    const supplierId = localStorage.getItem('supplier_id') || '1';
+
+    // 1. API에서 전체 상품 가져오기 시도
+    try {
+        const data = await apiCall(`/products/${supplierId}?all=true`);
+        if (data.products && data.products.length > 0) {
+            return data.products;
+        }
+    } catch (error) {
+        console.log('API unavailable, using local data');
+    }
+
+    // 2. extractedProducts 배열 사용 (카탈로그 등록 후)
+    if (extractedProducts && extractedProducts.length > 0) {
+        return extractedProducts.map(p => ({
+            name: p.name,
+            category: p.category ? getCategoryLabel(p.category) : '',
+            sku: p.sku || '',
+            price: p.price || '',
+            moq: p.moq || '',
+            certifications: p.certifications || [],
+            status: p.status || ''
+        }));
+    }
+
+    // 3. 테이블에서 직접 데이터 추출 (DOM 파싱)
+    const tableProducts = extractProductsFromTable();
+    if (tableProducts.length > 0) {
+        return tableProducts;
+    }
+
+    // 4. 데모 데이터 반환
+    return getDemoProducts();
+}
+
+// 테이블에서 상품 데이터 추출
+function extractProductsFromTable() {
+    const products = [];
+    const rows = document.querySelectorAll('#product-list-tbody tr');
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 7) {
+            const nameEl = cells[0].querySelector('.product-name');
+            const categoryEl = cells[1].querySelector('.category-badge');
+            const certBadges = cells[5].querySelectorAll('.cert-badge');
+            const statusEl = cells[6].querySelector('.status-dot');
+
+            products.push({
+                name: nameEl ? nameEl.textContent.trim() : '',
+                category: categoryEl ? categoryEl.textContent.trim() : '',
+                sku: cells[2] ? cells[2].textContent.trim() : '',
+                price: cells[3] ? cells[3].textContent.trim() : '',
+                moq: cells[4] ? cells[4].textContent.replace(/Missing|Add/gi, '').trim() : '',
+                certifications: Array.from(certBadges).map(b => b.textContent.trim()),
+                status: statusEl ? (statusEl.classList.contains('complete') ? 'Complete' : 'Incomplete') : ''
+            });
+        }
+    });
+
+    return products;
+}
+
+// 데모 상품 데이터
+function getDemoProducts() {
+    return [
+        { name: 'Extra Virgin Olive Oil 500ml', category: 'Oils & Vinegars', sku: 'OIL-001', price: '$7.20 - $8.50', moq: '200 bottles', certifications: ['Organic', 'HACCP'], status: 'Complete' },
+        { name: 'Aged Parmesan 24 months', category: 'Dairy & Cheese', sku: 'CHE-003', price: '$18.00 - $22.00', moq: '', certifications: ['DOP'], status: 'Incomplete' },
+        { name: 'Raw Organic Honey 500g', category: 'Organic & Health', sku: 'HON-005', price: '$12.00', moq: '100 jars', certifications: ['Organic'], status: 'Complete' },
+        { name: 'Balsamic Vinegar 250ml', category: 'Oils & Vinegars', sku: 'VIN-002', price: '$12.00 - $15.00', moq: '150 bottles', certifications: ['IGP'], status: 'Complete' },
+        { name: 'Truffle Oil 100ml', category: 'Oils & Vinegars', sku: 'OIL-010', price: '$25.00', moq: '50 bottles', certifications: [], status: 'Incomplete' },
+        { name: 'Artisan Pasta 500g', category: 'Pasta & Grains', sku: 'PAS-001', price: '$4.50', moq: '300 packs', certifications: ['Organic'], status: 'Complete' },
+        { name: 'San Marzano Tomatoes 400g', category: 'Canned Goods', sku: 'CAN-001', price: '$3.20', moq: '500 cans', certifications: ['DOP'], status: 'Complete' },
+        { name: 'Prosciutto di Parma 200g', category: 'Deli & Meats', sku: 'MEA-001', price: '$15.00 - $18.00', moq: '100 packs', certifications: ['DOP', 'HACCP'], status: 'Complete' },
+        { name: 'Pecorino Romano 300g', category: 'Dairy & Cheese', sku: 'CHE-005', price: '$14.00', moq: '', certifications: ['DOP'], status: 'Incomplete' },
+        { name: 'Limoncello 500ml', category: 'Beverages', sku: 'BEV-001', price: '$18.00', moq: '100 bottles', certifications: [], status: 'Incomplete' }
+    ];
 }
 
 // ==================== Profile ====================
@@ -1781,3 +1953,151 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
         // 언어 전환 로직 구현 필요
     });
 });
+
+// ==================== PO Management ====================
+
+// PO 목록 필터링
+function filterPOList() {
+    const filter = document.getElementById('po-status-filter').value;
+    const rows = document.querySelectorAll('#po-list-tbody tr');
+
+    rows.forEach(row => {
+        const statusBadge = row.querySelector('.status-badge');
+        const status = statusBadge ? statusBadge.classList[1] : '';
+
+        if (filter === 'all' || status === filter) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+// PO 검색
+function searchPO() {
+    const searchTerm = document.getElementById('po-search').value.toLowerCase();
+    const rows = document.querySelectorAll('#po-list-tbody tr');
+
+    rows.forEach(row => {
+        const poNumber = row.querySelector('.po-number')?.textContent.toLowerCase() || '';
+        const buyerName = row.querySelector('.buyer-name')?.textContent.toLowerCase() || '';
+
+        if (poNumber.includes(searchTerm) || buyerName.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+// PO 상세 보기
+function viewPODetail(poNumber) {
+    showToast(`Viewing details for ${poNumber}`, 'info');
+    // TODO: PO 상세 모달 표시
+}
+
+// PO 확정
+function confirmPO(poNumber) {
+    if (confirm(`Confirm order ${poNumber}?`)) {
+        showToast(`Order ${poNumber} confirmed!`, 'success');
+        // TODO: API 호출 및 상태 업데이트
+    }
+}
+
+// 배송 정보 업데이트
+function updateShipping(poNumber) {
+    showToast(`Update shipping for ${poNumber}`, 'info');
+    // TODO: 배송 정보 입력 모달 표시
+}
+
+// 배송 추적
+function trackShipment(poNumber) {
+    showToast(`Tracking shipment for ${poNumber}`, 'info');
+    // TODO: 배송 추적 정보 표시
+}
+
+// PO 목록 내보내기
+async function exportPOList() {
+    showToast('Exporting PO list to CSV...', 'info');
+
+    try {
+        const poData = getAllPOData();
+
+        if (!poData || poData.length === 0) {
+            showToast('No PO data to export', 'warning');
+            return;
+        }
+
+        // CSV 헤더
+        const headers = ['PO Number', 'Buyer', 'Country', 'Order Date', 'Items', 'Total Amount', 'Status'];
+
+        // CSV 데이터 생성
+        const csvRows = [];
+        csvRows.push(headers.join(','));
+
+        poData.forEach(po => {
+            const row = [
+                escapeCsvField(po.poNumber),
+                escapeCsvField(po.buyerName),
+                escapeCsvField(po.country),
+                escapeCsvField(po.orderDate),
+                escapeCsvField(po.items),
+                escapeCsvField(po.totalAmount),
+                escapeCsvField(po.status)
+            ];
+            csvRows.push(row.join(','));
+        });
+
+        const csvContent = csvRows.join('\n');
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        const timestamp = new Date().toISOString().slice(0, 10);
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', `po_export_${timestamp}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        showToast(`Successfully exported ${poData.length} PO records`, 'success');
+
+    } catch (error) {
+        console.error('PO Export error:', error);
+        showToast('Failed to export PO list', 'error');
+    }
+}
+
+// 전체 PO 데이터 가져오기
+function getAllPOData() {
+    const poData = [];
+    const rows = document.querySelectorAll('#po-list-tbody tr');
+
+    rows.forEach(row => {
+        const poNumber = row.querySelector('.po-number')?.textContent || '';
+        const buyerName = row.querySelector('.buyer-name')?.textContent || '';
+        const buyerCountry = row.querySelector('.buyer-country')?.textContent || '';
+        const cells = row.querySelectorAll('td');
+        const orderDate = cells[2]?.textContent || '';
+        const items = cells[3]?.textContent || '';
+        const totalAmount = row.querySelector('.amount')?.textContent || '';
+        const statusBadge = row.querySelector('.status-badge');
+        const status = statusBadge?.textContent || '';
+
+        poData.push({
+            poNumber,
+            buyerName,
+            country: buyerCountry.replace(/[^\w\s]/g, '').trim(),
+            orderDate,
+            items,
+            totalAmount,
+            status
+        });
+    });
+
+    return poData;
+}

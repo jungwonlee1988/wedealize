@@ -233,11 +233,11 @@
                                 <span data-i18n="dashboard.overview">Overview</span>
                             </button>
 
-                            <!-- Product Management with Submenu -->
+                            <!-- Product with Submenu -->
                             <div class="nav-group">
                                 <button class="nav-btn nav-parent" data-section="products" onclick="toggleSubmenu(this)">
                                     <span class="nav-icon">📦</span>
-                                    <span data-i18n="dashboard.productManagement">Product Management</span>
+                                    <span data-i18n="dashboard.product">Product</span>
                                     <span class="nav-arrow">▼</span>
                                 </button>
                                 <div class="nav-submenu">
@@ -248,6 +248,21 @@
                                     <button class="nav-btn nav-child" data-section="product-list">
                                         <span class="nav-icon">📋</span>
                                         <span data-i18n="dashboard.productList">Product List</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Sales with Submenu -->
+                            <div class="nav-group">
+                                <button class="nav-btn nav-parent" data-section="sales" onclick="toggleSubmenu(this)">
+                                    <span class="nav-icon">💰</span>
+                                    <span data-i18n="dashboard.sales">Sales</span>
+                                    <span class="nav-arrow">▼</span>
+                                </button>
+                                <div class="nav-submenu">
+                                    <button class="nav-btn nav-child" data-section="po-management">
+                                        <span class="nav-icon">📄</span>
+                                        <span data-i18n="dashboard.poManagement">PO Management</span>
                                     </button>
                                 </div>
                             </div>
@@ -729,6 +744,156 @@
                         </div>
 
 
+                        <!-- PO Management -->
+                        <div class="dashboard-panel" id="panel-po-management">
+                            <div class="panel-header">
+                                <h2 data-i18n="sales.poManagement">PO Management</h2>
+                                <p data-i18n="sales.poSubtitle">Manage purchase orders from buyers.</p>
+                            </div>
+
+                            <!-- PO Stats -->
+                            <div class="stats-row">
+                                <div class="stat-card">
+                                    <div class="stat-icon pending">📋</div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="po-pending-count">3</span>
+                                        <span class="stat-label" data-i18n="sales.pendingPO">Pending</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon confirmed">✓</div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="po-confirmed-count">8</span>
+                                        <span class="stat-label" data-i18n="sales.confirmedPO">Confirmed</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon shipping">🚚</div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="po-shipping-count">5</span>
+                                        <span class="stat-label" data-i18n="sales.inShipping">In Shipping</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon completed">✅</div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="po-completed-count">24</span>
+                                        <span class="stat-label" data-i18n="sales.completedPO">Completed</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PO Filter Bar -->
+                            <div class="filter-bar">
+                                <div class="filter-group">
+                                    <select id="po-status-filter" onchange="filterPOList()">
+                                        <option value="all" data-i18n="sales.allOrders">All Orders</option>
+                                        <option value="pending" data-i18n="sales.pendingPO">Pending</option>
+                                        <option value="confirmed" data-i18n="sales.confirmedPO">Confirmed</option>
+                                        <option value="shipping" data-i18n="sales.inShipping">In Shipping</option>
+                                        <option value="completed" data-i18n="sales.completedPO">Completed</option>
+                                        <option value="cancelled" data-i18n="sales.cancelledPO">Cancelled</option>
+                                    </select>
+                                    <input type="text" id="po-search" class="search-input" placeholder="Search PO#, Buyer..." data-i18n-placeholder="sales.searchPO" oninput="searchPO()">
+                                </div>
+                                <div class="filter-actions">
+                                    <button class="btn btn-outline" onclick="exportPOList()" data-i18n="sales.exportPO">Export</button>
+                                </div>
+                            </div>
+
+                            <!-- PO Table -->
+                            <table class="data-table po-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="sales.poNumber">PO #</th>
+                                        <th data-i18n="sales.buyer">Buyer</th>
+                                        <th data-i18n="sales.orderDate">Order Date</th>
+                                        <th data-i18n="sales.items">Items</th>
+                                        <th data-i18n="sales.totalAmount">Total Amount</th>
+                                        <th data-i18n="sales.status">Status</th>
+                                        <th data-i18n="sales.actions">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="po-list-tbody">
+                                    <tr>
+                                        <td><span class="po-number">PO-2026-0042</span></td>
+                                        <td>
+                                            <div class="buyer-cell">
+                                                <span class="buyer-name">Global Foods Inc.</span>
+                                                <span class="buyer-country">🇺🇸 USA</span>
+                                            </div>
+                                        </td>
+                                        <td>2026-02-03</td>
+                                        <td>5 items</td>
+                                        <td><span class="amount">$12,450.00</span></td>
+                                        <td><span class="status-badge pending" data-i18n="sales.pendingPO">Pending</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" onclick="viewPODetail('PO-2026-0042')" data-i18n="sales.view">View</button>
+                                            <button class="btn btn-sm btn-success" onclick="confirmPO('PO-2026-0042')" data-i18n="sales.confirm">Confirm</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="po-number">PO-2026-0041</span></td>
+                                        <td>
+                                            <div class="buyer-cell">
+                                                <span class="buyer-name">Euro Delicatessen GmbH</span>
+                                                <span class="buyer-country">🇩🇪 Germany</span>
+                                            </div>
+                                        </td>
+                                        <td>2026-02-02</td>
+                                        <td>3 items</td>
+                                        <td><span class="amount">$8,200.00</span></td>
+                                        <td><span class="status-badge confirmed" data-i18n="sales.confirmedPO">Confirmed</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" onclick="viewPODetail('PO-2026-0041')" data-i18n="sales.view">View</button>
+                                            <button class="btn btn-sm btn-outline" onclick="updateShipping('PO-2026-0041')" data-i18n="sales.shipment">Shipment</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="po-number">PO-2026-0040</span></td>
+                                        <td>
+                                            <div class="buyer-cell">
+                                                <span class="buyer-name">Asian Market Co.</span>
+                                                <span class="buyer-country">🇯🇵 Japan</span>
+                                            </div>
+                                        </td>
+                                        <td>2026-02-01</td>
+                                        <td>8 items</td>
+                                        <td><span class="amount">$24,800.00</span></td>
+                                        <td><span class="status-badge shipping" data-i18n="sales.inShipping">In Shipping</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" onclick="viewPODetail('PO-2026-0040')" data-i18n="sales.view">View</button>
+                                            <button class="btn btn-sm btn-outline" onclick="trackShipment('PO-2026-0040')" data-i18n="sales.track">Track</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="po-number">PO-2026-0039</span></td>
+                                        <td>
+                                            <div class="buyer-cell">
+                                                <span class="buyer-name">Fresh & Fine Ltd.</span>
+                                                <span class="buyer-country">🇬🇧 UK</span>
+                                            </div>
+                                        </td>
+                                        <td>2026-01-28</td>
+                                        <td>4 items</td>
+                                        <td><span class="amount">$6,750.00</span></td>
+                                        <td><span class="status-badge completed" data-i18n="sales.completedPO">Completed</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" onclick="viewPODetail('PO-2026-0039')" data-i18n="sales.view">View</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Pagination -->
+                            <div class="pagination">
+                                <button class="btn btn-sm btn-outline" disabled>&lt; Prev</button>
+                                <span class="page-info">Page 1 of 3</span>
+                                <button class="btn btn-sm btn-outline">Next &gt;</button>
+                            </div>
+                        </div>
+
+
                         <!-- Inquiries -->
                         <div class="dashboard-panel" id="panel-inquiries">
                             <div class="panel-header">
@@ -1027,7 +1192,10 @@
     </div>
 
     <script src="i18n.js"></script>
+    <!-- Legacy app.js for backward compatibility -->
     <script src="app.js"></script>
+    <!-- Modular JS (ES6 modules) - Uncomment to use -->
+    <!-- <script type="module" src="js/app.js"></script> -->
     <script>
         // 언어 드롭다운 초기화
         document.addEventListener('DOMContentLoaded', () => {
