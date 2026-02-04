@@ -1902,10 +1902,11 @@
 .wd-auth-section {
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 60px 20px;
     background: linear-gradient(135deg, var(--wd-gray-50) 0%, var(--wd-white) 100%);
+    overflow-y: auto;
 }
 
 .wd-auth-card {
