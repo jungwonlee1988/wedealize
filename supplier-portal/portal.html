@@ -47,83 +47,83 @@
         <!-- Main Content -->
         <main class="portal-main">
             <!-- Login/Register Section (초기 화면) -->
-            <section class="auth-section" id="auth-section">
-                <div class="auth-card">
-                    <div class="auth-tabs">
-                        <button class="auth-tab active" data-tab="login" data-i18n="auth.login">Login</button>
-                        <button class="auth-tab" data-tab="register" data-i18n="auth.register">Register</button>
+            <section class="wd-auth-section" id="auth-section">
+                <div class="wd-auth-card">
+                    <div class="wd-auth-tabs">
+                        <button class="wd-auth-tab active" data-tab="login" data-i18n="auth.login">로그인</button>
+                        <button class="wd-auth-tab" data-tab="register" data-i18n="auth.register">회원가입</button>
                     </div>
 
                     <!-- Login Form -->
-                    <form class="auth-form active" id="login-form" onsubmit="handleLogin(event)">
-                        <h2 data-i18n="auth.welcomeBack">Welcome Back</h2>
-                        <p class="auth-subtitle" data-i18n="auth.accessDashboard">Access your supplier dashboard</p>
+                    <form class="wd-auth-form active" id="login-form" onsubmit="handleLogin(event)">
+                        <h2 class="wd-auth-title" data-i18n="auth.welcomeBack">환영합니다</h2>
+                        <p class="wd-auth-subtitle" data-i18n="auth.accessDashboard">공급자 대시보드에 접속하세요</p>
 
                         <!-- Google Sign-In Button -->
-                        <div class="social-login">
-                            <button type="button" class="btn btn-google" onclick="handleGoogleLogin()">
+                        <div class="wd-social-login">
+                            <button type="button" class="wd-btn wd-btn-google" onclick="handleGoogleLogin()">
                                 <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
                                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                                 </svg>
-                                <span data-i18n="auth.continueWithGoogle">Continue with Google</span>
+                                <span data-i18n="auth.continueWithGoogle">Google로 계속하기</span>
                             </button>
                         </div>
 
-                        <div class="auth-divider">
-                            <span data-i18n="auth.or">or</span>
+                        <div class="wd-auth-divider">
+                            <span data-i18n="auth.or">또는</span>
                         </div>
 
-                        <div class="form-group">
-                            <label for="login-email" data-i18n="auth.email">Email</label>
-                            <input type="email" id="login-email" placeholder="your@company.com" required>
+                        <div class="wd-form-group">
+                            <label class="wd-form-label" for="login-email" data-i18n="auth.email">이메일</label>
+                            <input type="email" class="wd-input" id="login-email" placeholder="your@company.com" required>
                         </div>
-                        <div class="form-group">
-                            <label for="login-password" data-i18n="auth.password">Password</label>
-                            <input type="password" id="login-password" placeholder="Enter password" required>
+                        <div class="wd-form-group">
+                            <label class="wd-form-label" for="login-password" data-i18n="auth.password">비밀번호</label>
+                            <input type="password" class="wd-input" id="login-password" placeholder="비밀번호 입력" required>
                         </div>
-                        <div class="form-options">
-                            <label class="checkbox-label">
-                                <input type="checkbox"> <span data-i18n="auth.rememberMe">Remember me</span>
+                        <div class="wd-form-options">
+                            <label class="wd-checkbox">
+                                <input type="checkbox"> <span data-i18n="auth.rememberMe">로그인 유지</span>
                             </label>
-                            <a href="#" class="forgot-link" onclick="showForgotPassword(event)" data-i18n="auth.forgotPassword">Forgot password?</a>
+                            <a href="#" class="wd-link" onclick="showForgotPassword(event)" data-i18n="auth.forgotPassword">비밀번호 찾기</a>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-full" data-i18n="auth.login" onclick="handleLogin(event)">Login</button>
+                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.login" onclick="handleLogin(event)">로그인</button>
                     </form>
 
                     <!-- Register Form -->
-                    <form class="auth-form" id="register-form" onsubmit="handleRegister(event)">
-                        <h2 data-i18n="auth.joinWedealize">Join WeDealize</h2>
-                        <p class="auth-subtitle" data-i18n="auth.registerSubtitle">Register as a supplier partner</p>
+                    <form class="wd-auth-form" id="register-form" onsubmit="handleRegister(event)">
+                        <h2 class="wd-auth-title" data-i18n="auth.joinWedealize">WeDealize 가입</h2>
+                        <p class="wd-auth-subtitle" data-i18n="auth.registerSubtitle">공급자 파트너로 등록하세요</p>
 
                         <!-- Google Sign-In Button -->
-                        <div class="social-login">
-                            <button type="button" class="btn btn-google" onclick="handleGoogleLogin()">
+                        <div class="wd-social-login">
+                            <button type="button" class="wd-btn wd-btn-google" onclick="handleGoogleLogin()">
                                 <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
                                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                                 </svg>
-                                <span data-i18n="auth.continueWithGoogle">Continue with Google</span>
+                                <span data-i18n="auth.continueWithGoogle">Google로 계속하기</span>
                             </button>
                         </div>
 
-                        <div class="auth-divider">
-                            <span data-i18n="auth.or">or</span>
+                        <div class="wd-auth-divider">
+                            <span data-i18n="auth.or">또는</span>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="reg-company"><span data-i18n="auth.companyName">Company Name</span> *</label>
-                                <input type="text" id="reg-company" placeholder="Your Company Ltd." required>
+                        <div class="wd-form-row">
+                            <div class="wd-form-group">
+                                <label class="wd-form-label" for="reg-company"><span data-i18n="auth.companyName">회사명</span> *</label>
+                                <input type="text" class="wd-input" id="reg-company" placeholder="회사명" required>
                             </div>
-                            <div class="form-group">
-                                <label for="reg-country"><span data-i18n="auth.country">Country</span> *</label>
-                                <select id="reg-country" required>
-                                    <option value="" data-i18n="auth.selectCountry">Select country</option>
+                            <div class="wd-form-group">
+                                <label class="wd-form-label" for="reg-country"><span data-i18n="auth.country">국가</span> *</label>
+                                <select class="wd-input wd-select" id="reg-country" required>
+                                    <option value="" data-i18n="auth.selectCountry">국가 선택</option>
                                     <option value="IT" data-i18n="countries.IT">Italy</option>
                                     <option value="FR" data-i18n="countries.FR">France</option>
                                     <option value="JP" data-i18n="countries.JP">Japan</option>
@@ -137,18 +137,18 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="reg-email"><span data-i18n="auth.businessEmail">Business Email</span> *</label>
-                            <input type="email" id="reg-email" placeholder="sales@company.com" required>
+                        <div class="wd-form-group">
+                            <label class="wd-form-label" for="reg-email"><span data-i18n="auth.businessEmail">업무용 이메일</span> *</label>
+                            <input type="email" class="wd-input" id="reg-email" placeholder="sales@company.com" required>
                         </div>
-                        <div class="form-group">
-                            <label for="reg-password"><span data-i18n="auth.password">Password</span> *</label>
-                            <input type="password" id="reg-password" placeholder="Min 8 characters" required minlength="8">
+                        <div class="wd-form-group">
+                            <label class="wd-form-label" for="reg-password"><span data-i18n="auth.password">비밀번호</span> *</label>
+                            <input type="password" class="wd-input" id="reg-password" placeholder="최소 8자" required minlength="8">
                         </div>
-                        <div class="form-group">
-                            <label for="reg-category"><span data-i18n="auth.productCategory">Product Category</span> *</label>
-                            <select id="reg-category" required>
-                                <option value="" data-i18n="auth.selectCategory">Select category</option>
+                        <div class="wd-form-group">
+                            <label class="wd-form-label" for="reg-category"><span data-i18n="auth.productCategory">상품 카테고리</span> *</label>
+                            <select class="wd-input wd-select" id="reg-category" required>
+                                <option value="" data-i18n="auth.selectCategory">카테고리 선택</option>
                                 <option value="oils" data-i18n="categories.oils">Oils & Vinegars</option>
                                 <option value="dairy" data-i18n="categories.dairy">Dairy & Cheese</option>
                                 <option value="beverages" data-i18n="categories.beverages">Beverages & Tea</option>
@@ -159,69 +159,73 @@
                                 <option value="other" data-i18n="categories.other">Other</option>
                             </select>
                         </div>
-                        <div class="form-options">
-                            <label class="checkbox-label">
-                                <input type="checkbox" required> <span data-i18n="auth.agreeTerms">I agree to the</span> <a href="#" data-i18n="auth.termsOfService">Terms of Service</a>
+                        <div class="wd-form-options">
+                            <label class="wd-checkbox">
+                                <input type="checkbox" required> <span data-i18n="auth.agreeTerms">약관에 동의합니다</span> <a href="#" class="wd-link" data-i18n="auth.termsOfService">이용약관</a>
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-full" data-i18n="auth.createAccount">Create Account</button>
+                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.createAccount">계정 만들기</button>
                     </form>
 
                     <!-- Email Verification Form -->
-                    <div class="auth-form" id="verify-form" style="display: none;">
-                        <h2 data-i18n="verification.verifyEmail">Verify Your Email</h2>
-                        <p class="auth-subtitle"><span data-i18n="verification.codeSentTo">We sent a verification code to</span> <strong id="verify-email-display"></strong></p>
+                    <div class="wd-auth-form" id="verify-form" style="display: none;">
+                        <h2 class="wd-auth-title" data-i18n="verification.verifyEmail">이메일 인증</h2>
+                        <p class="wd-auth-subtitle"><span data-i18n="verification.codeSentTo">인증 코드를 발송했습니다:</span> <strong id="verify-email-display"></strong></p>
 
-                        <div class="verification-icon">📧</div>
+                        <div class="wd-verification-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--wd-primary)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </div>
 
-                        <div class="form-group">
-                            <label data-i18n="verification.enterCode">Enter 6-digit code</label>
-                            <div class="verification-code-inputs">
-                                <input type="text" maxlength="1" class="code-input" data-index="0" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
-                                <input type="text" maxlength="1" class="code-input" data-index="1" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
-                                <input type="text" maxlength="1" class="code-input" data-index="2" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
-                                <input type="text" maxlength="1" class="code-input" data-index="3" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
-                                <input type="text" maxlength="1" class="code-input" data-index="4" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
-                                <input type="text" maxlength="1" class="code-input" data-index="5" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
+                        <div class="wd-form-group">
+                            <label class="wd-form-label" data-i18n="verification.enterCode">6자리 코드 입력</label>
+                            <div class="wd-verification-inputs">
+                                <input type="text" maxlength="1" class="wd-code-input" data-index="0" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
+                                <input type="text" maxlength="1" class="wd-code-input" data-index="1" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
+                                <input type="text" maxlength="1" class="wd-code-input" data-index="2" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
+                                <input type="text" maxlength="1" class="wd-code-input" data-index="3" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
+                                <input type="text" maxlength="1" class="wd-code-input" data-index="4" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
+                                <input type="text" maxlength="1" class="wd-code-input" data-index="5" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-primary btn-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">Verify Email</button>
+                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">이메일 인증</button>
 
-                        <div class="resend-section">
-                            <p><span data-i18n="verification.didntReceive">Didn't receive the code?</span> <button type="button" class="link-btn" id="resend-btn" onclick="resendVerificationCode()" data-i18n="verification.resend">Resend</button></p>
-                            <p class="resend-timer" id="resend-timer" style="display: none;"><span data-i18n="verification.resendIn">Resend available in</span> <span id="timer-count">60</span>s</p>
+                        <div class="wd-resend-section">
+                            <p><span data-i18n="verification.didntReceive">코드를 받지 못하셨나요?</span> <button type="button" class="wd-btn-link" id="resend-btn" onclick="resendVerificationCode()" data-i18n="verification.resend">재전송</button></p>
+                            <p class="wd-resend-timer" id="resend-timer" style="display: none;"><span data-i18n="verification.resendIn">재전송 가능:</span> <span id="timer-count">60</span>초</p>
                         </div>
 
-                        <button type="button" class="btn btn-outline btn-full" onclick="backToRegister()" data-i18n="verification.backToRegister">Back to Register</button>
+                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToRegister()" data-i18n="verification.backToRegister">회원가입으로 돌아가기</button>
                     </div>
 
                     <!-- Forgot Password Form -->
-                    <div class="auth-form" id="forgot-form" style="display: none;">
-                        <h2 data-i18n="passwordReset.resetPassword">Reset Password</h2>
-                        <p class="auth-subtitle" data-i18n="passwordReset.enterEmail">Enter your email to receive a reset link</p>
+                    <div class="wd-auth-form" id="forgot-form" style="display: none;">
+                        <h2 class="wd-auth-title" data-i18n="passwordReset.resetPassword">비밀번호 재설정</h2>
+                        <p class="wd-auth-subtitle" data-i18n="passwordReset.enterEmail">재설정 링크를 받을 이메일을 입력하세요</p>
 
-                        <div class="form-group">
-                            <label for="forgot-email" data-i18n="auth.email">Email</label>
-                            <input type="email" id="forgot-email" placeholder="your@company.com" required>
+                        <div class="wd-form-group">
+                            <label class="wd-form-label" for="forgot-email" data-i18n="auth.email">이메일</label>
+                            <input type="email" class="wd-input" id="forgot-email" placeholder="your@company.com" required>
                         </div>
 
-                        <button type="button" class="btn btn-primary btn-full" onclick="sendResetLink()" data-i18n="passwordReset.sendResetLink">Send Reset Link</button>
+                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="sendResetLink()" data-i18n="passwordReset.sendResetLink">재설정 링크 보내기</button>
 
-                        <button type="button" class="btn btn-outline btn-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
+                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" style="margin-top: 12px;" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">로그인으로 돌아가기</button>
                     </div>
 
                     <!-- Password Reset Sent -->
-                    <div class="auth-form" id="reset-sent-form" style="display: none;">
-                        <div class="success-icon">✓</div>
-                        <h2 data-i18n="passwordReset.checkEmail">Check Your Email</h2>
-                        <p class="auth-subtitle"><span data-i18n="passwordReset.resetLinkSent">We sent a password reset link to</span> <strong id="reset-email-display"></strong></p>
+                    <div class="wd-auth-form" id="reset-sent-form" style="display: none;">
+                        <div class="wd-success-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--wd-success)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <h2 class="wd-auth-title" data-i18n="passwordReset.checkEmail">이메일을 확인하세요</h2>
+                        <p class="wd-auth-subtitle"><span data-i18n="passwordReset.resetLinkSent">비밀번호 재설정 링크를 보냈습니다:</span> <strong id="reset-email-display"></strong></p>
 
-                        <div class="reset-instructions">
-                            <p data-i18n="passwordReset.linkExpires">Click the link in the email to reset your password. The link will expire in 24 hours.</p>
+                        <div class="wd-reset-instructions">
+                            <p data-i18n="passwordReset.linkExpires">이메일의 링크를 클릭하여 비밀번호를 재설정하세요. 링크는 24시간 후 만료됩니다.</p>
                         </div>
 
-                        <button type="button" class="btn btn-outline btn-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
+                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">로그인으로 돌아가기</button>
                     </div>
                 </div>
             </section>
