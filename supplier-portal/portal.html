@@ -501,10 +501,16 @@
                                     <a class="wd-nav-item wd-nav-child" data-section="po-management" onclick="showSection('po-management')">
                                         <span data-i18n="dashboard.poManagement">PO Management</span>
                                     </a>
+                                    <a class="wd-nav-item wd-nav-child" data-section="pi-management" onclick="showSection('pi-management')">
+                                        <span data-i18n="dashboard.piManagement">PI Management</span>
+                                    </a>
+                                    <a class="wd-nav-item wd-nav-child" data-section="credit-management" onclick="showSection('credit-management')">
+                                        <span data-i18n="dashboard.creditManagement">Credit Management</span>
+                                    </a>
                                 </div>
                             </div>
 
-                            <a class="wd-nav-item" data-section="inquiries" onclick="showSection('inquiries')">
+                            <a class="wd-nav-item" data-section="inquiries" onclick="showSection('inquiries')"
                                 <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                                 <span data-i18n="dashboard.inquiries">Inquiries</span>
                             </a>
@@ -1366,6 +1372,543 @@
                                         <div class="notes-label" data-i18n="po.specialNotes">Special Notes</div>
                                         <div class="notes-content" id="po-notes">-</div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PI Management -->
+                        <div class="dashboard-panel" id="panel-pi-management">
+                            <!-- Page Header -->
+                            <div class="wd-page-header">
+                                <div class="wd-page-header-content">
+                                    <h2 class="wd-page-title" data-i18n="pi.title">PI Management</h2>
+                                    <p class="wd-page-subtitle" data-i18n="pi.subtitle">Create and manage Proforma Invoices based on Purchase Orders</p>
+                                </div>
+                                <div class="wd-page-actions">
+                                    <button class="btn btn-primary btn-md" onclick="openPIModal()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                        <span data-i18n="pi.createPI">Create PI</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- PI Summary Cards -->
+                            <div style="padding: 0 24px 24px;">
+                                <div class="wd-stats-grid">
+                                    <div class="wd-stat-card">
+                                        <div class="wd-stat-icon" style="background: var(--warning-light); color: var(--warning);">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                        </div>
+                                        <div class="wd-stat-content">
+                                            <span class="wd-stat-value" id="pi-draft-count">2</span>
+                                            <span class="wd-stat-label" data-i18n="pi.draftPI">Draft PI</span>
+                                        </div>
+                                    </div>
+                                    <div class="wd-stat-card">
+                                        <div class="wd-stat-icon" style="background: var(--primary-light); color: var(--primary);">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                        </div>
+                                        <div class="wd-stat-content">
+                                            <span class="wd-stat-value" id="pi-sent-count">8</span>
+                                            <span class="wd-stat-label" data-i18n="pi.sentPI">Sent PI</span>
+                                        </div>
+                                    </div>
+                                    <div class="wd-stat-card">
+                                        <div class="wd-stat-icon" style="background: var(--success-light); color: var(--success);">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                        </div>
+                                        <div class="wd-stat-content">
+                                            <span class="wd-stat-value" id="pi-total-amount">$45,230</span>
+                                            <span class="wd-stat-label" data-i18n="pi.totalPIAmount">Total PI Amount</span>
+                                        </div>
+                                    </div>
+                                    <div class="wd-stat-card">
+                                        <div class="wd-stat-icon" style="background: #FFF3E0; color: #E65100;">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                                        </div>
+                                        <div class="wd-stat-content">
+                                            <span class="wd-stat-value" id="pi-credit-applied">$1,250</span>
+                                            <span class="wd-stat-label" data-i18n="pi.creditApplied">Credit Applied</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Filter Bar -->
+                            <div class="wd-filter-bar" style="margin: 0 24px 16px;">
+                                <div class="wd-filter-group">
+                                    <select class="wd-select" id="pi-status-filter" onchange="filterPIList()">
+                                        <option value="all" data-i18n="pi.allStatus">All Status</option>
+                                        <option value="draft" data-i18n="pi.draft">Draft</option>
+                                        <option value="sent" data-i18n="pi.sent">Sent</option>
+                                        <option value="confirmed" data-i18n="pi.confirmed">Confirmed</option>
+                                        <option value="paid" data-i18n="pi.paid">Paid</option>
+                                    </select>
+                                    <div class="wd-search-box">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                        <input type="text" id="pi-search" placeholder="Search by PI number or buyer..." oninput="filterPIList()">
+                                    </div>
+                                </div>
+                                <div class="wd-filter-actions">
+                                    <button class="btn btn-tertiary btn-sm" onclick="exportPIList()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                        <span data-i18n="pi.export">Export</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- PI Table -->
+                            <div style="padding: 0 24px 24px;">
+                                <div class="wd-table-container">
+                                    <table class="wd-table">
+                                        <thead>
+                                            <tr>
+                                                <th data-i18n="pi.piNumber">PI Number</th>
+                                                <th data-i18n="pi.poReference">PO Reference</th>
+                                                <th data-i18n="pi.buyer">Buyer</th>
+                                                <th data-i18n="pi.issueDate">Issue Date</th>
+                                                <th data-i18n="pi.subtotal">Subtotal</th>
+                                                <th data-i18n="pi.creditDiscount">Credit/Discount</th>
+                                                <th data-i18n="pi.totalAmount">Total Amount</th>
+                                                <th data-i18n="pi.status">Status</th>
+                                                <th data-i18n="pi.actions">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="pi-table-body">
+                                            <tr data-status="draft">
+                                                <td><span class="wd-text-mono">PI-2024-0089</span></td>
+                                                <td><a href="#" class="wd-link" onclick="viewPOFromPI('PO-2024-0156')">PO-2024-0156</a></td>
+                                                <td>
+                                                    <div class="wd-buyer-cell">
+                                                        <span class="wd-buyer-name">ABC Distribution</span>
+                                                        <span class="wd-buyer-country">🇰🇷 South Korea</span>
+                                                    </div>
+                                                </td>
+                                                <td>2024-02-04</td>
+                                                <td>$3,250.00</td>
+                                                <td><span class="wd-text-success">-$125.00</span></td>
+                                                <td><span class="wd-text-bold">$3,125.00</span></td>
+                                                <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
+                                                <td>
+                                                    <div class="wd-action-buttons">
+                                                        <button class="btn btn-tertiary btn-sm" onclick="editPI('PI-2024-0089')" title="Edit">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                                        </button>
+                                                        <button class="btn btn-primary btn-sm" onclick="sendPI('PI-2024-0089')" title="Send">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr data-status="sent">
+                                                <td><span class="wd-text-mono">PI-2024-0088</span></td>
+                                                <td><a href="#" class="wd-link" onclick="viewPOFromPI('PO-2024-0142')">PO-2024-0142</a></td>
+                                                <td>
+                                                    <div class="wd-buyer-cell">
+                                                        <span class="wd-buyer-name">XYZ Foods Ltd</span>
+                                                        <span class="wd-buyer-country">🇯🇵 Japan</span>
+                                                    </div>
+                                                </td>
+                                                <td>2024-02-01</td>
+                                                <td>$8,450.00</td>
+                                                <td><span class="wd-text-success">-$320.00</span></td>
+                                                <td><span class="wd-text-bold">$8,130.00</span></td>
+                                                <td><span class="wd-badge wd-badge-primary">Sent</span></td>
+                                                <td>
+                                                    <div class="wd-action-buttons">
+                                                        <button class="btn btn-tertiary btn-sm" onclick="viewPI('PI-2024-0088')" title="View">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                                        </button>
+                                                        <button class="btn btn-tertiary btn-sm" onclick="downloadPI('PI-2024-0088')" title="Download PDF">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr data-status="confirmed">
+                                                <td><span class="wd-text-mono">PI-2024-0087</span></td>
+                                                <td><a href="#" class="wd-link" onclick="viewPOFromPI('PO-2024-0138')">PO-2024-0138</a></td>
+                                                <td>
+                                                    <div class="wd-buyer-cell">
+                                                        <span class="wd-buyer-name">Global Trade Co</span>
+                                                        <span class="wd-buyer-country">🇺🇸 United States</span>
+                                                    </div>
+                                                </td>
+                                                <td>2024-01-28</td>
+                                                <td>$12,800.00</td>
+                                                <td><span class="wd-text-secondary">$0.00</span></td>
+                                                <td><span class="wd-text-bold">$12,800.00</span></td>
+                                                <td><span class="wd-badge wd-badge-success">Confirmed</span></td>
+                                                <td>
+                                                    <div class="wd-action-buttons">
+                                                        <button class="btn btn-tertiary btn-sm" onclick="viewPI('PI-2024-0087')" title="View">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                                        </button>
+                                                        <button class="btn btn-tertiary btn-sm" onclick="downloadPI('PI-2024-0087')" title="Download PDF">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PI Create/Edit Modal -->
+                        <div class="wd-modal-overlay" id="pi-modal" style="display: none;">
+                            <div class="wd-modal wd-modal-lg">
+                                <div class="wd-modal-header">
+                                    <h3 class="wd-modal-title" id="pi-modal-title" data-i18n="pi.createPI">Create Proforma Invoice</h3>
+                                    <button class="wd-modal-close" onclick="closePIModal()">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                    </button>
+                                </div>
+                                <div class="wd-modal-body">
+                                    <form id="pi-form">
+                                        <!-- PO Selection -->
+                                        <div class="wd-form-section">
+                                            <h4 class="wd-form-section-title" data-i18n="pi.poSelection">PO Selection</h4>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="pi.selectPO">Select Purchase Order *</label>
+                                                <select class="wd-select" id="pi-po-select" required onchange="loadPOForPI()">
+                                                    <option value="">Select a PO to create PI...</option>
+                                                    <option value="PO-2024-0156">PO-2024-0156 - ABC Distribution (Feb 01, 2024)</option>
+                                                    <option value="PO-2024-0142">PO-2024-0142 - XYZ Foods Ltd (Jan 25, 2024)</option>
+                                                    <option value="PO-2024-0138">PO-2024-0138 - Global Trade Co (Jan 18, 2024)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- PO Items Preview -->
+                                        <div class="wd-form-section" id="pi-items-section" style="display: none;">
+                                            <h4 class="wd-form-section-title" data-i18n="pi.orderItems">Order Items</h4>
+                                            <div class="wd-table-container">
+                                                <table class="wd-table wd-table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-i18n="pi.product">Product</th>
+                                                            <th data-i18n="pi.quantity">Qty</th>
+                                                            <th data-i18n="pi.unitPrice">Unit Price</th>
+                                                            <th data-i18n="pi.amount">Amount</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="pi-items-tbody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Credit Application (Buyer-based) -->
+                                        <div class="wd-form-section" id="pi-credit-section" style="display: none;">
+                                            <h4 class="wd-form-section-title">
+                                                <span data-i18n="pi.applyCredit">Apply Credit</span>
+                                                <span class="wd-badge wd-badge-info" id="available-credit-badge">$0.00 available</span>
+                                            </h4>
+                                            <p class="wd-text-muted wd-text-sm" style="margin-bottom: 12px;" data-i18n="pi.creditBuyerNote">Available credits from this buyer's previous invoices</p>
+                                            <div class="wd-credit-list" id="pi-available-credits">
+                                                <!-- Credits will be loaded based on Buyer -->
+                                            </div>
+                                        </div>
+
+                                        <!-- PI Summary -->
+                                        <div class="wd-form-section" id="pi-summary-section" style="display: none;">
+                                            <h4 class="wd-form-section-title" data-i18n="pi.summary">Summary</h4>
+                                            <div class="wd-summary-box">
+                                                <div class="wd-summary-row">
+                                                    <span data-i18n="pi.subtotal">Subtotal</span>
+                                                    <span id="pi-subtotal">$0.00</span>
+                                                </div>
+                                                <div class="wd-summary-row wd-text-success">
+                                                    <span data-i18n="pi.creditDiscount">Credit Discount</span>
+                                                    <span id="pi-credit-discount">-$0.00</span>
+                                                </div>
+                                                <div class="wd-summary-row wd-summary-total">
+                                                    <span data-i18n="pi.totalAmount">Total Amount</span>
+                                                    <span id="pi-total">$0.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Payment Terms -->
+                                        <div class="wd-form-section" id="pi-terms-section" style="display: none;">
+                                            <h4 class="wd-form-section-title" data-i18n="pi.paymentTerms">Payment Terms</h4>
+                                            <div class="wd-form-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label" data-i18n="pi.paymentMethod">Payment Method</label>
+                                                    <select class="wd-select" id="pi-payment-method">
+                                                        <option value="tt">T/T (Wire Transfer)</option>
+                                                        <option value="lc">L/C (Letter of Credit)</option>
+                                                        <option value="dp">D/P (Documents against Payment)</option>
+                                                    </select>
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label" data-i18n="pi.validUntil">Valid Until</label>
+                                                    <input type="date" class="wd-input" id="pi-valid-until">
+                                                </div>
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="pi.remarks">Remarks</label>
+                                                <textarea class="wd-textarea" id="pi-remarks" rows="2" placeholder="Additional notes for the buyer..."></textarea>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="wd-modal-footer">
+                                    <button class="btn btn-tertiary btn-md" onclick="closePIModal()" data-i18n="common.cancel">Cancel</button>
+                                    <button class="btn btn-secondary btn-md" onclick="saveAsDraft()" data-i18n="pi.saveAsDraft">Save as Draft</button>
+                                    <button class="btn btn-primary btn-md" onclick="createAndSendPI()" data-i18n="pi.createAndSend">Create & Send PI</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Credit Management -->
+                        <div class="dashboard-panel" id="panel-credit-management">
+                            <!-- Page Header -->
+                            <div class="wd-page-header">
+                                <div class="wd-page-header-content">
+                                    <h2 class="wd-page-title" data-i18n="credit.title">Credit Management</h2>
+                                    <p class="wd-page-subtitle" data-i18n="credit.subtitle">Manage product claims and credits for invoice deductions</p>
+                                </div>
+                                <div class="wd-page-actions">
+                                    <button class="btn btn-primary btn-md" onclick="openCreditModal()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                        <span data-i18n="credit.newCredit">New Credit</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Credit Summary Cards -->
+                            <div style="padding: 0 24px 24px;">
+                                <div class="wd-stats-grid">
+                                    <div class="wd-stat-card">
+                                        <div class="wd-stat-icon" style="background: var(--warning-light); color: var(--warning);">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                        </div>
+                                        <div class="wd-stat-content">
+                                            <span class="wd-stat-value" id="credit-pending-count">3</span>
+                                            <span class="wd-stat-label" data-i18n="credit.pendingCredits">Pending Credits</span>
+                                        </div>
+                                    </div>
+                                    <div class="wd-stat-card">
+                                        <div class="wd-stat-icon" style="background: var(--success-light); color: var(--success);">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                        </div>
+                                        <div class="wd-stat-content">
+                                            <span class="wd-stat-value" id="credit-approved-count">12</span>
+                                            <span class="wd-stat-label" data-i18n="credit.approvedCredits">Approved Credits</span>
+                                        </div>
+                                    </div>
+                                    <div class="wd-stat-card">
+                                        <div class="wd-stat-icon" style="background: var(--primary-light); color: var(--primary);">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                        </div>
+                                        <div class="wd-stat-content">
+                                            <span class="wd-stat-value" id="credit-total-amount">$2,450</span>
+                                            <span class="wd-stat-label" data-i18n="credit.totalCreditAmount">Total Credit Amount</span>
+                                        </div>
+                                    </div>
+                                    <div class="wd-stat-card">
+                                        <div class="wd-stat-icon" style="background: #E8F4FD; color: #1976D2;">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                        </div>
+                                        <div class="wd-stat-content">
+                                            <span class="wd-stat-value" id="credit-used-amount">$1,200</span>
+                                            <span class="wd-stat-label" data-i18n="credit.usedInInvoices">Used in Invoices</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Filter Bar -->
+                            <div class="wd-filter-bar" style="margin: 0 24px 16px;">
+                                <div class="wd-filter-group">
+                                    <select class="wd-select" id="credit-status-filter" onchange="filterCredits()">
+                                        <option value="all" data-i18n="credit.allStatus">All Status</option>
+                                        <option value="pending" data-i18n="credit.pending">Pending</option>
+                                        <option value="approved" data-i18n="credit.approved">Approved</option>
+                                        <option value="used" data-i18n="credit.used">Used</option>
+                                        <option value="rejected" data-i18n="credit.rejected">Rejected</option>
+                                    </select>
+                                    <div class="wd-search-box">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                        <input type="text" id="credit-search" placeholder="Search by Invoice, Buyer or Product..." oninput="filterCredits()">
+                                    </div>
+                                </div>
+                                <div class="wd-filter-actions">
+                                    <button class="btn btn-tertiary btn-sm" onclick="exportCredits()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                        <span data-i18n="credit.export">Export</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Credit Table -->
+                            <div style="padding: 0 24px 24px;">
+                                <div class="wd-table-container">
+                                    <table class="wd-table">
+                                        <thead>
+                                            <tr>
+                                                <th data-i18n="credit.creditId">Credit ID</th>
+                                                <th data-i18n="credit.invoiceNumber">Invoice Number</th>
+                                                <th data-i18n="credit.buyer">Buyer</th>
+                                                <th data-i18n="credit.product">Product</th>
+                                                <th data-i18n="credit.claimReason">Claim Reason</th>
+                                                <th data-i18n="credit.amount">Amount</th>
+                                                <th data-i18n="credit.status">Status</th>
+                                                <th data-i18n="credit.createdDate">Created Date</th>
+                                                <th data-i18n="credit.actions">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="credit-table-body">
+                                            <tr data-buyer="ABC Distribution">
+                                                <td><span class="wd-text-mono">CR-2024-001</span></td>
+                                                <td><a href="#" class="wd-link" onclick="viewInvoiceFromCredit('INV-2024-0089')">INV-2024-0089</a></td>
+                                                <td><span class="buyer-name">ABC Distribution</span></td>
+                                                <td>
+                                                    <div class="wd-product-cell">
+                                                        <span class="wd-product-name">Extra Virgin Olive Oil 500ml</span>
+                                                        <span class="wd-product-sku">SKU: OIL-001</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="wd-text-secondary">Damaged packaging (5 units)</span></td>
+                                                <td><span class="wd-text-bold">$125.00</span></td>
+                                                <td><span class="wd-badge wd-badge-warning">Pending</span></td>
+                                                <td>2024-02-01</td>
+                                                <td>
+                                                    <div class="wd-action-buttons">
+                                                        <button class="btn btn-tertiary btn-sm" onclick="viewCreditDetail('CR-2024-001')" title="View">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                                        </button>
+                                                        <button class="btn btn-tertiary btn-sm" onclick="editCredit('CR-2024-001')" title="Edit">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr data-buyer="XYZ Foods Ltd">
+                                                <td><span class="wd-text-mono">CR-2024-002</span></td>
+                                                <td><a href="#" class="wd-link" onclick="viewInvoiceFromCredit('INV-2024-0088')">INV-2024-0088</a></td>
+                                                <td><span class="buyer-name">XYZ Foods Ltd</span></td>
+                                                <td>
+                                                    <div class="wd-product-cell">
+                                                        <span class="wd-product-name">Aged Parmesan 24 months</span>
+                                                        <span class="wd-product-sku">SKU: CHE-003</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="wd-text-secondary">Quality issue - mold (2 units)</span></td>
+                                                <td><span class="wd-text-bold">$320.00</span></td>
+                                                <td><span class="wd-badge wd-badge-success">Approved</span></td>
+                                                <td>2024-01-28</td>
+                                                <td>
+                                                    <div class="wd-action-buttons">
+                                                        <button class="btn btn-tertiary btn-sm" onclick="viewCreditDetail('CR-2024-002')" title="View">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                                        </button>
+                                                        <button class="btn btn-tertiary btn-sm" onclick="editCredit('CR-2024-002')" title="Edit">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr data-buyer="Global Trade Co">
+                                                <td><span class="wd-text-mono">CR-2024-003</span></td>
+                                                <td><a href="#" class="wd-link" onclick="viewInvoiceFromCredit('INV-2024-0087')">INV-2024-0087</a></td>
+                                                <td><span class="buyer-name">Global Trade Co</span></td>
+                                                <td>
+                                                    <div class="wd-product-cell">
+                                                        <span class="wd-product-name">Organic Honey 350g</span>
+                                                        <span class="wd-product-sku">SKU: HON-002</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="wd-text-secondary">Short shipment (10 units)</span></td>
+                                                <td><span class="wd-text-bold">$180.00</span></td>
+                                                <td><span class="wd-badge wd-badge-info">Used</span></td>
+                                                <td>2024-01-20</td>
+                                                <td>
+                                                    <div class="wd-action-buttons">
+                                                        <button class="btn btn-tertiary btn-sm" onclick="viewCreditDetail('CR-2024-003')" title="View">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                                        </button>
+                                                        <button class="btn btn-tertiary btn-sm disabled" title="Edit">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Credit Modal -->
+                        <div class="wd-modal-overlay" id="credit-modal" style="display: none;">
+                            <div class="wd-modal wd-modal-md">
+                                <div class="wd-modal-header">
+                                    <h3 class="wd-modal-title" id="credit-modal-title" data-i18n="credit.newCredit">New Credit</h3>
+                                    <button class="wd-modal-close" onclick="closeCreditModal()">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                    </button>
+                                </div>
+                                <div class="wd-modal-body">
+                                    <form id="credit-form">
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label" data-i18n="credit.selectInvoice">Select Invoice *</label>
+                                            <select class="wd-select" id="credit-invoice-select" required onchange="loadInvoiceProducts()">
+                                                <option value="">Select an Invoice...</option>
+                                                <option value="INV-2024-0089" data-buyer="ABC Distribution">INV-2024-0089 - ABC Distribution (Feb 01, 2024)</option>
+                                                <option value="INV-2024-0088" data-buyer="XYZ Foods Ltd">INV-2024-0088 - XYZ Foods Ltd (Jan 25, 2024)</option>
+                                                <option value="INV-2024-0087" data-buyer="Global Trade Co">INV-2024-0087 - Global Trade Co (Jan 18, 2024)</option>
+                                            </select>
+                                        </div>
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label" data-i18n="credit.selectProduct">Select Product *</label>
+                                            <select class="wd-select" id="credit-product-select" required>
+                                                <option value="">Select PO first...</option>
+                                            </select>
+                                        </div>
+                                        <div class="wd-form-row">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="credit.claimReason">Claim Reason *</label>
+                                                <select class="wd-select" id="credit-reason" required>
+                                                    <option value="">Select reason...</option>
+                                                    <option value="damaged" data-i18n="credit.reasonDamaged">Damaged packaging</option>
+                                                    <option value="quality" data-i18n="credit.reasonQuality">Quality issue</option>
+                                                    <option value="short" data-i18n="credit.reasonShort">Short shipment</option>
+                                                    <option value="wrong" data-i18n="credit.reasonWrong">Wrong product</option>
+                                                    <option value="expired" data-i18n="credit.reasonExpired">Expired/Near expiry</option>
+                                                    <option value="other" data-i18n="credit.reasonOther">Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="credit.affectedQty">Affected Quantity *</label>
+                                                <input type="number" class="wd-input" id="credit-qty" min="1" required placeholder="Enter quantity">
+                                            </div>
+                                        </div>
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label" data-i18n="credit.creditAmount">Credit Amount (USD) *</label>
+                                            <input type="number" class="wd-input" id="credit-amount" min="0" step="0.01" required placeholder="0.00">
+                                        </div>
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label" data-i18n="credit.description">Description</label>
+                                            <textarea class="wd-textarea" id="credit-description" rows="3" placeholder="Provide additional details about the claim..."></textarea>
+                                        </div>
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label" data-i18n="credit.attachments">Attachments (Photos/Documents)</label>
+                                            <div class="wd-file-upload" onclick="document.getElementById('credit-files').click()">
+                                                <input type="file" id="credit-files" multiple accept="image/*,.pdf" style="display:none" onchange="handleCreditFiles(event)">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                                <span data-i18n="credit.dropFiles">Click or drop files here</span>
+                                            </div>
+                                            <div id="credit-file-list" class="wd-file-list"></div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="wd-modal-footer">
+                                    <button class="btn btn-tertiary btn-md" onclick="closeCreditModal()" data-i18n="common.cancel">Cancel</button>
+                                    <button class="btn btn-primary btn-md" onclick="saveCredit()" data-i18n="credit.submitCredit">Submit Credit</button>
                                 </div>
                             </div>
                         </div>
