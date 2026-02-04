@@ -46,7 +46,7 @@
 
         <!-- Main Content -->
         <main class="portal-main">
-            <!-- Login/Register Section (초기 화면) -->
+            <!-- Login/Register Section (Initial Screen) -->
             <section class="wd-auth-section" id="auth-section">
                 <div class="wd-auth-card">
                     <div class="wd-auth-tabs">
@@ -90,7 +90,7 @@
                             </label>
                             <a href="#" class="wd-link" onclick="showForgotPassword(event)" data-i18n="auth.forgotPassword">Forgot password?</a>
                         </div>
-                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.login" onclick="handleLogin(event)">Login</button>
+                        <button type="submit" class="btn btn-primary btn-md w-full" data-i18n="auth.login" onclick="handleLogin(event)">Login</button>
                     </form>
 
                     <!-- Register Form -->
@@ -392,7 +392,7 @@
                                 <input type="checkbox" required> <span data-i18n="auth.agreeTerms">I agree to the</span> <a href="#" class="wd-link" data-i18n="auth.termsOfService">Terms of Service</a>
                             </label>
                         </div>
-                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.createAccount">Create Account</button>
+                        <button type="submit" class="btn btn-primary btn-md w-full" data-i18n="auth.createAccount">Create Account</button>
                     </form>
 
                     <!-- Email Verification Form -->
@@ -416,14 +416,14 @@
                             </div>
                         </div>
 
-                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">Verify Email</button>
+                        <button type="button" class="btn btn-primary btn-md w-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">Verify Email</button>
 
                         <div class="wd-resend-section">
                             <p><span data-i18n="verification.didntReceive">Didn't receive the code?</span> <button type="button" class="wd-btn-link" id="resend-btn" onclick="resendVerificationCode()" data-i18n="verification.resend">Resend</button></p>
                             <p class="wd-resend-timer" id="resend-timer" style="display: none;"><span data-i18n="verification.resendIn">Resend available in</span> <span id="timer-count">60</span>s</p>
                         </div>
 
-                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToRegister()" data-i18n="verification.backToRegister">Back to Register</button>
+                        <button type="button" class="btn btn-tertiary btn-md w-full" onclick="backToRegister()" data-i18n="verification.backToRegister">Back to Register</button>
                     </div>
 
                     <!-- Forgot Password Form -->
@@ -436,9 +436,9 @@
                             <input type="email" class="wd-input" id="forgot-email" placeholder="your@company.com" required>
                         </div>
 
-                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="sendResetLink()" data-i18n="passwordReset.sendResetLink">Send Reset Link</button>
+                        <button type="button" class="btn btn-primary btn-md w-full" onclick="sendResetLink()" data-i18n="passwordReset.sendResetLink">Send Reset Link</button>
 
-                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" style="margin-top: 12px;" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
+                        <button type="button" class="btn btn-tertiary btn-md w-full" style="margin-top: 12px;" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
                     </div>
 
                     <!-- Password Reset Sent -->
@@ -453,7 +453,7 @@
                             <p data-i18n="passwordReset.linkExpires">Click the link in the email to reset your password. The link will expire in 24 hours.</p>
                         </div>
 
-                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
+                        <button type="button" class="btn btn-tertiary btn-md w-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
                     </div>
                 </div>
             </section>
@@ -484,7 +484,7 @@
                                         <span data-i18n="dashboard.catalogRegistration">Catalog Registration</span>
                                     </a>
                                     <a class="wd-nav-item wd-nav-child" data-section="product-list" onclick="showSection('product-list')">
-                                        <span data-i18n="dashboard.productList">상품 목록</span>
+                                        <span data-i18n="dashboard.productList">Product List</span>
                                     </a>
                                 </div>
                             </div>
@@ -493,23 +493,23 @@
                             <div class="wd-nav-group">
                                 <a class="wd-nav-item wd-nav-parent" onclick="toggleSubmenu(this)">
                                     <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                                    <span data-i18n="dashboard.sales">발주 관리</span>
+                                    <span data-i18n="dashboard.sales">Sales</span>
                                     <svg class="wd-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                                 </a>
                                 <div class="wd-nav-submenu">
                                     <a class="wd-nav-item wd-nav-child" data-section="po-management" onclick="showSection('po-management')">
-                                        <span data-i18n="dashboard.poManagement">발주서</span>
+                                        <span data-i18n="dashboard.poManagement">PO Management</span>
                                     </a>
                                 </div>
                             </div>
 
                             <a class="wd-nav-item" data-section="inquiries" onclick="showSection('inquiries')">
                                 <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                                <span data-i18n="dashboard.inquiries">주문 관리</span>
+                                <span data-i18n="dashboard.inquiries">Inquiries</span>
                             </a>
                             <a class="wd-nav-item" data-section="profile" onclick="showSection('profile')">
                                 <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                <span data-i18n="dashboard.companyProfile">라벨 관리</span>
+                                <span data-i18n="dashboard.companyProfile">Company Profile</span>
                             </a>
                         </nav>
 
@@ -520,7 +520,7 @@
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                 </div>
                                 <div class="wd-user-info">
-                                    <span class="wd-user-name" id="sidebar-user-name">이중원</span>
+                                    <span class="wd-user-name" id="sidebar-user-name">User</span>
                                     <span class="wd-user-email" id="sidebar-user-email">jungwon.lee@seller-note.com</span>
                                 </div>
                             </div>
@@ -532,10 +532,10 @@
                         <!-- Overview -->
                         <div class="dashboard-panel active" id="panel-overview">
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="dashboard.dashboardOverview">대시보드</h2>
+                                <h2 class="wd-page-title" data-i18n="dashboard.dashboardOverview">Dashboard Overview</h2>
                             </div>
 
-                            <!-- 데이터 완성도 알림 -->
+                            <!-- Data Completeness Alert -->
                             <div class="wd-alert wd-alert-warning" id="data-completeness-alert" style="margin: 0 24px 24px;">
                                 <div class="wd-alert-icon">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -544,14 +544,14 @@
                                     </svg>
                                 </div>
                                 <div class="wd-alert-content">
-                                    <h4 data-i18n="dashboard.completeProfile">프로필 완성하기</h4>
-                                    <p id="completeness-message">상품 데이터가 <strong>65% 완료</strong>되었습니다. 누락된 정보를 추가하여 바이어 노출을 높이세요.</p>
+                                    <h4 data-i18n="dashboard.completeProfile">Complete Your Profile</h4>
+                                    <p id="completeness-message">Your product data is <strong>65% complete</strong>. Add missing information to increase visibility to buyers.</p>
                                     <div class="wd-alert-tags">
-                                        <span class="wd-badge wd-badge-outline">MOQ 5개 상품</span>
-                                        <span class="wd-badge wd-badge-outline" data-i18n="modal.certifications">인증서</span>
-                                        <span class="wd-badge wd-badge-outline" data-i18n="products.missingImages">상품 이미지</span>
+                                        <span class="wd-badge wd-badge-outline">MOQ 5 products</span>
+                                        <span class="wd-badge wd-badge-outline" data-i18n="modal.certifications">Certifications</span>
+                                        <span class="wd-badge wd-badge-outline" data-i18n="products.missingImages">Product Images</span>
                                     </div>
-                                    <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="showSection('product-list')" data-i18n="dashboard.completeNow">지금 완료하기</button>
+                                    <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="showSection('product-list')" data-i18n="dashboard.completeNow">Complete Now</button>
                                 </div>
                             </div>
 
@@ -562,7 +562,7 @@
                                     </div>
                                     <div class="wd-stat-info">
                                         <span class="wd-stat-value" id="stat-products">24</span>
-                                        <span class="wd-stat-label" data-i18n="dashboard.productsListed">등록 상품</span>
+                                        <span class="wd-stat-label" data-i18n="dashboard.productsListed">Products Listed</span>
                                     </div>
                                 </div>
                                 <div class="wd-stat-card">
@@ -571,7 +571,7 @@
                                     </div>
                                     <div class="wd-stat-info">
                                         <span class="wd-stat-value">1,247</span>
-                                        <span class="wd-stat-label" data-i18n="dashboard.profileViews">프로필 조회 (30일)</span>
+                                        <span class="wd-stat-label" data-i18n="dashboard.profileViews">Profile Views (30d)</span>
                                     </div>
                                 </div>
                                 <div class="wd-stat-card">
@@ -580,7 +580,7 @@
                                     </div>
                                     <div class="wd-stat-info">
                                         <span class="wd-stat-value">3</span>
-                                        <span class="wd-stat-label" data-i18n="dashboard.newInquiries">신규 문의</span>
+                                        <span class="wd-stat-label" data-i18n="dashboard.newInquiries">New Inquiries</span>
                                     </div>
                                 </div>
                                 <div class="wd-stat-card">
@@ -589,14 +589,14 @@
                                     </div>
                                     <div class="wd-stat-info">
                                         <span class="wd-stat-value">65%</span>
-                                        <span class="wd-stat-label" data-i18n="dashboard.dataCompleteness">데이터 완성도</span>
+                                        <span class="wd-stat-label" data-i18n="dashboard.dataCompleteness">Data Completeness</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="wd-card" style="margin: 0 24px 24px;">
                                 <div class="wd-card-header">
-                                    <h3 class="wd-card-title" data-i18n="dashboard.recentActivity">최근 활동</h3>
+                                    <h3 class="wd-card-title" data-i18n="dashboard.recentActivity">Recent Activity</h3>
                                 </div>
                                 <div class="wd-card-body">
                                     <div class="wd-activity-list">
@@ -605,8 +605,8 @@
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                                             </div>
                                             <div class="wd-activity-content">
-                                                <p><strong data-i18n="inquiry.new">신규 문의</strong> - ABC Distribution (Korea)</p>
-                                                <span class="wd-activity-time">2시간 전</span>
+                                                <p><strong data-i18n="inquiry.new">New Inquiry</strong> - ABC Distribution (Korea)</p>
+                                                <span class="wd-activity-time">2 hours ago</span>
                                             </div>
                                         </div>
                                         <div class="wd-activity-item">
@@ -614,8 +614,8 @@
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                             </div>
                                             <div class="wd-activity-content">
-                                                <p><strong>카탈로그 처리 완료</strong> - 24개 상품 추출</p>
-                                                <span class="wd-activity-time">1일 전</span>
+                                                <p><strong>Catalog Processed</strong> - 24 products extracted</p>
+                                                <span class="wd-activity-time">1 day ago</span>
                                             </div>
                                         </div>
                                         <div class="wd-activity-item">
@@ -623,8 +623,8 @@
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                                             </div>
                                             <div class="wd-activity-content">
-                                                <p><strong>누락된 데이터</strong> - 5개 상품의 MOQ를 추가하세요</p>
-                                                <span class="wd-activity-time">2일 전</span>
+                                                <p><strong>Missing Data</strong> - Add MOQ for 5 products</p>
+                                                <span class="wd-activity-time">2 days ago</span>
                                             </div>
                                         </div>
                                     </div>
@@ -636,29 +636,29 @@
                         <div class="dashboard-panel" id="panel-catalog">
                             <!-- Page Header -->
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="catalog.registrationTitle">카탈로그 등록</h2>
+                                <h2 class="wd-page-title" data-i18n="catalog.registrationTitle">Catalog Registration</h2>
                             </div>
 
                             <!-- Step Indicator -->
                             <div class="wd-steps" style="padding: 24px;">
                                 <div class="wd-step active" id="step-indicator-1">
                                     <div class="wd-step-number"><span>1</span></div>
-                                    <div class="wd-step-label" data-i18n="catalog.step1">카탈로그 업로드</div>
+                                    <div class="wd-step-label" data-i18n="catalog.step1">Upload Catalog</div>
                                 </div>
                                 <div class="wd-step-connector" id="connector-1"></div>
                                 <div class="wd-step" id="step-indicator-2">
                                     <div class="wd-step-number"><span>2</span></div>
-                                    <div class="wd-step-label" data-i18n="catalog.step2">상품 검토</div>
+                                    <div class="wd-step-label" data-i18n="catalog.step2">Review Products</div>
                                 </div>
                                 <div class="wd-step-connector" id="connector-2"></div>
                                 <div class="wd-step" id="step-indicator-3">
                                     <div class="wd-step-number"><span>3</span></div>
-                                    <div class="wd-step-label" data-i18n="catalog.step3">가격 매칭</div>
+                                    <div class="wd-step-label" data-i18n="catalog.step3">Match Prices</div>
                                 </div>
                                 <div class="wd-step-connector" id="connector-3"></div>
                                 <div class="wd-step" id="step-indicator-4">
                                     <div class="wd-step-number"><span>4</span></div>
-                                    <div class="wd-step-label" data-i18n="catalog.step4">완료</div>
+                                    <div class="wd-step-label" data-i18n="catalog.step4">Complete</div>
                                 </div>
                             </div>
 
@@ -667,10 +667,10 @@
                                 <div class="wd-card">
                                     <div class="wd-card-header" style="display: flex; align-items: center; gap: 12px;">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                        <h3 class="wd-card-title" data-i18n="catalog.uploadCatalogTitle">카탈로그 업로드</h3>
+                                        <h3 class="wd-card-title" data-i18n="catalog.uploadCatalogTitle">Upload Product Catalog</h3>
                                     </div>
                                     <div class="wd-card-body">
-                                        <p class="wd-form-hint" style="margin-bottom: 20px;" data-i18n="catalog.catalogDescription">카탈로그 파일을 업로드하면 상품 정보를 자동으로 추출합니다.</p>
+                                        <p class="wd-form-hint" style="margin-bottom: 20px;" data-i18n="catalog.catalogDescription">Upload your product catalog file. We'll automatically extract product information.</p>
 
                                         <div class="wd-dropzone" id="catalog-dropzone"
                                              ondrop="handleDrop(event, 'catalog')"
@@ -682,8 +682,8 @@
                                                 <polyline points="17 8 12 3 7 8"/>
                                                 <line x1="12" y1="3" x2="12" y2="15"/>
                                             </svg>
-                                            <p><span data-i18n="catalog.dragDrop">드래그 & 드롭 또는</span> <label for="catalog-file" class="wd-link" data-i18n="catalog.browse">찾아보기</label></p>
-                                            <span class="wd-dropzone-hint">PDF, Excel, CSV (최대 50MB)</span>
+                                            <p><span data-i18n="catalog.dragDrop">Drag & drop or</span> <label for="catalog-file" class="wd-link" data-i18n="catalog.browse">browse</label></p>
+                                            <span class="wd-dropzone-hint" data-i18n="catalog.fileHint">PDF, Excel, CSV (Max 50MB)</span>
                                         </div>
                                         <div class="wd-file-list" id="catalog-uploaded" style="display: none;">
                                             <div class="wd-file-item">
@@ -697,8 +697,8 @@
                                         </div>
 
                                         <div style="margin-top: 24px; text-align: right;">
-                                            <button class="wd-btn wd-btn-primary wd-btn-lg" onclick="extractCatalog()" id="extract-btn" disabled>
-                                                <span data-i18n="catalog.extractProducts">상품 추출</span>
+                                            <button class="btn btn-primary btn-lg" onclick="extractCatalog()" id="extract-btn" disabled>
+                                                <span data-i18n="catalog.extractProducts">Extract Products</span>
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                             </button>
                                         </div>
@@ -712,9 +712,9 @@
                                     <div class="wd-card-header" style="display: flex; align-items: center; justify-content: space-between;">
                                         <div style="display: flex; align-items: center; gap: 12px;">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                                            <h3 class="wd-card-title" data-i18n="catalog.reviewExtracted">추출된 상품 검토</h3>
+                                            <h3 class="wd-card-title" data-i18n="catalog.reviewExtracted">Review Extracted Products</h3>
                                         </div>
-                                        <span class="wd-badge wd-badge-info"><span id="extracted-total">0</span>개 상품 추출</span>
+                                        <span class="wd-badge wd-badge-info"><span id="extracted-total">0</span> products extracted</span>
                                     </div>
                                     <div class="wd-card-body">
                                         <div class="wd-filter-tabs" style="margin-bottom: 20px;">
@@ -735,11 +735,11 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 40px;"><input type="checkbox" id="select-all-extracted" onchange="toggleSelectAllExtracted()"></th>
-                                                    <th data-i18n="products.product">상품</th>
-                                                    <th data-i18n="modal.category">카테고리</th>
-                                                    <th data-i18n="catalog.price">가격</th>
-                                                    <th data-i18n="catalog.status">상태</th>
-                                                    <th data-i18n="catalog.actions">관리</th>
+                                                    <th data-i18n="products.product">Product</th>
+                                                    <th data-i18n="modal.category">Category</th>
+                                                    <th data-i18n="catalog.price">Price</th>
+                                                    <th data-i18n="catalog.status">Status</th>
+                                                    <th data-i18n="catalog.actions">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="extracted-products-tbody">
@@ -748,12 +748,12 @@
                                         </table>
 
                                         <div style="display: flex; justify-content: space-between; margin-top: 24px;">
-                                            <button class="wd-btn wd-btn-outline" onclick="goToCatalogStep(1)">
+                                            <button class="btn btn-tertiary btn-md" onclick="goToCatalogStep(1)">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                                                <span data-i18n="catalog.uploadDifferent">다른 파일 업로드</span>
+                                                <span data-i18n="catalog.uploadDifferent">Upload Different File</span>
                                             </button>
-                                            <button class="wd-btn wd-btn-primary wd-btn-lg" onclick="goToCatalogStep(3)">
-                                                <span data-i18n="catalog.nextMatchPrices">다음: 가격 매칭</span>
+                                            <button class="btn btn-primary btn-lg" onclick="goToCatalogStep(3)">
+                                                <span data-i18n="catalog.nextMatchPrices">Next: Match Prices</span>
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                             </button>
                                         </div>
@@ -766,13 +766,13 @@
                                 <div class="wd-card">
                                     <div class="wd-card-header" style="display: flex; align-items: center; gap: 12px;">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                                        <h3 class="wd-card-title" data-i18n="catalog.matchPrices">가격 매칭</h3>
-                                        <span class="wd-badge wd-badge-gray" data-i18n="catalog.optional">선택사항</span>
+                                        <h3 class="wd-card-title" data-i18n="catalog.matchPrices">Match Prices</h3>
+                                        <span class="wd-badge wd-badge-gray" data-i18n="catalog.optional">Optional</span>
                                     </div>
                                     <div class="wd-card-body">
                                         <!-- Price List Upload Section -->
                                         <div id="pricelist-upload-area" style="margin-bottom: 20px;">
-                                            <p class="wd-form-hint" style="margin-bottom: 16px;" data-i18n="catalog.priceMatchDescription">가격표를 업로드하면 추출된 상품과 자동으로 매칭합니다.</p>
+                                            <p class="wd-form-hint" style="margin-bottom: 16px;" data-i18n="catalog.priceMatchDescription">Upload a price list to automatically match prices with your extracted products.</p>
                                             <div class="wd-dropzone" id="pricelist-dropzone" style="padding: 24px;"
                                                  ondrop="handleDrop(event, 'pricelist')"
                                                  ondragover="handleDragOver(event)"
@@ -783,7 +783,7 @@
                                                     <polyline points="17 8 12 3 7 8"/>
                                                     <line x1="12" y1="3" x2="12" y2="15"/>
                                                 </svg>
-                                                <p><span data-i18n="catalog.dragDrop">드래그 & 드롭 또는</span> <label for="pricelist-file" class="wd-link" data-i18n="catalog.browse">찾아보기</label></p>
+                                                <p><span data-i18n="catalog.dragDrop">Drag & drop or</span> <label for="pricelist-file" class="wd-link" data-i18n="catalog.browse">browse</label></p>
                                                 <span class="wd-dropzone-hint">PDF, Excel, CSV</span>
                                             </div>
                                         </div>
@@ -793,8 +793,8 @@
                                             <div class="wd-file-item">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                                 <span class="wd-file-name" id="pricelist-filename"></span>
-                                                <span class="wd-badge wd-badge-success"><span id="price-matched-count">0</span>/<span id="price-total-count">0</span> 매칭</span>
-                                                <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="resetPriceList()">초기화</button>
+                                                <span class="wd-badge wd-badge-success"><span id="price-matched-count">0</span>/<span id="price-total-count">0</span> matched</span>
+                                                <button type="button" class="btn btn-tertiary btn-sm" onclick="resetPriceList()">Reset</button>
                                             </div>
                                         </div>
 
@@ -803,11 +803,11 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 40px;"></th>
-                                                    <th data-i18n="products.product">상품</th>
-                                                    <th data-i18n="modal.category">카테고리</th>
-                                                    <th data-i18n="catalog.price">기존 가격</th>
-                                                    <th data-i18n="catalog.newPrice">새 가격</th>
-                                                    <th data-i18n="catalog.actions">관리</th>
+                                                    <th data-i18n="products.product">Product</th>
+                                                    <th data-i18n="modal.category">Category</th>
+                                                    <th data-i18n="catalog.price">Current Price</th>
+                                                    <th data-i18n="catalog.newPrice">New Price</th>
+                                                    <th data-i18n="catalog.actions">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="price-match-tbody">
@@ -816,12 +816,12 @@
                                         </table>
 
                                         <div style="display: flex; justify-content: space-between; margin-top: 24px;">
-                                            <button class="wd-btn wd-btn-outline" onclick="goToCatalogStep(2)">
+                                            <button class="btn btn-tertiary btn-md" onclick="goToCatalogStep(2)">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                                                <span data-i18n="catalog.backToReview">검토로 돌아가기</span>
+                                                <span data-i18n="catalog.backToReview">Back to Review</span>
                                             </button>
-                                            <button class="wd-btn wd-btn-primary wd-btn-lg" onclick="goToCatalogStep(4)">
-                                                <span data-i18n="catalog.finishRegistration">등록 완료</span>
+                                            <button class="btn btn-primary btn-lg" onclick="goToCatalogStep(4)">
+                                                <span data-i18n="catalog.finishRegistration">Finish Registration</span>
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                             </button>
                                         </div>
@@ -835,32 +835,32 @@
                                     <div class="wd-complete-icon" style="width: 64px; height: 64px; margin: 0 auto 24px; background: var(--wd-success-light); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
                                     </div>
-                                    <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px;" data-i18n="catalog.registrationComplete">등록 완료!</h3>
+                                    <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px;" data-i18n="catalog.registrationComplete">Registration Complete!</h3>
                                     <p style="color: var(--wd-gray-600); margin-bottom: 24px;">
-                                        <span id="registered-count">0</span>개 <span data-i18n="catalog.productsRegistered">상품이 등록되었습니다.</span>
+                                        <span id="registered-count">0</span> <span data-i18n="catalog.productsRegistered">products have been registered.</span>
                                     </p>
 
                                     <div style="display: inline-flex; gap: 24px; background: var(--wd-gray-50); padding: 16px 32px; border-radius: 8px; margin-bottom: 24px;">
                                         <div>
-                                            <div style="font-size: 12px; color: var(--wd-gray-500);">완료</div>
+                                            <div style="font-size: 12px; color: var(--wd-gray-500);">Complete</div>
                                             <div style="font-size: 18px; font-weight: 600;" id="final-complete-count">0</div>
                                         </div>
                                         <div>
-                                            <div style="font-size: 12px; color: var(--wd-gray-500);">미완료</div>
+                                            <div style="font-size: 12px; color: var(--wd-gray-500);">Incomplete</div>
                                             <div style="font-size: 18px; font-weight: 600;" id="final-incomplete-count">0</div>
                                         </div>
                                         <div>
-                                            <div style="font-size: 12px; color: var(--wd-gray-500);">가격 매칭</div>
+                                            <div style="font-size: 12px; color: var(--wd-gray-500);">Price Matched</div>
                                             <div style="font-size: 18px; font-weight: 600;" id="final-price-count">0</div>
                                         </div>
                                     </div>
 
                                     <div style="display: flex; gap: 12px; justify-content: center;">
-                                        <button class="wd-btn wd-btn-outline" onclick="startNewCatalog()">
-                                            <span data-i18n="catalog.registerAnother">다른 카탈로그 등록</span>
+                                        <button class="btn btn-tertiary btn-md" onclick="startNewCatalog()">
+                                            <span data-i18n="catalog.registerAnother">Register Another Catalog</span>
                                         </button>
-                                        <button class="wd-btn wd-btn-primary" onclick="showSection('product-list')">
-                                            <span data-i18n="catalog.viewProductList">상품 목록 보기</span>
+                                        <button class="btn btn-primary btn-md" onclick="showSection('product-list')">
+                                            <span data-i18n="catalog.viewProductList">View Product List</span>
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                         </button>
                                     </div>
@@ -870,18 +870,18 @@
                             <!-- Upload History -->
                             <div class="wd-card" style="margin: 0 24px 24px;">
                                 <div class="wd-card-header">
-                                    <h3 class="wd-card-title" data-i18n="catalog.uploadHistory">업로드 내역</h3>
+                                    <h3 class="wd-card-title" data-i18n="catalog.uploadHistory">Upload History</h3>
                                 </div>
                                 <div class="wd-card-body" style="padding: 0;">
                                     <table class="wd-table">
                                         <thead>
                                             <tr>
-                                                <th data-i18n="catalog.fileName">파일명</th>
-                                                <th data-i18n="catalog.type">유형</th>
-                                                <th data-i18n="catalog.uploaded">업로드일</th>
-                                                <th data-i18n="catalog.status">상태</th>
-                                                <th data-i18n="catalog.products">상품</th>
-                                                <th data-i18n="catalog.actions">관리</th>
+                                                <th data-i18n="catalog.fileName">File Name</th>
+                                                <th data-i18n="catalog.type">Type</th>
+                                                <th data-i18n="catalog.uploaded">Uploaded</th>
+                                                <th data-i18n="catalog.status">Status</th>
+                                                <th data-i18n="catalog.products">Products</th>
+                                                <th data-i18n="catalog.actions">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody id="upload-history-tbody">
@@ -892,12 +892,12 @@
                                                         product_catalog_2024.pdf
                                                     </div>
                                                 </td>
-                                                <td><span class="wd-badge wd-badge-info" data-i18n="catalog.productCatalog">카탈로그</span></td>
+                                                <td><span class="wd-badge wd-badge-info" data-i18n="catalog.productCatalog">Product Catalog</span></td>
                                                 <td>2025.02.02</td>
-                                                <td><span class="wd-badge wd-badge-success" data-i18n="status.processed">처리완료</span></td>
-                                                <td>24개 추출</td>
+                                                <td><span class="wd-badge wd-badge-success" data-i18n="status.processed">Processed</span></td>
+                                                <td>24 extracted</td>
                                                 <td>
-                                                    <button class="wd-btn wd-btn-outline wd-btn-sm" data-i18n="inquiry.viewDetails">보기</button>
+                                                    <button class="btn btn-tertiary btn-sm" data-i18n="inquiry.viewDetails">View Details</button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -907,12 +907,12 @@
                                                         price_list_Q1_2025.xlsx
                                                     </div>
                                                 </td>
-                                                <td><span class="wd-badge wd-badge-success" data-i18n="catalog.priceList">가격표</span></td>
+                                                <td><span class="wd-badge wd-badge-success" data-i18n="catalog.priceList">Price List</span></td>
                                                 <td>2025.02.01</td>
-                                                <td><span class="wd-badge wd-badge-success" data-i18n="status.matched">매칭완료</span></td>
-                                                <td>18개 매칭</td>
+                                                <td><span class="wd-badge wd-badge-success" data-i18n="status.matched">Matched</span></td>
+                                                <td>18 matched</td>
                                                 <td>
-                                                    <button class="wd-btn wd-btn-outline wd-btn-sm" data-i18n="inquiry.viewDetails">보기</button>
+                                                    <button class="btn btn-tertiary btn-sm" data-i18n="inquiry.viewDetails">View Details</button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -925,10 +925,10 @@
                         <div class="dashboard-panel" id="panel-product-list">
                             <!-- Page Header -->
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="products.listTitle">상품 목록</h2>
-                                <button class="wd-btn wd-btn-primary" onclick="openAddProductModal()">
+                                <h2 class="wd-page-title" data-i18n="products.listTitle">Product List</h2>
+                                <button class="btn btn-primary btn-md" onclick="openAddProductModal()">
                                     <span>+</span>
-                                    <span data-i18n="products.addProduct">상품 등록</span>
+                                    <span data-i18n="products.addProduct">Add Product</span>
                                 </button>
                             </div>
 
@@ -941,27 +941,27 @@
                                         </div>
                                     </div>
                                     <div class="wd-quality-details">
-                                        <h4 style="margin: 0 0 12px; font-size: 14px; font-weight: 600;" data-i18n="products.dataCompleteness">데이터 완성도</h4>
+                                        <h4 style="margin: 0 0 12px; font-size: 14px; font-weight: 600;" data-i18n="products.dataCompleteness">Data Completeness</h4>
                                         <ul class="wd-quality-checklist">
                                             <li class="wd-quality-complete">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                                                <span data-i18n="products.requiredFields">필수 항목</span> (24/24)
+                                                <span data-i18n="products.requiredFields">Required fields</span> (24/24)
                                             </li>
                                             <li class="wd-quality-complete">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                                                <span data-i18n="catalog.priceList">가격</span> (20/24)
+                                                <span data-i18n="catalog.priceList">Price</span> (20/24)
                                             </li>
                                             <li class="wd-quality-incomplete">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                                MOQ (19/24) - <a href="#" class="wd-link" onclick="filterMissing('moq')">추가하기</a>
+                                                MOQ (19/24) - <a href="#" class="wd-link" onclick="filterMissing('moq')">Add missing</a>
                                             </li>
                                             <li class="wd-quality-incomplete">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                                <span data-i18n="products.missingImages">이미지</span> (12/24) - <a href="#" class="wd-link" onclick="filterMissing('images')">추가하기</a>
+                                                <span data-i18n="products.missingImages">Images</span> (12/24) - <a href="#" class="wd-link" onclick="filterMissing('images')">Add missing</a>
                                             </li>
                                             <li class="wd-quality-incomplete">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                                <span data-i18n="modal.certifications">인증서</span> (8/24) - <a href="#" class="wd-link" onclick="filterMissing('cert')">추가하기</a>
+                                                <span data-i18n="modal.certifications">Certifications</span> (8/24) - <a href="#" class="wd-link" onclick="filterMissing('cert')">Add missing</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -972,16 +972,16 @@
                             <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px 16px;">
                                 <div class="wd-filter-group" style="display: flex; gap: 12px; align-items: center;">
                                     <select id="product-list-filter" class="wd-input wd-select" style="width: 180px;" onchange="filterProductList()">
-                                        <option value="all" data-i18n="products.allProducts">전체 상품</option>
-                                        <option value="complete" data-i18n="products.complete">완료</option>
-                                        <option value="incomplete" data-i18n="products.incompleteData">미완료</option>
-                                        <option value="no-moq" data-i18n="products.missingMOQ">MOQ 누락</option>
-                                        <option value="no-image" data-i18n="products.missingImages">이미지 누락</option>
-                                        <option value="no-cert" data-i18n="products.missingCerts">인증서 누락</option>
+                                        <option value="all" data-i18n="products.allProducts">All Products</option>
+                                        <option value="complete" data-i18n="products.complete">Complete</option>
+                                        <option value="incomplete" data-i18n="products.incompleteData">Incomplete</option>
+                                        <option value="no-moq" data-i18n="products.missingMOQ">Missing MOQ</option>
+                                        <option value="no-image" data-i18n="products.missingImages">Missing Images</option>
+                                        <option value="no-cert" data-i18n="products.missingCerts">Missing Certifications</option>
                                     </select>
                                 </div>
                                 <div class="wd-filter-actions" style="display: flex; gap: 8px;">
-                                    <button class="wd-btn wd-btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">CSV 내보내기</button>
+                                    <button class="btn btn-tertiary btn-md" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
                                 </div>
                             </div>
 
@@ -990,14 +990,14 @@
                                 <table class="wd-table">
                                     <thead>
                                         <tr>
-                                            <th data-i18n="products.product">상품</th>
-                                            <th data-i18n="modal.category">카테고리</th>
+                                            <th data-i18n="products.product">Product</th>
+                                            <th data-i18n="modal.category">Category</th>
                                             <th data-i18n="products.sku">SKU</th>
-                                            <th data-i18n="products.priceFOB">가격 (FOB)</th>
+                                            <th data-i18n="products.priceFOB">Price (FOB)</th>
                                             <th data-i18n="products.moq">MOQ</th>
-                                            <th data-i18n="modal.certifications">인증서</th>
-                                            <th data-i18n="catalog.status">상태</th>
-                                            <th data-i18n="catalog.actions">관리</th>
+                                            <th data-i18n="modal.certifications">Certifications</th>
+                                            <th data-i18n="catalog.status">Status</th>
+                                            <th data-i18n="catalog.actions">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="product-list-tbody">
@@ -1020,9 +1020,9 @@
                                                 <span class="wd-badge wd-badge-success">Organic</span>
                                                 <span class="wd-badge wd-badge-success">HACCP</span>
                                             </td>
-                                            <td><span class="wd-badge wd-badge-success">완료</span></td>
+                                            <td><span class="wd-badge wd-badge-success">Complete</span></td>
                                             <td>
-                                                <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editProduct(1)" data-i18n="products.edit">수정</button>
+                                                <button class="btn btn-tertiary btn-sm" onclick="editProduct(1)" data-i18n="products.edit">Edit</button>
                                             </td>
                                         </tr>
                                         <tr class="wd-row-warning">
@@ -1040,15 +1040,15 @@
                                             <td>CHE-003</td>
                                             <td>$18.00 - $22.00</td>
                                             <td class="wd-missing-data">
-                                                <span class="wd-badge wd-badge-warning">누락</span>
-                                                <button class="wd-btn-link" onclick="addMOQ(3)">+ 추가</button>
+                                                <span class="wd-badge wd-badge-warning">Missing</span>
+                                                <button class="wd-btn-link" onclick="addMOQ(3)">+ Add</button>
                                             </td>
                                             <td>
                                                 <span class="wd-badge wd-badge-info">DOP</span>
                                             </td>
-                                            <td><span class="wd-badge wd-badge-warning">미완료</span></td>
+                                            <td><span class="wd-badge wd-badge-warning">Incomplete</span></td>
                                             <td>
-                                                <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="editProduct(3)" data-i18n="products.fillIn">입력하기</button>
+                                                <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="editProduct(3)" data-i18n="products.fillIn">Fill in</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1058,13 +1058,13 @@
                             <!-- Pagination -->
                             <div class="wd-pagination" style="padding: 16px 24px;">
                                 <div class="wd-pagination-info">
-                                    <span>총 24개 중</span>
+                                    <span>Showing</span>
                                     <select class="wd-input wd-select" style="width: 80px; padding: 6px 10px;">
                                         <option>20</option>
                                         <option>50</option>
                                         <option>100</option>
                                     </select>
-                                    <span>개씩 보기</span>
+                                    <span>per page</span>
                                 </div>
                                 <div class="wd-pagination-pages">
                                     <button class="wd-pagination-btn" disabled>&lt;</button>
@@ -1080,17 +1080,17 @@
                         <div class="dashboard-panel" id="panel-po-management">
                             <!-- Page Header -->
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="sales.poManagement">발주서</h2>
-                                <button class="wd-btn wd-btn-primary" onclick="openAddPOModal()">
+                                <h2 class="wd-page-title" data-i18n="sales.poManagement">PO Management</h2>
+                                <button class="btn btn-primary btn-md" onclick="openAddPOModal()">
                                     <span>+</span>
-                                    <span data-i18n="sales.addPO">발주서 등록</span>
+                                    <span data-i18n="sales.addPO">Add PO</span>
                                 </button>
                             </div>
 
                             <!-- Tabs -->
                             <div class="wd-tabs" style="padding: 0 24px;">
-                                <button class="wd-tab active" onclick="filterPOByTab('active')" data-i18n="sales.activePO">진행중 발주서</button>
-                                <button class="wd-tab" onclick="filterPOByTab('cancelled')" data-i18n="sales.cancelledPO">취소된 발주서</button>
+                                <button class="wd-tab active" onclick="filterPOByTab('active')" data-i18n="sales.activePO">Active POs</button>
+                                <button class="wd-tab" onclick="filterPOByTab('cancelled')" data-i18n="sales.cancelledPO">Cancelled POs</button>
                             </div>
 
                             <!-- Filter Bar -->
@@ -1101,7 +1101,7 @@
                                         <circle cx="11" cy="11" r="8"></circle>
                                         <path d="m21 21-4.3-4.3"></path>
                                     </svg>
-                                    <input type="text" id="po-search" class="wd-input" placeholder="검색어를 입력하세요" style="width: 280px;" oninput="searchPO()">
+                                    <input type="text" id="po-search" class="wd-input" placeholder="Search PO#, Buyer..." style="width: 280px;" oninput="searchPO()">
                                 </div>
                             </div>
 
@@ -1114,11 +1114,11 @@
                                     <thead>
                                         <tr>
                                             <th class="sortable" onclick="sortPOTable('poNumber')">
-                                                <span data-i18n="sales.poNumber">발주 번호</span>
+                                                <span data-i18n="sales.poNumber">PO Number</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
                                             <th class="th-filter">
-                                                <span data-i18n="sales.status">발주 상태</span>
+                                                <span data-i18n="sales.status">Status</span>
                                                 <div class="wd-column-filter">
                                                     <button class="wd-filter-btn" onclick="toggleStatusFilter(event)">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1128,43 +1128,43 @@
                                                     <div class="wd-filter-dropdown" id="status-filter-dropdown">
                                                         <label class="wd-filter-option">
                                                             <input type="radio" name="status-filter" value="all" checked onchange="applyStatusFilter('all')">
-                                                            <span>전체</span>
+                                                            <span>All</span>
                                                         </label>
                                                         <label class="wd-filter-option">
                                                             <input type="radio" name="status-filter" value="pending" onchange="applyStatusFilter('pending')">
-                                                            <span>등록완료</span>
+                                                            <span>Registered</span>
                                                         </label>
                                                         <label class="wd-filter-option">
                                                             <input type="radio" name="status-filter" value="confirmed" onchange="applyStatusFilter('confirmed')">
-                                                            <span>운송요청완료</span>
+                                                            <span>Shipping Requested</span>
                                                         </label>
                                                         <label class="wd-filter-option">
                                                             <input type="radio" name="status-filter" value="shipping" onchange="applyStatusFilter('shipping')">
-                                                            <span>운송중</span>
+                                                            <span>In Shipping</span>
                                                         </label>
                                                         <label class="wd-filter-option">
                                                             <input type="radio" name="status-filter" value="completed" onchange="applyStatusFilter('completed')">
-                                                            <span>완료</span>
+                                                            <span>Completed</span>
                                                         </label>
                                                     </div>
                                                 </div>
                                             </th>
                                             <th class="sortable" onclick="sortPOTable('productName')">
-                                                <span data-i18n="sales.productName">품목명</span>
+                                                <span data-i18n="sales.productName">Product Name</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
                                             <th class="sortable" onclick="sortPOTable('totalAmount')">
-                                                <span data-i18n="sales.totalAmount">총 금액</span>
+                                                <span data-i18n="sales.totalAmount">Total Amount</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
                                             <th class="sortable" onclick="sortPOTable('exporter')">
-                                                <span data-i18n="sales.exporter">수출자 회사명</span>
+                                                <span data-i18n="sales.exporter">Exporter</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
-                                            <th data-i18n="sales.paymentTerms">결제 조건</th>
-                                            <th data-i18n="sales.incoterms">인코텀즈</th>
+                                            <th data-i18n="sales.paymentTerms">Payment Terms</th>
+                                            <th data-i18n="sales.incoterms">Incoterms</th>
                                             <th class="sortable" onclick="sortPOTable('modifiedDate')">
-                                                <span data-i18n="sales.modifiedDate">변경일시</span>
+                                                <span data-i18n="sales.modifiedDate">Modified Date</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
                                         </tr>
@@ -1172,8 +1172,8 @@
                                 <tbody id="po-list-tbody">
                                     <tr data-status="pending" data-po="20260202171" onclick="viewPODetail('20260202171')" style="cursor: pointer;">
                                         <td>20260202171</td>
-                                        <td><span class="wd-badge wd-badge-gray">등록완료</span></td>
-                                        <td>얇은 바나나 슬라이스 60g</td>
+                                        <td><span class="wd-badge wd-badge-gray">Registered</span></td>
+                                        <td>Thin Banana Slices 60g</td>
                                         <td>USD 1,128</td>
                                         <td>CJ UNIWORLD CORPORATION</td>
                                         <td>T/T</td>
@@ -1182,8 +1182,8 @@
                                     </tr>
                                     <tr data-status="confirmed" data-po="PO20260203048953" onclick="viewPODetail('PO20260203048953')" style="cursor: pointer;">
                                         <td>PO20260203048953</td>
-                                        <td><span class="wd-badge wd-badge-primary">운송요청완료</span></td>
-                                        <td>냉동 버터 크로아상 생지(버터 24%)</td>
+                                        <td><span class="wd-badge wd-badge-primary">Shipping Requested</span></td>
+                                        <td>Frozen Butter Croissant Dough (24% Butter)</td>
                                         <td>EUR 806.4</td>
                                         <td>DELIFRANCE</td>
                                         <td>T/T</td>
@@ -1192,10 +1192,10 @@
                                     </tr>
                                     <tr data-status="confirmed" data-po="PO2026012800A2C" onclick="viewPODetail('PO2026012800A2C')" style="cursor: pointer;">
                                         <td>PO2026012800A2C</td>
-                                        <td><span class="wd-badge wd-badge-primary">운송요청완료</span></td>
+                                        <td><span class="wd-badge wd-badge-primary">Shipping Requested</span></td>
                                         <td>
-                                            대용량 피스타치오 스프레드 1KG
-                                            <a href="#" class="wd-link" onclick="event.stopPropagation();">외 1건</a>
+                                            Pistachio Spread 1KG
+                                            <a href="#" class="wd-link" onclick="event.stopPropagation();">+1 more</a>
                                         </td>
                                         <td>EUR 16,272</td>
                                         <td>Amorelli Spreads BV</td>
@@ -1210,13 +1210,13 @@
                             <!-- Pagination -->
                             <div class="wd-pagination" style="padding: 16px 24px;">
                                 <div class="wd-pagination-info">
-                                    <span>총 3개 중</span>
+                                    <span>Showing</span>
                                     <select class="wd-input wd-select" style="width: 80px; padding: 6px 10px;">
                                         <option>20</option>
                                         <option>50</option>
                                         <option>100</option>
                                     </select>
-                                    <span>개씩 보기</span>
+                                    <span>per page</span>
                                 </div>
                                 <div class="wd-pagination-pages">
                                     <button class="wd-pagination-btn" disabled>&lt;</button>
@@ -1233,7 +1233,7 @@
                                 <div class="po-detail-header">
                                     <div class="po-detail-title">
                                         <button class="btn-back" onclick="backToPOList()">←</button>
-                                        <h2 data-i18n="po.orderInfo">발주 정보</h2>
+                                        <h2 data-i18n="po.orderInfo">Order Information</h2>
                                     </div>
                                     <button class="btn-icon" onclick="downloadPO()" title="Download">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1248,15 +1248,15 @@
                                 <div class="po-detail-info-row">
                                     <div class="po-number-section">
                                         <span class="po-detail-number" id="po-detail-number">PO20260203048953</span>
-                                        <span class="status-badge shipping-requested" id="po-detail-status">운송요청완료</span>
+                                        <span class="status-badge shipping-requested" id="po-detail-status">Shipping Requested</span>
                                         <span class="po-detail-date" id="po-detail-date">2026.02.03 13:44</span>
                                     </div>
-                                    <button class="wd-btn wd-btn-outline wd-btn-danger" onclick="cancelPO()" data-i18n="po.cancelOrder">발주 취소</button>
+                                    <button class="btn btn-destructive btn-md" onclick="cancelPO()" data-i18n="po.cancelOrder">Cancel Order</button>
                                 </div>
 
                                 <!-- Exporter Info -->
                                 <div class="po-detail-section">
-                                    <h3 class="section-title" data-i18n="po.exporterInfo">수출자 정보</h3>
+                                    <h3 class="section-title" data-i18n="po.exporterInfo">Exporter Information</h3>
                                     <div class="company-info-card">
                                         <div class="company-avatar">
                                             <span>🏢</span>
@@ -1283,7 +1283,7 @@
 
                                 <!-- Importer Info -->
                                 <div class="po-detail-section">
-                                    <h3 class="section-title" data-i18n="po.importerInfo">수입자 정보</h3>
+                                    <h3 class="section-title" data-i18n="po.importerInfo">Importer Information</h3>
                                     <div class="company-info-card">
                                         <div class="company-avatar">
                                             <span>🏢</span>
@@ -1310,18 +1310,18 @@
 
                                 <!-- Trade Info -->
                                 <div class="po-detail-section">
-                                    <h3 class="section-title" data-i18n="po.tradeInfo">거래 정보</h3>
+                                    <h3 class="section-title" data-i18n="po.tradeInfo">Trade Information</h3>
                                     <div class="trade-info-grid">
                                         <div class="trade-info-item">
-                                            <span class="trade-label" data-i18n="po.incoterms">인코텀즈</span>
-                                            <span class="trade-value" id="po-incoterms">FCA (운송인 인도)</span>
+                                            <span class="trade-label" data-i18n="po.incoterms">Incoterms</span>
+                                            <span class="trade-value" id="po-incoterms">FCA (Free Carrier)</span>
                                         </div>
                                         <div class="trade-info-item">
-                                            <span class="trade-label" data-i18n="po.paymentTerms">결제 조건</span>
-                                            <span class="trade-value" id="po-payment-terms">T/T (전신환송금)</span>
+                                            <span class="trade-label" data-i18n="po.paymentTerms">Payment Terms</span>
+                                            <span class="trade-value" id="po-payment-terms">T/T (Telegraphic Transfer)</span>
                                         </div>
                                         <div class="trade-info-item">
-                                            <span class="trade-label" data-i18n="po.currency">통화</span>
+                                            <span class="trade-label" data-i18n="po.currency">Currency</span>
                                             <span class="trade-value" id="po-currency">EUR</span>
                                         </div>
                                     </div>
@@ -1329,20 +1329,20 @@
 
                                 <!-- Items Info -->
                                 <div class="po-detail-section">
-                                    <h3 class="section-title"><span data-i18n="po.itemsInfo">품목 정보</span>(<span id="po-items-count">1</span>)</h3>
+                                    <h3 class="section-title"><span data-i18n="po.itemsInfo">Items</span>(<span id="po-items-count">1</span>)</h3>
                                     <table class="po-items-table">
                                         <thead>
                                             <tr>
-                                                <th data-i18n="po.itemName">품목명</th>
-                                                <th data-i18n="po.quantity">수량</th>
-                                                <th data-i18n="po.unit">단위</th>
-                                                <th data-i18n="po.unitPrice">단가</th>
-                                                <th data-i18n="po.subtotal">합계</th>
+                                                <th data-i18n="po.itemName">Item Name</th>
+                                                <th data-i18n="po.quantity">Quantity</th>
+                                                <th data-i18n="po.unit">Unit</th>
+                                                <th data-i18n="po.unitPrice">Unit Price</th>
+                                                <th data-i18n="po.subtotal">Subtotal</th>
                                             </tr>
                                         </thead>
                                         <tbody id="po-items-tbody">
                                             <tr>
-                                                <td>냉동 버터 크로아상 생지(버터 24%)</td>
+                                                <td>Frozen Butter Croissant Dough (24% Butter)</td>
                                                 <td class="text-right">40</td>
                                                 <td>boxes</td>
                                                 <td class="text-right">20.16</td>
@@ -1351,8 +1351,8 @@
                                         </tbody>
                                         <tfoot>
                                             <tr class="total-row">
-                                                <td colspan="2"><span data-i18n="po.totalQuantity">총 수량</span> <strong id="po-total-qty">40</strong></td>
-                                                <td colspan="3" class="text-right"><span data-i18n="po.totalAmount">총 금액</span> <strong><span id="po-total-currency">EUR</span> <span id="po-total-amount">806.4</span></strong></td>
+                                                <td colspan="2"><span data-i18n="po.totalQuantity">Total Quantity</span> <strong id="po-total-qty">40</strong></td>
+                                                <td colspan="3" class="text-right"><span data-i18n="po.totalAmount">Total Amount</span> <strong><span id="po-total-currency">EUR</span> <span id="po-total-amount">806.4</span></strong></td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -1360,9 +1360,9 @@
 
                                 <!-- Exporter Notes -->
                                 <div class="po-detail-section">
-                                    <h3 class="section-title" data-i18n="po.exporterNotes">수출자 전달 사항</h3>
+                                    <h3 class="section-title" data-i18n="po.exporterNotes">Exporter Notes</h3>
                                     <div class="notes-box">
-                                        <div class="notes-label" data-i18n="po.specialNotes">특이사항</div>
+                                        <div class="notes-label" data-i18n="po.specialNotes">Special Notes</div>
                                         <div class="notes-content" id="po-notes">-</div>
                                     </div>
                                 </div>
@@ -1373,14 +1373,14 @@
                         <div class="dashboard-panel" id="panel-inquiries">
                             <!-- Page Header -->
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="inquiry.title">주문 관리</h2>
+                                <h2 class="wd-page-title" data-i18n="inquiry.title">Inquiries</h2>
                             </div>
 
                             <!-- Tabs -->
                             <div class="wd-tabs" style="padding: 0 24px;">
-                                <button class="wd-tab active" data-i18n="inquiry.allInquiries">전체 문의</button>
-                                <button class="wd-tab" data-i18n="inquiry.quotationRequest">견적 요청</button>
-                                <button class="wd-tab" data-i18n="inquiry.sampleRequest">샘플 요청</button>
+                                <button class="wd-tab active" data-i18n="inquiry.allInquiries">All Inquiries</button>
+                                <button class="wd-tab" data-i18n="inquiry.quotationRequest">Quotation Request</button>
+                                <button class="wd-tab" data-i18n="inquiry.sampleRequest">Sample Request</button>
                             </div>
 
                             <!-- Inquiry List -->
@@ -1389,13 +1389,13 @@
                                     <div class="wd-inquiry-card wd-inquiry-new">
                                         <div class="wd-inquiry-header">
                                             <div class="wd-inquiry-badges">
-                                                <span class="wd-badge wd-badge-primary">신규</span>
-                                                <span class="wd-badge wd-badge-info">견적 요청</span>
+                                                <span class="wd-badge wd-badge-primary">New</span>
+                                                <span class="wd-badge wd-badge-info">Quotation Request</span>
                                             </div>
-                                            <span class="wd-inquiry-date">2시간 전</span>
+                                            <span class="wd-inquiry-date">2 hours ago</span>
                                         </div>
                                         <div class="wd-inquiry-body">
-                                            <h4 class="wd-inquiry-title">Extra Virgin Olive Oil 견적 요청</h4>
+                                            <h4 class="wd-inquiry-title">Extra Virgin Olive Oil Quotation Request</h4>
                                             <p class="wd-inquiry-from">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                                 ABC Distribution Co. (South Korea)
@@ -1413,20 +1413,20 @@
                                             <p class="wd-inquiry-message">"We are interested in your organic olive oil for the Korean market..."</p>
                                         </div>
                                         <div class="wd-inquiry-footer">
-                                            <button class="wd-btn wd-btn-outline" data-i18n="inquiry.viewDetails">상세 보기</button>
-                                            <button class="wd-btn wd-btn-primary" data-i18n="inquiry.sendQuotation">견적 발송</button>
+                                            <button class="btn btn-tertiary btn-md" data-i18n="inquiry.viewDetails">View Details</button>
+                                            <button class="btn btn-primary btn-md" data-i18n="inquiry.sendQuotation">Send Quotation</button>
                                         </div>
                                     </div>
 
                                     <div class="wd-inquiry-card">
                                         <div class="wd-inquiry-header">
                                             <div class="wd-inquiry-badges">
-                                                <span class="wd-badge wd-badge-warning">샘플 요청</span>
+                                                <span class="wd-badge wd-badge-warning">Sample Request</span>
                                             </div>
-                                            <span class="wd-inquiry-date">1일 전</span>
+                                            <span class="wd-inquiry-date">1 day ago</span>
                                         </div>
                                         <div class="wd-inquiry-body">
-                                            <h4 class="wd-inquiry-title">Aged Parmesan 샘플 요청</h4>
+                                            <h4 class="wd-inquiry-title">Aged Parmesan Sample Request</h4>
                                             <p class="wd-inquiry-from">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                                 XYZ Foods Ltd. (Japan)
@@ -1439,8 +1439,8 @@
                                             </div>
                                         </div>
                                         <div class="wd-inquiry-footer">
-                                            <button class="wd-btn wd-btn-outline" data-i18n="inquiry.viewDetails">상세 보기</button>
-                                            <button class="wd-btn wd-btn-primary" data-i18n="inquiry.approveSample">샘플 승인</button>
+                                            <button class="btn btn-tertiary btn-md" data-i18n="inquiry.viewDetails">View Details</button>
+                                            <button class="btn btn-primary btn-md" data-i18n="inquiry.approveSample">Approve Sample</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1451,10 +1451,10 @@
                         <div class="dashboard-panel" id="panel-profile">
                             <!-- Page Header -->
                             <div class="wd-page-header">
-                                <h2 class="wd-page-title" data-i18n="profile.title">라벨 관리</h2>
-                                <button class="wd-btn wd-btn-primary" onclick="saveProfile(event)">
+                                <h2 class="wd-page-title" data-i18n="profile.title">Company Profile</h2>
+                                <button class="btn btn-primary btn-md" onclick="saveProfile(event)">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                                    <span data-i18n="profile.saveChanges">저장</span>
+                                    <span data-i18n="profile.saveChanges">Save Changes</span>
                                 </button>
                             </div>
 
@@ -1462,7 +1462,7 @@
                                 <!-- Company Logo Section -->
                                 <div class="wd-card" style="margin: 0 24px 24px;">
                                     <div class="wd-card-header">
-                                        <h3 class="wd-card-title" data-i18n="profile.companyLogo">회사 로고</h3>
+                                        <h3 class="wd-card-title" data-i18n="profile.companyLogo">Company Logo</h3>
                                     </div>
                                     <div class="wd-card-body">
                                         <div class="wd-logo-upload">
@@ -1474,27 +1474,27 @@
                                                         <circle cx="8.5" cy="8.5" r="1.5"/>
                                                         <polyline points="21 15 16 10 5 21"/>
                                                     </svg>
-                                                    <span data-i18n="profile.noLogo">로고 없음</span>
+                                                    <span data-i18n="profile.noLogo">No Logo</span>
                                                 </div>
                                             </div>
                                             <div class="wd-logo-actions">
                                                 <input type="file" id="logo-input" accept="image/*" style="display: none;" onchange="handleLogoSelect(event)">
-                                                <button type="button" class="wd-btn wd-btn-outline" onclick="document.getElementById('logo-input').click()">
+                                                <button type="button" class="btn btn-tertiary btn-md" onclick="document.getElementById('logo-input').click()">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                                         <polyline points="17 8 12 3 7 8"/>
                                                         <line x1="12" y1="3" x2="12" y2="15"/>
                                                     </svg>
-                                                    <span data-i18n="profile.uploadLogo">로고 업로드</span>
+                                                    <span data-i18n="profile.uploadLogo">Upload Logo</span>
                                                 </button>
-                                                <button type="button" class="wd-btn wd-btn-outline wd-btn-danger" id="remove-logo-btn" style="display: none;" onclick="removeLogo()">
+                                                <button type="button" class="btn btn-destructive btn-md" id="remove-logo-btn" style="display: none;" onclick="removeLogo()">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                         <polyline points="3 6 5 6 21 6"/>
                                                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                                     </svg>
-                                                    <span data-i18n="profile.removeLogo">삭제</span>
+                                                    <span data-i18n="profile.removeLogo">Remove</span>
                                                 </button>
-                                                <p class="wd-form-hint" data-i18n="profile.logoHint">권장: 200x200px, PNG 또는 JPG, 최대 2MB</p>
+                                                <p class="wd-form-hint" data-i18n="profile.logoHint">Recommended: 200x200px, PNG or JPG, Max 2MB</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1503,16 +1503,16 @@
                                 <!-- Basic Info Section -->
                                 <div class="wd-card" style="margin: 0 24px 24px;">
                                     <div class="wd-card-header">
-                                        <h3 class="wd-card-title" data-i18n="profile.basicInfo">기본 정보</h3>
+                                        <h3 class="wd-card-title" data-i18n="profile.basicInfo">Basic Information</h3>
                                     </div>
                                     <div class="wd-card-body">
                                         <div class="wd-form-row">
                                             <div class="wd-form-group">
-                                                <label class="wd-form-label"><span data-i18n="auth.companyName">회사명</span> *</label>
+                                                <label class="wd-form-label"><span data-i18n="auth.companyName">Company Name</span> *</label>
                                                 <input type="text" class="wd-input" value="Oleificio Ferrara S.r.l." required>
                                             </div>
                                             <div class="wd-form-group">
-                                                <label class="wd-form-label"><span data-i18n="auth.country">국가</span> *</label>
+                                                <label class="wd-form-label"><span data-i18n="auth.country">Country</span> *</label>
                                                 <select class="wd-input wd-select" required>
                                                     <option value="IT" selected data-i18n="countries.IT">Italy</option>
                                                 </select>
@@ -1520,16 +1520,16 @@
                                         </div>
                                         <div class="wd-form-row">
                                             <div class="wd-form-group">
-                                                <label class="wd-form-label"><span data-i18n="auth.businessEmail">업무용 이메일</span> *</label>
+                                                <label class="wd-form-label"><span data-i18n="auth.businessEmail">Business Email</span> *</label>
                                                 <input type="email" class="wd-input wd-input-readonly" value="sales@oleificio-ferrara.it" readonly title="Email cannot be changed">
                                             </div>
                                             <div class="wd-form-group">
-                                                <label class="wd-form-label" data-i18n="profile.phone">전화번호</label>
+                                                <label class="wd-form-label" data-i18n="profile.phone">Phone</label>
                                                 <input type="tel" class="wd-input" value="+39 0123 456789">
                                             </div>
                                         </div>
                                         <div class="wd-form-group">
-                                            <label class="wd-form-label" data-i18n="profile.website">웹사이트</label>
+                                            <label class="wd-form-label" data-i18n="profile.website">Website</label>
                                             <input type="url" class="wd-input" value="https://www.oleificio-ferrara.it">
                                         </div>
                                     </div>
@@ -1538,16 +1538,16 @@
                                 <!-- Company Details Section -->
                                 <div class="wd-card" style="margin: 0 24px 24px;">
                                     <div class="wd-card-header">
-                                        <h3 class="wd-card-title" data-i18n="profile.companyDetails">회사 상세</h3>
+                                        <h3 class="wd-card-title" data-i18n="profile.companyDetails">Company Details</h3>
                                     </div>
                                     <div class="wd-card-body">
                                         <div class="wd-form-row">
                                             <div class="wd-form-group">
-                                                <label class="wd-form-label" data-i18n="profile.yearEstablished">설립 연도</label>
+                                                <label class="wd-form-label" data-i18n="profile.yearEstablished">Year Established</label>
                                                 <input type="number" class="wd-input" value="1985" min="1800" max="2025">
                                             </div>
                                             <div class="wd-form-group">
-                                                <label class="wd-form-label" data-i18n="profile.employees">직원 수</label>
+                                                <label class="wd-form-label" data-i18n="profile.employees">Number of Employees</label>
                                                 <select class="wd-input wd-select">
                                                     <option value="1-10">1-10</option>
                                                     <option value="11-50" selected>11-50</option>
@@ -1558,7 +1558,7 @@
                                             </div>
                                         </div>
                                         <div class="wd-form-group">
-                                            <label class="wd-form-label" data-i18n="profile.description">회사 소개</label>
+                                            <label class="wd-form-label" data-i18n="profile.description">Company Description</label>
                                             <textarea class="wd-input wd-textarea" rows="4" data-i18n-placeholder="profile.descPlaceholder">Family-owned olive oil producer since 1985, specializing in premium extra virgin olive oil from Puglia region. Our products are certified organic and HACCP compliant.</textarea>
                                         </div>
                                     </div>
@@ -1567,10 +1567,10 @@
                                 <!-- Company Certifications Section -->
                                 <div class="wd-card" style="margin: 0 24px 24px;">
                                     <div class="wd-card-header">
-                                        <h3 class="wd-card-title" data-i18n="profile.companyCertifications">회사 인증</h3>
+                                        <h3 class="wd-card-title" data-i18n="profile.companyCertifications">Company Certifications</h3>
                                     </div>
                                     <div class="wd-card-body">
-                                        <p class="wd-form-hint" style="margin-bottom: 16px;" data-i18n="profile.companyCertsDesc">회사 전체에 적용되는 인증입니다. 개별 상품 인증은 상품 편집 시 추가할 수 있습니다.</p>
+                                        <p class="wd-form-hint" style="margin-bottom: 16px;" data-i18n="profile.companyCertsDesc">Certifications that apply to your entire company. Product-specific certifications can be added when editing each product.</p>
 
                                         <div class="wd-checkbox-grid">
                                             <label class="wd-checkbox-card">
@@ -1599,9 +1599,9 @@
                                             </label>
                                         </div>
 
-                                        <!-- 인증서 파일 업로드 -->
+                                        <!-- Certificate File Upload -->
                                         <div class="wd-upload-section" style="margin-top: 24px;">
-                                            <h4 class="wd-form-label" style="margin-bottom: 12px;" data-i18n="profile.uploadCertDocs">인증서 문서 업로드</h4>
+                                            <h4 class="wd-form-label" style="margin-bottom: 12px;" data-i18n="profile.uploadCertDocs">Upload Certification Documents</h4>
                                             <div class="wd-dropzone" id="company-cert-dropzone"
                                                  ondrop="handleDrop(event, 'company-cert')"
                                                  ondragover="handleDragOver(event)"
@@ -1612,14 +1612,14 @@
                                                     <polyline points="17 8 12 3 7 8"/>
                                                     <line x1="12" y1="3" x2="12" y2="15"/>
                                                 </svg>
-                                                <p><span data-i18n="catalog.dragDrop">드래그 & 드롭 또는</span> <label for="company-cert-file" class="wd-link" data-i18n="catalog.browse">찾아보기</label></p>
-                                                <span class="wd-dropzone-hint">PDF, JPG, PNG (최대 10MB)</span>
+                                                <p><span data-i18n="catalog.dragDrop">Drag & drop or</span> <label for="company-cert-file" class="wd-link" data-i18n="catalog.browse">browse</label></p>
+                                                <span class="wd-dropzone-hint" data-i18n="profile.certFileHint">PDF, JPG, PNG (Max 10MB)</span>
                                             </div>
                                             <div class="wd-file-list" id="company-cert-list">
                                                 <div class="wd-file-item">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                                     <span class="wd-file-name">HACCP_Certificate_2024.pdf</span>
-                                                    <span class="wd-badge wd-badge-success" data-i18n="profile.valid">유효</span>
+                                                    <span class="wd-badge wd-badge-success" data-i18n="profile.valid">Valid</span>
                                                     <button type="button" class="wd-btn-icon" onclick="removeCert('haccp')">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                                                     </button>
@@ -1627,7 +1627,7 @@
                                                 <div class="wd-file-item">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                                     <span class="wd-file-name">Organic_EU_Certificate.pdf</span>
-                                                    <span class="wd-badge wd-badge-success" data-i18n="profile.valid">유효</span>
+                                                    <span class="wd-badge wd-badge-success" data-i18n="profile.valid">Valid</span>
                                                     <button type="button" class="wd-btn-icon" onclick="removeCert('organic')">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                                                     </button>
@@ -1640,24 +1640,24 @@
                                 <!-- Trade Terms Section -->
                                 <div class="wd-card" style="margin: 0 24px 24px;">
                                     <div class="wd-card-header">
-                                        <h3 class="wd-card-title" data-i18n="profile.tradeTerms">거래 조건</h3>
+                                        <h3 class="wd-card-title" data-i18n="profile.tradeTerms">Trade Terms</h3>
                                     </div>
                                     <div class="wd-card-body">
                                         <div class="wd-form-row">
                                             <div class="wd-form-group">
-                                                <label class="wd-form-label" data-i18n="profile.minOrderValue">최소 주문 금액</label>
+                                                <label class="wd-form-label" data-i18n="profile.minOrderValue">Minimum Order Value</label>
                                                 <div class="wd-input-group">
                                                     <span class="wd-input-prefix">$</span>
                                                     <input type="number" class="wd-input" value="1000" min="0">
                                                 </div>
                                             </div>
                                             <div class="wd-form-group">
-                                                <label class="wd-form-label" data-i18n="profile.leadTime">리드타임 (일)</label>
+                                                <label class="wd-form-label" data-i18n="profile.leadTime">Lead Time (days)</label>
                                                 <input type="number" class="wd-input" value="14" min="1">
                                             </div>
                                         </div>
                                         <div class="wd-form-group">
-                                            <label class="wd-form-label" data-i18n="profile.paymentTerms">결제 조건</label>
+                                            <label class="wd-form-label" data-i18n="profile.paymentTerms">Payment Terms</label>
                                             <div class="wd-checkbox-inline">
                                                 <label class="wd-checkbox"><input type="checkbox" checked> T/T</label>
                                                 <label class="wd-checkbox"><input type="checkbox" checked> L/C</label>
@@ -1678,7 +1678,7 @@
         <div class="wd-modal-overlay" id="product-modal" style="display: none;">
             <div class="wd-modal">
                 <div class="wd-modal-header">
-                    <h3 class="wd-modal-title" data-i18n="modal.editProduct">상품 편집</h3>
+                    <h3 class="wd-modal-title" data-i18n="modal.editProduct">Edit Product</h3>
                     <button class="wd-btn-icon" onclick="closeProductModal()">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
@@ -1688,11 +1688,11 @@
                         <div class="wd-alert-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                         </div>
-                        <p style="margin: 0;" data-i18n="modal.fillMissing">아래 누락된 정보를 입력해주세요:</p>
+                        <p style="margin: 0;" data-i18n="modal.fillMissing">Please fill in the missing information:</p>
                     </div>
                     <form id="product-edit-form" class="wd-form">
                         <div class="wd-form-group">
-                            <label class="wd-form-label" data-i18n="modal.productName">상품명</label>
+                            <label class="wd-form-label" data-i18n="modal.productName">Product Name</label>
                             <input type="text" class="wd-input" id="edit-product-name" required>
                         </div>
                         <div class="wd-form-row">
@@ -1701,7 +1701,7 @@
                                 <input type="text" class="wd-input" id="edit-product-sku">
                             </div>
                             <div class="wd-form-group">
-                                <label class="wd-form-label" data-i18n="modal.category">카테고리</label>
+                                <label class="wd-form-label" data-i18n="modal.category">Category</label>
                                 <select class="wd-input wd-select" id="edit-product-category">
                                     <option value="oils" data-i18n="categories.oils">Oils & Vinegars</option>
                                     <option value="dairy" data-i18n="categories.dairy">Dairy & Cheese</option>
@@ -1711,39 +1711,39 @@
                         </div>
                         <div class="wd-form-row">
                             <div class="wd-form-group">
-                                <label class="wd-form-label" data-i18n="modal.priceMin">최소 가격 (FOB USD)</label>
+                                <label class="wd-form-label" data-i18n="modal.priceMin">Min Price (FOB USD)</label>
                                 <input type="number" class="wd-input" id="edit-price-min" step="0.01">
                             </div>
                             <div class="wd-form-group">
-                                <label class="wd-form-label" data-i18n="modal.priceMax">최대 가격 (FOB USD)</label>
+                                <label class="wd-form-label" data-i18n="modal.priceMax">Max Price (FOB USD)</label>
                                 <input type="number" class="wd-input" id="edit-price-max" step="0.01">
                             </div>
                         </div>
                         <div class="wd-form-row" style="background: var(--wd-warning-light); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
                             <div class="wd-form-group" style="margin-bottom: 0;">
                                 <label class="wd-form-label">
-                                    <span data-i18n="modal.moqLabel">MOQ (최소 주문 수량)</span>
-                                    <span class="wd-badge wd-badge-warning" style="margin-left: 8px;" data-i18n="modal.required">필수</span>
+                                    <span data-i18n="modal.moqLabel">MOQ (Minimum Order Quantity)</span>
+                                    <span class="wd-badge wd-badge-warning" style="margin-left: 8px;" data-i18n="modal.required">Required</span>
                                 </label>
-                                <input type="number" class="wd-input" id="edit-moq" placeholder="예: 100">
+                                <input type="number" class="wd-input" id="edit-moq" placeholder="e.g., 100">
                             </div>
                             <div class="wd-form-group" style="margin-bottom: 0;">
-                                <label class="wd-form-label" data-i18n="modal.moqUnit">MOQ 단위</label>
+                                <label class="wd-form-label" data-i18n="modal.moqUnit">MOQ Unit</label>
                                 <select class="wd-input wd-select" id="edit-moq-unit">
-                                    <option value="pieces" data-i18n="units.pieces">개</option>
-                                    <option value="bottles" data-i18n="units.bottles">병</option>
-                                    <option value="cases" data-i18n="units.cases">박스</option>
+                                    <option value="pieces" data-i18n="units.pieces">Pieces</option>
+                                    <option value="bottles" data-i18n="units.bottles">Bottles</option>
+                                    <option value="cases" data-i18n="units.cases">Cases</option>
                                     <option value="kg" data-i18n="units.kg">Kg</option>
                                 </select>
                             </div>
                         </div>
                         <div class="wd-form-group">
-                            <label class="wd-form-label" data-i18n="modal.specifications">사양</label>
+                            <label class="wd-form-label" data-i18n="modal.specifications">Specifications</label>
                             <textarea class="wd-input wd-textarea" id="edit-specs" rows="3" data-i18n-placeholder="modal.specsPlaceholder"></textarea>
                         </div>
                         <div class="wd-form-group">
-                            <label class="wd-form-label"><span data-i18n="modal.productCertifications">상품 인증</span></label>
-                            <p class="wd-form-hint" style="margin-bottom: 12px;" data-i18n="modal.productCertsDesc">이 상품에 해당하는 인증</p>
+                            <label class="wd-form-label"><span data-i18n="modal.productCertifications">Product Certifications</span></label>
+                            <p class="wd-form-hint" style="margin-bottom: 12px;" data-i18n="modal.productCertsDesc">Certifications applicable to this product</p>
                             <div class="wd-checkbox-grid" style="grid-template-columns: repeat(4, 1fr);">
                                 <label class="wd-checkbox-card"><input type="checkbox" value="organic"> <span class="wd-checkbox-label">Organic</span></label>
                                 <label class="wd-checkbox-card"><input type="checkbox" value="haccp"> <span class="wd-checkbox-label">HACCP</span></label>
@@ -1756,7 +1756,7 @@
                             </div>
                         </div>
                         <div class="wd-form-group">
-                            <label class="wd-form-label" data-i18n="modal.productImage">상품 이미지</label>
+                            <label class="wd-form-label" data-i18n="modal.productImage">Product Image</label>
                             <div class="wd-dropzone" style="padding: 24px;">
                                 <input type="file" id="edit-product-image" accept="image/*" hidden>
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1764,14 +1764,14 @@
                                     <circle cx="8.5" cy="8.5" r="1.5"/>
                                     <polyline points="21 15 16 10 5 21"/>
                                 </svg>
-                                <p><label for="edit-product-image" class="wd-link" data-i18n="modal.clickUpload">클릭하여 이미지 업로드</label></p>
+                                <p><label for="edit-product-image" class="wd-link" data-i18n="modal.clickUpload">Click to upload image</label></p>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="wd-modal-footer">
-                    <button class="wd-btn wd-btn-outline" onclick="closeProductModal()" data-i18n="modal.cancel">취소</button>
-                    <button class="wd-btn wd-btn-primary" onclick="saveProduct()" data-i18n="modal.saveProduct">저장</button>
+                    <button class="btn btn-tertiary btn-md" onclick="closeProductModal()" data-i18n="modal.cancel">Cancel</button>
+                    <button class="btn btn-primary btn-md" onclick="saveProduct()" data-i18n="modal.saveProduct">Save</button>
                 </div>
             </div>
         </div>
@@ -1783,13 +1783,13 @@
     <!-- Modular JS (ES6 modules) - Uncomment to use -->
     <!-- <script type="module" src="js/app.js"></script> -->
     <script>
-        // 언어 드롭다운 초기화
+        // Initialize language dropdown
         document.addEventListener('DOMContentLoaded', () => {
             initI18n();
             renderLanguageList();
         });
 
-        // 언어 드롭다운 토글
+        // Toggle language dropdown
         function toggleLanguageDropdown() {
             const menu = document.getElementById('language-menu');
             const dropdown = document.getElementById('language-dropdown');
@@ -1797,7 +1797,7 @@
             dropdown.classList.toggle('active');
         }
 
-        // 외부 클릭 시 드롭다운 닫기
+        // Close dropdown on outside click
         document.addEventListener('click', (e) => {
             const dropdown = document.getElementById('language-dropdown');
             if (dropdown && !dropdown.contains(e.target)) {
@@ -1806,7 +1806,7 @@
             }
         });
 
-        // 언어 목록 렌더링
+        // Render language list
         function renderLanguageList(filter = '') {
             const list = document.getElementById('language-list');
             const filterLower = filter.toLowerCase();
@@ -1828,7 +1828,7 @@
             `).join('');
         }
 
-        // 언어 선택
+        // Select language
         function selectLanguage(code) {
             setLanguage(code);
             renderLanguageList();
@@ -1836,7 +1836,7 @@
             document.getElementById('language-dropdown').classList.remove('active');
         }
 
-        // 언어 필터링
+        // Filter languages
         function filterLanguages(value) {
             renderLanguageList(value);
         }
@@ -1846,7 +1846,7 @@
     <div class="wd-modal-overlay" id="crop-modal" style="display: none;">
         <div class="wd-modal" style="max-width: 500px;">
             <div class="wd-modal-header">
-                <h3 class="wd-modal-title" data-i18n="profile.cropLogo">로고 자르기</h3>
+                <h3 class="wd-modal-title" data-i18n="profile.cropLogo">Crop Logo</h3>
                 <button type="button" class="wd-btn-icon" onclick="closeCropModal()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
@@ -1857,8 +1857,8 @@
                 </div>
             </div>
             <div class="wd-modal-footer">
-                <button type="button" class="wd-btn wd-btn-outline" onclick="closeCropModal()" data-i18n="common.cancel">취소</button>
-                <button type="button" class="wd-btn wd-btn-primary" onclick="applyCrop()" data-i18n="profile.applyCrop">적용</button>
+                <button type="button" class="btn btn-tertiary btn-md" onclick="closeCropModal()" data-i18n="common.cancel">Cancel</button>
+                <button type="button" class="btn btn-primary btn-md" onclick="applyCrop()" data-i18n="profile.applyCrop">Apply</button>
             </div>
         </div>
     </div>

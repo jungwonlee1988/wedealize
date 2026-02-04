@@ -172,7 +172,8 @@ const englishTranslations = {
         productsRegistered: "products have been registered.",
         registerAnother: "Register Another Catalog",
         viewProductList: "View Product List",
-        remove: "Remove"
+        remove: "Remove",
+        fileHint: "PDF, Excel, CSV (Max 50MB)"
     },
     products: {
         listTitle: "Product List",
@@ -233,7 +234,10 @@ const englishTranslations = {
         minOrderValue: "Minimum Order Value",
         leadTime: "Lead Time (days)",
         paymentTerms: "Payment Terms",
-        saveChanges: "Save Changes"
+        saveChanges: "Save Changes",
+        certFileHint: "PDF, JPG, PNG (Max 10MB)",
+        cropLogo: "Crop Logo",
+        applyCrop: "Apply"
     },
     modal: {
         editProduct: "Edit Product",
@@ -247,7 +251,7 @@ const englishTranslations = {
         specsPlaceholder: "Weight, packaging, ingredients...",
         certifications: "Certifications",
         productCertifications: "Product Certifications",
-        productCertsDesc: "Certifications specific to this product",
+        productCertsDesc: "Certifications applicable to this product",
         productImage: "Product Image",
         clickUpload: "Click to upload image",
         cancel: "Cancel",
