@@ -50,7 +50,7 @@ class AuthService {
         try {
             await api.post('/auth/send-verification', {
                 email: data.email,
-                company_name: data.company
+                companyName: data.company
             });
         } catch (error) {
             console.log('Using demo mode for verification');
@@ -72,7 +72,7 @@ class AuthService {
             const response = await api.post('/auth/verify-email', {
                 email: this.pendingRegistration.email,
                 code: code,
-                company_name: this.pendingRegistration.company,
+                companyName: this.pendingRegistration.company,
                 password: this.pendingRegistration.password,
                 country: this.pendingRegistration.country,
                 category: this.pendingRegistration.category
@@ -124,7 +124,7 @@ class AuthService {
         try {
             await api.post('/auth/send-verification', {
                 email: this.pendingRegistration.email,
-                company_name: this.pendingRegistration.company
+                companyName: this.pendingRegistration.company
             });
         } catch (error) {
             console.log('Using demo mode for resend');

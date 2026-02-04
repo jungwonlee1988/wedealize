@@ -2,7 +2,7 @@
 // 영어 기준 동적 AI 번역 시스템
 
 // API 설정
-const API_BASE_URL = window.API_BASE_URL || 'http://localhost:8000/api/v1/supplier';
+const API_BASE_URL = window.API_BASE_URL || 'https://supplier-api-theta.vercel.app/api/v1/supplier';
 
 // 영어 원본 (Source of Truth)
 const englishTranslations = {

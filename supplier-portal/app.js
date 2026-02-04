@@ -113,41 +113,32 @@ async function handleLogin(e) {
     console.log('Email:', email, 'Password:', password ? '***' : 'empty');
 
     if (!email || !password) {
-        alert('Please enter email and password');
+        showToast('Please enter email and password', 'error');
         return;
     }
 
-    // 데모 모드 응답 준비
-    const demoResponse = {
-        access_token: 'demo_token_' + Date.now(),
-        supplier_id: 1,
-        company_name: email.split('@')[0] || 'Demo Supplier',
-        email: email
-    };
-
-    let response = demoResponse;
-
-    // 백엔드 연결 시도
+    // 백엔드 로그인 시도
     try {
-        response = await apiCall('/login', {
+        const response = await apiCall('/login', {
             method: 'POST',
             body: JSON.stringify({ email, password })
         });
         console.log('Login via backend successful');
+
+        // 토큰 및 정보 저장
+        localStorage.setItem('supplier_logged_in', 'true');
+        localStorage.setItem('supplier_token', response.access_token);
+        localStorage.setItem('supplier_id', response.supplier_id);
+        localStorage.setItem('supplier_email', response.email);
+        localStorage.setItem('supplier_name', response.company_name);
+
+        console.log('Showing dashboard...');
+        showToast(t('toast.loginSuccess'), 'success');
+        showDashboard();
     } catch (apiError) {
-        console.log('Backend unavailable, using demo mode:', apiError.message);
+        console.error('Login failed:', apiError.message);
+        showToast('Invalid email or password', 'error');
     }
-
-    // 토큰 및 정보 저장
-    localStorage.setItem('supplier_logged_in', 'true');
-    localStorage.setItem('supplier_token', response.access_token);
-    localStorage.setItem('supplier_id', response.supplier_id);
-    localStorage.setItem('supplier_email', response.email);
-    localStorage.setItem('supplier_name', response.company_name);
-
-    console.log('Showing dashboard...');
-    showToast(t('toast.loginSuccess'), 'success');
-    showDashboard();
 }
 
 // 로그인 버튼 직접 클릭 핸들러 (폴백)
@@ -174,7 +165,7 @@ async function handleRegister(e) {
         // API 호출: 인증 코드 발송 요청
         await apiCall('/auth/send-verification', {
             method: 'POST',
-            body: JSON.stringify({ email, company_name: company })
+            body: JSON.stringify({ email, companyName: company })
         });
 
         showVerificationForm(email);
@@ -234,6 +225,32 @@ function handleCodeInput(e) {
     }
 }
 
+// 인증 코드 붙여넣기 핸들러
+function handleCodePaste(e) {
+    e.preventDefault();
+    const pastedData = (e.clipboardData || window.clipboardData).getData('text');
+    const digits = pastedData.replace(/[^0-9]/g, '').slice(0, 6);
+
+    if (digits.length > 0) {
+        const allInputs = document.querySelectorAll('.code-input');
+        digits.split('').forEach((digit, i) => {
+            if (allInputs[i]) {
+                allInputs[i].value = digit;
+                allInputs[i].classList.add('filled');
+            }
+        });
+
+        // 마지막 입력 필드로 포커스
+        const lastIndex = Math.min(digits.length - 1, 5);
+        allInputs[lastIndex].focus();
+
+        // 6자리 모두 입력되면 자동 인증
+        if (digits.length === 6) {
+            verifyEmail();
+        }
+    }
+}
+
 // 인증 코드 키보드 핸들러 (백스페이스 처리)
 function handleCodeKeydown(e) {
     const input = e.target;
@@ -266,7 +283,7 @@ async function verifyEmail() {
             body: JSON.stringify({
                 email: pendingRegistration.email,
                 code: code,
-                company_name: pendingRegistration.company,
+                companyName: pendingRegistration.company,
                 password: pendingRegistration.password,
                 country: pendingRegistration.country,
                 category: pendingRegistration.category
@@ -277,29 +294,20 @@ async function verifyEmail() {
 
     } catch (error) {
         console.error('Verification error:', error);
-
-        // 데모 모드: 코드 123456이면 성공
-        if (code === '123456') {
-            completeRegistration({
-                supplier_id: '1',
-                access_token: 'demo_token'
-            });
-        } else {
-            // 인증 실패 애니메이션
-            allInputs.forEach(input => {
-                input.classList.add('error');
-                setTimeout(() => input.classList.remove('error'), 500);
-            });
-            showToast('Invalid verification code. Please try again.', 'error');
-        }
+        // 인증 실패 애니메이션
+        allInputs.forEach(input => {
+            input.classList.add('error');
+            setTimeout(() => input.classList.remove('error'), 500);
+        });
+        showToast('Invalid verification code. Please try again.', 'error');
     }
 }
 
 // 회원가입 완료
 function completeRegistration(response) {
     localStorage.setItem('supplier_logged_in', 'true');
-    localStorage.setItem('supplier_token', response.access_token || 'demo_token');
-    localStorage.setItem('supplier_id', response.supplier_id || '1');
+    localStorage.setItem('supplier_token', response.access_token);
+    localStorage.setItem('supplier_id', response.supplier_id);
     localStorage.setItem('supplier_email', pendingRegistration.email);
     localStorage.setItem('supplier_name', pendingRegistration.company);
 
@@ -324,7 +332,7 @@ async function resendVerificationCode() {
             method: 'POST',
             body: JSON.stringify({
                 email: pendingRegistration.email,
-                company_name: pendingRegistration.company
+                companyName: pendingRegistration.company
             })
         });
 
@@ -460,9 +468,8 @@ function handleGoogleLogin() {
             }
         });
     } else {
-        // Google SDK 미로드 시 데모 모드
-        console.log('Google SDK not loaded, using demo mode');
-        handleGoogleDemoLogin();
+        console.error('Google SDK not loaded');
+        showToast('Google login is not available. Please try again later.', 'error');
     }
 }
 
@@ -480,7 +487,7 @@ function googlePopupLogin() {
         });
         client.requestAccessToken();
     } else {
-        handleGoogleDemoLogin();
+        showToast('Google login is not available. Please try again later.', 'error');
     }
 }
 
@@ -526,8 +533,7 @@ async function processGoogleAuth(credential) {
 
     } catch (error) {
         console.error('Google auth error:', error);
-        // 데모 모드
-        handleGoogleDemoLogin();
+        showToast('Google login failed. Please try again.', 'error');
     }
 }
 
@@ -556,20 +562,8 @@ async function processGoogleUserInfo(userInfo) {
 
     } catch (error) {
         console.error('Google login error:', error);
-        handleGoogleDemoLogin();
+        showToast('Google login failed. Please try again.', 'error');
     }
-}
-
-// Google 데모 로그인 (API 미연결 시)
-function handleGoogleDemoLogin() {
-    localStorage.setItem('supplier_logged_in', 'true');
-    localStorage.setItem('supplier_token', 'google_demo_token');
-    localStorage.setItem('supplier_id', '1');
-    localStorage.setItem('supplier_email', 'demo@gmail.com');
-    localStorage.setItem('supplier_name', 'Google User');
-
-    showDashboard();
-    showToast('Successfully logged in with Google! (Demo)');
 }
 
 // 비밀번호 찾기 화면
@@ -1455,9 +1449,131 @@ function getDemoProducts() {
 
 // ==================== Profile ====================
 
+let cropper = null;
+let currentLogoFile = null;
+
 function saveProfile(e) {
     e.preventDefault();
     showToast('Profile saved successfully!');
+}
+
+// 로고 파일 선택 핸들러
+function handleLogoSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // 파일 유효성 검사
+    if (!file.type.startsWith('image/')) {
+        showToast('Please select an image file.', 'error');
+        return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        showToast('File size must be less than 2MB.', 'error');
+        return;
+    }
+
+    currentLogoFile = file;
+
+    // Crop 모달 열기
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const cropImage = document.getElementById('crop-image');
+        cropImage.src = e.target.result;
+        document.getElementById('crop-modal').style.display = 'flex';
+
+        // 기존 cropper 제거
+        if (cropper) {
+            cropper.destroy();
+        }
+
+        // Cropper 초기화
+        cropper = new Cropper(cropImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+            dragMode: 'move',
+            autoCropArea: 0.8,
+            restore: false,
+            guides: true,
+            center: true,
+            highlight: false,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            toggleDragModeOnDblclick: false
+        });
+    };
+    reader.readAsDataURL(file);
+}
+
+// Crop 모달 닫기
+function closeCropModal() {
+    document.getElementById('crop-modal').style.display = 'none';
+    if (cropper) {
+        cropper.destroy();
+        cropper = null;
+    }
+    // 파일 입력 초기화
+    document.getElementById('logo-input').value = '';
+}
+
+// Crop 적용
+function applyCrop() {
+    if (!cropper) return;
+
+    const canvas = cropper.getCroppedCanvas({
+        width: 200,
+        height: 200,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high'
+    });
+
+    if (!canvas) {
+        showToast('Failed to crop image.', 'error');
+        return;
+    }
+
+    // 미리보기 업데이트
+    const previewImg = document.getElementById('logo-preview-img');
+    const placeholder = document.getElementById('logo-placeholder');
+    const removeBtn = document.getElementById('remove-logo-btn');
+
+    previewImg.src = canvas.toDataURL('image/png');
+    previewImg.style.display = 'block';
+    placeholder.style.display = 'none';
+    removeBtn.style.display = 'inline-flex';
+
+    // 모달 닫기
+    closeCropModal();
+
+    showToast('Logo updated successfully!');
+
+    // TODO: 서버에 업로드
+    // canvas.toBlob(function(blob) {
+    //     const formData = new FormData();
+    //     formData.append('logo', blob, 'logo.png');
+    //     // API 호출
+    // }, 'image/png');
+}
+
+// 로고 제거
+function removeLogo() {
+    if (!confirm('Are you sure you want to remove the logo?')) return;
+
+    const previewImg = document.getElementById('logo-preview-img');
+    const placeholder = document.getElementById('logo-placeholder');
+    const removeBtn = document.getElementById('remove-logo-btn');
+
+    previewImg.src = '';
+    previewImg.style.display = 'none';
+    placeholder.style.display = 'flex';
+    removeBtn.style.display = 'none';
+
+    // 파일 입력 초기화
+    document.getElementById('logo-input').value = '';
+
+    showToast('Logo removed.');
+
+    // TODO: 서버에서 로고 삭제 API 호출
 }
 
 // ==================== Utilities ====================
@@ -1992,8 +2108,103 @@ function searchPO() {
 
 // PO 상세 보기
 function viewPODetail(poNumber) {
-    showToast(`Viewing details for ${poNumber}`, 'info');
-    // TODO: PO 상세 모달 표시
+    // 패널 전환
+    document.getElementById('panel-po-management').style.display = 'none';
+    document.getElementById('panel-po-detail').style.display = 'block';
+
+    // 샘플 데이터 (실제로는 API에서 가져옴)
+    const poData = {
+        'PO-2026-0042': {
+            number: 'PO20260203048953',
+            status: '운송요청완료',
+            statusClass: 'shipping-requested',
+            date: '2026.02.03 13:44',
+            exporter: {
+                name: 'DELIFRANCE',
+                contact: 'Anne, CHU',
+                email: 'anne.chu@delifrance.com',
+                phone: '+33 (0)6 73 18 08 52'
+            },
+            importer: {
+                name: 'SELLER-NOTE.CO.,LTD',
+                contact: 'jay',
+                email: 'jay@seller-note.com',
+                phone: '821026387225'
+            },
+            trade: {
+                incoterms: 'FCA (운송인 인도)',
+                paymentTerms: 'T/T (전신환송금)',
+                currency: 'EUR'
+            },
+            items: [
+                { name: '냉동 버터 크로아상 생지(버터 24%)', qty: 40, unit: 'boxes', price: 20.16, total: 806.4 }
+            ],
+            totalQty: 40,
+            totalAmount: 806.4,
+            notes: '-'
+        }
+    };
+
+    const data = poData[poNumber] || poData['PO-2026-0042'];
+
+    // 데이터 바인딩
+    document.getElementById('po-detail-number').textContent = data.number;
+    document.getElementById('po-detail-status').textContent = data.status;
+    document.getElementById('po-detail-status').className = 'status-badge ' + data.statusClass;
+    document.getElementById('po-detail-date').textContent = data.date;
+
+    document.getElementById('po-exporter-name').textContent = data.exporter.name;
+    document.getElementById('po-exporter-contact').textContent = data.exporter.contact;
+    document.getElementById('po-exporter-email').textContent = data.exporter.email;
+    document.getElementById('po-exporter-phone').textContent = data.exporter.phone;
+
+    document.getElementById('po-importer-name').textContent = data.importer.name;
+    document.getElementById('po-importer-contact').textContent = data.importer.contact;
+    document.getElementById('po-importer-email').textContent = data.importer.email;
+    document.getElementById('po-importer-phone').textContent = data.importer.phone;
+
+    document.getElementById('po-incoterms').textContent = data.trade.incoterms;
+    document.getElementById('po-payment-terms').textContent = data.trade.paymentTerms;
+    document.getElementById('po-currency').textContent = data.trade.currency;
+
+    document.getElementById('po-items-count').textContent = data.items.length;
+
+    // 품목 테이블
+    const tbody = document.getElementById('po-items-tbody');
+    tbody.innerHTML = data.items.map(item => `
+        <tr>
+            <td>${item.name}</td>
+            <td class="text-right">${item.qty}</td>
+            <td>${item.unit}</td>
+            <td class="text-right">${item.price}</td>
+            <td class="text-right">${item.total}</td>
+        </tr>
+    `).join('');
+
+    document.getElementById('po-total-qty').textContent = data.totalQty;
+    document.getElementById('po-total-currency').textContent = data.trade.currency;
+    document.getElementById('po-total-amount').textContent = data.totalAmount;
+    document.getElementById('po-notes').textContent = data.notes;
+}
+
+// PO 목록으로 돌아가기
+function backToPOList() {
+    document.getElementById('panel-po-detail').style.display = 'none';
+    document.getElementById('panel-po-management').style.display = 'block';
+}
+
+// PO 다운로드
+function downloadPO() {
+    showToast('Downloading PO document...', 'info');
+    // TODO: PDF 다운로드 구현
+}
+
+// PO 취소
+function cancelPO() {
+    if (confirm('Are you sure you want to cancel this order?')) {
+        showToast('Order cancellation requested', 'warning');
+        // TODO: API 호출
+    }
 }
 
 // PO 확정
