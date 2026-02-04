@@ -47,37 +47,52 @@ class SalesModule {
      */
     filterPOList() {
         const filter = $('#po-status-filter')?.value;
+        const searchTerm = $('#po-search')?.value.toLowerCase() || '';
         const rows = $$('#po-list-tbody tr');
 
         rows.forEach(row => {
-            const statusBadge = row.querySelector('.status-badge');
-            const status = statusBadge ? statusBadge.classList[1] : '';
+            const status = row.dataset.status || '';
+            const poNumber = row.querySelector('.po-number')?.textContent.toLowerCase() || '';
+            const buyerName = row.querySelector('.buyer-name')?.textContent.toLowerCase() || '';
 
-            if (filter === 'all' || status === filter) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
+            const matchesFilter = filter === 'all' || status === filter;
+            const matchesSearch = !searchTerm || poNumber.includes(searchTerm) || buyerName.includes(searchTerm);
+
+            row.style.display = (matchesFilter && matchesSearch) ? '' : 'none';
+        });
+
+        // Update stats count based on visible rows
+        this.updateFilteredStats();
+    }
+
+    /**
+     * Update stats based on filtered results
+     */
+    updateFilteredStats() {
+        const rows = $$('#po-list-tbody tr');
+        const stats = {
+            pending: 0,
+            confirmed: 0,
+            shipping: 0,
+            completed: 0
+        };
+
+        rows.forEach(row => {
+            if (row.style.display !== 'none') {
+                const status = row.dataset.status || '';
+                if (stats[status] !== undefined) {
+                    stats[status]++;
+                }
             }
         });
     }
 
     /**
-     * Search PO
+     * Search PO - applies both search and filter together
      */
     searchPO() {
-        const searchTerm = $('#po-search')?.value.toLowerCase() || '';
-        const rows = $$('#po-list-tbody tr');
-
-        rows.forEach(row => {
-            const poNumber = row.querySelector('.po-number')?.textContent.toLowerCase() || '';
-            const buyerName = row.querySelector('.buyer-name')?.textContent.toLowerCase() || '';
-
-            if (poNumber.includes(searchTerm) || buyerName.includes(searchTerm)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
+        // Reuse filterPOList which now handles both filter and search
+        this.filterPOList();
     }
 
     /**
@@ -147,7 +162,7 @@ class SalesModule {
         if (!tbody || !orders) return;
 
         tbody.innerHTML = orders.map(order => `
-            <tr>
+            <tr data-status="${order.status}" data-po="${order.poNumber}" data-buyer="${order.buyerName}">
                 <td>
                     <a href="#" class="po-number" onclick="viewPODetail('${order.poNumber}')">${order.poNumber}</a>
                 </td>
@@ -166,6 +181,9 @@ class SalesModule {
                 </td>
             </tr>
         `).join('');
+
+        // Apply current filter after rendering
+        this.filterPOList();
     }
 
     /**
