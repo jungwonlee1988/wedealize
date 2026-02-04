@@ -710,6 +710,16 @@ body.dashboard-mode .portal-badge {
     flex-shrink: 0;
 }
 
+.sidebar-label {
+    color: var(--primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 0 24px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 16px;
+}
+
 .sidebar-nav {
     display: flex;
     flex-direction: column;
