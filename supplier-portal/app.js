@@ -2341,3 +2341,48 @@ function getAllPOData() {
 
     return poData;
 }
+
+// Status 컬럼 필터 드롭다운 토글
+function toggleStatusFilter(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('status-filter-dropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+
+    // 외부 클릭 시 드롭다운 닫기
+    const closeDropdown = (e) => {
+        if (!e.target.closest('.column-filter')) {
+            dropdown?.classList.remove('show');
+            document.removeEventListener('click', closeDropdown);
+        }
+    };
+    setTimeout(() => document.addEventListener('click', closeDropdown), 0);
+}
+
+// Status 필터 적용
+function applyStatusFilter(status) {
+    const filterInput = document.getElementById('po-status-filter');
+    if (filterInput) {
+        filterInput.value = status;
+    }
+
+    // 필터 적용
+    applyPOFilters();
+
+    // 필터 아이콘 활성화 상태 업데이트
+    const filterBtn = document.querySelector('.filter-icon-btn');
+    if (filterBtn) {
+        if (status !== 'all') {
+            filterBtn.classList.add('active');
+        } else {
+            filterBtn.classList.remove('active');
+        }
+    }
+
+    // 드롭다운 닫기
+    const dropdown = document.getElementById('status-filter-dropdown');
+    if (dropdown) {
+        dropdown.classList.remove('show');
+    }
+}
