@@ -2089,3 +2089,165 @@
     color: var(--wd-gray-600);
     text-align: center;
 }
+
+/* ==================== Custom Country Select ==================== */
+.wd-country-select {
+    position: relative;
+    width: 100%;
+}
+
+.wd-country-select-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    font-size: var(--wd-font-size-base);
+    color: var(--wd-gray-800);
+    background: var(--wd-white);
+    border: 1px solid var(--wd-gray-300);
+    border-radius: var(--wd-radius-md);
+    cursor: pointer;
+    transition: all var(--wd-transition-fast);
+    text-align: left;
+}
+
+.wd-country-select-trigger:hover {
+    border-color: var(--wd-gray-400);
+}
+
+.wd-country-select-trigger:focus,
+.wd-country-select.open .wd-country-select-trigger {
+    outline: none;
+    border-color: var(--wd-primary);
+    box-shadow: 0 0 0 3px var(--wd-primary-light);
+}
+
+.wd-country-select-flag {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.wd-country-select-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.wd-country-select-text.placeholder {
+    color: var(--wd-gray-400);
+}
+
+.wd-country-select-arrow {
+    width: 16px;
+    height: 16px;
+    color: var(--wd-gray-500);
+    transition: transform var(--wd-transition-fast);
+    flex-shrink: 0;
+}
+
+.wd-country-select.open .wd-country-select-arrow {
+    transform: rotate(180deg);
+}
+
+.wd-country-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    background: var(--wd-white);
+    border: 1px solid var(--wd-gray-200);
+    border-radius: var(--wd-radius-md);
+    box-shadow: var(--wd-shadow-lg);
+    z-index: 1000;
+    max-height: 300px;
+    overflow: hidden;
+    display: none;
+}
+
+.wd-country-select.open .wd-country-select-dropdown {
+    display: block;
+}
+
+.wd-country-search {
+    padding: 10px;
+    border-bottom: 1px solid var(--wd-gray-100);
+}
+
+.wd-country-search input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: var(--wd-font-size-sm);
+    border: 1px solid var(--wd-gray-200);
+    border-radius: var(--wd-radius-sm);
+    outline: none;
+}
+
+.wd-country-search input:focus {
+    border-color: var(--wd-primary);
+}
+
+.wd-country-list {
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.wd-country-group-label {
+    padding: 8px 14px 4px;
+    font-size: var(--wd-font-size-xs);
+    font-weight: var(--wd-font-semibold);
+    color: var(--wd-gray-500);
+    background: var(--wd-gray-50);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wd-country-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background var(--wd-transition-fast);
+}
+
+.wd-country-option:hover {
+    background: var(--wd-gray-50);
+}
+
+.wd-country-option.selected {
+    background: var(--wd-primary-bg);
+}
+
+.wd-country-option-flag {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.wd-country-option-name {
+    font-size: var(--wd-font-size-base);
+    color: var(--wd-gray-800);
+}
+
+.wd-country-option-code {
+    font-size: var(--wd-font-size-sm);
+    color: var(--wd-gray-400);
+    margin-left: auto;
+}
+
+/* Hide native select when custom is present */
+.wd-country-select .wd-select-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

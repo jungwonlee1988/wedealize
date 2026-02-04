@@ -640,7 +640,122 @@ document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('supplier_logged_in') === 'true') {
         showDashboard();
     }
+
+    // Custom Country Select 초기화
+    initCountrySelect();
 });
+
+// ==================== Custom Country Select ====================
+
+function initCountrySelect() {
+    const countrySelect = document.getElementById('country-select');
+    if (!countrySelect) return;
+
+    const trigger = document.getElementById('country-trigger');
+    const dropdown = document.getElementById('country-dropdown');
+    const searchInput = document.getElementById('country-search');
+    const countryList = document.getElementById('country-list');
+    const hiddenInput = document.getElementById('reg-country');
+    const selectedFlag = document.getElementById('selected-flag');
+    const selectedCountry = document.getElementById('selected-country');
+
+    // Toggle dropdown on trigger click
+    trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        countrySelect.classList.toggle('open');
+
+        if (countrySelect.classList.contains('open')) {
+            searchInput.focus();
+            searchInput.value = '';
+            filterCountries('');
+        }
+    });
+
+    // Handle country option click
+    countryList.addEventListener('click', (e) => {
+        const option = e.target.closest('.wd-country-option');
+        if (!option) return;
+
+        const value = option.dataset.value;
+        const flag = option.dataset.flag;
+        const name = option.dataset.name;
+
+        // Update hidden input value
+        hiddenInput.value = value;
+
+        // Update trigger display
+        selectedFlag.textContent = flag;
+        selectedCountry.textContent = name;
+        selectedCountry.classList.remove('placeholder');
+
+        // Update selected state
+        countryList.querySelectorAll('.wd-country-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        option.classList.add('selected');
+
+        // Close dropdown
+        countrySelect.classList.remove('open');
+    });
+
+    // Filter countries on search
+    searchInput.addEventListener('input', (e) => {
+        filterCountries(e.target.value.toLowerCase());
+    });
+
+    // Prevent search input click from closing dropdown
+    searchInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!countrySelect.contains(e.target)) {
+            countrySelect.classList.remove('open');
+        }
+    });
+
+    // Close dropdown on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && countrySelect.classList.contains('open')) {
+            countrySelect.classList.remove('open');
+        }
+    });
+
+    function filterCountries(searchTerm) {
+        const options = countryList.querySelectorAll('.wd-country-option');
+        const groupLabels = countryList.querySelectorAll('.wd-country-group-label');
+
+        // Track which groups have visible options
+        const visibleGroups = new Set();
+
+        options.forEach(option => {
+            const name = (option.dataset.name || '').toLowerCase();
+            const code = (option.dataset.value || '').toLowerCase();
+
+            if (name.includes(searchTerm) || code.includes(searchTerm)) {
+                option.style.display = '';
+                // Find the group this option belongs to
+                let prevSibling = option.previousElementSibling;
+                while (prevSibling) {
+                    if (prevSibling.classList.contains('wd-country-group-label')) {
+                        visibleGroups.add(prevSibling);
+                        break;
+                    }
+                    prevSibling = prevSibling.previousElementSibling;
+                }
+            } else {
+                option.style.display = 'none';
+            }
+        });
+
+        // Show/hide group labels based on visible options
+        groupLabels.forEach(label => {
+            label.style.display = visibleGroups.has(label) ? '' : 'none';
+        });
+    }
+}
 
 // ==================== Dashboard Navigation ====================
 
