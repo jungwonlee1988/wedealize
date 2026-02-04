@@ -622,11 +622,8 @@ function logout() {
     localStorage.removeItem('supplier_email');
     localStorage.removeItem('supplier_name');
 
-    document.getElementById('auth-section').style.display = 'flex';
-    document.getElementById('dashboard-section').style.display = 'none';
-    document.getElementById('user-menu').style.display = 'none';
-    document.querySelector('.auth-tabs').style.display = 'flex';
-    document.body.classList.remove('dashboard-mode');
+    // index 페이지로 리다이렉트
+    window.location.href = '../index.html';
 }
 
 // 대시보드 표시
