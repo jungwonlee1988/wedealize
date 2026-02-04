@@ -299,79 +299,101 @@
                     <div class="dashboard-content">
                         <!-- Overview -->
                         <div class="dashboard-panel active" id="panel-overview">
-                            <div class="panel-header">
-                                <h2 data-i18n="dashboard.dashboardOverview">Dashboard Overview</h2>
-                                <p data-i18n="dashboard.welcomeStatus">Welcome back! Here's your supplier status.</p>
+                            <div class="wd-page-header">
+                                <h2 class="wd-page-title" data-i18n="dashboard.dashboardOverview">대시보드</h2>
                             </div>
 
                             <!-- 데이터 완성도 알림 -->
-                            <div class="alert alert-warning" id="data-completeness-alert">
-                                <div class="alert-icon">⚠️</div>
-                                <div class="alert-content">
-                                    <h4 data-i18n="dashboard.completeProfile">Complete Your Profile</h4>
-                                    <p id="completeness-message">Your product data is <strong>65% complete</strong>. Add missing information to increase visibility to buyers.</p>
-                                    <div class="missing-items">
-                                        <span class="missing-tag">MOQ for 5 products</span>
-                                        <span class="missing-tag" data-i18n="modal.certifications">Certifications</span>
-                                        <span class="missing-tag" data-i18n="products.missingImages">Product images</span>
+                            <div class="wd-alert wd-alert-warning" id="data-completeness-alert" style="margin: 0 24px 24px;">
+                                <div class="wd-alert-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                                    </svg>
+                                </div>
+                                <div class="wd-alert-content">
+                                    <h4 data-i18n="dashboard.completeProfile">프로필 완성하기</h4>
+                                    <p id="completeness-message">상품 데이터가 <strong>65% 완료</strong>되었습니다. 누락된 정보를 추가하여 바이어 노출을 높이세요.</p>
+                                    <div class="wd-alert-tags">
+                                        <span class="wd-badge wd-badge-outline">MOQ 5개 상품</span>
+                                        <span class="wd-badge wd-badge-outline" data-i18n="modal.certifications">인증서</span>
+                                        <span class="wd-badge wd-badge-outline" data-i18n="products.missingImages">상품 이미지</span>
                                     </div>
-                                    <button class="btn btn-sm btn-warning" onclick="showSection('product-list')" data-i18n="dashboard.completeNow">Complete Now</button>
+                                    <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="showSection('product-list')" data-i18n="dashboard.completeNow">지금 완료하기</button>
                                 </div>
                             </div>
 
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <div class="stat-icon primary">🎁</div>
-                                    <div class="stat-info">
-                                        <span class="stat-value" id="stat-products">24</span>
-                                        <span class="stat-label" data-i18n="dashboard.productsListed">Products Listed</span>
+                            <div class="wd-stats-grid" style="padding: 0 24px 24px;">
+                                <div class="wd-stat-card">
+                                    <div class="wd-stat-icon wd-stat-icon-primary">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                                    </div>
+                                    <div class="wd-stat-info">
+                                        <span class="wd-stat-value" id="stat-products">24</span>
+                                        <span class="wd-stat-label" data-i18n="dashboard.productsListed">등록 상품</span>
                                     </div>
                                 </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon">👀</div>
-                                    <div class="stat-info">
-                                        <span class="stat-value">1,247</span>
-                                        <span class="stat-label" data-i18n="dashboard.profileViews">Profile Views (30d)</span>
+                                <div class="wd-stat-card">
+                                    <div class="wd-stat-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </div>
+                                    <div class="wd-stat-info">
+                                        <span class="wd-stat-value">1,247</span>
+                                        <span class="wd-stat-label" data-i18n="dashboard.profileViews">프로필 조회 (30일)</span>
                                     </div>
                                 </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon warning">💌</div>
-                                    <div class="stat-info">
-                                        <span class="stat-value">3</span>
-                                        <span class="stat-label" data-i18n="dashboard.newInquiries">New Inquiries</span>
+                                <div class="wd-stat-card">
+                                    <div class="wd-stat-icon wd-stat-icon-warning">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                    </div>
+                                    <div class="wd-stat-info">
+                                        <span class="wd-stat-value">3</span>
+                                        <span class="wd-stat-label" data-i18n="dashboard.newInquiries">신규 문의</span>
                                     </div>
                                 </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon success">🌟</div>
-                                    <div class="stat-info">
-                                        <span class="stat-value">65%</span>
-                                        <span class="stat-label" data-i18n="dashboard.dataCompleteness">Data Completeness</span>
+                                <div class="wd-stat-card">
+                                    <div class="wd-stat-icon wd-stat-icon-success">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                    </div>
+                                    <div class="wd-stat-info">
+                                        <span class="wd-stat-value">65%</span>
+                                        <span class="wd-stat-label" data-i18n="dashboard.dataCompleteness">데이터 완성도</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="recent-activity">
-                                <h3 data-i18n="dashboard.recentActivity">Recent Activity</h3>
-                                <div class="activity-list">
-                                    <div class="activity-item">
-                                        <span class="activity-icon">💌</span>
-                                        <div class="activity-content">
-                                            <p><strong data-i18n="inquiry.new">New inquiry</strong> from ABC Distribution (Korea)</p>
-                                            <span class="activity-time">2 <span data-i18n="time.hoursAgo">hours ago</span></span>
+                            <div class="wd-card" style="margin: 0 24px 24px;">
+                                <div class="wd-card-header">
+                                    <h3 class="wd-card-title" data-i18n="dashboard.recentActivity">최근 활동</h3>
+                                </div>
+                                <div class="wd-card-body">
+                                    <div class="wd-activity-list">
+                                        <div class="wd-activity-item">
+                                            <div class="wd-activity-icon wd-activity-icon-info">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                            </div>
+                                            <div class="wd-activity-content">
+                                                <p><strong data-i18n="inquiry.new">신규 문의</strong> - ABC Distribution (Korea)</p>
+                                                <span class="wd-activity-time">2시간 전</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="activity-item">
-                                        <span class="activity-icon">✨</span>
-                                        <div class="activity-content">
-                                            <p><strong>Catalog processed</strong> - 24 products extracted</p>
-                                            <span class="activity-time">1 <span data-i18n="time.dayAgo">day ago</span></span>
+                                        <div class="wd-activity-item">
+                                            <div class="wd-activity-icon wd-activity-icon-success">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                            </div>
+                                            <div class="wd-activity-content">
+                                                <p><strong>카탈로그 처리 완료</strong> - 24개 상품 추출</p>
+                                                <span class="wd-activity-time">1일 전</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="activity-item">
-                                        <span class="activity-icon">📝</span>
-                                        <div class="activity-content">
-                                            <p><strong>Missing data</strong> - Please add MOQ for 5 products</p>
-                                            <span class="activity-time">2 <span data-i18n="time.daysAgo">days ago</span></span>
+                                        <div class="wd-activity-item">
+                                            <div class="wd-activity-icon wd-activity-icon-warning">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                            </div>
+                                            <div class="wd-activity-content">
+                                                <p><strong>누락된 데이터</strong> - 5개 상품의 MOQ를 추가하세요</p>
+                                                <span class="wd-activity-time">2일 전</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -650,113 +672,156 @@
 
                         <!-- Product List -->
                         <div class="dashboard-panel" id="panel-product-list">
-                            <div class="panel-header">
-                                <h2 data-i18n="products.listTitle">Product List</h2>
-                                <p data-i18n="products.listSubtitle">Manage your registered products. Required fields: Category, Product Name.</p>
+                            <!-- Page Header -->
+                            <div class="wd-page-header">
+                                <h2 class="wd-page-title" data-i18n="products.listTitle">상품 목록</h2>
+                                <button class="wd-btn wd-btn-primary" onclick="openAddProductModal()">
+                                    <span>+</span>
+                                    <span data-i18n="products.addProduct">상품 등록</span>
+                                </button>
                             </div>
 
-                            <!-- Data Quality Alert -->
-                            <div class="data-quality-section">
-                                <div class="quality-summary">
-                                    <div class="quality-chart">
-                                        <div class="quality-ring" style="--percentage: 65;">
-                                            <span class="quality-value">65%</span>
+                            <!-- Data Quality Summary Card -->
+                            <div class="wd-card" style="margin: 0 24px 24px;">
+                                <div class="wd-card-body" style="display: flex; gap: 32px; align-items: flex-start;">
+                                    <div class="wd-quality-chart">
+                                        <div class="wd-quality-ring" style="--percentage: 65;">
+                                            <span class="wd-quality-value">65%</span>
                                         </div>
                                     </div>
-                                    <div class="quality-details">
-                                        <h4 data-i18n="products.dataCompleteness">Data Completeness</h4>
-                                        <ul class="quality-checklist">
-                                            <li class="complete">✓ <span data-i18n="products.requiredFields">Required fields</span> (24/24)</li>
-                                            <li class="complete">✓ <span data-i18n="catalog.priceList">Prices</span> (20/24)</li>
-                                            <li class="incomplete">✗ MOQ (19/24) - <a href="#" onclick="filterMissing('moq')"><span data-i18n="products.addMissing">Add missing</span></a></li>
-                                            <li class="incomplete">✗ <span data-i18n="products.missingImages">Images</span> (12/24) - <a href="#" onclick="filterMissing('images')"><span data-i18n="products.addMissing">Add missing</span></a></li>
-                                            <li class="incomplete">✗ <span data-i18n="modal.certifications">Certifications</span> (8/24) - <a href="#" onclick="filterMissing('cert')"><span data-i18n="products.addMissing">Add missing</span></a></li>
+                                    <div class="wd-quality-details">
+                                        <h4 style="margin: 0 0 12px; font-size: 14px; font-weight: 600;" data-i18n="products.dataCompleteness">데이터 완성도</h4>
+                                        <ul class="wd-quality-checklist">
+                                            <li class="wd-quality-complete">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                                <span data-i18n="products.requiredFields">필수 항목</span> (24/24)
+                                            </li>
+                                            <li class="wd-quality-complete">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                                <span data-i18n="catalog.priceList">가격</span> (20/24)
+                                            </li>
+                                            <li class="wd-quality-incomplete">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                                MOQ (19/24) - <a href="#" class="wd-link" onclick="filterMissing('moq')">추가하기</a>
+                                            </li>
+                                            <li class="wd-quality-incomplete">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                                <span data-i18n="products.missingImages">이미지</span> (12/24) - <a href="#" class="wd-link" onclick="filterMissing('images')">추가하기</a>
+                                            </li>
+                                            <li class="wd-quality-incomplete">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                                <span data-i18n="modal.certifications">인증서</span> (8/24) - <a href="#" class="wd-link" onclick="filterMissing('cert')">추가하기</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="filter-bar">
-                                <div class="filter-group">
-                                    <select id="product-list-filter" onchange="filterProductList()">
-                                        <option value="all" data-i18n="products.allProducts">All Products</option>
-                                        <option value="complete" data-i18n="products.complete">Complete</option>
-                                        <option value="incomplete" data-i18n="products.incompleteData">Incomplete Data</option>
-                                        <option value="no-moq" data-i18n="products.missingMOQ">Missing MOQ</option>
-                                        <option value="no-image" data-i18n="products.missingImages">Missing Images</option>
-                                        <option value="no-cert" data-i18n="products.missingCerts">Missing Certifications</option>
+                            <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px 16px;">
+                                <div class="wd-filter-group" style="display: flex; gap: 12px; align-items: center;">
+                                    <select id="product-list-filter" class="wd-input wd-select" style="width: 180px;" onchange="filterProductList()">
+                                        <option value="all" data-i18n="products.allProducts">전체 상품</option>
+                                        <option value="complete" data-i18n="products.complete">완료</option>
+                                        <option value="incomplete" data-i18n="products.incompleteData">미완료</option>
+                                        <option value="no-moq" data-i18n="products.missingMOQ">MOQ 누락</option>
+                                        <option value="no-image" data-i18n="products.missingImages">이미지 누락</option>
+                                        <option value="no-cert" data-i18n="products.missingCerts">인증서 누락</option>
                                     </select>
                                 </div>
-                                <div class="filter-actions">
-                                    <button class="btn btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
-                                    <button class="btn btn-primary" onclick="openAddProductModal()">+ <span data-i18n="products.addProduct">Add Product</span></button>
+                                <div class="wd-filter-actions" style="display: flex; gap: 8px;">
+                                    <button class="wd-btn wd-btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">CSV 내보내기</button>
                                 </div>
                             </div>
 
                             <!-- Products Table -->
-                            <table class="data-table products-table">
-                                <thead>
-                                    <tr>
-                                        <th data-i18n="products.product">Product</th>
-                                        <th data-i18n="modal.category">Category</th>
-                                        <th data-i18n="products.sku">SKU</th>
-                                        <th data-i18n="products.priceFOB">Price (FOB)</th>
-                                        <th data-i18n="products.moq">MOQ</th>
-                                        <th data-i18n="modal.certifications">Certifications</th>
-                                        <th data-i18n="catalog.status">Status</th>
-                                        <th data-i18n="catalog.actions">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="product-list-tbody">
-                                    <tr>
-                                        <td>
-                                            <div class="product-cell">
-                                                <span class="product-thumb">🫒</span>
-                                                <div>
-                                                    <span class="product-name">Extra Virgin Olive Oil 500ml</span>
+                            <div style="padding: 0 24px;">
+                                <table class="wd-table">
+                                    <thead>
+                                        <tr>
+                                            <th data-i18n="products.product">상품</th>
+                                            <th data-i18n="modal.category">카테고리</th>
+                                            <th data-i18n="products.sku">SKU</th>
+                                            <th data-i18n="products.priceFOB">가격 (FOB)</th>
+                                            <th data-i18n="products.moq">MOQ</th>
+                                            <th data-i18n="modal.certifications">인증서</th>
+                                            <th data-i18n="catalog.status">상태</th>
+                                            <th data-i18n="catalog.actions">관리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="product-list-tbody">
+                                        <tr>
+                                            <td>
+                                                <div class="wd-product-cell">
+                                                    <div class="wd-product-thumb">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
+                                                    </div>
+                                                    <div>
+                                                        <span class="wd-product-name">Extra Virgin Olive Oil 500ml</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td><span class="category-badge" data-i18n="categories.oils">Oils & Vinegars</span></td>
-                                        <td>OIL-001</td>
-                                        <td>$7.20 - $8.50</td>
-                                        <td>200 <span data-i18n="units.bottles">bottles</span></td>
-                                        <td>
-                                            <span class="cert-badge">Organic</span>
-                                            <span class="cert-badge">HACCP</span>
-                                        </td>
-                                        <td><span class="status-dot complete"></span> <span data-i18n="products.complete">Complete</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline" onclick="editProduct(1)" data-i18n="products.edit">Edit</button>
-                                        </td>
-                                    </tr>
-                                    <tr class="incomplete-row">
-                                        <td>
-                                            <div class="product-cell">
-                                                <span class="product-thumb">🧀</span>
-                                                <div>
-                                                    <span class="product-name">Aged Parmesan 24 months</span>
+                                            </td>
+                                            <td><span class="wd-badge wd-badge-outline" data-i18n="categories.oils">Oils & Vinegars</span></td>
+                                            <td>OIL-001</td>
+                                            <td>$7.20 - $8.50</td>
+                                            <td>200 <span data-i18n="units.bottles">bottles</span></td>
+                                            <td>
+                                                <span class="wd-badge wd-badge-success">Organic</span>
+                                                <span class="wd-badge wd-badge-success">HACCP</span>
+                                            </td>
+                                            <td><span class="wd-badge wd-badge-success">완료</span></td>
+                                            <td>
+                                                <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editProduct(1)" data-i18n="products.edit">수정</button>
+                                            </td>
+                                        </tr>
+                                        <tr class="wd-row-warning">
+                                            <td>
+                                                <div class="wd-product-cell">
+                                                    <div class="wd-product-thumb">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
+                                                    </div>
+                                                    <div>
+                                                        <span class="wd-product-name">Aged Parmesan 24 months</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td><span class="category-badge" data-i18n="categories.dairy">Dairy & Cheese</span></td>
-                                        <td>CHE-003</td>
-                                        <td>$18.00 - $22.00</td>
-                                        <td class="missing-data">
-                                            <span class="missing-indicator" data-i18n="products.missing">Missing</span>
-                                            <button class="btn-add-inline" onclick="addMOQ(3)">+ <span data-i18n="products.add">Add</span></button>
-                                        </td>
-                                        <td>
-                                            <span class="cert-badge">DOP</span>
-                                        </td>
-                                        <td><span class="status-dot incomplete"></span> <span data-i18n="products.incomplete">Incomplete</span></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-warning" onclick="editProduct(3)" data-i18n="products.fillIn">Fill in</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            </td>
+                                            <td><span class="wd-badge wd-badge-outline" data-i18n="categories.dairy">Dairy & Cheese</span></td>
+                                            <td>CHE-003</td>
+                                            <td>$18.00 - $22.00</td>
+                                            <td class="wd-missing-data">
+                                                <span class="wd-badge wd-badge-warning">누락</span>
+                                                <button class="wd-btn-link" onclick="addMOQ(3)">+ 추가</button>
+                                            </td>
+                                            <td>
+                                                <span class="wd-badge wd-badge-info">DOP</span>
+                                            </td>
+                                            <td><span class="wd-badge wd-badge-warning">미완료</span></td>
+                                            <td>
+                                                <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="editProduct(3)" data-i18n="products.fillIn">입력하기</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="wd-pagination" style="padding: 16px 24px;">
+                                <div class="wd-pagination-info">
+                                    <span>총 24개 중</span>
+                                    <select class="wd-input wd-select" style="width: 80px; padding: 6px 10px;">
+                                        <option>20</option>
+                                        <option>50</option>
+                                        <option>100</option>
+                                    </select>
+                                    <span>개씩 보기</span>
+                                </div>
+                                <div class="wd-pagination-pages">
+                                    <button class="wd-pagination-btn" disabled>&lt;</button>
+                                    <button class="wd-pagination-btn active">1</button>
+                                    <button class="wd-pagination-btn">2</button>
+                                    <button class="wd-pagination-btn">&gt;</button>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -1055,47 +1120,77 @@
 
                         <!-- Inquiries -->
                         <div class="dashboard-panel" id="panel-inquiries">
-                            <div class="panel-header">
-                                <h2 data-i18n="inquiry.title">Inquiries</h2>
-                                <p data-i18n="inquiry.subtitle">Manage buyer inquiries and sample requests.</p>
+                            <!-- Page Header -->
+                            <div class="wd-page-header">
+                                <h2 class="wd-page-title" data-i18n="inquiry.title">주문 관리</h2>
                             </div>
 
-                            <div class="inquiries-list">
-                                <div class="inquiry-card new">
-                                    <div class="inquiry-header">
-                                        <span class="inquiry-badge new" data-i18n="inquiry.new">New</span>
-                                        <span class="inquiry-date">2 <span data-i18n="time.hoursAgo">hours ago</span></span>
-                                    </div>
-                                    <div class="inquiry-content">
-                                        <h4><span data-i18n="inquiry.quotationRequest">Quotation Request</span> - Extra Virgin Olive Oil</h4>
-                                        <p class="inquiry-from"><span data-i18n="inquiry.from">From</span>: ABC Distribution Co. (South Korea)</p>
-                                        <div class="inquiry-details">
-                                            <span><span data-i18n="inquiry.quantity">Quantity</span>: 500 <span data-i18n="units.bottles">bottles</span></span>
-                                            <span><span data-i18n="inquiry.incoterm">Incoterm</span>: CIF Busan</span>
-                                        </div>
-                                        <p class="inquiry-message">"We are interested in your organic olive oil for the Korean market..."</p>
-                                    </div>
-                                    <div class="inquiry-actions">
-                                        <button class="btn btn-outline" data-i18n="inquiry.viewDetails">View Details</button>
-                                        <button class="btn btn-primary" data-i18n="inquiry.sendQuotation">Send Quotation</button>
-                                    </div>
-                                </div>
+                            <!-- Tabs -->
+                            <div class="wd-tabs" style="padding: 0 24px;">
+                                <button class="wd-tab active" data-i18n="inquiry.allInquiries">전체 문의</button>
+                                <button class="wd-tab" data-i18n="inquiry.quotationRequest">견적 요청</button>
+                                <button class="wd-tab" data-i18n="inquiry.sampleRequest">샘플 요청</button>
+                            </div>
 
-                                <div class="inquiry-card">
-                                    <div class="inquiry-header">
-                                        <span class="inquiry-badge sample" data-i18n="inquiry.sampleRequest">Sample Request</span>
-                                        <span class="inquiry-date">1 <span data-i18n="time.dayAgo">day ago</span></span>
-                                    </div>
-                                    <div class="inquiry-content">
-                                        <h4><span data-i18n="inquiry.sampleRequest">Sample Request</span> - Aged Parmesan</h4>
-                                        <p class="inquiry-from"><span data-i18n="inquiry.from">From</span>: XYZ Foods Ltd. (Japan)</p>
-                                        <div class="inquiry-details">
-                                            <span><span data-i18n="inquiry.samples">Samples</span>: 3 units</span>
+                            <!-- Inquiry List -->
+                            <div style="padding: 24px;">
+                                <div class="wd-inquiry-list">
+                                    <div class="wd-inquiry-card wd-inquiry-new">
+                                        <div class="wd-inquiry-header">
+                                            <div class="wd-inquiry-badges">
+                                                <span class="wd-badge wd-badge-primary">신규</span>
+                                                <span class="wd-badge wd-badge-info">견적 요청</span>
+                                            </div>
+                                            <span class="wd-inquiry-date">2시간 전</span>
+                                        </div>
+                                        <div class="wd-inquiry-body">
+                                            <h4 class="wd-inquiry-title">Extra Virgin Olive Oil 견적 요청</h4>
+                                            <p class="wd-inquiry-from">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                                ABC Distribution Co. (South Korea)
+                                            </p>
+                                            <div class="wd-inquiry-meta">
+                                                <span class="wd-inquiry-meta-item">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
+                                                    500 bottles
+                                                </span>
+                                                <span class="wd-inquiry-meta-item">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                                    CIF Busan
+                                                </span>
+                                            </div>
+                                            <p class="wd-inquiry-message">"We are interested in your organic olive oil for the Korean market..."</p>
+                                        </div>
+                                        <div class="wd-inquiry-footer">
+                                            <button class="wd-btn wd-btn-outline" data-i18n="inquiry.viewDetails">상세 보기</button>
+                                            <button class="wd-btn wd-btn-primary" data-i18n="inquiry.sendQuotation">견적 발송</button>
                                         </div>
                                     </div>
-                                    <div class="inquiry-actions">
-                                        <button class="btn btn-outline" data-i18n="inquiry.viewDetails">View Details</button>
-                                        <button class="btn btn-primary" data-i18n="inquiry.approveSample">Approve Sample</button>
+
+                                    <div class="wd-inquiry-card">
+                                        <div class="wd-inquiry-header">
+                                            <div class="wd-inquiry-badges">
+                                                <span class="wd-badge wd-badge-warning">샘플 요청</span>
+                                            </div>
+                                            <span class="wd-inquiry-date">1일 전</span>
+                                        </div>
+                                        <div class="wd-inquiry-body">
+                                            <h4 class="wd-inquiry-title">Aged Parmesan 샘플 요청</h4>
+                                            <p class="wd-inquiry-from">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                                XYZ Foods Ltd. (Japan)
+                                            </p>
+                                            <div class="wd-inquiry-meta">
+                                                <span class="wd-inquiry-meta-item">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
+                                                    3 units
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="wd-inquiry-footer">
+                                            <button class="wd-btn wd-btn-outline" data-i18n="inquiry.viewDetails">상세 보기</button>
+                                            <button class="wd-btn wd-btn-primary" data-i18n="inquiry.approveSample">샘플 승인</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1103,191 +1198,223 @@
 
                         <!-- Company Profile -->
                         <div class="dashboard-panel" id="panel-profile">
-                            <div class="panel-header">
-                                <h2 data-i18n="profile.title">Company Profile</h2>
-                                <p data-i18n="profile.subtitle">Manage your company information visible to buyers.</p>
+                            <!-- Page Header -->
+                            <div class="wd-page-header">
+                                <h2 class="wd-page-title" data-i18n="profile.title">라벨 관리</h2>
+                                <button class="wd-btn wd-btn-primary" onclick="saveProfile(event)">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                    <span data-i18n="profile.saveChanges">저장</span>
+                                </button>
                             </div>
 
-                            <form class="profile-form" onsubmit="saveProfile(event)">
+                            <form class="wd-form" id="profile-form" onsubmit="saveProfile(event)">
                                 <!-- Company Logo Section -->
-                                <div class="form-section">
-                                    <h3 data-i18n="profile.companyLogo">Company Logo</h3>
-                                    <div class="logo-upload-container">
-                                        <div class="logo-preview" id="logo-preview">
-                                            <img src="" alt="Company Logo" id="logo-preview-img" style="display: none;">
-                                            <div class="logo-placeholder" id="logo-placeholder">
-                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                                                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                                                    <polyline points="21 15 16 10 5 21"/>
-                                                </svg>
-                                                <span data-i18n="profile.noLogo">No logo uploaded</span>
+                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                    <div class="wd-card-header">
+                                        <h3 class="wd-card-title" data-i18n="profile.companyLogo">회사 로고</h3>
+                                    </div>
+                                    <div class="wd-card-body">
+                                        <div class="wd-logo-upload">
+                                            <div class="wd-logo-preview" id="logo-preview">
+                                                <img src="" alt="Company Logo" id="logo-preview-img" style="display: none;">
+                                                <div class="wd-logo-placeholder" id="logo-placeholder">
+                                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                                                        <polyline points="21 15 16 10 5 21"/>
+                                                    </svg>
+                                                    <span data-i18n="profile.noLogo">로고 없음</span>
+                                                </div>
+                                            </div>
+                                            <div class="wd-logo-actions">
+                                                <input type="file" id="logo-input" accept="image/*" style="display: none;" onchange="handleLogoSelect(event)">
+                                                <button type="button" class="wd-btn wd-btn-outline" onclick="document.getElementById('logo-input').click()">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                                        <polyline points="17 8 12 3 7 8"/>
+                                                        <line x1="12" y1="3" x2="12" y2="15"/>
+                                                    </svg>
+                                                    <span data-i18n="profile.uploadLogo">로고 업로드</span>
+                                                </button>
+                                                <button type="button" class="wd-btn wd-btn-outline wd-btn-danger" id="remove-logo-btn" style="display: none;" onclick="removeLogo()">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <polyline points="3 6 5 6 21 6"/>
+                                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                    </svg>
+                                                    <span data-i18n="profile.removeLogo">삭제</span>
+                                                </button>
+                                                <p class="wd-form-hint" data-i18n="profile.logoHint">권장: 200x200px, PNG 또는 JPG, 최대 2MB</p>
                                             </div>
                                         </div>
-                                        <div class="logo-upload-actions">
-                                            <input type="file" id="logo-input" accept="image/*" style="display: none;" onchange="handleLogoSelect(event)">
-                                            <button type="button" class="btn btn-outline" onclick="document.getElementById('logo-input').click()">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    </div>
+                                </div>
+
+                                <!-- Basic Info Section -->
+                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                    <div class="wd-card-header">
+                                        <h3 class="wd-card-title" data-i18n="profile.basicInfo">기본 정보</h3>
+                                    </div>
+                                    <div class="wd-card-body">
+                                        <div class="wd-form-row">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label"><span data-i18n="auth.companyName">회사명</span> *</label>
+                                                <input type="text" class="wd-input" value="Oleificio Ferrara S.r.l." required>
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label"><span data-i18n="auth.country">국가</span> *</label>
+                                                <select class="wd-input wd-select" required>
+                                                    <option value="IT" selected data-i18n="countries.IT">Italy</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="wd-form-row">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label"><span data-i18n="auth.businessEmail">업무용 이메일</span> *</label>
+                                                <input type="email" class="wd-input wd-input-readonly" value="sales@oleificio-ferrara.it" readonly title="Email cannot be changed">
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="profile.phone">전화번호</label>
+                                                <input type="tel" class="wd-input" value="+39 0123 456789">
+                                            </div>
+                                        </div>
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label" data-i18n="profile.website">웹사이트</label>
+                                            <input type="url" class="wd-input" value="https://www.oleificio-ferrara.it">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Company Details Section -->
+                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                    <div class="wd-card-header">
+                                        <h3 class="wd-card-title" data-i18n="profile.companyDetails">회사 상세</h3>
+                                    </div>
+                                    <div class="wd-card-body">
+                                        <div class="wd-form-row">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="profile.yearEstablished">설립 연도</label>
+                                                <input type="number" class="wd-input" value="1985" min="1800" max="2025">
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="profile.employees">직원 수</label>
+                                                <select class="wd-input wd-select">
+                                                    <option value="1-10">1-10</option>
+                                                    <option value="11-50" selected>11-50</option>
+                                                    <option value="51-200">51-200</option>
+                                                    <option value="201-500">201-500</option>
+                                                    <option value="500+">500+</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label" data-i18n="profile.description">회사 소개</label>
+                                            <textarea class="wd-input wd-textarea" rows="4" data-i18n-placeholder="profile.descPlaceholder">Family-owned olive oil producer since 1985, specializing in premium extra virgin olive oil from Puglia region. Our products are certified organic and HACCP compliant.</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Company Certifications Section -->
+                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                    <div class="wd-card-header">
+                                        <h3 class="wd-card-title" data-i18n="profile.companyCertifications">회사 인증</h3>
+                                    </div>
+                                    <div class="wd-card-body">
+                                        <p class="wd-form-hint" style="margin-bottom: 16px;" data-i18n="profile.companyCertsDesc">회사 전체에 적용되는 인증입니다. 개별 상품 인증은 상품 편집 시 추가할 수 있습니다.</p>
+
+                                        <div class="wd-checkbox-grid">
+                                            <label class="wd-checkbox-card">
+                                                <input type="checkbox" checked>
+                                                <span class="wd-checkbox-label">HACCP</span>
+                                            </label>
+                                            <label class="wd-checkbox-card">
+                                                <input type="checkbox" checked>
+                                                <span class="wd-checkbox-label">ISO 22000</span>
+                                            </label>
+                                            <label class="wd-checkbox-card">
+                                                <input type="checkbox" checked>
+                                                <span class="wd-checkbox-label">Organic (EU)</span>
+                                            </label>
+                                            <label class="wd-checkbox-card">
+                                                <input type="checkbox">
+                                                <span class="wd-checkbox-label">Halal</span>
+                                            </label>
+                                            <label class="wd-checkbox-card">
+                                                <input type="checkbox">
+                                                <span class="wd-checkbox-label">Kosher</span>
+                                            </label>
+                                            <label class="wd-checkbox-card">
+                                                <input type="checkbox">
+                                                <span class="wd-checkbox-label">Non-GMO</span>
+                                            </label>
+                                        </div>
+
+                                        <!-- 인증서 파일 업로드 -->
+                                        <div class="wd-upload-section" style="margin-top: 24px;">
+                                            <h4 class="wd-form-label" style="margin-bottom: 12px;" data-i18n="profile.uploadCertDocs">인증서 문서 업로드</h4>
+                                            <div class="wd-dropzone" id="company-cert-dropzone"
+                                                 ondrop="handleDrop(event, 'company-cert')"
+                                                 ondragover="handleDragOver(event)"
+                                                 ondragleave="handleDragLeave(event)">
+                                                <input type="file" id="company-cert-file" accept=".pdf,.jpg,.png" onchange="handleFileSelect(event, 'company-cert')" hidden multiple>
+                                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                                     <polyline points="17 8 12 3 7 8"/>
                                                     <line x1="12" y1="3" x2="12" y2="15"/>
                                                 </svg>
-                                                <span data-i18n="profile.uploadLogo">Upload Logo</span>
-                                            </button>
-                                            <button type="button" class="btn btn-outline btn-danger" id="remove-logo-btn" style="display: none;" onclick="removeLogo()">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <polyline points="3 6 5 6 21 6"/>
-                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                                </svg>
-                                                <span data-i18n="profile.removeLogo">Remove</span>
-                                            </button>
-                                            <p class="upload-hint" data-i18n="profile.logoHint">Recommended: 200x200px, PNG or JPG, max 2MB</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-section">
-                                    <h3 data-i18n="profile.basicInfo">Basic Information</h3>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label><span data-i18n="auth.companyName">Company Name</span> *</label>
-                                            <input type="text" value="Oleificio Ferrara S.r.l." required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label><span data-i18n="auth.country">Country</span> *</label>
-                                            <select required>
-                                                <option value="IT" selected data-i18n="countries.IT">Italy</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label><span data-i18n="auth.businessEmail">Business Email</span> *</label>
-                                            <input type="email" value="sales@oleificio-ferrara.it" readonly class="input-readonly" title="Email cannot be changed">
-                                        </div>
-                                        <div class="form-group">
-                                            <label data-i18n="profile.phone">Phone</label>
-                                            <input type="tel" value="+39 0123 456789">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label data-i18n="profile.website">Website</label>
-                                        <input type="url" value="https://www.oleificio-ferrara.it">
-                                    </div>
-                                </div>
-
-                                <div class="form-section">
-                                    <h3 data-i18n="profile.companyDetails">Company Details</h3>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label data-i18n="profile.yearEstablished">Year Established</label>
-                                            <input type="number" value="1985" min="1800" max="2025">
-                                        </div>
-                                        <div class="form-group">
-                                            <label data-i18n="profile.employees">Number of Employees</label>
-                                            <select>
-                                                <option value="1-10">1-10</option>
-                                                <option value="11-50" selected>11-50</option>
-                                                <option value="51-200">51-200</option>
-                                                <option value="201-500">201-500</option>
-                                                <option value="500+">500+</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label data-i18n="profile.description">Company Description</label>
-                                        <textarea rows="4" data-i18n-placeholder="profile.descPlaceholder">Family-owned olive oil producer since 1985, specializing in premium extra virgin olive oil from Puglia region. Our products are certified organic and HACCP compliant.</textarea>
-                                    </div>
-                                </div>
-
-                                <div class="form-section">
-                                    <h3 data-i18n="profile.companyCertifications">Company Certifications</h3>
-                                    <p class="section-description" data-i18n="profile.companyCertsDesc">Certifications that apply to your entire company. Product-specific certifications can be added when editing each product.</p>
-
-                                    <div class="cert-checkboxes">
-                                        <label class="checkbox-card">
-                                            <input type="checkbox" checked>
-                                            <span class="checkbox-label">HACCP</span>
-                                        </label>
-                                        <label class="checkbox-card">
-                                            <input type="checkbox" checked>
-                                            <span class="checkbox-label">ISO 22000</span>
-                                        </label>
-                                        <label class="checkbox-card">
-                                            <input type="checkbox" checked>
-                                            <span class="checkbox-label">Organic (EU)</span>
-                                        </label>
-                                        <label class="checkbox-card">
-                                            <input type="checkbox">
-                                            <span class="checkbox-label">Halal</span>
-                                        </label>
-                                        <label class="checkbox-card">
-                                            <input type="checkbox">
-                                            <span class="checkbox-label">Kosher</span>
-                                        </label>
-                                        <label class="checkbox-card">
-                                            <input type="checkbox">
-                                            <span class="checkbox-label">Non-GMO</span>
-                                        </label>
-                                    </div>
-
-                                    <!-- 인증서 파일 업로드 -->
-                                    <div class="cert-upload-section">
-                                        <h4 data-i18n="profile.uploadCertDocs">Upload Certification Documents</h4>
-                                        <div class="upload-dropzone compact" id="company-cert-dropzone"
-                                             ondrop="handleDrop(event, 'company-cert')"
-                                             ondragover="handleDragOver(event)"
-                                             ondragleave="handleDragLeave(event)">
-                                            <input type="file" id="company-cert-file" accept=".pdf,.jpg,.png" onchange="handleFileSelect(event, 'company-cert')" hidden multiple>
-                                            <span class="dropzone-icon">📤</span>
-                                            <p><span data-i18n="catalog.dragDrop">Drag & drop or</span> <label for="company-cert-file" class="browse-link" data-i18n="catalog.browse">browse</label></p>
-                                            <span class="file-types">PDF, JPG, PNG (<span data-i18n="catalog.maxSize">Max</span> 10MB)</span>
-                                        </div>
-                                        <div class="uploaded-certs-list" id="company-cert-list">
-                                            <div class="uploaded-cert-item">
-                                                <span class="cert-icon">📄</span>
-                                                <span class="cert-name">HACCP_Certificate_2024.pdf</span>
-                                                <span class="cert-status valid" data-i18n="profile.valid">Valid</span>
-                                                <button class="btn-remove" onclick="removeCert('haccp')">×</button>
+                                                <p><span data-i18n="catalog.dragDrop">드래그 & 드롭 또는</span> <label for="company-cert-file" class="wd-link" data-i18n="catalog.browse">찾아보기</label></p>
+                                                <span class="wd-dropzone-hint">PDF, JPG, PNG (최대 10MB)</span>
                                             </div>
-                                            <div class="uploaded-cert-item">
-                                                <span class="cert-icon">📄</span>
-                                                <span class="cert-name">Organic_EU_Certificate.pdf</span>
-                                                <span class="cert-status valid" data-i18n="profile.valid">Valid</span>
-                                                <button class="btn-remove" onclick="removeCert('organic')">×</button>
+                                            <div class="wd-file-list" id="company-cert-list">
+                                                <div class="wd-file-item">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                                    <span class="wd-file-name">HACCP_Certificate_2024.pdf</span>
+                                                    <span class="wd-badge wd-badge-success" data-i18n="profile.valid">유효</span>
+                                                    <button type="button" class="wd-btn-icon" onclick="removeCert('haccp')">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                                    </button>
+                                                </div>
+                                                <div class="wd-file-item">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                                    <span class="wd-file-name">Organic_EU_Certificate.pdf</span>
+                                                    <span class="wd-badge wd-badge-success" data-i18n="profile.valid">유효</span>
+                                                    <button type="button" class="wd-btn-icon" onclick="removeCert('organic')">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="form-section">
-                                    <h3 data-i18n="profile.tradeTerms">Trade Terms</h3>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label data-i18n="profile.minOrderValue">Minimum Order Value</label>
-                                            <div class="input-with-prefix">
-                                                <span class="prefix">$</span>
-                                                <input type="number" value="1000" min="0">
+                                <!-- Trade Terms Section -->
+                                <div class="wd-card" style="margin: 0 24px 24px;">
+                                    <div class="wd-card-header">
+                                        <h3 class="wd-card-title" data-i18n="profile.tradeTerms">거래 조건</h3>
+                                    </div>
+                                    <div class="wd-card-body">
+                                        <div class="wd-form-row">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="profile.minOrderValue">최소 주문 금액</label>
+                                                <div class="wd-input-group">
+                                                    <span class="wd-input-prefix">$</span>
+                                                    <input type="number" class="wd-input" value="1000" min="0">
+                                                </div>
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="profile.leadTime">리드타임 (일)</label>
+                                                <input type="number" class="wd-input" value="14" min="1">
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label data-i18n="profile.leadTime">Lead Time (days)</label>
-                                            <input type="number" value="14" min="1">
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label" data-i18n="profile.paymentTerms">결제 조건</label>
+                                            <div class="wd-checkbox-inline">
+                                                <label class="wd-checkbox"><input type="checkbox" checked> T/T</label>
+                                                <label class="wd-checkbox"><input type="checkbox" checked> L/C</label>
+                                                <label class="wd-checkbox"><input type="checkbox"> PayPal</label>
+                                                <label class="wd-checkbox"><input type="checkbox"> Western Union</label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label data-i18n="profile.paymentTerms">Payment Terms</label>
-                                        <div class="checkbox-group">
-                                            <label><input type="checkbox" checked> T/T</label>
-                                            <label><input type="checkbox" checked> L/C</label>
-                                            <label><input type="checkbox"> PayPal</label>
-                                            <label><input type="checkbox"> Western Union</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-actions">
-                                    <button type="submit" class="btn btn-primary" data-i18n="profile.saveChanges">Save Changes</button>
                                 </div>
                             </form>
                         </div>

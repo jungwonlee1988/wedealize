@@ -647,15 +647,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ==================== Dashboard Navigation ====================
 
-document.querySelectorAll('.nav-btn:not(.nav-parent)').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const section = btn.dataset.section;
-        if (section) {
-            showSection(section);
-        }
-    });
-});
-
 function showSection(sectionName) {
     // 패널 전환
     document.querySelectorAll('.dashboard-panel').forEach(panel => {
@@ -667,14 +658,24 @@ function showSection(sectionName) {
         targetPanel.classList.add('active');
     }
 
-    // 네비게이션 버튼 활성화 상태 업데이트
+    // 네비게이션 버튼 활성화 상태 업데이트 (기존 nav-btn)
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
         if (btn.dataset.section === sectionName) {
             btn.classList.add('active');
-
-            // 서브메뉴 항목이면 부모 메뉴 열기
             const navGroup = btn.closest('.nav-group');
+            if (navGroup) {
+                navGroup.classList.add('expanded');
+            }
+        }
+    });
+
+    // 새 디자인 시스템 네비게이션 (wd-nav-item)
+    document.querySelectorAll('.wd-nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.section === sectionName) {
+            item.classList.add('active');
+            const navGroup = item.closest('.wd-nav-group');
             if (navGroup) {
                 navGroup.classList.add('expanded');
             }
@@ -684,7 +685,15 @@ function showSection(sectionName) {
 
 // 서브메뉴 토글
 function toggleSubmenu(btn) {
-    const navGroup = btn.closest('.nav-group');
+    // 기존 nav-group 지원
+    let navGroup = btn.closest('.nav-group');
+    if (navGroup) {
+        navGroup.classList.toggle('expanded');
+        return;
+    }
+
+    // 새 wd-nav-group 지원
+    navGroup = btn.closest('.wd-nav-group');
     if (navGroup) {
         navGroup.classList.toggle('expanded');
     }
