@@ -42,15 +42,13 @@ body {
 .portal-header {
     background: white;
     border-bottom: 1px solid var(--gray-200);
-    padding: 15px 30px;
+    padding: 0;
     position: sticky;
     top: 0;
     z-index: 100;
 }
 
 .header-content {
-    max-width: 1400px;
-    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -60,6 +58,23 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+    padding: 15px 24px;
+    width: 260px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* 대시보드 모드일 때 로고 영역 스타일 */
+body.dashboard-mode .logo {
+    background: var(--gray-900);
+}
+
+body.dashboard-mode .logo img {
+    filter: brightness(0) invert(1);
+}
+
+body.dashboard-mode .portal-badge {
+    background: var(--primary);
 }
 
 .logo h1 {
@@ -80,6 +95,9 @@ body {
     display: flex;
     align-items: center;
     gap: 20px;
+    padding: 15px 30px;
+    flex: 1;
+    justify-content: flex-end;
 }
 
 /* Language Dropdown */
@@ -621,32 +639,8 @@ body {
 .dashboard-sidebar {
     width: 260px;
     background: var(--gray-900);
-    padding: 0;
+    padding: 20px 0;
     flex-shrink: 0;
-}
-
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 20px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 10px;
-}
-
-.sidebar-header img {
-    filter: brightness(0) invert(1);
-}
-
-.sidebar-badge {
-    background: var(--primary);
-    color: white;
-    font-size: 0.65rem;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .sidebar-nav {
