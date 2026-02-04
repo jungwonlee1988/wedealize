@@ -328,6 +328,33 @@ const supportedLanguages = [
     { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳' }
 ];
 
+// 번역 진행 메시지 (각 언어별)
+const translationProgressMessages = {
+    en: 'Applying your selected language...',
+    ko: '선택하신 언어로 적용 중입니다...',
+    ja: '選択した言語を適用しています...',
+    zh: '正在应用您选择的语言...',
+    es: 'Aplicando el idioma seleccionado...',
+    de: 'Ihre ausgewählte Sprache wird angewendet...',
+    fr: 'Application de la langue sélectionnée...',
+    it: 'Applicazione della lingua selezionata...',
+    pt: 'Aplicando o idioma selecionado...',
+    ru: 'Применение выбранного языка...',
+    ar: 'جاري تطبيق اللغة المحددة...',
+    th: 'กำลังใช้ภาษาที่เลือก...',
+    vi: 'Đang áp dụng ngôn ngữ đã chọn...',
+    id: 'Menerapkan bahasa yang dipilih...',
+    tr: 'Seçilen dil uygulanıyor...',
+    nl: 'Geselecteerde taal toepassen...',
+    pl: 'Stosowanie wybranego języka...',
+    hi: 'चयनित भाषा लागू की जा रही है...'
+};
+
+// 번역 진행 메시지 가져오기
+function getTranslationProgressMessage(langCode) {
+    return translationProgressMessages[langCode] || translationProgressMessages['en'];
+}
+
 // 번역 캐시 (localStorage 기반)
 const CACHE_KEY = 'wedealize_translations_cache';
 const CACHE_VERSION = '1.4';  // 영어 원본 변경 시 버전 올리면 캐시 자동 초기화
@@ -426,8 +453,11 @@ async function generateTranslations(targetLang) {
         return translationCache[targetLang];
     }
 
+    // 해당 언어의 진행 메시지 사용
+    const progressMessage = getTranslationProgressMessage(targetLang);
+
     console.log(`Generating AI translations for: ${targetLang}`);
-    showTranslationProgress(true, 'Translating...');
+    showTranslationProgress(true, progressMessage);
 
     try {
         // 1차: 백엔드 AI 번역 API 시도
@@ -445,7 +475,8 @@ async function generateTranslations(targetLang) {
 
         // 2차: Google 무료 API 폴백
         try {
-            updateTranslationProgress(0, 'Fallback translating...');
+            // 폴백 시에도 해당 언어 메시지 유지
+            updateTranslationProgress(0, progressMessage);
             const result = await translateWithGoogleFallback(englishTranslations, targetLang);
 
             translationCache[targetLang] = result;
