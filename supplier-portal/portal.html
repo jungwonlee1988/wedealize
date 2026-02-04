@@ -50,14 +50,14 @@
             <section class="wd-auth-section" id="auth-section">
                 <div class="wd-auth-card">
                     <div class="wd-auth-tabs">
-                        <button class="wd-auth-tab active" data-tab="login" data-i18n="auth.login">로그인</button>
-                        <button class="wd-auth-tab" data-tab="register" data-i18n="auth.register">회원가입</button>
+                        <button class="wd-auth-tab active" data-tab="login" data-i18n="auth.login">Login</button>
+                        <button class="wd-auth-tab" data-tab="register" data-i18n="auth.register">Register</button>
                     </div>
 
                     <!-- Login Form -->
                     <form class="wd-auth-form active" id="login-form" onsubmit="handleLogin(event)">
-                        <h2 class="wd-auth-title" data-i18n="auth.welcomeBack">환영합니다</h2>
-                        <p class="wd-auth-subtitle" data-i18n="auth.accessDashboard">공급자 대시보드에 접속하세요</p>
+                        <h2 class="wd-auth-title" data-i18n="auth.welcomeBack">Welcome Back</h2>
+                        <p class="wd-auth-subtitle" data-i18n="auth.accessDashboard">Access your supplier dashboard</p>
 
                         <!-- Google Sign-In Button -->
                         <div class="wd-social-login">
@@ -68,35 +68,35 @@
                                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                                 </svg>
-                                <span data-i18n="auth.continueWithGoogle">Google로 계속하기</span>
+                                <span data-i18n="auth.continueWithGoogle">Continue with Google</span>
                             </button>
                         </div>
 
                         <div class="wd-auth-divider">
-                            <span data-i18n="auth.or">또는</span>
+                            <span data-i18n="auth.or">or</span>
                         </div>
 
                         <div class="wd-form-group">
-                            <label class="wd-form-label" for="login-email" data-i18n="auth.email">이메일</label>
+                            <label class="wd-form-label" for="login-email" data-i18n="auth.email">Email</label>
                             <input type="email" class="wd-input" id="login-email" placeholder="your@company.com" required>
                         </div>
                         <div class="wd-form-group">
-                            <label class="wd-form-label" for="login-password" data-i18n="auth.password">비밀번호</label>
-                            <input type="password" class="wd-input" id="login-password" placeholder="비밀번호 입력" required>
+                            <label class="wd-form-label" for="login-password" data-i18n="auth.password">Password</label>
+                            <input type="password" class="wd-input" id="login-password" data-i18n-placeholder="auth.enterPassword" placeholder="Enter password" required>
                         </div>
                         <div class="wd-form-options">
                             <label class="wd-checkbox">
-                                <input type="checkbox"> <span data-i18n="auth.rememberMe">로그인 유지</span>
+                                <input type="checkbox"> <span data-i18n="auth.rememberMe">Remember me</span>
                             </label>
-                            <a href="#" class="wd-link" onclick="showForgotPassword(event)" data-i18n="auth.forgotPassword">비밀번호 찾기</a>
+                            <a href="#" class="wd-link" onclick="showForgotPassword(event)" data-i18n="auth.forgotPassword">Forgot password?</a>
                         </div>
-                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.login" onclick="handleLogin(event)">로그인</button>
+                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.login" onclick="handleLogin(event)">Login</button>
                     </form>
 
                     <!-- Register Form -->
                     <form class="wd-auth-form" id="register-form" onsubmit="handleRegister(event)">
-                        <h2 class="wd-auth-title" data-i18n="auth.joinWedealize">WeDealize 가입</h2>
-                        <p class="wd-auth-subtitle" data-i18n="auth.registerSubtitle">공급자 파트너로 등록하세요</p>
+                        <h2 class="wd-auth-title" data-i18n="auth.joinWedealize">Join WeDealize</h2>
+                        <p class="wd-auth-subtitle" data-i18n="auth.registerSubtitle">Register as a supplier partner</p>
 
                         <!-- Google Sign-In Button -->
                         <div class="wd-social-login">
@@ -107,276 +107,276 @@
                                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                                 </svg>
-                                <span data-i18n="auth.continueWithGoogle">Google로 계속하기</span>
+                                <span data-i18n="auth.continueWithGoogle">Continue with Google</span>
                             </button>
                         </div>
 
                         <div class="wd-auth-divider">
-                            <span data-i18n="auth.or">또는</span>
+                            <span data-i18n="auth.or">or</span>
                         </div>
 
                         <div class="wd-form-group">
-                            <label class="wd-form-label" for="reg-company"><span data-i18n="auth.companyName">회사명</span> *</label>
-                            <input type="text" class="wd-input" id="reg-company" placeholder="회사명" required>
+                            <label class="wd-form-label" for="reg-company"><span data-i18n="auth.companyName">Company Name</span> *</label>
+                            <input type="text" class="wd-input" id="reg-company" data-i18n-placeholder="auth.companyName" placeholder="Company Name" required>
                         </div>
                         <div class="wd-form-group">
-                            <label class="wd-form-label" for="reg-country"><span data-i18n="auth.country">국가</span> *</label>
+                            <label class="wd-form-label" for="reg-country"><span data-i18n="auth.country">Country</span> *</label>
                             <div class="wd-country-select" id="country-select">
                                 <input type="hidden" id="reg-country" name="country" required>
                                 <button type="button" class="wd-country-select-trigger" id="country-trigger">
                                     <img class="wd-country-select-flag" id="selected-flag" src="" alt="" style="display: none;">
-                                    <span class="wd-country-select-text placeholder" id="selected-country">국가 선택</span>
+                                    <span class="wd-country-select-text placeholder" id="selected-country" data-i18n="auth.selectCountry">Select country</span>
                                     <svg class="wd-country-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M6 9l6 6 6-6"/>
                                     </svg>
                                 </button>
                                 <div class="wd-country-select-dropdown" id="country-dropdown">
                                     <div class="wd-country-search">
-                                        <input type="text" id="country-search" placeholder="국가 검색...">
+                                        <input type="text" id="country-search" data-i18n-placeholder="auth.searchCountry" placeholder="Search country...">
                                     </div>
                                     <div class="wd-country-list" id="country-list">
                                         <!-- Asia -->
-                                        <div class="wd-country-group-label">아시아</div>
-                                        <div class="wd-country-option" data-value="KR" data-name="대한민국 (South Korea)">
+                                        <div class="wd-country-group-label" data-i18n="regions.asia">Asia</div>
+                                        <div class="wd-country-option" data-value="KR" data-name="South Korea">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/kr.png" alt="KR">
-                                            <span class="wd-country-option-name">대한민국 (South Korea)</span>
+                                            <span class="wd-country-option-name">South Korea</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="JP" data-name="일본 (Japan)">
+                                        <div class="wd-country-option" data-value="JP" data-name="Japan">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/jp.png" alt="JP">
-                                            <span class="wd-country-option-name">일본 (Japan)</span>
+                                            <span class="wd-country-option-name">Japan</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="CN" data-name="중국 (China)">
+                                        <div class="wd-country-option" data-value="CN" data-name="China">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/cn.png" alt="CN">
-                                            <span class="wd-country-option-name">중국 (China)</span>
+                                            <span class="wd-country-option-name">China</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="TW" data-name="대만 (Taiwan)">
+                                        <div class="wd-country-option" data-value="TW" data-name="Taiwan">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/tw.png" alt="TW">
-                                            <span class="wd-country-option-name">대만 (Taiwan)</span>
+                                            <span class="wd-country-option-name">Taiwan</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="HK" data-name="홍콩 (Hong Kong)">
+                                        <div class="wd-country-option" data-value="HK" data-name="Hong Kong">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/hk.png" alt="HK">
-                                            <span class="wd-country-option-name">홍콩 (Hong Kong)</span>
+                                            <span class="wd-country-option-name">Hong Kong</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="SG" data-name="싱가포르 (Singapore)">
+                                        <div class="wd-country-option" data-value="SG" data-name="Singapore">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/sg.png" alt="SG">
-                                            <span class="wd-country-option-name">싱가포르 (Singapore)</span>
+                                            <span class="wd-country-option-name">Singapore</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="MY" data-name="말레이시아 (Malaysia)">
+                                        <div class="wd-country-option" data-value="MY" data-name="Malaysia">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/my.png" alt="MY">
-                                            <span class="wd-country-option-name">말레이시아 (Malaysia)</span>
+                                            <span class="wd-country-option-name">Malaysia</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="TH" data-name="태국 (Thailand)">
+                                        <div class="wd-country-option" data-value="TH" data-name="Thailand">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/th.png" alt="TH">
-                                            <span class="wd-country-option-name">태국 (Thailand)</span>
+                                            <span class="wd-country-option-name">Thailand</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="VN" data-name="베트남 (Vietnam)">
+                                        <div class="wd-country-option" data-value="VN" data-name="Vietnam">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/vn.png" alt="VN">
-                                            <span class="wd-country-option-name">베트남 (Vietnam)</span>
+                                            <span class="wd-country-option-name">Vietnam</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="ID" data-name="인도네시아 (Indonesia)">
+                                        <div class="wd-country-option" data-value="ID" data-name="Indonesia">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/id.png" alt="ID">
-                                            <span class="wd-country-option-name">인도네시아 (Indonesia)</span>
+                                            <span class="wd-country-option-name">Indonesia</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="PH" data-name="필리핀 (Philippines)">
+                                        <div class="wd-country-option" data-value="PH" data-name="Philippines">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ph.png" alt="PH">
-                                            <span class="wd-country-option-name">필리핀 (Philippines)</span>
+                                            <span class="wd-country-option-name">Philippines</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="IN" data-name="인도 (India)">
+                                        <div class="wd-country-option" data-value="IN" data-name="India">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/in.png" alt="IN">
-                                            <span class="wd-country-option-name">인도 (India)</span>
+                                            <span class="wd-country-option-name">India</span>
                                         </div>
                                         <!-- Europe -->
-                                        <div class="wd-country-group-label">유럽</div>
-                                        <div class="wd-country-option" data-value="DE" data-name="독일 (Germany)">
+                                        <div class="wd-country-group-label" data-i18n="regions.europe">Europe</div>
+                                        <div class="wd-country-option" data-value="DE" data-name="Germany">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/de.png" alt="DE">
-                                            <span class="wd-country-option-name">독일 (Germany)</span>
+                                            <span class="wd-country-option-name">Germany</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="FR" data-name="프랑스 (France)">
+                                        <div class="wd-country-option" data-value="FR" data-name="France">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/fr.png" alt="FR">
-                                            <span class="wd-country-option-name">프랑스 (France)</span>
+                                            <span class="wd-country-option-name">France</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="GB" data-name="영국 (United Kingdom)">
+                                        <div class="wd-country-option" data-value="GB" data-name="United Kingdom">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/gb.png" alt="GB">
-                                            <span class="wd-country-option-name">영국 (United Kingdom)</span>
+                                            <span class="wd-country-option-name">United Kingdom</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="IT" data-name="이탈리아 (Italy)">
+                                        <div class="wd-country-option" data-value="IT" data-name="Italy">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/it.png" alt="IT">
-                                            <span class="wd-country-option-name">이탈리아 (Italy)</span>
+                                            <span class="wd-country-option-name">Italy</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="ES" data-name="스페인 (Spain)">
+                                        <div class="wd-country-option" data-value="ES" data-name="Spain">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/es.png" alt="ES">
-                                            <span class="wd-country-option-name">스페인 (Spain)</span>
+                                            <span class="wd-country-option-name">Spain</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="NL" data-name="네덜란드 (Netherlands)">
+                                        <div class="wd-country-option" data-value="NL" data-name="Netherlands">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/nl.png" alt="NL">
-                                            <span class="wd-country-option-name">네덜란드 (Netherlands)</span>
+                                            <span class="wd-country-option-name">Netherlands</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="BE" data-name="벨기에 (Belgium)">
+                                        <div class="wd-country-option" data-value="BE" data-name="Belgium">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/be.png" alt="BE">
-                                            <span class="wd-country-option-name">벨기에 (Belgium)</span>
+                                            <span class="wd-country-option-name">Belgium</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="CH" data-name="스위스 (Switzerland)">
+                                        <div class="wd-country-option" data-value="CH" data-name="Switzerland">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ch.png" alt="CH">
-                                            <span class="wd-country-option-name">스위스 (Switzerland)</span>
+                                            <span class="wd-country-option-name">Switzerland</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="AT" data-name="오스트리아 (Austria)">
+                                        <div class="wd-country-option" data-value="AT" data-name="Austria">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/at.png" alt="AT">
-                                            <span class="wd-country-option-name">오스트리아 (Austria)</span>
+                                            <span class="wd-country-option-name">Austria</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="PL" data-name="폴란드 (Poland)">
+                                        <div class="wd-country-option" data-value="PL" data-name="Poland">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/pl.png" alt="PL">
-                                            <span class="wd-country-option-name">폴란드 (Poland)</span>
+                                            <span class="wd-country-option-name">Poland</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="PT" data-name="포르투갈 (Portugal)">
+                                        <div class="wd-country-option" data-value="PT" data-name="Portugal">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/pt.png" alt="PT">
-                                            <span class="wd-country-option-name">포르투갈 (Portugal)</span>
+                                            <span class="wd-country-option-name">Portugal</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="SE" data-name="스웨덴 (Sweden)">
+                                        <div class="wd-country-option" data-value="SE" data-name="Sweden">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/se.png" alt="SE">
-                                            <span class="wd-country-option-name">스웨덴 (Sweden)</span>
+                                            <span class="wd-country-option-name">Sweden</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="NO" data-name="노르웨이 (Norway)">
+                                        <div class="wd-country-option" data-value="NO" data-name="Norway">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/no.png" alt="NO">
-                                            <span class="wd-country-option-name">노르웨이 (Norway)</span>
+                                            <span class="wd-country-option-name">Norway</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="DK" data-name="덴마크 (Denmark)">
+                                        <div class="wd-country-option" data-value="DK" data-name="Denmark">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/dk.png" alt="DK">
-                                            <span class="wd-country-option-name">덴마크 (Denmark)</span>
+                                            <span class="wd-country-option-name">Denmark</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="FI" data-name="핀란드 (Finland)">
+                                        <div class="wd-country-option" data-value="FI" data-name="Finland">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/fi.png" alt="FI">
-                                            <span class="wd-country-option-name">핀란드 (Finland)</span>
+                                            <span class="wd-country-option-name">Finland</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="IE" data-name="아일랜드 (Ireland)">
+                                        <div class="wd-country-option" data-value="IE" data-name="Ireland">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ie.png" alt="IE">
-                                            <span class="wd-country-option-name">아일랜드 (Ireland)</span>
+                                            <span class="wd-country-option-name">Ireland</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="GR" data-name="그리스 (Greece)">
+                                        <div class="wd-country-option" data-value="GR" data-name="Greece">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/gr.png" alt="GR">
-                                            <span class="wd-country-option-name">그리스 (Greece)</span>
+                                            <span class="wd-country-option-name">Greece</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="CZ" data-name="체코 (Czech Republic)">
+                                        <div class="wd-country-option" data-value="CZ" data-name="Czech Republic">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/cz.png" alt="CZ">
-                                            <span class="wd-country-option-name">체코 (Czech Republic)</span>
+                                            <span class="wd-country-option-name">Czech Republic</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="HU" data-name="헝가리 (Hungary)">
+                                        <div class="wd-country-option" data-value="HU" data-name="Hungary">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/hu.png" alt="HU">
-                                            <span class="wd-country-option-name">헝가리 (Hungary)</span>
+                                            <span class="wd-country-option-name">Hungary</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="RO" data-name="루마니아 (Romania)">
+                                        <div class="wd-country-option" data-value="RO" data-name="Romania">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ro.png" alt="RO">
-                                            <span class="wd-country-option-name">루마니아 (Romania)</span>
+                                            <span class="wd-country-option-name">Romania</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="RU" data-name="러시아 (Russia)">
+                                        <div class="wd-country-option" data-value="RU" data-name="Russia">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ru.png" alt="RU">
-                                            <span class="wd-country-option-name">러시아 (Russia)</span>
+                                            <span class="wd-country-option-name">Russia</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="UA" data-name="우크라이나 (Ukraine)">
+                                        <div class="wd-country-option" data-value="UA" data-name="Ukraine">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ua.png" alt="UA">
-                                            <span class="wd-country-option-name">우크라이나 (Ukraine)</span>
+                                            <span class="wd-country-option-name">Ukraine</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="TR" data-name="터키 (Turkey)">
+                                        <div class="wd-country-option" data-value="TR" data-name="Turkey">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/tr.png" alt="TR">
-                                            <span class="wd-country-option-name">터키 (Turkey)</span>
+                                            <span class="wd-country-option-name">Turkey</span>
                                         </div>
                                         <!-- Americas -->
-                                        <div class="wd-country-group-label">아메리카</div>
-                                        <div class="wd-country-option" data-value="US" data-name="미국 (United States)">
+                                        <div class="wd-country-group-label" data-i18n="regions.americas">Americas</div>
+                                        <div class="wd-country-option" data-value="US" data-name="United States">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/us.png" alt="US">
-                                            <span class="wd-country-option-name">미국 (United States)</span>
+                                            <span class="wd-country-option-name">United States</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="CA" data-name="캐나다 (Canada)">
+                                        <div class="wd-country-option" data-value="CA" data-name="Canada">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ca.png" alt="CA">
-                                            <span class="wd-country-option-name">캐나다 (Canada)</span>
+                                            <span class="wd-country-option-name">Canada</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="MX" data-name="멕시코 (Mexico)">
+                                        <div class="wd-country-option" data-value="MX" data-name="Mexico">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/mx.png" alt="MX">
-                                            <span class="wd-country-option-name">멕시코 (Mexico)</span>
+                                            <span class="wd-country-option-name">Mexico</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="BR" data-name="브라질 (Brazil)">
+                                        <div class="wd-country-option" data-value="BR" data-name="Brazil">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/br.png" alt="BR">
-                                            <span class="wd-country-option-name">브라질 (Brazil)</span>
+                                            <span class="wd-country-option-name">Brazil</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="AR" data-name="아르헨티나 (Argentina)">
+                                        <div class="wd-country-option" data-value="AR" data-name="Argentina">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ar.png" alt="AR">
-                                            <span class="wd-country-option-name">아르헨티나 (Argentina)</span>
+                                            <span class="wd-country-option-name">Argentina</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="CL" data-name="칠레 (Chile)">
+                                        <div class="wd-country-option" data-value="CL" data-name="Chile">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/cl.png" alt="CL">
-                                            <span class="wd-country-option-name">칠레 (Chile)</span>
+                                            <span class="wd-country-option-name">Chile</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="CO" data-name="콜롬비아 (Colombia)">
+                                        <div class="wd-country-option" data-value="CO" data-name="Colombia">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/co.png" alt="CO">
-                                            <span class="wd-country-option-name">콜롬비아 (Colombia)</span>
+                                            <span class="wd-country-option-name">Colombia</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="PE" data-name="페루 (Peru)">
+                                        <div class="wd-country-option" data-value="PE" data-name="Peru">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/pe.png" alt="PE">
-                                            <span class="wd-country-option-name">페루 (Peru)</span>
+                                            <span class="wd-country-option-name">Peru</span>
                                         </div>
                                         <!-- Oceania -->
-                                        <div class="wd-country-group-label">오세아니아</div>
-                                        <div class="wd-country-option" data-value="AU" data-name="호주 (Australia)">
+                                        <div class="wd-country-group-label" data-i18n="regions.oceania">Oceania</div>
+                                        <div class="wd-country-option" data-value="AU" data-name="Australia">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/au.png" alt="AU">
-                                            <span class="wd-country-option-name">호주 (Australia)</span>
+                                            <span class="wd-country-option-name">Australia</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="NZ" data-name="뉴질랜드 (New Zealand)">
+                                        <div class="wd-country-option" data-value="NZ" data-name="New Zealand">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/nz.png" alt="NZ">
-                                            <span class="wd-country-option-name">뉴질랜드 (New Zealand)</span>
+                                            <span class="wd-country-option-name">New Zealand</span>
                                         </div>
                                         <!-- Middle East -->
-                                        <div class="wd-country-group-label">중동</div>
-                                        <div class="wd-country-option" data-value="AE" data-name="아랍에미리트 (UAE)">
+                                        <div class="wd-country-group-label" data-i18n="regions.middleEast">Middle East</div>
+                                        <div class="wd-country-option" data-value="AE" data-name="United Arab Emirates">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ae.png" alt="AE">
-                                            <span class="wd-country-option-name">아랍에미리트 (UAE)</span>
+                                            <span class="wd-country-option-name">United Arab Emirates</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="SA" data-name="사우디아라비아 (Saudi Arabia)">
+                                        <div class="wd-country-option" data-value="SA" data-name="Saudi Arabia">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/sa.png" alt="SA">
-                                            <span class="wd-country-option-name">사우디아라비아 (Saudi Arabia)</span>
+                                            <span class="wd-country-option-name">Saudi Arabia</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="IL" data-name="이스라엘 (Israel)">
+                                        <div class="wd-country-option" data-value="IL" data-name="Israel">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/il.png" alt="IL">
-                                            <span class="wd-country-option-name">이스라엘 (Israel)</span>
+                                            <span class="wd-country-option-name">Israel</span>
                                         </div>
                                         <!-- Africa -->
-                                        <div class="wd-country-group-label">아프리카</div>
-                                        <div class="wd-country-option" data-value="ZA" data-name="남아프리카 (South Africa)">
+                                        <div class="wd-country-group-label" data-i18n="regions.africa">Africa</div>
+                                        <div class="wd-country-option" data-value="ZA" data-name="South Africa">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/za.png" alt="ZA">
-                                            <span class="wd-country-option-name">남아프리카 (South Africa)</span>
+                                            <span class="wd-country-option-name">South Africa</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="EG" data-name="이집트 (Egypt)">
+                                        <div class="wd-country-option" data-value="EG" data-name="Egypt">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/eg.png" alt="EG">
-                                            <span class="wd-country-option-name">이집트 (Egypt)</span>
+                                            <span class="wd-country-option-name">Egypt</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="NG" data-name="나이지리아 (Nigeria)">
+                                        <div class="wd-country-option" data-value="NG" data-name="Nigeria">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ng.png" alt="NG">
-                                            <span class="wd-country-option-name">나이지리아 (Nigeria)</span>
+                                            <span class="wd-country-option-name">Nigeria</span>
                                         </div>
-                                        <div class="wd-country-option" data-value="KE" data-name="케냐 (Kenya)">
+                                        <div class="wd-country-option" data-value="KE" data-name="Kenya">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ke.png" alt="KE">
-                                            <span class="wd-country-option-name">케냐 (Kenya)</span>
+                                            <span class="wd-country-option-name">Kenya</span>
                                         </div>
                                         <!-- Other -->
-                                        <div class="wd-country-group-label">기타</div>
-                                        <div class="wd-country-option" data-value="OTHER" data-name="기타 (Other)">
+                                        <div class="wd-country-group-label" data-i18n="regions.other">Other</div>
+                                        <div class="wd-country-option" data-value="OTHER" data-name="Other">
                                             <img class="wd-country-option-flag" src="https://flagcdn.com/w40/un.png" alt="OTHER">
-                                            <span class="wd-country-option-name">기타 (Other)</span>
+                                            <span class="wd-country-option-name">Other</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="wd-form-group">
-                            <label class="wd-form-label" for="reg-email"><span data-i18n="auth.businessEmail">업무용 이메일</span> *</label>
+                            <label class="wd-form-label" for="reg-email"><span data-i18n="auth.businessEmail">Business Email</span> *</label>
                             <input type="email" class="wd-input" id="reg-email" placeholder="sales@company.com" required>
                         </div>
                         <div class="wd-form-group">
-                            <label class="wd-form-label" for="reg-password"><span data-i18n="auth.password">비밀번호</span> *</label>
-                            <input type="password" class="wd-input" id="reg-password" placeholder="최소 8자" required minlength="8">
+                            <label class="wd-form-label" for="reg-password"><span data-i18n="auth.password">Password</span> *</label>
+                            <input type="password" class="wd-input" id="reg-password" data-i18n-placeholder="auth.minChars" placeholder="Minimum 8 characters" required minlength="8">
                         </div>
                         <div class="wd-form-group">
-                            <label class="wd-form-label" for="reg-category"><span data-i18n="auth.productCategory">상품 카테고리</span> *</label>
+                            <label class="wd-form-label" for="reg-category"><span data-i18n="auth.productCategory">Product Category</span> *</label>
                             <select class="wd-input wd-select" id="reg-category" required>
-                                <option value="" data-i18n="auth.selectCategory">카테고리 선택</option>
+                                <option value="" data-i18n="auth.selectCategory">Select category</option>
                                 <option value="oils" data-i18n="categories.oils">Oils & Vinegars</option>
                                 <option value="dairy" data-i18n="categories.dairy">Dairy & Cheese</option>
                                 <option value="beverages" data-i18n="categories.beverages">Beverages & Tea</option>
@@ -389,23 +389,23 @@
                         </div>
                         <div class="wd-form-options">
                             <label class="wd-checkbox">
-                                <input type="checkbox" required> <span data-i18n="auth.agreeTerms">약관에 동의합니다</span> <a href="#" class="wd-link" data-i18n="auth.termsOfService">이용약관</a>
+                                <input type="checkbox" required> <span data-i18n="auth.agreeTerms">I agree to the</span> <a href="#" class="wd-link" data-i18n="auth.termsOfService">Terms of Service</a>
                             </label>
                         </div>
-                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.createAccount">계정 만들기</button>
+                        <button type="submit" class="wd-btn wd-btn-primary wd-btn-full" data-i18n="auth.createAccount">Create Account</button>
                     </form>
 
                     <!-- Email Verification Form -->
                     <div class="wd-auth-form" id="verify-form" style="display: none;">
-                        <h2 class="wd-auth-title" data-i18n="verification.verifyEmail">이메일 인증</h2>
-                        <p class="wd-auth-subtitle"><span data-i18n="verification.codeSentTo">인증 코드를 발송했습니다:</span> <strong id="verify-email-display"></strong></p>
+                        <h2 class="wd-auth-title" data-i18n="verification.verifyEmail">Verify Your Email</h2>
+                        <p class="wd-auth-subtitle"><span data-i18n="verification.codeSentTo">We sent a verification code to</span> <strong id="verify-email-display"></strong></p>
 
                         <div class="wd-verification-icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--wd-primary)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                         </div>
 
                         <div class="wd-form-group">
-                            <label class="wd-form-label" data-i18n="verification.enterCode">6자리 코드 입력</label>
+                            <label class="wd-form-label" data-i18n="verification.enterCode">Enter 6-digit code</label>
                             <div class="wd-verification-inputs">
                                 <input type="text" maxlength="1" class="wd-code-input" data-index="0" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
                                 <input type="text" maxlength="1" class="wd-code-input" data-index="1" oninput="handleCodeInput(event)" onkeydown="handleCodeKeydown(event)" onpaste="handleCodePaste(event)">
@@ -416,29 +416,29 @@
                             </div>
                         </div>
 
-                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">이메일 인증</button>
+                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">Verify Email</button>
 
                         <div class="wd-resend-section">
-                            <p><span data-i18n="verification.didntReceive">코드를 받지 못하셨나요?</span> <button type="button" class="wd-btn-link" id="resend-btn" onclick="resendVerificationCode()" data-i18n="verification.resend">재전송</button></p>
-                            <p class="wd-resend-timer" id="resend-timer" style="display: none;"><span data-i18n="verification.resendIn">재전송 가능:</span> <span id="timer-count">60</span>초</p>
+                            <p><span data-i18n="verification.didntReceive">Didn't receive the code?</span> <button type="button" class="wd-btn-link" id="resend-btn" onclick="resendVerificationCode()" data-i18n="verification.resend">Resend</button></p>
+                            <p class="wd-resend-timer" id="resend-timer" style="display: none;"><span data-i18n="verification.resendIn">Resend available in</span> <span id="timer-count">60</span>s</p>
                         </div>
 
-                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToRegister()" data-i18n="verification.backToRegister">회원가입으로 돌아가기</button>
+                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToRegister()" data-i18n="verification.backToRegister">Back to Register</button>
                     </div>
 
                     <!-- Forgot Password Form -->
                     <div class="wd-auth-form" id="forgot-form" style="display: none;">
-                        <h2 class="wd-auth-title" data-i18n="passwordReset.resetPassword">비밀번호 재설정</h2>
-                        <p class="wd-auth-subtitle" data-i18n="passwordReset.enterEmail">재설정 링크를 받을 이메일을 입력하세요</p>
+                        <h2 class="wd-auth-title" data-i18n="passwordReset.resetPassword">Reset Password</h2>
+                        <p class="wd-auth-subtitle" data-i18n="passwordReset.enterEmail">Enter your email to receive a reset link</p>
 
                         <div class="wd-form-group">
-                            <label class="wd-form-label" for="forgot-email" data-i18n="auth.email">이메일</label>
+                            <label class="wd-form-label" for="forgot-email" data-i18n="auth.email">Email</label>
                             <input type="email" class="wd-input" id="forgot-email" placeholder="your@company.com" required>
                         </div>
 
-                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="sendResetLink()" data-i18n="passwordReset.sendResetLink">재설정 링크 보내기</button>
+                        <button type="button" class="wd-btn wd-btn-primary wd-btn-full" onclick="sendResetLink()" data-i18n="passwordReset.sendResetLink">Send Reset Link</button>
 
-                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" style="margin-top: 12px;" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">로그인으로 돌아가기</button>
+                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" style="margin-top: 12px;" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
                     </div>
 
                     <!-- Password Reset Sent -->
@@ -446,19 +446,19 @@
                         <div class="wd-success-icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--wd-success)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                         </div>
-                        <h2 class="wd-auth-title" data-i18n="passwordReset.checkEmail">이메일을 확인하세요</h2>
-                        <p class="wd-auth-subtitle"><span data-i18n="passwordReset.resetLinkSent">비밀번호 재설정 링크를 보냈습니다:</span> <strong id="reset-email-display"></strong></p>
+                        <h2 class="wd-auth-title" data-i18n="passwordReset.checkEmail">Check Your Email</h2>
+                        <p class="wd-auth-subtitle"><span data-i18n="passwordReset.resetLinkSent">We sent a password reset link to</span> <strong id="reset-email-display"></strong></p>
 
                         <div class="wd-reset-instructions">
-                            <p data-i18n="passwordReset.linkExpires">이메일의 링크를 클릭하여 비밀번호를 재설정하세요. 링크는 24시간 후 만료됩니다.</p>
+                            <p data-i18n="passwordReset.linkExpires">Click the link in the email to reset your password. The link will expire in 24 hours.</p>
                         </div>
 
-                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">로그인으로 돌아가기</button>
+                        <button type="button" class="wd-btn wd-btn-outline wd-btn-full" onclick="backToLogin()" data-i18n="passwordReset.backToLogin">Back to Login</button>
                     </div>
                 </div>
             </section>
 
-            <!-- Dashboard Section (로그인 후) -->
+            <!-- Dashboard Section (after login) -->
             <section class="dashboard-section" id="dashboard-section" style="display: none;">
                 <div class="dashboard-container">
                     <!-- Sidebar -->
@@ -469,19 +469,19 @@
                         <nav class="wd-sidebar-nav">
                             <a class="wd-nav-item active" data-section="overview" onclick="showSection('overview')">
                                 <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                                <span data-i18n="dashboard.overview">대시보드</span>
+                                <span data-i18n="dashboard.overview">Overview</span>
                             </a>
 
                             <!-- Product with Submenu -->
                             <div class="wd-nav-group">
                                 <a class="wd-nav-item wd-nav-parent" onclick="toggleSubmenu(this)">
                                     <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                                    <span data-i18n="dashboard.product">상품 관리</span>
+                                    <span data-i18n="dashboard.product">Product</span>
                                     <svg class="wd-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                                 </a>
                                 <div class="wd-nav-submenu">
                                     <a class="wd-nav-item wd-nav-child" data-section="catalog" onclick="showSection('catalog')">
-                                        <span data-i18n="dashboard.catalogRegistration">카탈로그 등록</span>
+                                        <span data-i18n="dashboard.catalogRegistration">Catalog Registration</span>
                                     </a>
                                     <a class="wd-nav-item wd-nav-child" data-section="product-list" onclick="showSection('product-list')">
                                         <span data-i18n="dashboard.productList">상품 목록</span>

@@ -32,7 +32,10 @@ const englishTranslations = {
         termsOfService: "Terms of Service",
         createAccount: "Create Account",
         continueWithGoogle: "Continue with Google",
-        or: "or"
+        or: "or",
+        enterPassword: "Enter password",
+        searchCountry: "Search country...",
+        minChars: "Minimum 8 characters"
     },
     verification: {
         verifyEmail: "Verify Your Email",
@@ -259,6 +262,15 @@ const englishTranslations = {
         CN: "China",
         KR: "South Korea",
         OTHER: "Other"
+    },
+    regions: {
+        asia: "Asia",
+        europe: "Europe",
+        americas: "Americas",
+        oceania: "Oceania",
+        middleEast: "Middle East",
+        africa: "Africa",
+        other: "Other"
     },
     units: {
         pieces: "Pieces",
