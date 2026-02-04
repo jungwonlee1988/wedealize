@@ -266,6 +266,17 @@
     --wd-transition-slow: 0.3s ease;
 }
 
+/* ==================== Utility Classes ==================== */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-100 { gap: var(--spacing-100); }
+.gap-200 { gap: var(--spacing-200); }
+.gap-300 { gap: var(--spacing-300); }
+.gap-400 { gap: var(--spacing-400); }
+
 /* ==================== Base Styles ==================== */
 .wd-text-primary { color: var(--wd-black); }
 .wd-text-secondary { color: var(--wd-gray-600); }
