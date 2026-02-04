@@ -415,7 +415,7 @@ async function generateTranslations(targetLang) {
     }
 
     console.log(`Generating AI translations for: ${targetLang}`);
-    showTranslationProgress(true, 'AI 번역 중...');
+    showTranslationProgress(true, 'Translating...');
 
     try {
         // 1차: 백엔드 AI 번역 API 시도
@@ -433,7 +433,7 @@ async function generateTranslations(targetLang) {
 
         // 2차: Google 무료 API 폴백
         try {
-            updateTranslationProgress(0, 'Fallback 번역 중...');
+            updateTranslationProgress(0, 'Fallback translating...');
             const result = await translateWithGoogleFallback(englishTranslations, targetLang);
 
             translationCache[targetLang] = result;
@@ -700,9 +700,9 @@ function showToast(message, type = 'info') {
 
 // 초기화
 async function initI18n() {
-    // 저장된 언어가 없으면 브라우저 언어 사용
+    // 저장된 언어가 없으면 영어 기본값 사용
     if (!localStorage.getItem('supplier_language')) {
-        currentLanguage = detectBrowserLanguage();
+        currentLanguage = 'en';
         localStorage.setItem('supplier_language', currentLanguage);
     }
 
