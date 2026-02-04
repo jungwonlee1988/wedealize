@@ -691,6 +691,16 @@
     border-bottom-color: var(--wd-black);
 }
 
+/* Tab Panels */
+.wd-tab-panel {
+    display: none;
+    padding: var(--spacing-600);
+}
+
+.wd-tab-panel.active {
+    display: block;
+}
+
 /* Filter tabs (pill style) */
 .wd-filter-tabs {
     display: flex;

@@ -2813,13 +2813,15 @@ window.viewActivityTarget = (type, targetId) => salesModule.viewActivityTarget(t
 // Settings Tab Navigation
 window.switchSettingsTab = (tabName) => {
     // Update tab buttons
-    const tabs = document.querySelectorAll('.wd-sub-tabs .wd-sub-tab');
-    tabs.forEach(tab => {
-        tab.classList.remove('active');
-        if (tab.getAttribute('onclick')?.includes(tabName)) {
-            tab.classList.add('active');
-        }
-    });
+    const tabContainer = document.querySelector('#panel-settings .wd-tabs');
+    if (tabContainer) {
+        tabContainer.querySelectorAll('.wd-tab').forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.getAttribute('onclick')?.includes(tabName)) {
+                tab.classList.add('active');
+            }
+        });
+    }
 
     // Update panels
     const panels = document.querySelectorAll('[id^="settings-"][id$="-panel"]');
