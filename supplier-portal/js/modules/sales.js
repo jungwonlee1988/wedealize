@@ -96,6 +96,47 @@ class SalesModule {
     }
 
     /**
+     * Toggle status filter dropdown
+     */
+    toggleStatusFilter(event) {
+        event.stopPropagation();
+        const dropdown = $('#status-filter-dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        const closeDropdown = (e) => {
+            if (!e.target.closest('.column-filter')) {
+                dropdown?.classList.remove('show');
+                document.removeEventListener('click', closeDropdown);
+            }
+        };
+        setTimeout(() => document.addEventListener('click', closeDropdown), 0);
+    }
+
+    /**
+     * Apply status filter from column dropdown
+     */
+    applyStatusFilter(status) {
+        const filterInput = $('#po-status-filter');
+        if (filterInput) {
+            filterInput.value = status;
+        }
+        this.filterPOList();
+
+        // Update filter icon state
+        const filterBtn = $('.filter-icon-btn');
+        if (filterBtn) {
+            filterBtn.classList.toggle('active', status !== 'all');
+        }
+
+        // Close dropdown
+        const dropdown = $('#status-filter-dropdown');
+        dropdown?.classList.remove('show');
+    }
+
+    /**
      * View PO detail
      */
     async viewPODetail(poNumber) {
@@ -248,6 +289,8 @@ const salesModule = new SalesModule();
 // Global functions for backward compatibility
 window.filterPOList = () => salesModule.filterPOList();
 window.searchPO = () => salesModule.searchPO();
+window.toggleStatusFilter = (event) => salesModule.toggleStatusFilter(event);
+window.applyStatusFilter = (status) => salesModule.applyStatusFilter(status);
 window.viewPODetail = (poNumber) => salesModule.viewPODetail(poNumber);
 window.confirmPO = (poNumber) => salesModule.confirmPO(poNumber);
 window.updateShipping = (poNumber) => salesModule.updateShipping(poNumber);

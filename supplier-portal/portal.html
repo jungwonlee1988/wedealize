@@ -782,20 +782,15 @@
                             <!-- PO Filter Bar -->
                             <div class="filter-bar">
                                 <div class="filter-group">
-                                    <select id="po-status-filter" onchange="filterPOList()">
-                                        <option value="all" data-i18n="sales.allOrders">All Orders</option>
-                                        <option value="pending" data-i18n="sales.pendingPO">Pending</option>
-                                        <option value="confirmed" data-i18n="sales.confirmedPO">Confirmed</option>
-                                        <option value="shipping" data-i18n="sales.inShipping">In Shipping</option>
-                                        <option value="completed" data-i18n="sales.completedPO">Completed</option>
-                                        <option value="cancelled" data-i18n="sales.cancelledPO">Cancelled</option>
-                                    </select>
                                     <input type="text" id="po-search" class="search-input" placeholder="Search PO#, Buyer..." data-i18n-placeholder="sales.searchPO" oninput="searchPO()">
                                 </div>
                                 <div class="filter-actions">
                                     <button class="btn btn-outline" onclick="exportPOList()" data-i18n="sales.exportPO">Export</button>
                                 </div>
                             </div>
+
+                            <!-- Hidden filter value holder -->
+                            <input type="hidden" id="po-status-filter" value="all">
 
                             <!-- PO Table -->
                             <table class="data-table po-table">
@@ -806,7 +801,42 @@
                                         <th data-i18n="sales.orderDate">Order Date</th>
                                         <th data-i18n="sales.items">Items</th>
                                         <th data-i18n="sales.totalAmount">Total Amount</th>
-                                        <th data-i18n="sales.status">Status</th>
+                                        <th class="th-filter">
+                                            <span data-i18n="sales.status">Status</span>
+                                            <div class="column-filter">
+                                                <button class="filter-icon-btn" onclick="toggleStatusFilter(event)">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                                    </svg>
+                                                </button>
+                                                <div class="filter-dropdown" id="status-filter-dropdown">
+                                                    <label class="filter-option">
+                                                        <input type="radio" name="status-filter" value="all" checked onchange="applyStatusFilter('all')">
+                                                        <span data-i18n="sales.allOrders">All</span>
+                                                    </label>
+                                                    <label class="filter-option">
+                                                        <input type="radio" name="status-filter" value="pending" onchange="applyStatusFilter('pending')">
+                                                        <span data-i18n="sales.pendingPO">Pending</span>
+                                                    </label>
+                                                    <label class="filter-option">
+                                                        <input type="radio" name="status-filter" value="confirmed" onchange="applyStatusFilter('confirmed')">
+                                                        <span data-i18n="sales.confirmedPO">Confirmed</span>
+                                                    </label>
+                                                    <label class="filter-option">
+                                                        <input type="radio" name="status-filter" value="shipping" onchange="applyStatusFilter('shipping')">
+                                                        <span data-i18n="sales.inShipping">In Shipping</span>
+                                                    </label>
+                                                    <label class="filter-option">
+                                                        <input type="radio" name="status-filter" value="completed" onchange="applyStatusFilter('completed')">
+                                                        <span data-i18n="sales.completedPO">Completed</span>
+                                                    </label>
+                                                    <label class="filter-option">
+                                                        <input type="radio" name="status-filter" value="cancelled" onchange="applyStatusFilter('cancelled')">
+                                                        <span data-i18n="sales.cancelledPO">Cancelled</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </th>
                                         <th data-i18n="sales.actions">Actions</th>
                                     </tr>
                                 </thead>

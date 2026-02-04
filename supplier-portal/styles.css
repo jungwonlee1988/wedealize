@@ -3140,3 +3140,76 @@ body.dashboard-mode .portal-badge {
         padding: 8px 12px;
     }
 }
+
+/* Column Filter Dropdown */
+.th-filter {
+    position: relative;
+}
+
+.th-filter > span {
+    margin-right: 4px;
+}
+
+.column-filter {
+    display: inline-block;
+    position: relative;
+}
+
+.filter-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    color: var(--gray-400);
+    transition: all 0.2s;
+    vertical-align: middle;
+}
+
+.filter-icon-btn:hover {
+    background: var(--gray-100);
+    color: var(--gray-600);
+}
+
+.filter-icon-btn.active {
+    color: var(--primary-dark);
+    background: var(--primary-bg);
+}
+
+.filter-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lg);
+    min-width: 150px;
+    z-index: 100;
+    padding: 8px 0;
+}
+
+.filter-dropdown.show {
+    display: block;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-weight: normal;
+    font-size: 0.9rem;
+}
+
+.filter-option:hover {
+    background: var(--gray-50);
+}
+
+.filter-option input[type="radio"] {
+    accent-color: var(--primary-dark);
+}
