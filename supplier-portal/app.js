@@ -678,14 +678,18 @@ function initCountrySelect() {
         if (!option) return;
 
         const value = option.dataset.value;
-        const flag = option.dataset.flag;
         const name = option.dataset.name;
+        const flagImg = option.querySelector('.wd-country-option-flag');
 
         // Update hidden input value
         hiddenInput.value = value;
 
-        // Update trigger display
-        selectedFlag.textContent = flag;
+        // Update trigger display with image flag
+        if (flagImg) {
+            selectedFlag.src = flagImg.src;
+            selectedFlag.alt = value;
+            selectedFlag.style.display = 'block';
+        }
         selectedCountry.textContent = name;
         selectedCountry.classList.remove('placeholder');
 

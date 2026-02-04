@@ -115,306 +115,251 @@
                             <span data-i18n="auth.or">또는</span>
                         </div>
 
-                        <div class="wd-form-row">
-                            <div class="wd-form-group">
-                                <label class="wd-form-label" for="reg-company"><span data-i18n="auth.companyName">회사명</span> *</label>
-                                <input type="text" class="wd-input" id="reg-company" placeholder="회사명" required>
-                            </div>
-                            <div class="wd-form-group">
-                                <label class="wd-form-label" for="reg-country"><span data-i18n="auth.country">국가</span> *</label>
-                                <div class="wd-country-select" id="country-select">
-                                    <input type="hidden" id="reg-country" name="country" required>
-                                    <button type="button" class="wd-country-select-trigger" id="country-trigger">
-                                        <span class="wd-country-select-flag" id="selected-flag"></span>
-                                        <span class="wd-country-select-text placeholder" id="selected-country">국가 선택</span>
-                                        <svg class="wd-country-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M6 9l6 6 6-6"/>
-                                        </svg>
-                                    </button>
-                                    <div class="wd-country-select-dropdown" id="country-dropdown">
-                                        <div class="wd-country-search">
-                                            <input type="text" id="country-search" placeholder="국가 검색...">
+                        <div class="wd-form-group">
+                            <label class="wd-form-label" for="reg-company"><span data-i18n="auth.companyName">회사명</span> *</label>
+                            <input type="text" class="wd-input" id="reg-company" placeholder="회사명" required>
+                        </div>
+                        <div class="wd-form-group">
+                            <label class="wd-form-label" for="reg-country"><span data-i18n="auth.country">국가</span> *</label>
+                            <div class="wd-country-select" id="country-select">
+                                <input type="hidden" id="reg-country" name="country" required>
+                                <button type="button" class="wd-country-select-trigger" id="country-trigger">
+                                    <img class="wd-country-select-flag" id="selected-flag" src="" alt="" style="display: none;">
+                                    <span class="wd-country-select-text placeholder" id="selected-country">국가 선택</span>
+                                    <svg class="wd-country-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9l6 6 6-6"/>
+                                    </svg>
+                                </button>
+                                <div class="wd-country-select-dropdown" id="country-dropdown">
+                                    <div class="wd-country-search">
+                                        <input type="text" id="country-search" placeholder="국가 검색...">
+                                    </div>
+                                    <div class="wd-country-list" id="country-list">
+                                        <!-- Asia -->
+                                        <div class="wd-country-group-label">아시아</div>
+                                        <div class="wd-country-option" data-value="KR" data-name="대한민국 (South Korea)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/kr.png" alt="KR">
+                                            <span class="wd-country-option-name">대한민국 (South Korea)</span>
                                         </div>
-                                        <div class="wd-country-list" id="country-list">
-                                            <!-- Asia -->
-                                            <div class="wd-country-group-label">아시아</div>
-                                            <div class="wd-country-option" data-value="KR" data-flag="🇰🇷" data-name="대한민국 (South Korea)">
-                                                <span class="wd-country-option-flag">🇰🇷</span>
-                                                <span class="wd-country-option-name">대한민국 (South Korea)</span>
-                                                <span class="wd-country-option-code">KR</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="JP" data-flag="🇯🇵" data-name="일본 (Japan)">
-                                                <span class="wd-country-option-flag">🇯🇵</span>
-                                                <span class="wd-country-option-name">일본 (Japan)</span>
-                                                <span class="wd-country-option-code">JP</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="CN" data-flag="🇨🇳" data-name="중국 (China)">
-                                                <span class="wd-country-option-flag">🇨🇳</span>
-                                                <span class="wd-country-option-name">중국 (China)</span>
-                                                <span class="wd-country-option-code">CN</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="TW" data-flag="🇹🇼" data-name="대만 (Taiwan)">
-                                                <span class="wd-country-option-flag">🇹🇼</span>
-                                                <span class="wd-country-option-name">대만 (Taiwan)</span>
-                                                <span class="wd-country-option-code">TW</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="HK" data-flag="🇭🇰" data-name="홍콩 (Hong Kong)">
-                                                <span class="wd-country-option-flag">🇭🇰</span>
-                                                <span class="wd-country-option-name">홍콩 (Hong Kong)</span>
-                                                <span class="wd-country-option-code">HK</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="SG" data-flag="🇸🇬" data-name="싱가포르 (Singapore)">
-                                                <span class="wd-country-option-flag">🇸🇬</span>
-                                                <span class="wd-country-option-name">싱가포르 (Singapore)</span>
-                                                <span class="wd-country-option-code">SG</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="MY" data-flag="🇲🇾" data-name="말레이시아 (Malaysia)">
-                                                <span class="wd-country-option-flag">🇲🇾</span>
-                                                <span class="wd-country-option-name">말레이시아 (Malaysia)</span>
-                                                <span class="wd-country-option-code">MY</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="TH" data-flag="🇹🇭" data-name="태국 (Thailand)">
-                                                <span class="wd-country-option-flag">🇹🇭</span>
-                                                <span class="wd-country-option-name">태국 (Thailand)</span>
-                                                <span class="wd-country-option-code">TH</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="VN" data-flag="🇻🇳" data-name="베트남 (Vietnam)">
-                                                <span class="wd-country-option-flag">🇻🇳</span>
-                                                <span class="wd-country-option-name">베트남 (Vietnam)</span>
-                                                <span class="wd-country-option-code">VN</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="ID" data-flag="🇮🇩" data-name="인도네시아 (Indonesia)">
-                                                <span class="wd-country-option-flag">🇮🇩</span>
-                                                <span class="wd-country-option-name">인도네시아 (Indonesia)</span>
-                                                <span class="wd-country-option-code">ID</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="PH" data-flag="🇵🇭" data-name="필리핀 (Philippines)">
-                                                <span class="wd-country-option-flag">🇵🇭</span>
-                                                <span class="wd-country-option-name">필리핀 (Philippines)</span>
-                                                <span class="wd-country-option-code">PH</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="IN" data-flag="🇮🇳" data-name="인도 (India)">
-                                                <span class="wd-country-option-flag">🇮🇳</span>
-                                                <span class="wd-country-option-name">인도 (India)</span>
-                                                <span class="wd-country-option-code">IN</span>
-                                            </div>
-                                            <!-- Europe -->
-                                            <div class="wd-country-group-label">유럽</div>
-                                            <div class="wd-country-option" data-value="DE" data-flag="🇩🇪" data-name="독일 (Germany)">
-                                                <span class="wd-country-option-flag">🇩🇪</span>
-                                                <span class="wd-country-option-name">독일 (Germany)</span>
-                                                <span class="wd-country-option-code">DE</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="FR" data-flag="🇫🇷" data-name="프랑스 (France)">
-                                                <span class="wd-country-option-flag">🇫🇷</span>
-                                                <span class="wd-country-option-name">프랑스 (France)</span>
-                                                <span class="wd-country-option-code">FR</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="GB" data-flag="🇬🇧" data-name="영국 (United Kingdom)">
-                                                <span class="wd-country-option-flag">🇬🇧</span>
-                                                <span class="wd-country-option-name">영국 (United Kingdom)</span>
-                                                <span class="wd-country-option-code">GB</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="IT" data-flag="🇮🇹" data-name="이탈리아 (Italy)">
-                                                <span class="wd-country-option-flag">🇮🇹</span>
-                                                <span class="wd-country-option-name">이탈리아 (Italy)</span>
-                                                <span class="wd-country-option-code">IT</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="ES" data-flag="🇪🇸" data-name="스페인 (Spain)">
-                                                <span class="wd-country-option-flag">🇪🇸</span>
-                                                <span class="wd-country-option-name">스페인 (Spain)</span>
-                                                <span class="wd-country-option-code">ES</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="NL" data-flag="🇳🇱" data-name="네덜란드 (Netherlands)">
-                                                <span class="wd-country-option-flag">🇳🇱</span>
-                                                <span class="wd-country-option-name">네덜란드 (Netherlands)</span>
-                                                <span class="wd-country-option-code">NL</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="BE" data-flag="🇧🇪" data-name="벨기에 (Belgium)">
-                                                <span class="wd-country-option-flag">🇧🇪</span>
-                                                <span class="wd-country-option-name">벨기에 (Belgium)</span>
-                                                <span class="wd-country-option-code">BE</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="CH" data-flag="🇨🇭" data-name="스위스 (Switzerland)">
-                                                <span class="wd-country-option-flag">🇨🇭</span>
-                                                <span class="wd-country-option-name">스위스 (Switzerland)</span>
-                                                <span class="wd-country-option-code">CH</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="AT" data-flag="🇦🇹" data-name="오스트리아 (Austria)">
-                                                <span class="wd-country-option-flag">🇦🇹</span>
-                                                <span class="wd-country-option-name">오스트리아 (Austria)</span>
-                                                <span class="wd-country-option-code">AT</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="PL" data-flag="🇵🇱" data-name="폴란드 (Poland)">
-                                                <span class="wd-country-option-flag">🇵🇱</span>
-                                                <span class="wd-country-option-name">폴란드 (Poland)</span>
-                                                <span class="wd-country-option-code">PL</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="PT" data-flag="🇵🇹" data-name="포르투갈 (Portugal)">
-                                                <span class="wd-country-option-flag">🇵🇹</span>
-                                                <span class="wd-country-option-name">포르투갈 (Portugal)</span>
-                                                <span class="wd-country-option-code">PT</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="SE" data-flag="🇸🇪" data-name="스웨덴 (Sweden)">
-                                                <span class="wd-country-option-flag">🇸🇪</span>
-                                                <span class="wd-country-option-name">스웨덴 (Sweden)</span>
-                                                <span class="wd-country-option-code">SE</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="NO" data-flag="🇳🇴" data-name="노르웨이 (Norway)">
-                                                <span class="wd-country-option-flag">🇳🇴</span>
-                                                <span class="wd-country-option-name">노르웨이 (Norway)</span>
-                                                <span class="wd-country-option-code">NO</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="DK" data-flag="🇩🇰" data-name="덴마크 (Denmark)">
-                                                <span class="wd-country-option-flag">🇩🇰</span>
-                                                <span class="wd-country-option-name">덴마크 (Denmark)</span>
-                                                <span class="wd-country-option-code">DK</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="FI" data-flag="🇫🇮" data-name="핀란드 (Finland)">
-                                                <span class="wd-country-option-flag">🇫🇮</span>
-                                                <span class="wd-country-option-name">핀란드 (Finland)</span>
-                                                <span class="wd-country-option-code">FI</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="IE" data-flag="🇮🇪" data-name="아일랜드 (Ireland)">
-                                                <span class="wd-country-option-flag">🇮🇪</span>
-                                                <span class="wd-country-option-name">아일랜드 (Ireland)</span>
-                                                <span class="wd-country-option-code">IE</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="GR" data-flag="🇬🇷" data-name="그리스 (Greece)">
-                                                <span class="wd-country-option-flag">🇬🇷</span>
-                                                <span class="wd-country-option-name">그리스 (Greece)</span>
-                                                <span class="wd-country-option-code">GR</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="CZ" data-flag="🇨🇿" data-name="체코 (Czech Republic)">
-                                                <span class="wd-country-option-flag">🇨🇿</span>
-                                                <span class="wd-country-option-name">체코 (Czech Republic)</span>
-                                                <span class="wd-country-option-code">CZ</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="HU" data-flag="🇭🇺" data-name="헝가리 (Hungary)">
-                                                <span class="wd-country-option-flag">🇭🇺</span>
-                                                <span class="wd-country-option-name">헝가리 (Hungary)</span>
-                                                <span class="wd-country-option-code">HU</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="RO" data-flag="🇷🇴" data-name="루마니아 (Romania)">
-                                                <span class="wd-country-option-flag">🇷🇴</span>
-                                                <span class="wd-country-option-name">루마니아 (Romania)</span>
-                                                <span class="wd-country-option-code">RO</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="RU" data-flag="🇷🇺" data-name="러시아 (Russia)">
-                                                <span class="wd-country-option-flag">🇷🇺</span>
-                                                <span class="wd-country-option-name">러시아 (Russia)</span>
-                                                <span class="wd-country-option-code">RU</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="UA" data-flag="🇺🇦" data-name="우크라이나 (Ukraine)">
-                                                <span class="wd-country-option-flag">🇺🇦</span>
-                                                <span class="wd-country-option-name">우크라이나 (Ukraine)</span>
-                                                <span class="wd-country-option-code">UA</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="TR" data-flag="🇹🇷" data-name="터키 (Turkey)">
-                                                <span class="wd-country-option-flag">🇹🇷</span>
-                                                <span class="wd-country-option-name">터키 (Turkey)</span>
-                                                <span class="wd-country-option-code">TR</span>
-                                            </div>
-                                            <!-- Americas -->
-                                            <div class="wd-country-group-label">아메리카</div>
-                                            <div class="wd-country-option" data-value="US" data-flag="🇺🇸" data-name="미국 (United States)">
-                                                <span class="wd-country-option-flag">🇺🇸</span>
-                                                <span class="wd-country-option-name">미국 (United States)</span>
-                                                <span class="wd-country-option-code">US</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="CA" data-flag="🇨🇦" data-name="캐나다 (Canada)">
-                                                <span class="wd-country-option-flag">🇨🇦</span>
-                                                <span class="wd-country-option-name">캐나다 (Canada)</span>
-                                                <span class="wd-country-option-code">CA</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="MX" data-flag="🇲🇽" data-name="멕시코 (Mexico)">
-                                                <span class="wd-country-option-flag">🇲🇽</span>
-                                                <span class="wd-country-option-name">멕시코 (Mexico)</span>
-                                                <span class="wd-country-option-code">MX</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="BR" data-flag="🇧🇷" data-name="브라질 (Brazil)">
-                                                <span class="wd-country-option-flag">🇧🇷</span>
-                                                <span class="wd-country-option-name">브라질 (Brazil)</span>
-                                                <span class="wd-country-option-code">BR</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="AR" data-flag="🇦🇷" data-name="아르헨티나 (Argentina)">
-                                                <span class="wd-country-option-flag">🇦🇷</span>
-                                                <span class="wd-country-option-name">아르헨티나 (Argentina)</span>
-                                                <span class="wd-country-option-code">AR</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="CL" data-flag="🇨🇱" data-name="칠레 (Chile)">
-                                                <span class="wd-country-option-flag">🇨🇱</span>
-                                                <span class="wd-country-option-name">칠레 (Chile)</span>
-                                                <span class="wd-country-option-code">CL</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="CO" data-flag="🇨🇴" data-name="콜롬비아 (Colombia)">
-                                                <span class="wd-country-option-flag">🇨🇴</span>
-                                                <span class="wd-country-option-name">콜롬비아 (Colombia)</span>
-                                                <span class="wd-country-option-code">CO</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="PE" data-flag="🇵🇪" data-name="페루 (Peru)">
-                                                <span class="wd-country-option-flag">🇵🇪</span>
-                                                <span class="wd-country-option-name">페루 (Peru)</span>
-                                                <span class="wd-country-option-code">PE</span>
-                                            </div>
-                                            <!-- Oceania -->
-                                            <div class="wd-country-group-label">오세아니아</div>
-                                            <div class="wd-country-option" data-value="AU" data-flag="🇦🇺" data-name="호주 (Australia)">
-                                                <span class="wd-country-option-flag">🇦🇺</span>
-                                                <span class="wd-country-option-name">호주 (Australia)</span>
-                                                <span class="wd-country-option-code">AU</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="NZ" data-flag="🇳🇿" data-name="뉴질랜드 (New Zealand)">
-                                                <span class="wd-country-option-flag">🇳🇿</span>
-                                                <span class="wd-country-option-name">뉴질랜드 (New Zealand)</span>
-                                                <span class="wd-country-option-code">NZ</span>
-                                            </div>
-                                            <!-- Middle East -->
-                                            <div class="wd-country-group-label">중동</div>
-                                            <div class="wd-country-option" data-value="AE" data-flag="🇦🇪" data-name="아랍에미리트 (UAE)">
-                                                <span class="wd-country-option-flag">🇦🇪</span>
-                                                <span class="wd-country-option-name">아랍에미리트 (UAE)</span>
-                                                <span class="wd-country-option-code">AE</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="SA" data-flag="🇸🇦" data-name="사우디아라비아 (Saudi Arabia)">
-                                                <span class="wd-country-option-flag">🇸🇦</span>
-                                                <span class="wd-country-option-name">사우디아라비아 (Saudi Arabia)</span>
-                                                <span class="wd-country-option-code">SA</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="IL" data-flag="🇮🇱" data-name="이스라엘 (Israel)">
-                                                <span class="wd-country-option-flag">🇮🇱</span>
-                                                <span class="wd-country-option-name">이스라엘 (Israel)</span>
-                                                <span class="wd-country-option-code">IL</span>
-                                            </div>
-                                            <!-- Africa -->
-                                            <div class="wd-country-group-label">아프리카</div>
-                                            <div class="wd-country-option" data-value="ZA" data-flag="🇿🇦" data-name="남아프리카 (South Africa)">
-                                                <span class="wd-country-option-flag">🇿🇦</span>
-                                                <span class="wd-country-option-name">남아프리카 (South Africa)</span>
-                                                <span class="wd-country-option-code">ZA</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="EG" data-flag="🇪🇬" data-name="이집트 (Egypt)">
-                                                <span class="wd-country-option-flag">🇪🇬</span>
-                                                <span class="wd-country-option-name">이집트 (Egypt)</span>
-                                                <span class="wd-country-option-code">EG</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="NG" data-flag="🇳🇬" data-name="나이지리아 (Nigeria)">
-                                                <span class="wd-country-option-flag">🇳🇬</span>
-                                                <span class="wd-country-option-name">나이지리아 (Nigeria)</span>
-                                                <span class="wd-country-option-code">NG</span>
-                                            </div>
-                                            <div class="wd-country-option" data-value="KE" data-flag="🇰🇪" data-name="케냐 (Kenya)">
-                                                <span class="wd-country-option-flag">🇰🇪</span>
-                                                <span class="wd-country-option-name">케냐 (Kenya)</span>
-                                                <span class="wd-country-option-code">KE</span>
-                                            </div>
-                                            <!-- Other -->
-                                            <div class="wd-country-group-label">기타</div>
-                                            <div class="wd-country-option" data-value="OTHER" data-flag="🌍" data-name="기타 (Other)">
-                                                <span class="wd-country-option-flag">🌍</span>
-                                                <span class="wd-country-option-name">기타 (Other)</span>
-                                                <span class="wd-country-option-code">OTHER</span>
-                                            </div>
+                                        <div class="wd-country-option" data-value="JP" data-name="일본 (Japan)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/jp.png" alt="JP">
+                                            <span class="wd-country-option-name">일본 (Japan)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="CN" data-name="중국 (China)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/cn.png" alt="CN">
+                                            <span class="wd-country-option-name">중국 (China)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="TW" data-name="대만 (Taiwan)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/tw.png" alt="TW">
+                                            <span class="wd-country-option-name">대만 (Taiwan)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="HK" data-name="홍콩 (Hong Kong)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/hk.png" alt="HK">
+                                            <span class="wd-country-option-name">홍콩 (Hong Kong)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="SG" data-name="싱가포르 (Singapore)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/sg.png" alt="SG">
+                                            <span class="wd-country-option-name">싱가포르 (Singapore)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="MY" data-name="말레이시아 (Malaysia)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/my.png" alt="MY">
+                                            <span class="wd-country-option-name">말레이시아 (Malaysia)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="TH" data-name="태국 (Thailand)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/th.png" alt="TH">
+                                            <span class="wd-country-option-name">태국 (Thailand)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="VN" data-name="베트남 (Vietnam)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/vn.png" alt="VN">
+                                            <span class="wd-country-option-name">베트남 (Vietnam)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="ID" data-name="인도네시아 (Indonesia)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/id.png" alt="ID">
+                                            <span class="wd-country-option-name">인도네시아 (Indonesia)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="PH" data-name="필리핀 (Philippines)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ph.png" alt="PH">
+                                            <span class="wd-country-option-name">필리핀 (Philippines)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="IN" data-name="인도 (India)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/in.png" alt="IN">
+                                            <span class="wd-country-option-name">인도 (India)</span>
+                                        </div>
+                                        <!-- Europe -->
+                                        <div class="wd-country-group-label">유럽</div>
+                                        <div class="wd-country-option" data-value="DE" data-name="독일 (Germany)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/de.png" alt="DE">
+                                            <span class="wd-country-option-name">독일 (Germany)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="FR" data-name="프랑스 (France)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/fr.png" alt="FR">
+                                            <span class="wd-country-option-name">프랑스 (France)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="GB" data-name="영국 (United Kingdom)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/gb.png" alt="GB">
+                                            <span class="wd-country-option-name">영국 (United Kingdom)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="IT" data-name="이탈리아 (Italy)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/it.png" alt="IT">
+                                            <span class="wd-country-option-name">이탈리아 (Italy)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="ES" data-name="스페인 (Spain)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/es.png" alt="ES">
+                                            <span class="wd-country-option-name">스페인 (Spain)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="NL" data-name="네덜란드 (Netherlands)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/nl.png" alt="NL">
+                                            <span class="wd-country-option-name">네덜란드 (Netherlands)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="BE" data-name="벨기에 (Belgium)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/be.png" alt="BE">
+                                            <span class="wd-country-option-name">벨기에 (Belgium)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="CH" data-name="스위스 (Switzerland)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ch.png" alt="CH">
+                                            <span class="wd-country-option-name">스위스 (Switzerland)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="AT" data-name="오스트리아 (Austria)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/at.png" alt="AT">
+                                            <span class="wd-country-option-name">오스트리아 (Austria)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="PL" data-name="폴란드 (Poland)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/pl.png" alt="PL">
+                                            <span class="wd-country-option-name">폴란드 (Poland)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="PT" data-name="포르투갈 (Portugal)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/pt.png" alt="PT">
+                                            <span class="wd-country-option-name">포르투갈 (Portugal)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="SE" data-name="스웨덴 (Sweden)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/se.png" alt="SE">
+                                            <span class="wd-country-option-name">스웨덴 (Sweden)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="NO" data-name="노르웨이 (Norway)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/no.png" alt="NO">
+                                            <span class="wd-country-option-name">노르웨이 (Norway)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="DK" data-name="덴마크 (Denmark)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/dk.png" alt="DK">
+                                            <span class="wd-country-option-name">덴마크 (Denmark)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="FI" data-name="핀란드 (Finland)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/fi.png" alt="FI">
+                                            <span class="wd-country-option-name">핀란드 (Finland)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="IE" data-name="아일랜드 (Ireland)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ie.png" alt="IE">
+                                            <span class="wd-country-option-name">아일랜드 (Ireland)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="GR" data-name="그리스 (Greece)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/gr.png" alt="GR">
+                                            <span class="wd-country-option-name">그리스 (Greece)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="CZ" data-name="체코 (Czech Republic)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/cz.png" alt="CZ">
+                                            <span class="wd-country-option-name">체코 (Czech Republic)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="HU" data-name="헝가리 (Hungary)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/hu.png" alt="HU">
+                                            <span class="wd-country-option-name">헝가리 (Hungary)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="RO" data-name="루마니아 (Romania)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ro.png" alt="RO">
+                                            <span class="wd-country-option-name">루마니아 (Romania)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="RU" data-name="러시아 (Russia)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ru.png" alt="RU">
+                                            <span class="wd-country-option-name">러시아 (Russia)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="UA" data-name="우크라이나 (Ukraine)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ua.png" alt="UA">
+                                            <span class="wd-country-option-name">우크라이나 (Ukraine)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="TR" data-name="터키 (Turkey)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/tr.png" alt="TR">
+                                            <span class="wd-country-option-name">터키 (Turkey)</span>
+                                        </div>
+                                        <!-- Americas -->
+                                        <div class="wd-country-group-label">아메리카</div>
+                                        <div class="wd-country-option" data-value="US" data-name="미국 (United States)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/us.png" alt="US">
+                                            <span class="wd-country-option-name">미국 (United States)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="CA" data-name="캐나다 (Canada)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ca.png" alt="CA">
+                                            <span class="wd-country-option-name">캐나다 (Canada)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="MX" data-name="멕시코 (Mexico)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/mx.png" alt="MX">
+                                            <span class="wd-country-option-name">멕시코 (Mexico)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="BR" data-name="브라질 (Brazil)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/br.png" alt="BR">
+                                            <span class="wd-country-option-name">브라질 (Brazil)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="AR" data-name="아르헨티나 (Argentina)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ar.png" alt="AR">
+                                            <span class="wd-country-option-name">아르헨티나 (Argentina)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="CL" data-name="칠레 (Chile)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/cl.png" alt="CL">
+                                            <span class="wd-country-option-name">칠레 (Chile)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="CO" data-name="콜롬비아 (Colombia)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/co.png" alt="CO">
+                                            <span class="wd-country-option-name">콜롬비아 (Colombia)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="PE" data-name="페루 (Peru)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/pe.png" alt="PE">
+                                            <span class="wd-country-option-name">페루 (Peru)</span>
+                                        </div>
+                                        <!-- Oceania -->
+                                        <div class="wd-country-group-label">오세아니아</div>
+                                        <div class="wd-country-option" data-value="AU" data-name="호주 (Australia)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/au.png" alt="AU">
+                                            <span class="wd-country-option-name">호주 (Australia)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="NZ" data-name="뉴질랜드 (New Zealand)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/nz.png" alt="NZ">
+                                            <span class="wd-country-option-name">뉴질랜드 (New Zealand)</span>
+                                        </div>
+                                        <!-- Middle East -->
+                                        <div class="wd-country-group-label">중동</div>
+                                        <div class="wd-country-option" data-value="AE" data-name="아랍에미리트 (UAE)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ae.png" alt="AE">
+                                            <span class="wd-country-option-name">아랍에미리트 (UAE)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="SA" data-name="사우디아라비아 (Saudi Arabia)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/sa.png" alt="SA">
+                                            <span class="wd-country-option-name">사우디아라비아 (Saudi Arabia)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="IL" data-name="이스라엘 (Israel)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/il.png" alt="IL">
+                                            <span class="wd-country-option-name">이스라엘 (Israel)</span>
+                                        </div>
+                                        <!-- Africa -->
+                                        <div class="wd-country-group-label">아프리카</div>
+                                        <div class="wd-country-option" data-value="ZA" data-name="남아프리카 (South Africa)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/za.png" alt="ZA">
+                                            <span class="wd-country-option-name">남아프리카 (South Africa)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="EG" data-name="이집트 (Egypt)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/eg.png" alt="EG">
+                                            <span class="wd-country-option-name">이집트 (Egypt)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="NG" data-name="나이지리아 (Nigeria)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ng.png" alt="NG">
+                                            <span class="wd-country-option-name">나이지리아 (Nigeria)</span>
+                                        </div>
+                                        <div class="wd-country-option" data-value="KE" data-name="케냐 (Kenya)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/ke.png" alt="KE">
+                                            <span class="wd-country-option-name">케냐 (Kenya)</span>
+                                        </div>
+                                        <!-- Other -->
+                                        <div class="wd-country-group-label">기타</div>
+                                        <div class="wd-country-option" data-value="OTHER" data-name="기타 (Other)">
+                                            <img class="wd-country-option-flag" src="https://flagcdn.com/w40/un.png" alt="OTHER">
+                                            <span class="wd-country-option-name">기타 (Other)</span>
                                         </div>
                                     </div>
                                 </div>
