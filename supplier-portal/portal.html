@@ -419,7 +419,7 @@
                         <button type="button" class="btn btn-primary btn-md w-full" onclick="verifyEmail()" data-i18n="verification.verifyButton">Verify Email</button>
 
                         <div class="wd-resend-section">
-                            <p><span data-i18n="verification.didntReceive">Didn't receive the code?</span> <button type="button" class="text-btn-black text-btn-md" id="resend-btn" onclick="resendVerificationCode()" data-i18n="verification.resend">Resend</button></p>
+                            <p><span data-i18n="verification.didntReceive">Didn't receive the code?</span> <button type="button" class="wd-btn-link" id="resend-btn" onclick="resendVerificationCode()" data-i18n="verification.resend">Resend</button></p>
                             <p class="wd-resend-timer" id="resend-timer" style="display: none;"><span data-i18n="verification.resendIn">Resend available in</span> <span id="timer-count">60</span>s</p>
                         </div>
 
@@ -551,7 +551,7 @@
                                         <span class="wd-badge wd-badge-outline" data-i18n="modal.certifications">Certifications</span>
                                         <span class="wd-badge wd-badge-outline" data-i18n="products.missingImages">Product Images</span>
                                     </div>
-                                    <button class="btn btn-secondary btn-sm" onclick="showSection('product-list')" data-i18n="dashboard.completeNow">Complete Now</button>
+                                    <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="showSection('product-list')" data-i18n="dashboard.completeNow">Complete Now</button>
                                 </div>
                             </div>
 
@@ -690,7 +690,7 @@
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                                 <span class="wd-file-name" id="catalog-filename"></span>
                                                 <span class="wd-file-size" id="catalog-filesize"></span>
-                                                <button type="button" class="icon-btn-md" onclick="removeFile('catalog')">
+                                                <button type="button" class="wd-btn-icon" onclick="removeFile('catalog')">
                                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                                                 </button>
                                             </div>
@@ -1041,14 +1041,14 @@
                                             <td>$18.00 - $22.00</td>
                                             <td class="wd-missing-data">
                                                 <span class="wd-badge wd-badge-warning">Missing</span>
-                                                <button class="text-btn-black text-btn-md" onclick="addMOQ(3)">+ Add</button>
+                                                <button class="wd-btn-link" onclick="addMOQ(3)">+ Add</button>
                                             </td>
                                             <td>
                                                 <span class="wd-badge wd-badge-info">DOP</span>
                                             </td>
                                             <td><span class="wd-badge wd-badge-warning">Incomplete</span></td>
                                             <td>
-                                                <button class="btn btn-secondary btn-sm" onclick="editProduct(3)" data-i18n="products.fillIn">Fill in</button>
+                                                <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="editProduct(3)" data-i18n="products.fillIn">Fill in</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1620,7 +1620,7 @@
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                                     <span class="wd-file-name">HACCP_Certificate_2024.pdf</span>
                                                     <span class="wd-badge wd-badge-success" data-i18n="profile.valid">Valid</span>
-                                                    <button type="button" class="icon-btn-md" onclick="removeCert('haccp')">
+                                                    <button type="button" class="wd-btn-icon" onclick="removeCert('haccp')">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                                                     </button>
                                                 </div>
@@ -1628,7 +1628,7 @@
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                                     <span class="wd-file-name">Organic_EU_Certificate.pdf</span>
                                                     <span class="wd-badge wd-badge-success" data-i18n="profile.valid">Valid</span>
-                                                    <button type="button" class="icon-btn-md" onclick="removeCert('organic')">
+                                                    <button type="button" class="wd-btn-icon" onclick="removeCert('organic')">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                                                     </button>
                                                 </div>
@@ -1679,7 +1679,7 @@
             <div class="wd-modal">
                 <div class="wd-modal-header">
                     <h3 class="wd-modal-title" data-i18n="modal.editProduct">Edit Product</h3>
-                    <button class="icon-btn-md" onclick="closeProductModal()">
+                    <button class="wd-btn-icon" onclick="closeProductModal()">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                 </div>
@@ -1847,7 +1847,7 @@
         <div class="wd-modal" style="max-width: 500px;">
             <div class="wd-modal-header">
                 <h3 class="wd-modal-title" data-i18n="profile.cropLogo">Crop Logo</h3>
-                <button type="button" class="icon-btn-md" onclick="closeCropModal()">
+                <button type="button" class="wd-btn-icon" onclick="closeCropModal()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
             </div>
