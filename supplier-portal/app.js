@@ -2697,7 +2697,7 @@ async function savePO() {
     };
 
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const url = window._editingPOId ? `${baseUrl}/po/${window._editingPOId}` : `${baseUrl}/po`;
         const method = window._editingPOId ? 'PATCH' : 'POST';
@@ -2736,7 +2736,7 @@ async function savePOAsDraft() {
     };
 
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const url = window._editingPOId ? `${baseUrl}/po/${window._editingPOId}` : `${baseUrl}/po`;
         const method = window._editingPOId ? 'PATCH' : 'POST';
@@ -2869,7 +2869,7 @@ function removePOFile() {
 
 async function loadPODataForEdit(poId) {
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const res = await fetch(`${baseUrl}/po/${poId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -2924,7 +2924,7 @@ async function loadPODataForEdit(poId) {
 
 async function loadPOListFromAPI() {
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const res = await fetch(`${baseUrl}/po`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -2994,7 +2994,7 @@ function renderPOListFromAPI(orders) {
 async function deletePO(poId) {
     if (!confirm('Are you sure you want to delete this PO?')) return;
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const res = await fetch(`${baseUrl}/po/${poId}`, {
             method: 'DELETE',
@@ -3049,7 +3049,7 @@ async function populatePIBuyerDropdown() {
     buyerSelect.innerHTML = '<option value="">Loading buyers...</option>';
 
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
 
         const res = await fetch(`${baseUrl}/accounts`, {
@@ -3090,7 +3090,7 @@ async function createAndSendPI() {
     piData.status = 'sent';
 
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const url = window._editingPIId ? `${baseUrl}/pi/${window._editingPIId}` : `${baseUrl}/pi`;
         const method = window._editingPIId ? 'PATCH' : 'POST';
@@ -3179,7 +3179,7 @@ async function loadBuyerForPI() {
 
     // Fetch actual approved credits for this buyer from API
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const res = await fetch(`${baseUrl}/credits/buyer/${encodeURIComponent(name)}`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -3403,7 +3403,7 @@ async function saveAsDraft() {
     piData.status = 'draft';
 
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const url = window._editingPIId ? `${baseUrl}/pi/${window._editingPIId}` : `${baseUrl}/pi`;
         const method = window._editingPIId ? 'PATCH' : 'POST';
@@ -3713,7 +3713,7 @@ async function viewAccountDetail(accountId) {
         window.currentAccountId = accountId;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('supplier_token');
             const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
             const res = await fetch(`${baseUrl}/accounts/${accountId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -3843,7 +3843,7 @@ function closeAccountModal() {
 
 async function loadAccountIntoForm(accountId) {
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const res = await fetch(`${baseUrl}/accounts/${accountId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -3891,7 +3891,7 @@ async function saveAccount() {
     };
 
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const isEdit = !!window._editingAccountId;
         const url = isEdit ? `${baseUrl}/accounts/${window._editingAccountId}` : `${baseUrl}/accounts`;
@@ -3922,7 +3922,7 @@ async function loadAccountListFromAPI() {
     if (!tbody) return;
 
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const res = await fetch(`${baseUrl}/accounts`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -3971,7 +3971,7 @@ async function deleteAccountFromAPI(accountId) {
     if (!confirm('Are you sure you want to delete this account?')) return;
 
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
         const res = await fetch(`${baseUrl}/accounts/${accountId}`, {
             method: 'DELETE',
