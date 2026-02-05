@@ -3963,7 +3963,7 @@ async function loadAccountListFromAPI() {
         `).join('');
     } catch (e) {
         console.error('Failed to load accounts:', e);
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:#ef4444;">Failed to load accounts</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:#999;">No accounts yet. Click "Add Account" to create one.</td></tr>`;
     }
 }
 
