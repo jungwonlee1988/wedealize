@@ -3436,23 +3436,6 @@
     border-left: 4px solid var(--wd-warning);
 }
 
-.wd-card-opportunity {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    color: var(--wd-white);
-}
-
-.wd-card-opportunity .wd-card-header {
-    border-bottom-color: rgba(255,255,255,0.1);
-}
-
-.wd-card-opportunity .wd-card-title {
-    color: var(--wd-white);
-}
-
-.wd-card-opportunity .wd-card-link {
-    color: rgba(255,255,255,0.8);
-}
 
 /* ========================================
    Action Required List
@@ -3770,42 +3753,6 @@
     font-size: var(--wd-font-size-sm);
 }
 
-/* ========================================
-   Keyword Cloud (Opportunity)
-   ======================================== */
-.wd-opportunity-desc {
-    font-size: var(--wd-font-size-sm);
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 16px;
-}
-
-.wd-keyword-cloud {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.wd-keyword-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: rgba(255,255,255,0.15);
-    color: var(--wd-white);
-    font-size: var(--wd-font-size-sm);
-    border-radius: 20px;
-}
-
-.wd-keyword-tag em {
-    font-style: normal;
-    font-size: var(--wd-font-size-xs);
-    opacity: 0.7;
-}
-
-.wd-keyword-tag.wd-keyword-hot {
-    background: rgba(255,255,255,0.25);
-    font-weight: var(--wd-font-semibold);
-}
 
 /* ========================================
    Buyer Discovery
@@ -4645,6 +4592,15 @@
 
 /* Enhanced Select */
 .wd-select {
+    width: 100%;
+    padding: var(--spacing-300) var(--spacing-400);
+    border: 1px solid var(--wd-gray-300);
+    border-radius: var(--radius-200);
+    font-size: var(--wd-font-size-base);
+    font-family: inherit;
+    color: var(--wd-black);
+    background: var(--wd-white);
+    transition: all var(--wd-transition-fast);
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23707070' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -4655,6 +4611,18 @@
 
 .wd-select:hover {
     border-color: var(--wd-gray-400);
+}
+
+.wd-select:focus {
+    outline: none;
+    border-color: var(--wd-primary);
+    box-shadow: 0 0 0 3px rgba(255, 217, 0, 0.2);
+}
+
+.wd-select:disabled {
+    background: var(--wd-gray-100);
+    color: var(--wd-gray-500);
+    cursor: not-allowed;
 }
 
 /* Enhanced Buttons */

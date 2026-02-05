@@ -376,7 +376,7 @@
                         </div>
                         <div class="wd-form-group">
                             <label class="wd-form-label" for="reg-category"><span data-i18n="auth.productCategory">Product Category</span> *</label>
-                            <select class="wd-input wd-select" id="reg-category" required>
+                            <select class="wd-select" id="reg-category" required>
                                 <option value="" data-i18n="auth.selectCategory">Select category</option>
                                 <option value="oils" data-i18n="categories.oils">Oils & Vinegars</option>
                                 <option value="dairy" data-i18n="categories.dairy">Dairy & Cheese</option>
@@ -854,32 +854,6 @@
                                             </button>
                                         </div>
                                     </div>
-
-                                    <!-- 3. Opportunity (Growth Potential) -->
-                                    <div class="wd-card wd-card-opportunity">
-                                        <div class="wd-card-header">
-                                            <h3 class="wd-card-title">
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                                <span data-i18n="dashboard.opportunity">Opportunity</span>
-                                            </h3>
-                                            <a href="#" class="wd-card-link" onclick="showSection('buyer-discovery'); return false;" data-i18n="common.viewMore">View More</a>
-                                        </div>
-                                        <div class="wd-card-body">
-                                            <p class="wd-opportunity-desc" data-i18n="dashboard.trendingKeywords">Trending search keywords from buyers</p>
-                                            <div class="wd-keyword-cloud">
-                                                <span class="wd-keyword-tag wd-keyword-hot">olive oil <em>234</em></span>
-                                                <span class="wd-keyword-tag wd-keyword-hot">organic honey <em>189</em></span>
-                                                <span class="wd-keyword-tag">parmesan cheese <em>156</em></span>
-                                                <span class="wd-keyword-tag">balsamic vinegar <em>142</em></span>
-                                                <span class="wd-keyword-tag">truffle oil <em>98</em></span>
-                                                <span class="wd-keyword-tag">dried pasta <em>87</em></span>
-                                            </div>
-                                            <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="showSection('buyer-discovery')" style="width: 100%; margin-top: 16px;">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-                                                <span data-i18n="dashboard.findBuyers">Find Potential Buyers</span>
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1231,7 +1205,7 @@
                             <!-- Filter Bar -->
                             <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px 16px;">
                                 <div class="wd-filter-group" style="display: flex; gap: 12px; align-items: center;">
-                                    <select id="product-list-filter" class="wd-input wd-select" style="width: 180px;" onchange="filterProductList()">
+                                    <select id="product-list-filter" class="wd-select" style="width: 180px;" onchange="filterProductList()">
                                         <option value="all" data-i18n="products.allProducts">All Products</option>
                                         <option value="complete" data-i18n="products.complete">Complete</option>
                                         <option value="incomplete" data-i18n="products.incompleteData">Incomplete</option>
@@ -1319,7 +1293,7 @@
                             <div class="wd-pagination" style="padding: 16px 24px;">
                                 <div class="wd-pagination-info">
                                     <span>Showing</span>
-                                    <select class="wd-input wd-select" style="width: 80px; padding: 6px 10px;">
+                                    <select class="wd-select" style="width: 80px; padding: 6px 10px;">
                                         <option>20</option>
                                         <option>50</option>
                                         <option>100</option>
@@ -1491,7 +1465,7 @@
                             <div class="wd-pagination" style="padding: 16px 24px;">
                                 <div class="wd-pagination-info">
                                     <span>Showing</span>
-                                    <select class="wd-input wd-select" style="width: 80px; padding: 6px 10px;">
+                                    <select class="wd-select" style="width: 80px; padding: 6px 10px;">
                                         <option>20</option>
                                         <option>50</option>
                                         <option>100</option>
@@ -3425,7 +3399,7 @@
                                             </div>
                                             <div class="wd-form-group">
                                                 <label class="wd-form-label"><span data-i18n="auth.country">Country</span> *</label>
-                                                <select class="wd-input wd-select" required>
+                                                <select class="wd-select" required>
                                                     <option value="IT" selected data-i18n="countries.IT">Italy</option>
                                                 </select>
                                             </div>
@@ -3460,7 +3434,7 @@
                                             </div>
                                             <div class="wd-form-group">
                                                 <label class="wd-form-label" data-i18n="profile.employees">Number of Employees</label>
-                                                <select class="wd-input wd-select">
+                                                <select class="wd-select">
                                                     <option value="1-10">1-10</option>
                                                     <option value="11-50" selected>11-50</option>
                                                     <option value="51-200">51-200</option>
@@ -3972,7 +3946,7 @@
                             </div>
                             <div class="wd-form-group">
                                 <label class="wd-form-label" data-i18n="modal.category">Category</label>
-                                <select class="wd-input wd-select" id="edit-product-category">
+                                <select class="wd-select" id="edit-product-category">
                                     <option value="oils" data-i18n="categories.oils">Oils & Vinegars</option>
                                     <option value="dairy" data-i18n="categories.dairy">Dairy & Cheese</option>
                                     <option value="beverages" data-i18n="categories.beverages">Beverages</option>
@@ -3999,7 +3973,7 @@
                             </div>
                             <div class="wd-form-group" style="margin-bottom: 0;">
                                 <label class="wd-form-label" data-i18n="modal.moqUnit">MOQ Unit</label>
-                                <select class="wd-input wd-select" id="edit-moq-unit">
+                                <select class="wd-select" id="edit-moq-unit">
                                     <option value="pieces" data-i18n="units.pieces">Pieces</option>
                                     <option value="bottles" data-i18n="units.bottles">Bottles</option>
                                     <option value="cases" data-i18n="units.cases">Cases</option>
