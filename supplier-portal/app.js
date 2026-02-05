@@ -551,11 +551,23 @@ async function fetchGoogleUserInfo(accessToken) {
 // Google 인증 처리 (백엔드 연동)
 async function processGoogleAuth(credential) {
     try {
-        const response = await apiCall('/auth/google', {
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/auth/google`, {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ credential })
         });
 
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            if (res.status === 401) {
+                showToast(err.message || '아직 가입되지 않은 계정입니다. 가입 먼저 해주세요.', 'error');
+                return;
+            }
+            throw new Error(err.message || 'Google login failed');
+        }
+
+        const response = await res.json();
         localStorage.setItem('supplier_logged_in', 'true');
         localStorage.setItem('supplier_token', response.access_token);
         localStorage.setItem('supplier_id', response.supplier_id);
@@ -568,8 +580,7 @@ async function processGoogleAuth(credential) {
 
     } catch (error) {
         console.error('Google auth error:', error);
-        const msg = error.message || 'Google login failed. Please try again.';
-        showToast(msg, 'error');
+        showToast(error.message || 'Google login failed. Please try again.', 'error');
     }
 }
 
