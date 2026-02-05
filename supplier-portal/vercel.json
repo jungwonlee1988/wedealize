@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "supplier-portal",
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",

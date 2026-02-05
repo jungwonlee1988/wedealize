@@ -5,7 +5,7 @@
     'use strict';
 
     // Configuration
-    const API_BASE_URL = 'https://supplier-api-theta.vercel.app/api/v1/admin';
+    const API_BASE_URL = 'https://supplier-api-blush.vercel.app/api/v1/admin';
     const DEFAULT_ADMIN_KEY = 'wedealize-admin-2024';
     const STORAGE_KEY = 'admin_key';
 

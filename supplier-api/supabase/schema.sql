@@ -207,6 +207,29 @@ CREATE TABLE IF NOT EXISTS credit_applications (
     UNIQUE(credit_id, pi_id)
 );
 
+-- Buyer Inquiries table
+CREATE TABLE IF NOT EXISTS buyer_inquiries (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    supplier_id UUID REFERENCES suppliers(id) ON DELETE CASCADE,
+    buyer_company VARCHAR(255) NOT NULL,
+    buyer_contact VARCHAR(255),
+    buyer_email VARCHAR(255),
+    buyer_phone VARCHAR(50),
+    buyer_country VARCHAR(50),
+    message TEXT,
+    status VARCHAR(50) DEFAULT 'active',  -- active, responded, closed
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Buyer Inquiry Products (M:N relationship)
+CREATE TABLE IF NOT EXISTS buyer_inquiry_products (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    inquiry_id UUID REFERENCES buyer_inquiries(id) ON DELETE CASCADE,
+    product_id UUID REFERENCES products(id) ON DELETE CASCADE,
+    UNIQUE(inquiry_id, product_id)
+);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_products_supplier ON products(supplier_id);
 CREATE INDEX IF NOT EXISTS idx_orders_supplier ON orders(supplier_id);
@@ -225,6 +248,10 @@ CREATE INDEX IF NOT EXISTS idx_credits_status ON credits(status);
 CREATE INDEX IF NOT EXISTS idx_credits_buyer ON credits(buyer_name);
 CREATE INDEX IF NOT EXISTS idx_credit_applications_credit ON credit_applications(credit_id);
 CREATE INDEX IF NOT EXISTS idx_credit_applications_pi ON credit_applications(pi_id);
+CREATE INDEX IF NOT EXISTS idx_buyer_inquiries_supplier ON buyer_inquiries(supplier_id);
+CREATE INDEX IF NOT EXISTS idx_buyer_inquiries_status ON buyer_inquiries(status);
+CREATE INDEX IF NOT EXISTS idx_buyer_inquiry_products_inquiry ON buyer_inquiry_products(inquiry_id);
+CREATE INDEX IF NOT EXISTS idx_buyer_inquiry_products_product ON buyer_inquiry_products(product_id);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE suppliers ENABLE ROW LEVEL SECURITY;
@@ -239,6 +266,8 @@ ALTER TABLE proforma_invoices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE proforma_invoice_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE credits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE credit_applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE buyer_inquiries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE buyer_inquiry_products ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies (suppliers can only access their own data)
 -- Note: Service role key bypasses RLS, so backend API can access all data
@@ -286,5 +315,10 @@ CREATE TRIGGER update_proforma_invoices_updated_at
 
 CREATE TRIGGER update_credits_updated_at
     BEFORE UPDATE ON credits
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_buyer_inquiries_updated_at
+    BEFORE UPDATE ON buyer_inquiries
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();

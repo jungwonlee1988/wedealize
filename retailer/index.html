@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeDealize - 리테일러</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>WeDealize</h1>
+                <span class="user-type">Retailer</span>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>대시보드</span>
+                </div>
+                <div class="nav-item" data-page="catalog">
+                    <span class="nav-icon">📦</span>
+                    <span>상품 카탈로그</span>
+                </div>
+                <div class="nav-item" data-page="orders">
+                    <span class="nav-icon">🛒</span>
+                    <span>주문 관리</span>
+                </div>
+                <div class="nav-item" data-page="cart">
+                    <span class="nav-icon">🧺</span>
+                    <span>장바구니</span>
+                    <span class="badge-count" id="cart-count">0</span>
+                </div>
+                <div class="nav-item" data-page="account">
+                    <span class="nav-icon">👤</span>
+                    <span>내 정보</span>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="distributor-info">
+                    <span class="label">담당 총판</span>
+                    <span class="value">ABC유통</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">로그아웃</button>
+            </div>
+        </aside>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="main-content">
+            <!-- 대시보드 -->
+            <section class="page active" id="page-dashboard">
+                <header class="page-header">
+                    <h2>대시보드</h2>
+                    <p class="page-description">주문 현황과 최근 활동을 확인하세요.</p>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">🛒</div>
+                        <div class="stat-info">
+                            <span class="stat-value">12</span>
+                            <span class="stat-label">진행중 주문</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">✅</div>
+                        <div class="stat-info">
+                            <span class="stat-value">156</span>
+                            <span class="stat-label">완료된 주문</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">📦</div>
+                        <div class="stat-info">
+                            <span class="stat-value">3</span>
+                            <span class="stat-label">배송중</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">💰</div>
+                        <div class="stat-info">
+                            <span class="stat-value">₩2.4M</span>
+                            <span class="stat-label">이번 달 주문액</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>최근 주문</h3>
+                            <a href="#" onclick="showPage('orders')">전체보기</a>
+                        </div>
+                        <div class="order-list">
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <span class="order-id">#ORD-2025-0892</span>
+                                    <span class="order-date">2025.02.03</span>
+                                </div>
+                                <div class="order-detail">
+                                    <span>무선 이어버드 외 2건</span>
+                                    <span class="order-amount">₩285,000</span>
+                                </div>
+                                <span class="status-badge shipping">배송중</span>
+                            </div>
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <span class="order-id">#ORD-2025-0891</span>
+                                    <span class="order-date">2025.02.02</span>
+                                </div>
+                                <div class="order-detail">
+                                    <span>스마트워치 외 1건</span>
+                                    <span class="order-amount">₩450,000</span>
+                                </div>
+                                <span class="status-badge preparing">상품준비중</span>
+                            </div>
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <span class="order-id">#ORD-2025-0890</span>
+                                    <span class="order-date">2025.02.01</span>
+                                </div>
+                                <div class="order-detail">
+                                    <span>블루투스 스피커</span>
+                                    <span class="order-amount">₩89,000</span>
+                                </div>
+                                <span class="status-badge completed">배송완료</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3>추천 상품</h3>
+                            <a href="#" onclick="showPage('catalog')">더보기</a>
+                        </div>
+                        <div class="product-list">
+                            <div class="product-item">
+                                <div class="product-image">📱</div>
+                                <div class="product-info">
+                                    <span class="product-name">무선 충전 패드</span>
+                                    <span class="product-price">₩35,000</span>
+                                </div>
+                                <button class="btn-add-cart" onclick="addToCart(1)">담기</button>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-image">🎧</div>
+                                <div class="product-info">
+                                    <span class="product-name">노이즈캔슬링 헤드폰</span>
+                                    <span class="product-price">₩189,000</span>
+                                </div>
+                                <button class="btn-add-cart" onclick="addToCart(2)">담기</button>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-image">⌚</div>
+                                <div class="product-info">
+                                    <span class="product-name">스마트 밴드</span>
+                                    <span class="product-price">₩79,000</span>
+                                </div>
+                                <button class="btn-add-cart" onclick="addToCart(3)">담기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 상품 카탈로그 -->
+            <section class="page" id="page-catalog">
+                <header class="page-header">
+                    <h2>상품 카탈로그</h2>
+                    <p class="page-description">총판에서 제공하는 상품을 확인하고 주문하세요.</p>
+                </header>
+
+                <div class="catalog-toolbar">
+                    <div class="search-box">
+                        <input type="text" placeholder="상품명 검색..." id="catalog-search">
+                    </div>
+                    <div class="filter-group">
+                        <select id="category-filter">
+                            <option value="">전체 카테고리</option>
+                            <option value="electronics">전자기기</option>
+                            <option value="accessories">액세서리</option>
+                            <option value="audio">오디오</option>
+                        </select>
+                        <select id="sort-filter">
+                            <option value="popular">인기순</option>
+                            <option value="price-low">낮은가격순</option>
+                            <option value="price-high">높은가격순</option>
+                            <option value="newest">최신순</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="catalog-grid" id="catalog-grid">
+                    <!-- 상품 카드들이 JS로 렌더링 -->
+                </div>
+            </section>
+
+            <!-- 주문 관리 -->
+            <section class="page" id="page-orders">
+                <header class="page-header">
+                    <h2>주문 관리</h2>
+                    <p class="page-description">주문 내역을 확인하고 배송 상태를 추적하세요.</p>
+                </header>
+
+                <div class="orders-toolbar">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-status="all">전체</button>
+                        <button class="tab-btn" data-status="preparing">상품준비중</button>
+                        <button class="tab-btn" data-status="shipping">배송중</button>
+                        <button class="tab-btn" data-status="completed">배송완료</button>
+                    </div>
+                    <div class="date-filter">
+                        <input type="date" id="order-date-from">
+                        <span>~</span>
+                        <input type="date" id="order-date-to">
+                    </div>
+                </div>
+
+                <div class="orders-list" id="orders-list">
+                    <!-- 주문 목록이 JS로 렌더링 -->
+                </div>
+            </section>
+
+            <!-- 장바구니 -->
+            <section class="page" id="page-cart">
+                <header class="page-header">
+                    <h2>장바구니</h2>
+                    <p class="page-description">선택한 상품을 확인하고 주문을 진행하세요.</p>
+                </header>
+
+                <div class="cart-container">
+                    <div class="cart-items" id="cart-items">
+                        <!-- 장바구니 아이템이 JS로 렌더링 -->
+                    </div>
+                    <div class="cart-summary">
+                        <h3>주문 요약</h3>
+                        <div class="summary-row">
+                            <span>상품 금액</span>
+                            <span id="subtotal">₩0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>할인 금액</span>
+                            <span id="discount" class="discount">-₩0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>배송비</span>
+                            <span id="shipping-fee">₩0</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>총 결제금액</span>
+                            <span id="total">₩0</span>
+                        </div>
+                        <button class="btn btn-primary btn-order" onclick="placeOrder()">주문하기</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 내 정보 -->
+            <section class="page" id="page-account">
+                <header class="page-header">
+                    <h2>내 정보</h2>
+                    <p class="page-description">계정 정보와 사업자 정보를 관리하세요.</p>
+                </header>
+
+                <div class="account-grid">
+                    <div class="account-card">
+                        <h3>기본 정보</h3>
+                        <div class="info-row">
+                            <label>상호명</label>
+                            <span>리테일샵 강남점</span>
+                        </div>
+                        <div class="info-row">
+                            <label>대표자명</label>
+                            <span>홍길동</span>
+                        </div>
+                        <div class="info-row">
+                            <label>연락처</label>
+                            <span>02-1234-5678</span>
+                        </div>
+                        <div class="info-row">
+                            <label>이메일</label>
+                            <span>shop@retailshop.com</span>
+                        </div>
+                        <button class="btn btn-secondary">정보 수정</button>
+                    </div>
+
+                    <div class="account-card">
+                        <h3>사업자 정보</h3>
+                        <div class="info-row">
+                            <label>사업자등록번호</label>
+                            <span>123-45-67890</span>
+                        </div>
+                        <div class="info-row">
+                            <label>업태</label>
+                            <span>도소매</span>
+                        </div>
+                        <div class="info-row">
+                            <label>업종</label>
+                            <span>전자제품</span>
+                        </div>
+                        <div class="info-row">
+                            <label>사업장 주소</label>
+                            <span>서울시 강남구 테헤란로 123</span>
+                        </div>
+                        <button class="btn btn-secondary">정보 수정</button>
+                    </div>
+
+                    <div class="account-card">
+                        <h3>배송지 정보</h3>
+                        <div class="info-row">
+                            <label>기본 배송지</label>
+                            <span>서울시 강남구 테헤란로 123, 1층</span>
+                        </div>
+                        <div class="info-row">
+                            <label>수령인</label>
+                            <span>홍길동</span>
+                        </div>
+                        <div class="info-row">
+                            <label>연락처</label>
+                            <span>010-1234-5678</span>
+                        </div>
+                        <button class="btn btn-secondary">배송지 관리</button>
+                    </div>
+
+                    <div class="account-card">
+                        <h3>거래 조건</h3>
+                        <div class="info-row">
+                            <label>거래 등급</label>
+                            <span class="grade-badge gold">Gold</span>
+                        </div>
+                        <div class="info-row">
+                            <label>기본 할인율</label>
+                            <span>35%</span>
+                        </div>
+                        <div class="info-row">
+                            <label>결제 조건</label>
+                            <span>월말 정산</span>
+                        </div>
+                        <div class="info-row">
+                            <label>여신 한도</label>
+                            <span>₩10,000,000</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

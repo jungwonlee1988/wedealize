@@ -104,6 +104,18 @@ class ApiService {
     }
 
     /**
+     * PATCH request
+     * @param {string} endpoint - API endpoint
+     * @param {Object} data - Request body
+     */
+    async patch(endpoint, data = {}) {
+        return this.request(endpoint, {
+            method: 'PATCH',
+            body: JSON.stringify(data)
+        });
+    }
+
+    /**
      * DELETE request
      * @param {string} endpoint - API endpoint
      */

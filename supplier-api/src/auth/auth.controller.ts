@@ -1,8 +1,10 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, Post, Get, Patch, Delete, Body, Param, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto, SendVerificationDto, VerifyEmailDto } from './dto/register.dto';
-import { LoginDto, GoogleAuthDto, ForgotPasswordDto } from './dto/login.dto';
+import { LoginDto, GoogleAuthDto, ForgotPasswordDto, ResetPasswordDto } from './dto/login.dto';
+import { InviteTeamMemberDto, AcceptInviteDto, UpdateTeamMemberDto } from './dto/invite.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('Authentication')
 @Controller('api/v1/supplier')
@@ -48,5 +50,70 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Reset email sent if account exists' })
   async forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto);
+  }
+
+  @Post('auth/reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Reset password with token' })
+  @ApiResponse({ status: 200, description: 'Password reset successful' })
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto);
+  }
+
+  // ==================== Team Management ====================
+
+  @Post('team/invite')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Invite a team member' })
+  @ApiResponse({ status: 200, description: 'Invitation sent' })
+  async inviteTeamMember(@Request() req, @Body() dto: InviteTeamMemberDto) {
+    return this.authService.inviteTeamMember(req.user.id, dto);
+  }
+
+  @Post('team/accept-invite')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Accept a team invitation' })
+  @ApiResponse({ status: 200, description: 'Invitation accepted' })
+  async acceptInvite(@Body() dto: AcceptInviteDto) {
+    return this.authService.acceptInvite(dto.token);
+  }
+
+  @Get('team/members')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get team members list' })
+  @ApiResponse({ status: 200, description: 'Team members retrieved' })
+  async getTeamMembers(@Request() req) {
+    return this.authService.getTeamMembers(req.user.id);
+  }
+
+  @Patch('team/members/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update team member role' })
+  @ApiResponse({ status: 200, description: 'Team member updated' })
+  async updateTeamMember(@Request() req, @Param('id') memberId: string, @Body() dto: UpdateTeamMemberDto) {
+    return this.authService.updateTeamMember(req.user.id, memberId, dto);
+  }
+
+  @Delete('team/members/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Remove team member' })
+  @ApiResponse({ status: 200, description: 'Team member removed' })
+  async removeTeamMember(@Request() req, @Param('id') memberId: string) {
+    return this.authService.removeTeamMember(req.user.id, memberId);
+  }
+
+  @Post('team/resend-invite/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Resend team invitation' })
+  @ApiResponse({ status: 200, description: 'Invitation resent' })
+  async resendInvite(@Request() req, @Param('id') memberId: string) {
+    return this.authService.resendInvite(req.user.id, memberId);
   }
 }

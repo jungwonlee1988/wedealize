@@ -3,7 +3,7 @@
 
 const Config = {
     // API Settings
-    API_BASE_URL: typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://supplier-api-theta.vercel.app/api/v1/supplier',
+    API_BASE_URL: typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://supplier-api-blush.vercel.app/api/v1/supplier',
     API_TIMEOUT: 3000,
 
     // OAuth

@@ -1,11 +1,13 @@
-import { Injectable, UnauthorizedException, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 import { SupabaseService } from '../config/supabase.service';
 import { EmailService } from './email.service';
 import { RegisterDto, SendVerificationDto, VerifyEmailDto } from './dto/register.dto';
-import { LoginDto, GoogleAuthDto, ForgotPasswordDto } from './dto/login.dto';
+import { LoginDto, GoogleAuthDto, ForgotPasswordDto, ResetPasswordDto } from './dto/login.dto';
+import { InviteTeamMemberDto, UpdateTeamMemberDto } from './dto/invite.dto';
 
 @Injectable()
 export class AuthService {
@@ -263,6 +265,38 @@ export class AuthService {
     return { message: 'If the email exists, a reset link will be sent' };
   }
 
+  // Reset password with token
+  async resetPassword(dto: ResetPasswordDto): Promise<{ message: string }> {
+    const { token, password } = dto;
+
+    try {
+      const payload = this.jwtService.verify(token);
+
+      if (payload.type !== 'password_reset') {
+        throw new BadRequestException('Invalid reset token');
+      }
+
+      const supabase = this.supabaseService.getAdminClient();
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const { error } = await supabase
+        .from('suppliers')
+        .update({ password: hashedPassword })
+        .eq('id', payload.sub);
+
+      if (error) {
+        throw new BadRequestException('Failed to reset password');
+      }
+
+      return { message: 'Password has been reset successfully' };
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new BadRequestException('Invalid or expired reset token');
+    }
+  }
+
   // Validate user from JWT
   async validateUser(payload: any): Promise<any> {
     const supabase = this.supabaseService.getAdminClient();
@@ -284,5 +318,259 @@ export class AuthService {
     };
 
     return this.jwtService.sign(payload);
+  }
+
+  // ==================== Team Member Management ====================
+
+  // Invite team member
+  async inviteTeamMember(supplierId: string, dto: InviteTeamMemberDto): Promise<{ message: string; member: any }> {
+    const supabase = this.supabaseService.getAdminClient();
+
+    // Get inviter info
+    const { data: inviter } = await supabase
+      .from('suppliers')
+      .select('id, email, company_name')
+      .eq('id', supplierId)
+      .single();
+
+    if (!inviter) {
+      throw new BadRequestException('Supplier not found');
+    }
+
+    // Check if already a team member
+    const { data: existing } = await supabase
+      .from('team_members')
+      .select('id, status')
+      .eq('supplier_id', supplierId)
+      .eq('email', dto.email)
+      .single();
+
+    if (existing) {
+      if (existing.status === 'active') {
+        throw new BadRequestException('This user is already a team member');
+      }
+      if (existing.status === 'pending') {
+        throw new BadRequestException('An invitation has already been sent to this email');
+      }
+    }
+
+    // Generate invite token
+    const inviteToken = randomBytes(32).toString('hex');
+
+    // Save to database
+    const { data: member, error } = await supabase
+      .from('team_members')
+      .insert({
+        supplier_id: supplierId,
+        email: dto.email,
+        role: dto.role,
+        status: 'pending',
+        invite_token: inviteToken,
+        invited_by: supplierId,
+        invited_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (error) {
+      this.logger.error('Failed to create team member invite:', error);
+      throw new BadRequestException('Failed to send invitation');
+    }
+
+    // Send invite email
+    const frontendUrl = this.configService.get<string>('frontendUrl');
+    const inviteLink = `${frontendUrl}/accept-invite?token=${inviteToken}`;
+
+    await this.emailService.sendTeamInviteEmail(
+      dto.email,
+      inviter.company_name,
+      inviter.company_name,
+      dto.role,
+      dto.message,
+      inviteLink,
+    );
+
+    return { message: 'Invitation sent successfully', member };
+  }
+
+  // Accept team invite
+  async acceptInvite(token: string): Promise<{ message: string; supplier_id: string }> {
+    const supabase = this.supabaseService.getAdminClient();
+
+    // Find invite by token
+    const { data: member, error: fetchError } = await supabase
+      .from('team_members')
+      .select('*, suppliers!team_members_supplier_id_fkey(company_name)')
+      .eq('invite_token', token)
+      .eq('status', 'pending')
+      .single();
+
+    if (fetchError || !member) {
+      throw new BadRequestException('Invalid or expired invitation');
+    }
+
+    // Check if invite is expired (7 days)
+    const invitedAt = new Date(member.invited_at);
+    const now = new Date();
+    const diffDays = (now.getTime() - invitedAt.getTime()) / (1000 * 60 * 60 * 24);
+    if (diffDays > 7) {
+      throw new BadRequestException('This invitation has expired');
+    }
+
+    // Update team member status
+    const { error: updateError } = await supabase
+      .from('team_members')
+      .update({
+        status: 'active',
+        joined_at: new Date().toISOString(),
+        invite_token: null,
+      })
+      .eq('id', member.id);
+
+    if (updateError) {
+      this.logger.error('Failed to accept invite:', updateError);
+      throw new BadRequestException('Failed to accept invitation');
+    }
+
+    return {
+      message: 'Invitation accepted successfully',
+      supplier_id: member.supplier_id,
+    };
+  }
+
+  // Get team members
+  async getTeamMembers(supplierId: string): Promise<any[]> {
+    const supabase = this.supabaseService.getAdminClient();
+
+    const { data: members, error } = await supabase
+      .from('team_members')
+      .select('*')
+      .eq('supplier_id', supplierId)
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      this.logger.error('Failed to fetch team members:', error);
+      throw new BadRequestException('Failed to fetch team members');
+    }
+
+    return members || [];
+  }
+
+  // Update team member role
+  async updateTeamMember(supplierId: string, memberId: string, dto: UpdateTeamMemberDto): Promise<{ message: string }> {
+    const supabase = this.supabaseService.getAdminClient();
+
+    // Verify member belongs to this supplier
+    const { data: member } = await supabase
+      .from('team_members')
+      .select('id, role')
+      .eq('id', memberId)
+      .eq('supplier_id', supplierId)
+      .single();
+
+    if (!member) {
+      throw new NotFoundException('Team member not found');
+    }
+
+    const { error } = await supabase
+      .from('team_members')
+      .update({ role: dto.role })
+      .eq('id', memberId);
+
+    if (error) {
+      this.logger.error('Failed to update team member:', error);
+      throw new BadRequestException('Failed to update team member');
+    }
+
+    return { message: 'Team member updated successfully' };
+  }
+
+  // Remove team member
+  async removeTeamMember(supplierId: string, memberId: string): Promise<{ message: string }> {
+    const supabase = this.supabaseService.getAdminClient();
+
+    // Verify member belongs to this supplier
+    const { data: member } = await supabase
+      .from('team_members')
+      .select('id')
+      .eq('id', memberId)
+      .eq('supplier_id', supplierId)
+      .single();
+
+    if (!member) {
+      throw new NotFoundException('Team member not found');
+    }
+
+    const { error } = await supabase
+      .from('team_members')
+      .delete()
+      .eq('id', memberId);
+
+    if (error) {
+      this.logger.error('Failed to remove team member:', error);
+      throw new BadRequestException('Failed to remove team member');
+    }
+
+    return { message: 'Team member removed successfully' };
+  }
+
+  // Resend team invite
+  async resendInvite(supplierId: string, memberId: string): Promise<{ message: string }> {
+    const supabase = this.supabaseService.getAdminClient();
+
+    // Get member and verify ownership
+    const { data: member } = await supabase
+      .from('team_members')
+      .select('*')
+      .eq('id', memberId)
+      .eq('supplier_id', supplierId)
+      .eq('status', 'pending')
+      .single();
+
+    if (!member) {
+      throw new NotFoundException('Pending invitation not found');
+    }
+
+    // Get inviter info
+    const { data: inviter } = await supabase
+      .from('suppliers')
+      .select('id, company_name')
+      .eq('id', supplierId)
+      .single();
+
+    if (!inviter) {
+      throw new BadRequestException('Supplier not found');
+    }
+
+    // Generate new token
+    const newToken = randomBytes(32).toString('hex');
+
+    const { error } = await supabase
+      .from('team_members')
+      .update({
+        invite_token: newToken,
+        invited_at: new Date().toISOString(),
+      })
+      .eq('id', memberId);
+
+    if (error) {
+      this.logger.error('Failed to resend invite:', error);
+      throw new BadRequestException('Failed to resend invitation');
+    }
+
+    // Send email
+    const frontendUrl = this.configService.get<string>('frontendUrl');
+    const inviteLink = `${frontendUrl}/accept-invite?token=${newToken}`;
+
+    await this.emailService.sendTeamInviteEmail(
+      member.email,
+      inviter.company_name,
+      inviter.company_name,
+      member.role,
+      undefined,
+      inviteLink,
+    );
+
+    return { message: 'Invitation resent successfully' };
   }
 }
