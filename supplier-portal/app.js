@@ -831,6 +831,9 @@ function showSection(sectionName) {
     });
 
     // Section-specific data loading
+    if (sectionName === 'accounts') {
+        loadAccountListFromAPI();
+    }
     if (sectionName === 'buyer-discovery') {
         loadInquiredBuyers();
     }
@@ -3049,48 +3052,26 @@ async function populatePIBuyerDropdown() {
         const token = localStorage.getItem('token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
 
-        // Fetch POs and Credits in parallel to build buyer list
-        const [poRes, creditRes] = await Promise.all([
-            fetch(`${baseUrl}/po`, { headers: { 'Authorization': `Bearer ${token}` } }),
-            fetch(`${baseUrl}/credits?status=approved`, { headers: { 'Authorization': `Bearer ${token}` } })
-        ]);
+        const res = await fetch(`${baseUrl}/accounts`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
 
-        const buyerMap = new Map(); // key: buyer_name, value: { email, country }
-
-        if (poRes.ok) {
-            const poList = await poRes.json();
-            (Array.isArray(poList) ? poList : []).forEach(po => {
-                if (po.buyer_name && !buyerMap.has(po.buyer_name)) {
-                    buyerMap.set(po.buyer_name, {
-                        email: po.buyer_email || '',
-                        country: po.buyer_country || ''
-                    });
-                }
-            });
-        }
-
-        if (creditRes.ok) {
-            const creditList = await creditRes.json();
-            (Array.isArray(creditList) ? creditList : []).forEach(c => {
-                if (c.buyer_name && !buyerMap.has(c.buyer_name)) {
-                    buyerMap.set(c.buyer_name, { email: '', country: '' });
-                }
-            });
-        }
+        if (!res.ok) throw new Error('Failed to load accounts');
+        const accounts = await res.json();
 
         buyerSelect.innerHTML = '<option value="">Select a buyer...</option>';
-        buyerMap.forEach((info, name) => {
+        (Array.isArray(accounts) ? accounts : []).forEach(acc => {
             const opt = document.createElement('option');
-            opt.value = name;
-            opt.setAttribute('data-name', name);
-            opt.setAttribute('data-email', info.email);
-            opt.setAttribute('data-country', info.country);
-            opt.textContent = name + (info.country ? ` (${info.country})` : '');
+            opt.value = acc.company_name;
+            opt.setAttribute('data-name', acc.company_name);
+            opt.setAttribute('data-email', acc.email || '');
+            opt.setAttribute('data-country', acc.country || '');
+            opt.textContent = acc.company_name + (acc.country ? ` (${acc.country})` : '');
             buyerSelect.appendChild(opt);
         });
 
-        if (buyerMap.size === 0) {
-            buyerSelect.innerHTML = '<option value="">No buyers found</option>';
+        if (accounts.length === 0) {
+            buyerSelect.innerHTML = '<option value="">No accounts found — add one in Account Management</option>';
         }
     } catch (e) {
         console.error('Failed to load buyers:', e);
@@ -3723,15 +3704,44 @@ function viewCreditDetail(creditId) {
 // ==================== Account Management ====================
 
 // Account detail drawer 열기
-function viewAccountDetail(accountId) {
+async function viewAccountDetail(accountId) {
     const drawer = document.getElementById('account-detail-drawer');
     const overlay = document.getElementById('account-drawer-overlay');
     if (drawer) {
         drawer.classList.add('active');
         if (overlay) overlay.classList.add('active');
         window.currentAccountId = accountId;
-        // TODO: Load account detail data based on accountId
-        console.log('Opening account detail for:', accountId);
+
+        try {
+            const token = localStorage.getItem('token');
+            const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+            const res = await fetch(`${baseUrl}/accounts/${accountId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!res.ok) throw new Error('Failed');
+            const acc = await res.json();
+
+            const titleEl = document.getElementById('account-drawer-title');
+            const subtitleEl = document.getElementById('account-drawer-subtitle');
+            if (titleEl) titleEl.textContent = acc.company_name || '';
+            if (subtitleEl) subtitleEl.textContent = acc.country || '';
+
+            const infoEl = document.getElementById('account-drawer-info');
+            if (infoEl) {
+                infoEl.innerHTML = `
+                    <div class="wd-info-item"><span class="wd-info-label">Contact</span><span class="wd-info-value">${escapeHtml(acc.contact_name || '-')}</span></div>
+                    <div class="wd-info-item"><span class="wd-info-label">Position</span><span class="wd-info-value">${escapeHtml(acc.contact_position || '-')}</span></div>
+                    <div class="wd-info-item"><span class="wd-info-label">Email</span><span class="wd-info-value">${escapeHtml(acc.email || '-')}</span></div>
+                    <div class="wd-info-item"><span class="wd-info-label">Phone</span><span class="wd-info-value">${escapeHtml(acc.phone || '-')}</span></div>
+                    <div class="wd-info-item"><span class="wd-info-label">Currency</span><span class="wd-info-value">${escapeHtml(acc.currency || 'USD')}</span></div>
+                    <div class="wd-info-item"><span class="wd-info-label">Incoterms</span><span class="wd-info-value">${escapeHtml(acc.incoterms || '-')}</span></div>
+                    <div class="wd-info-item"><span class="wd-info-label">Payment Terms</span><span class="wd-info-value">${escapeHtml(acc.payment_terms || '-')}</span></div>
+                    <div class="wd-info-item"><span class="wd-info-label">Address</span><span class="wd-info-value">${escapeHtml(acc.address || '-')}</span></div>
+                `;
+            }
+        } catch (e) {
+            console.error('Failed to load account detail:', e);
+        }
     }
 }
 
@@ -3801,6 +3811,189 @@ function changeAccountSalesYear() {
         console.log('Changed to year:', yearSelect.value);
         // TODO: Load sales data for selected year
     }
+}
+
+// ---- Account CRUD (API-connected) ----
+
+window._editingAccountId = null;
+
+function openAccountModal(accountId) {
+    const modal = document.getElementById('account-modal');
+    const titleEl = document.getElementById('account-modal-title');
+    const form = document.getElementById('account-form');
+    if (form) form.reset();
+    window._editingAccountId = null;
+
+    if (accountId) {
+        window._editingAccountId = accountId;
+        if (titleEl) titleEl.textContent = 'Edit Account';
+        loadAccountIntoForm(accountId);
+    } else {
+        if (titleEl) titleEl.textContent = 'Add Account';
+    }
+
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeAccountModal() {
+    const modal = document.getElementById('account-modal');
+    if (modal) modal.style.display = 'none';
+    window._editingAccountId = null;
+}
+
+async function loadAccountIntoForm(accountId) {
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/accounts/${accountId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed to load account');
+        const acc = await res.json();
+
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+        setVal('account-company-name', acc.company_name);
+        setVal('account-country', acc.country);
+        setVal('account-address', acc.address);
+        setVal('account-contact-name', acc.contact_name);
+        setVal('account-contact-position', acc.contact_position);
+        setVal('account-email', acc.email);
+        setVal('account-phone', acc.phone);
+        setVal('account-currency', acc.currency);
+        setVal('account-incoterms', acc.incoterms);
+        setVal('account-payment-terms', acc.payment_terms);
+        setVal('account-notes', acc.notes);
+    } catch (e) {
+        console.error('Failed to load account into form:', e);
+        showToast('Failed to load account data', 'error');
+    }
+}
+
+async function saveAccount() {
+    const companyName = document.getElementById('account-company-name')?.value?.trim();
+    if (!companyName) {
+        showToast('Company name is required', 'error');
+        return;
+    }
+
+    const payload = {
+        companyName,
+        country: document.getElementById('account-country')?.value || '',
+        address: document.getElementById('account-address')?.value || '',
+        contactName: document.getElementById('account-contact-name')?.value || '',
+        contactPosition: document.getElementById('account-contact-position')?.value || '',
+        email: document.getElementById('account-email')?.value || '',
+        phone: document.getElementById('account-phone')?.value || '',
+        currency: document.getElementById('account-currency')?.value || 'USD',
+        incoterms: document.getElementById('account-incoterms')?.value || '',
+        paymentTerms: document.getElementById('account-payment-terms')?.value || '',
+        notes: document.getElementById('account-notes')?.value || '',
+    };
+
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const isEdit = !!window._editingAccountId;
+        const url = isEdit ? `${baseUrl}/accounts/${window._editingAccountId}` : `${baseUrl}/accounts`;
+        const method = isEdit ? 'PATCH' : 'POST';
+
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Failed to save account');
+        }
+
+        showToast(isEdit ? 'Account updated!' : 'Account created!', 'success');
+        closeAccountModal();
+        loadAccountListFromAPI();
+    } catch (e) {
+        console.error('Failed to save account:', e);
+        showToast(e.message || 'Failed to save account', 'error');
+    }
+}
+
+async function loadAccountListFromAPI() {
+    const tbody = document.getElementById('accounts-table-body');
+    if (!tbody) return;
+
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/accounts`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!res.ok) throw new Error('Failed to load accounts');
+        const accounts = await res.json();
+
+        if (!accounts.length) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:#999;">No accounts yet. Click "Add Account" to create one.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = accounts.map(acc => `
+            <tr data-account-id="${acc.id}" onclick="viewAccountDetail('${acc.id}')" class="wd-cursor-pointer">
+                <td>
+                    <div class="wd-company-cell">
+                        <span class="wd-company-name">${escapeHtml(acc.company_name)}</span>
+                        <span class="wd-company-code">${escapeHtml(acc.country || '')}</span>
+                    </div>
+                </td>
+                <td>${escapeHtml(acc.contact_name || '-')}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>${escapeHtml(acc.email || '-')}</td>
+                <td>
+                    <div style="display:flex; gap:4px;">
+                        <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="event.stopPropagation(); openAccountModal('${acc.id}')" title="Edit">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </button>
+                        <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="event.stopPropagation(); deleteAccountFromAPI('${acc.id}')" title="Delete" style="color:#ef4444;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    } catch (e) {
+        console.error('Failed to load accounts:', e);
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:#ef4444;">Failed to load accounts</td></tr>`;
+    }
+}
+
+async function deleteAccountFromAPI(accountId) {
+    if (!confirm('Are you sure you want to delete this account?')) return;
+
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/accounts/${accountId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed to delete account');
+        showToast('Account deleted', 'success');
+        loadAccountListFromAPI();
+    } catch (e) {
+        console.error('Failed to delete account:', e);
+        showToast('Failed to delete account', 'error');
+    }
+}
+
+function filterAccounts() {
+    const searchInput = document.getElementById('account-search');
+    const searchTerm = (searchInput?.value || '').toLowerCase();
+    const rows = document.querySelectorAll('#accounts-table-body tr');
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
 }
 
 // Product tooltip 표시

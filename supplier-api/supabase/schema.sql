@@ -207,6 +207,25 @@ CREATE TABLE IF NOT EXISTS credit_applications (
     UNIQUE(credit_id, pi_id)
 );
 
+-- Accounts (buyer/trade partner) table
+CREATE TABLE IF NOT EXISTS accounts (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    supplier_id UUID REFERENCES suppliers(id) ON DELETE CASCADE,
+    company_name VARCHAR(255) NOT NULL,
+    country VARCHAR(100),
+    address TEXT,
+    contact_name VARCHAR(255),
+    contact_position VARCHAR(100),
+    email VARCHAR(255),
+    phone VARCHAR(50),
+    currency VARCHAR(10) DEFAULT 'USD',
+    incoterms VARCHAR(20),
+    payment_terms VARCHAR(50),
+    notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Buyer Inquiries table
 CREATE TABLE IF NOT EXISTS buyer_inquiries (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -248,6 +267,7 @@ CREATE INDEX IF NOT EXISTS idx_credits_status ON credits(status);
 CREATE INDEX IF NOT EXISTS idx_credits_buyer ON credits(buyer_name);
 CREATE INDEX IF NOT EXISTS idx_credit_applications_credit ON credit_applications(credit_id);
 CREATE INDEX IF NOT EXISTS idx_credit_applications_pi ON credit_applications(pi_id);
+CREATE INDEX IF NOT EXISTS idx_accounts_supplier ON accounts(supplier_id);
 CREATE INDEX IF NOT EXISTS idx_buyer_inquiries_supplier ON buyer_inquiries(supplier_id);
 CREATE INDEX IF NOT EXISTS idx_buyer_inquiries_status ON buyer_inquiries(status);
 CREATE INDEX IF NOT EXISTS idx_buyer_inquiry_products_inquiry ON buyer_inquiry_products(inquiry_id);
@@ -266,6 +286,7 @@ ALTER TABLE proforma_invoices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE proforma_invoice_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE credits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE credit_applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE accounts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE buyer_inquiries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE buyer_inquiry_products ENABLE ROW LEVEL SECURITY;
 
@@ -315,6 +336,11 @@ CREATE TRIGGER update_proforma_invoices_updated_at
 
 CREATE TRIGGER update_credits_updated_at
     BEFORE UPDATE ON credits
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_accounts_updated_at
+    BEFORE UPDATE ON accounts
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
