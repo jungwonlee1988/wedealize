@@ -2555,11 +2555,344 @@ function sortPOTable(column) {
 }
 
 // 발주서 등록 모달
-function openAddPOModal() {
-    showToast('발주서 등록 기능 준비 중입니다.', 'info');
+function openAddPOModal(poId) {
+    const modalEl = document.getElementById('add-po-modal');
+    const form = document.getElementById('add-po-form');
+    const titleEl = document.getElementById('add-po-modal-title');
+
+    if (!modalEl) return;
+
+    if (form) form.reset();
+    window._editingPOId = null;
+
+    // Reset items table
+    const tbody = document.getElementById('add-po-items-tbody');
+    if (tbody) {
+        tbody.innerHTML = `
+            <tr data-row="0">
+                <td><input type="text" class="wd-input wd-input-sm po-item-name" required placeholder="Product name"></td>
+                <td><input type="number" class="wd-input wd-input-sm po-item-qty" required min="1" value="1" onchange="calculatePOItemSubtotal(0)"></td>
+                <td>
+                    <select class="wd-select wd-select-sm po-item-unit">
+                        <option value="pcs">pcs</option>
+                        <option value="boxes">boxes</option>
+                        <option value="cases">cases</option>
+                        <option value="pallets">pallets</option>
+                        <option value="kg">kg</option>
+                        <option value="lbs">lbs</option>
+                        <option value="liters">liters</option>
+                    </select>
+                </td>
+                <td><input type="number" class="wd-input wd-input-sm po-item-price" required min="0" step="0.01" value="0" onchange="calculatePOItemSubtotal(0)"></td>
+                <td class="po-item-subtotal wd-text-right wd-text-bold">0.00</td>
+                <td>
+                    <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removePOItemRow(0)" title="Remove">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }
+
+    // Set default date
+    const orderDateInput = document.getElementById('add-po-date');
+    if (orderDateInput) orderDateInput.value = new Date().toISOString().split('T')[0];
+
+    if (poId) {
+        window._editingPOId = poId;
+        if (titleEl) titleEl.textContent = 'Edit Purchase Order';
+        loadPODataForEdit(poId);
+    } else {
+        if (titleEl) titleEl.textContent = 'Add Purchase Order';
+    }
+
+    modalEl.style.display = 'flex';
+}
+
+function closeAddPOModal() {
+    const modalEl = document.getElementById('add-po-modal');
+    if (modalEl) modalEl.style.display = 'none';
+}
+
+function collectPOItems() {
+    const items = [];
+    const tbody = document.getElementById('add-po-items-tbody');
+    if (!tbody) return items;
+
+    tbody.querySelectorAll('tr').forEach(row => {
+        const item = {
+            productName: row.querySelector('.po-item-name')?.value || '',
+            quantity: parseInt(row.querySelector('.po-item-qty')?.value) || 0,
+            unit: row.querySelector('.po-item-unit')?.value || 'pcs',
+            unitPrice: parseFloat(row.querySelector('.po-item-price')?.value) || 0
+        };
+        if (item.productName) items.push(item);
+    });
+
+    return items;
+}
+
+async function savePO() {
+    const form = document.getElementById('add-po-form');
+    if (form && !form.checkValidity()) { form.reportValidity(); return; }
+
+    const buyerCompany = document.getElementById('add-po-buyer-company')?.value;
+    if (!buyerCompany) { showToast('Buyer company is required', 'error'); return; }
+
+    const items = collectPOItems();
+    if (items.length === 0) { showToast('At least one product item is required', 'error'); return; }
+
+    const poData = {
+        poNumber: document.getElementById('add-po-number')?.value || undefined,
+        orderDate: document.getElementById('add-po-date')?.value || undefined,
+        buyerName: buyerCompany,
+        buyerContact: document.getElementById('add-po-buyer-contact')?.value || undefined,
+        buyerEmail: document.getElementById('add-po-buyer-email')?.value || undefined,
+        buyerPhone: document.getElementById('add-po-buyer-phone')?.value || undefined,
+        buyerAddress: document.getElementById('add-po-buyer-address')?.value || undefined,
+        currency: document.getElementById('add-po-currency')?.value || 'USD',
+        incoterms: document.getElementById('add-po-incoterms')?.value || undefined,
+        paymentTerms: document.getElementById('add-po-payment-terms')?.value || undefined,
+        items,
+        notes: document.getElementById('add-po-notes')?.value || undefined,
+        status: 'pending'
+    };
+
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const url = window._editingPOId ? `${baseUrl}/po/${window._editingPOId}` : `${baseUrl}/po`;
+        const method = window._editingPOId ? 'PATCH' : 'POST';
+
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(poData)
+        });
+        if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.message || 'Failed'); }
+
+        showToast(window._editingPOId ? 'PO updated!' : 'PO registered!', 'success');
+        closeAddPOModal();
+        if (typeof loadPOListFromAPI === 'function') loadPOListFromAPI();
+    } catch (e) {
+        showToast(e.message || 'Failed to save PO', 'error');
+    }
+}
+
+async function savePOAsDraft() {
+    const items = collectPOItems();
+    const poData = {
+        poNumber: document.getElementById('add-po-number')?.value || undefined,
+        orderDate: document.getElementById('add-po-date')?.value || undefined,
+        buyerName: document.getElementById('add-po-buyer-company')?.value || '',
+        buyerContact: document.getElementById('add-po-buyer-contact')?.value || undefined,
+        buyerEmail: document.getElementById('add-po-buyer-email')?.value || undefined,
+        buyerPhone: document.getElementById('add-po-buyer-phone')?.value || undefined,
+        buyerAddress: document.getElementById('add-po-buyer-address')?.value || undefined,
+        currency: document.getElementById('add-po-currency')?.value || 'USD',
+        incoterms: document.getElementById('add-po-incoterms')?.value || undefined,
+        paymentTerms: document.getElementById('add-po-payment-terms')?.value || undefined,
+        items,
+        notes: document.getElementById('add-po-notes')?.value || undefined,
+        status: 'draft'
+    };
+
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const url = window._editingPOId ? `${baseUrl}/po/${window._editingPOId}` : `${baseUrl}/po`;
+        const method = window._editingPOId ? 'PATCH' : 'POST';
+
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(poData)
+        });
+        if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.message || 'Failed'); }
+
+        showToast('PO saved as draft!', 'success');
+        closeAddPOModal();
+        if (typeof loadPOListFromAPI === 'function') loadPOListFromAPI();
+    } catch (e) {
+        showToast(e.message || 'Failed to save draft', 'error');
+    }
+}
+
+async function loadPODataForEdit(poId) {
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/po/${poId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed to load PO');
+        const data = await res.json();
+
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+        setVal('add-po-number', data.po_number);
+        setVal('add-po-date', data.order_date ? data.order_date.split('T')[0] : '');
+        setVal('add-po-buyer-company', data.buyer_name);
+        setVal('add-po-buyer-contact', data.buyer_contact);
+        setVal('add-po-buyer-email', data.buyer_email);
+        setVal('add-po-buyer-phone', data.buyer_phone);
+        setVal('add-po-buyer-address', data.buyer_address);
+        setVal('add-po-currency', data.currency);
+        setVal('add-po-incoterms', data.incoterms);
+        setVal('add-po-payment-terms', data.payment_terms);
+        setVal('add-po-notes', data.notes);
+
+        const items = data.order_items || [];
+        if (items.length > 0) {
+            const tbody = document.getElementById('add-po-items-tbody');
+            if (tbody) {
+                tbody.innerHTML = items.map((item, idx) => `
+                    <tr data-row="${idx}">
+                        <td><input type="text" class="wd-input wd-input-sm po-item-name" required placeholder="Product name" value="${item.product_name || ''}"></td>
+                        <td><input type="number" class="wd-input wd-input-sm po-item-qty" required min="1" value="${item.quantity || 1}" onchange="calculatePOItemSubtotal(${idx})"></td>
+                        <td>
+                            <select class="wd-select wd-select-sm po-item-unit">
+                                ${['pcs','boxes','cases','pallets','kg','lbs','liters'].map(u =>
+                                    `<option value="${u}" ${(item.unit||'pcs')===u?'selected':''}>${u}</option>`
+                                ).join('')}
+                            </select>
+                        </td>
+                        <td><input type="number" class="wd-input wd-input-sm po-item-price" required min="0" step="0.01" value="${item.unit_price || 0}" onchange="calculatePOItemSubtotal(${idx})"></td>
+                        <td class="po-item-subtotal wd-text-right wd-text-bold">${((item.quantity||0)*(item.unit_price||0)).toFixed(2)}</td>
+                        <td>
+                            <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removePOItemRow(${idx})" title="Remove">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                if (typeof updatePOTotal === 'function') updatePOTotal();
+            }
+        }
+    } catch (e) {
+        showToast('Failed to load PO data', 'error');
+    }
+}
+
+async function loadPOListFromAPI() {
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/po`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) return;
+        const orders = await res.json();
+        renderPOListFromAPI(Array.isArray(orders) ? orders : []);
+    } catch (e) {
+        console.log('Failed to load PO list from API');
+    }
+}
+
+function renderPOListFromAPI(orders) {
+    const tbody = document.getElementById('po-list-tbody');
+    if (!tbody) return;
+
+    if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:#888;">No purchase orders found</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = orders.map(order => {
+        const poNumber = order.po_number || '';
+        const status = order.status || '';
+        const totalAmount = order.total_amount ?? 0;
+        const currency = order.currency || 'USD';
+        const buyerName = order.buyer_name || '';
+        const paymentTerms = order.payment_terms || '-';
+        const incoterms = order.incoterms || '-';
+        const items = order.order_items || [];
+        const productName = items.length > 0 ? (items[0].product_name || '-') : '-';
+        const itemExtra = items.length > 1 ? ` (+${items.length - 1})` : '';
+        const formattedAmount = typeof totalAmount === 'number'
+            ? `${currency} ${totalAmount.toLocaleString('en-US', {minimumFractionDigits:2})}`
+            : totalAmount;
+        const updatedAt = order.updated_at || order.created_at || '';
+        const formattedDate = updatedAt ? new Date(updatedAt).toLocaleDateString() : '-';
+        const orderId = order.id || '';
+
+        const statusBadgeClass = {
+            draft: 'wd-badge-secondary', pending: 'wd-badge-warning', confirmed: 'wd-badge-success',
+            shipping: 'wd-badge-info', delivered: 'wd-badge-success', cancelled: 'wd-badge-danger'
+        }[status] || 'wd-badge-secondary';
+        const statusLabel = {draft:'Draft',pending:'Pending',confirmed:'Confirmed',shipping:'Shipping',delivered:'Delivered',cancelled:'Cancelled'}[status] || status;
+
+        let actions = '';
+        if (status === 'draft' || status === 'pending') {
+            actions += `<button class="wd-btn wd-btn-sm wd-btn-outline" onclick="event.stopPropagation();openAddPOModal('${orderId}')">Edit</button> `;
+            actions += `<button class="wd-btn wd-btn-sm wd-btn-danger-outline" onclick="event.stopPropagation();deletePO('${orderId}')">Delete</button>`;
+        }
+
+        return `
+        <tr data-status="${status}" data-po="${poNumber}" onclick="viewPODetail('${orderId}')" class="wd-cursor-pointer">
+            <td>${poNumber}</td>
+            <td><span class="wd-badge ${statusBadgeClass}">${statusLabel}</span></td>
+            <td>${productName}${itemExtra}</td>
+            <td>${formattedAmount}</td>
+            <td>${buyerName}</td>
+            <td>${paymentTerms}</td>
+            <td>${incoterms}</td>
+            <td>${formattedDate}</td>
+            <td>${actions || '-'}</td>
+        </tr>`;
+    }).join('');
+}
+
+async function deletePO(poId) {
+    if (!confirm('Are you sure you want to delete this PO?')) return;
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/po/${poId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed');
+        showToast('PO deleted', 'success');
+        loadPOListFromAPI();
+    } catch (e) {
+        showToast('Failed to delete PO', 'error');
+    }
+}
+
+function editPO(poId) {
+    openAddPOModal(poId);
 }
 
 // ==================== PI Management ====================
+
+function openPIModal(piId) {
+    const modalEl = document.getElementById('pi-modal');
+    const form = document.getElementById('pi-form');
+    const titleEl = document.getElementById('pi-modal-title');
+
+    if (!modalEl) return;
+
+    if (form) form.reset();
+    window._editingPIId = null;
+
+    if (piId) {
+        window._editingPIId = piId;
+        if (titleEl) titleEl.textContent = 'Edit Proforma Invoice';
+    } else {
+        if (titleEl) titleEl.textContent = 'Create Proforma Invoice';
+    }
+
+    modalEl.style.display = 'flex';
+}
+
+function closePIModal() {
+    const modalEl = document.getElementById('pi-modal');
+    if (modalEl) modalEl.style.display = 'none';
+}
+
+async function createAndSendPI() {
+    showToast('PI creation - coming soon', 'info');
+}
 
 // PI 탭 필터 (Active/Cancelled)
 function filterPIByTab(tabType) {
