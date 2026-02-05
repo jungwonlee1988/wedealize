@@ -1,4 +1,5 @@
 import { Controller, Post, Get, Patch, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
+// Note: GET /products moved to ProductsController
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { DiscoveryService } from './discovery.service';
 import { CreateInquiryDto, UpdateInquiryDto } from './dto/create-inquiry.dto';
@@ -10,21 +11,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @ApiBearerAuth()
 export class DiscoveryController {
   constructor(private discoveryService: DiscoveryService) {}
-
-  // ==================== Products ====================
-
-  @Get('products')
-  @ApiOperation({ summary: 'Get completed products for inquiry linking' })
-  @ApiResponse({ status: 200, description: 'Product list retrieved' })
-  async getProducts(
-    @Request() req,
-    @Query('status') status?: string,
-  ) {
-    if (status === 'completed') {
-      return this.discoveryService.getCompletedProducts(req.user.id);
-    }
-    return this.discoveryService.getCompletedProducts(req.user.id);
-  }
 
   // ==================== Inquiry CRUD ====================
 

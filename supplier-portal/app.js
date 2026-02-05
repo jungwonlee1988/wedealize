@@ -987,21 +987,20 @@ function filterProductList() {
     const rows = document.querySelectorAll('#product-list-tbody tr');
 
     rows.forEach(row => {
-        const isIncomplete = row.classList.contains('incomplete-row');
+        const isWarning = row.classList.contains('wd-row-warning');
         let show = true;
 
         switch (filter) {
             case 'complete':
-                show = !isIncomplete;
+                show = !isWarning;
                 break;
             case 'incomplete':
-                show = isIncomplete;
+                show = isWarning;
                 break;
             case 'no-moq':
             case 'no-image':
             case 'no-cert':
-                // TODO: 상세 필터링 구현
-                show = isIncomplete;
+                show = isWarning;
                 break;
         }
 
@@ -1347,89 +1346,163 @@ function filterMissing(type) {
     // 필터 적용
 }
 
-function editProduct(productId) {
-    // 모달 표시
+// ==================== Product CRUD ====================
+
+function openAddProductModal() {
+    window._editingProductId = null;
+    document.getElementById('product-modal-title').textContent = 'Add Product';
+    document.getElementById('product-edit-form').reset();
+    // Clear all certification checkboxes
+    document.querySelectorAll('#product-cert-grid input[type="checkbox"]').forEach(cb => cb.checked = false);
     document.getElementById('product-modal').style.display = 'flex';
+}
 
-    // 데모 데이터 로드
-    const demoProducts = {
-        1: { name: 'Extra Virgin Olive Oil 500ml', sku: 'OIL-001', moq: 200, certs: ['organic', 'haccp'] },
-        3: { name: 'Aged Parmesan 24 months', sku: 'CHE-003', moq: null, certs: ['dop'] },
-        5: { name: 'Raw Honey 500g', sku: 'HON-005', moq: null, certs: [] }
-    };
+async function editProduct(productId) {
+    window._editingProductId = productId;
+    document.getElementById('product-modal-title').textContent = 'Edit Product';
+    document.getElementById('product-edit-form').reset();
+    document.querySelectorAll('#product-cert-grid input[type="checkbox"]').forEach(cb => cb.checked = false);
 
-    const product = demoProducts[productId] || demoProducts[1];
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/products/${productId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.status === 401) { handleSessionExpired(); return; }
+        if (!res.ok) throw new Error('Failed to load product');
+        const product = await res.json();
 
-    document.getElementById('edit-product-name').value = product.name;
-    document.getElementById('edit-product-sku').value = product.sku;
-    document.getElementById('edit-moq').value = product.moq || '';
+        document.getElementById('edit-product-name').value = product.name || '';
+        document.getElementById('edit-product-sku').value = product.sku || '';
+        document.getElementById('edit-product-category').value = product.category || '';
+        document.getElementById('edit-product-status').value = product.status || 'active';
+        document.getElementById('edit-product-description').value = product.description || '';
+        document.getElementById('edit-price-min').value = product.min_price || '';
+        document.getElementById('edit-price-max').value = product.max_price || '';
+        document.getElementById('edit-moq').value = product.moq || '';
+        document.getElementById('edit-moq-unit').value = product.moq_unit || '';
 
-    // 누락 데이터 강조
-    if (!product.moq || product.certs.length === 0) {
-        document.getElementById('modal-missing-alert').style.display = 'flex';
-    } else {
-        document.getElementById('modal-missing-alert').style.display = 'none';
+        // Set certification checkboxes
+        if (product.certifications && product.certifications.length > 0) {
+            product.certifications.forEach(cert => {
+                const cb = document.querySelector(`#product-cert-grid input[value="${cert}"]`);
+                if (cb) cb.checked = true;
+            });
+        }
+    } catch (e) {
+        console.error('Failed to load product for edit:', e);
+        showToast('Failed to load product data', 'error');
     }
+
+    document.getElementById('product-modal').style.display = 'flex';
 }
 
 function closeProductModal() {
     document.getElementById('product-modal').style.display = 'none';
+    window._editingProductId = null;
 }
 
 async function saveProduct() {
-    const productId = document.getElementById('edit-product-id')?.value;
-    const moq = document.getElementById('edit-moq').value;
-
-    if (!moq) {
-        showToast('Please fill in MOQ (required)', 'warning');
+    const name = document.getElementById('edit-product-name')?.value?.trim();
+    if (!name) {
+        showToast('Product name is required', 'error');
         return;
     }
 
+    // Gather selected certifications
+    const certifications = [];
+    document.querySelectorAll('#product-cert-grid input[type="checkbox"]:checked').forEach(cb => {
+        certifications.push(cb.value);
+    });
+
+    const payload = {
+        name,
+        sku: document.getElementById('edit-product-sku')?.value || '',
+        category: document.getElementById('edit-product-category')?.value || '',
+        status: document.getElementById('edit-product-status')?.value || 'active',
+        description: document.getElementById('edit-product-description')?.value || '',
+        minPrice: parseFloat(document.getElementById('edit-price-min')?.value) || null,
+        maxPrice: parseFloat(document.getElementById('edit-price-max')?.value) || null,
+        moq: parseInt(document.getElementById('edit-moq')?.value) || null,
+        moqUnit: document.getElementById('edit-moq-unit')?.value || '',
+        certifications,
+    };
+
     try {
-        // API 호출
-        await apiCall(`/products/${productId || 1}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                product_id: parseInt(productId || 1),
-                moq: parseInt(moq)
-            })
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const isEdit = !!window._editingProductId;
+        const url = isEdit ? `${baseUrl}/products/${window._editingProductId}` : `${baseUrl}/products`;
+        const method = isEdit ? 'PATCH' : 'POST';
+
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
         });
 
+        if (res.status === 401) { handleSessionExpired(); return; }
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Failed to save product');
+        }
+
+        showToast(isEdit ? 'Product updated!' : 'Product created!', 'success');
         closeProductModal();
-        showToast('Product updated successfully!');
-
-        // 완성도 재계산 요청
-        const supplierId = localStorage.getItem('supplier_id') || '1';
-        await apiCall(`/data-completeness/refresh/${supplierId}`, { method: 'POST' });
-
-        // UI 업데이트
-        await checkDataCompleteness();
-        await loadProducts();
-
-    } catch (error) {
-        console.error('Save error:', error);
-        // 오프라인/데모 모드
-        closeProductModal();
-        showToast('Product updated successfully!');
+        loadProducts();
+    } catch (e) {
+        console.error('Failed to save product:', e);
+        showToast(e.message || 'Failed to save product', 'error');
     }
 }
 
-// 상품 목록 로드
-async function loadProducts(filter = null) {
-    const supplierId = localStorage.getItem('supplier_id') || '1';
+async function deleteProduct(productId) {
+    if (!confirm('Are you sure you want to delete this product?')) return;
 
     try {
-        let endpoint = `/products/${supplierId}`;
-        if (filter) {
-            endpoint += `?filter_missing=${filter}`;
-        }
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/products/${productId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.status === 401) { handleSessionExpired(); return; }
+        if (!res.ok) throw new Error('Failed to delete product');
+        showToast('Product deleted', 'success');
+        loadProducts();
+    } catch (e) {
+        console.error('Failed to delete product:', e);
+        showToast('Failed to delete product', 'error');
+    }
+}
 
-        const data = await apiCall(endpoint);
-        renderProductList(data.products);
+// Product list load from API
+async function loadProducts(filter = null) {
+    const tbody = document.getElementById('product-list-tbody');
+    if (!tbody) return;
 
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        let url = `${baseUrl}/products`;
+        const params = new URLSearchParams();
+        if (filter) params.set('status', filter);
+        if (params.toString()) url += `?${params.toString()}`;
+
+        const res = await fetch(url, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.status === 401) { handleSessionExpired(); return; }
+        if (!res.ok) throw new Error('Failed to load products');
+        const data = await res.json();
+        renderProductList(data.products || []);
     } catch (error) {
         console.error('Failed to load products:', error);
-        // 데모 데이터 사용
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:#999;">No products yet. Click "Add Product" to create one.</td></tr>`;
+        }
     }
 }
 
@@ -1437,9 +1510,23 @@ function renderProductList(products) {
     const tbody = document.getElementById('product-list-tbody');
     if (!tbody) return;
 
-    const isIncomplete = (p) => p.completeness < 70;
+    if (!products.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:#999;">No products yet. Click "Add Product" to create one.</td></tr>`;
+        return;
+    }
 
-    tbody.innerHTML = products.map(product => `
+    const isIncomplete = (p) => (p.completeness || 0) < 70;
+
+    tbody.innerHTML = products.map(product => {
+        const priceDisplay = product.min_price
+            ? (product.max_price ? `$${product.min_price} - $${product.max_price}` : `$${product.min_price}`)
+            : '<span class="wd-text-muted">-</span>';
+
+        const moqDisplay = product.moq
+            ? `${product.moq}${product.moq_unit ? ' ' + product.moq_unit : ''}`
+            : '<span class="wd-badge wd-badge-warning">Missing</span>';
+
+        return `
         <tr class="${isIncomplete(product) ? 'wd-row-warning' : ''}">
             <td>
                 <div class="wd-product-cell">
@@ -1447,26 +1534,31 @@ function renderProductList(products) {
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
                     </div>
                     <div>
-                        <span class="wd-product-name">${product.name}</span>
-                        <div class="wd-product-sub">${product.sku || ''}</div>
+                        <span class="wd-product-name">${escapeHtml(product.name)}</span>
+                        <div class="wd-product-sub">${escapeHtml(product.sku || '')}</div>
                     </div>
                 </div>
             </td>
-            <td>${product.category ? `<span class="wd-badge wd-badge-outline">${product.category}</span>` : '<span class="wd-badge wd-badge-warning">Missing</span>'}</td>
-            <td>${product.sku || '-'}</td>
-            <td>${product.unit_price ? `$${product.unit_price}` : '<span class="wd-text-muted">—</span>'}</td>
-            <td>${product.moq ? product.moq : '<span class="wd-badge wd-badge-warning">Missing</span>'}</td>
+            <td>${product.category ? `<span class="wd-badge wd-badge-outline">${escapeHtml(product.category)}</span>` : '<span class="wd-badge wd-badge-warning">Missing</span>'}</td>
+            <td>${escapeHtml(product.sku || '-')}</td>
+            <td>${priceDisplay}</td>
+            <td>${moqDisplay}</td>
             <td>
                 ${product.certifications?.length > 0
-                    ? product.certifications.map(c => `<span class="wd-badge wd-badge-success">${c}</span>`).join(' ')
+                    ? product.certifications.map(c => `<span class="wd-badge wd-badge-success">${escapeHtml(c)}</span>`).join(' ')
                     : '<span class="wd-text-muted">None</span>'}
             </td>
             <td><span class="wd-badge ${isIncomplete(product) ? 'wd-badge-warning' : 'wd-badge-success'}">${isIncomplete(product) ? 'Incomplete' : 'Complete'}</span></td>
             <td>
-                <button class="wd-btn ${isIncomplete(product) ? 'wd-btn-warning' : 'wd-btn-outline'} wd-btn-sm" onclick="editProduct(${product.id})">${isIncomplete(product) ? 'Fill in' : 'Edit'}</button>
+                <div style="display:flex; gap:4px;">
+                    <button class="wd-btn ${isIncomplete(product) ? 'wd-btn-warning' : 'wd-btn-outline'} wd-btn-sm" onclick="editProduct('${product.id}')">${isIncomplete(product) ? 'Fill in' : 'Edit'}</button>
+                    <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="deleteProduct('${product.id}')" title="Delete" style="color:#ef4444;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    </button>
+                </div>
             </td>
-        </tr>
-    `).join('');
+        </tr>`;
+    }).join('');
 }
 
 function addMOQ(productId) {
@@ -1475,11 +1567,6 @@ function addMOQ(productId) {
 
 function addCert(productId) {
     editProduct(productId);
-}
-
-function openAddProductModal() {
-    // 새 상품 추가 모달 (구현 필요)
-    showToast('Add product feature coming soon');
 }
 
 async function exportProducts() {
@@ -1580,13 +1667,18 @@ function parsePriceRange(priceStr) {
 
 // 전체 상품 목록 가져오기 (status, 페이지네이션 관계없이)
 async function getAllProducts() {
-    const supplierId = localStorage.getItem('supplier_id') || '1';
-
     // 1. API에서 전체 상품 가져오기 시도
     try {
-        const data = await apiCall(`/products/${supplierId}?all=true`);
-        if (data.products && data.products.length > 0) {
-            return data.products;
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/products`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.products && data.products.length > 0) {
+                return data.products;
+            }
         }
     } catch (error) {
         console.log('API unavailable, using local data');
