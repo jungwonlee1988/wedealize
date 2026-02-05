@@ -94,7 +94,7 @@ async function uploadFile(endpoint, file, additionalData = {}) {
 // ==================== Auth ====================
 
 // Google OAuth Configuration (실제 배포 시 Google Cloud Console에서 발급받은 Client ID로 교체)
-const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '922089603849-fgcilcaqoohkqs0dslblb6giq7v0r2nh.apps.googleusercontent.com';
 
 // 임시 저장용 (회원가입 시 이메일 인증 전까지)
 let pendingRegistration = null;
