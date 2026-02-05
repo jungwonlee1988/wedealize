@@ -214,6 +214,9 @@ export class AuthService {
         company_name: supplier.company_name,
       };
     } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
       this.logger.error('Google auth error:', error);
       throw new UnauthorizedException('Google authentication failed');
     }
