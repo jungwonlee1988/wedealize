@@ -1327,6 +1327,34 @@
 .wd-sidebar-header {
     padding: 20px 16px;
     border-bottom: 1px solid var(--wd-gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wd-sidebar-logo {
+    font-size: var(--wd-font-size-base);
+    font-weight: var(--wd-font-bold);
+    color: var(--wd-black);
+    letter-spacing: -0.3px;
+}
+
+.wd-sidebar-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--wd-gray-500);
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wd-sidebar-toggle:hover {
+    background: var(--wd-gray-100);
+    color: var(--wd-gray-700);
 }
 
 .wd-sidebar-label {
@@ -4192,6 +4220,51 @@
     display: block;
 }
 
+/* ==================== Collapsible Sidebar ==================== */
+.wd-sidebar {
+    transition: width 0.3s ease, min-width 0.3s ease;
+}
+
+.wd-sidebar.collapsed {
+    width: 56px;
+    min-width: 56px;
+}
+
+.wd-sidebar.collapsed .wd-sidebar-logo,
+.wd-sidebar.collapsed .wd-nav-item span,
+.wd-sidebar.collapsed .wd-nav-arrow,
+.wd-sidebar.collapsed .wd-user-info,
+.wd-sidebar.collapsed .wd-nav-submenu {
+    display: none;
+}
+
+.wd-sidebar.collapsed .wd-nav-item {
+    justify-content: center;
+    padding: 10px 0;
+    margin: 2px 4px;
+}
+
+.wd-sidebar.collapsed .wd-nav-child {
+    padding-left: 0;
+}
+
+.wd-sidebar.collapsed .wd-sidebar-toggle svg {
+    transform: rotate(180deg);
+}
+
+.wd-sidebar.collapsed .wd-sidebar-header {
+    justify-content: center;
+    padding: 20px 8px;
+}
+
+.wd-sidebar.collapsed .wd-user-profile {
+    justify-content: center;
+}
+
+.wd-sidebar.collapsed .wd-sidebar-footer {
+    padding: 16px 8px;
+}
+
 /* ==================== Enhanced UX/UI V2 ==================== */
 
 /* Enhanced Sidebar Navigation */
@@ -5847,6 +5920,40 @@
     font-weight: var(--wd-font-semibold);
     color: var(--wd-gray-900);
 }
+
+/* Price Updated (green highlight for matched prices) */
+.wd-price-updated {
+    color: #2e7d32;
+    font-weight: var(--wd-font-semibold);
+}
+
+/* Form Section */
+.wd-form-section { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--wd-gray-200); }
+.wd-form-section:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.wd-form-section-title { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; color: var(--wd-gray-800); margin-bottom: 16px; }
+
+/* Table Variants */
+.wd-table-container { overflow-x: auto; }
+.wd-table-sm th { padding: 8px 12px; }
+.wd-table-sm td { padding: 8px 12px; }
+
+/* Text Utilities */
+.wd-text-bold { font-weight: var(--wd-font-bold); }
+.wd-text-mono { font-family: 'SF Mono', SFMono-Regular, ui-monospace, monospace; font-size: 13px; }
+
+/* Upload area internal */
+.wd-upload-content { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.wd-upload-text { font-size: 15px; color: var(--wd-gray-600); margin: 0; }
+.wd-upload-hint { font-size: 12px; color: var(--wd-gray-400); }
+.wd-file-info { display: flex; align-items: center; gap: 8px; flex: 1; }
+
+/* Product Add Row (PI) */
+.wd-product-add-row { display: flex; gap: 12px; margin-bottom: 16px; }
+.wd-empty-row td { text-align: center; color: var(--wd-gray-500); padding: 32px !important; }
+
+/* Button: Secondary */
+.wd-btn-secondary { background: var(--wd-gray-800); color: var(--wd-white); border-color: var(--wd-gray-800); }
+.wd-btn-secondary:hover:not(:disabled) { background: var(--wd-gray-700); border-color: var(--wd-gray-700); }
 
 /* Print Styles */
 @media print {

@@ -778,6 +778,21 @@ function initCountrySelect() {
     }
 }
 
+// ==================== Sidebar Toggle ====================
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.wd-sidebar');
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
+}
+
+// Restore sidebar state on page load
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('sidebar-collapsed') === 'true') {
+        document.querySelector('.wd-sidebar')?.classList.add('collapsed');
+    }
+});
+
 // ==================== Dashboard Navigation ====================
 
 function showSection(sectionName) {
@@ -814,6 +829,11 @@ function showSection(sectionName) {
             }
         }
     });
+
+    // Section-specific data loading
+    if (sectionName === 'buyer-discovery') {
+        loadInquiredBuyers();
+    }
 }
 
 // 서브메뉴 토글
@@ -1374,30 +1394,38 @@ async function loadProducts(filter = null) {
 }
 
 function renderProductList(products) {
-    const container = document.getElementById('product-list');
-    if (!container) return;
+    const tbody = document.getElementById('product-list-tbody');
+    if (!tbody) return;
 
-    container.innerHTML = products.map(product => `
-        <div class="product-row ${product.completeness < 70 ? 'incomplete' : ''}">
-            <div class="product-info">
-                <span class="product-name">${product.name}</span>
-                <span class="product-sku">${product.sku}</span>
-            </div>
-            <div class="product-moq">
-                ${product.moq ? product.moq : '<span class="missing">Missing</span>'}
-            </div>
-            <div class="product-price">
-                ${product.unit_price ? `$${product.unit_price}` : '<span class="missing">—</span>'}
-            </div>
-            <div class="product-certs">
+    const isIncomplete = (p) => p.completeness < 70;
+
+    tbody.innerHTML = products.map(product => `
+        <tr class="${isIncomplete(product) ? 'wd-row-warning' : ''}">
+            <td>
+                <div class="wd-product-cell">
+                    <div class="wd-product-thumb">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
+                    </div>
+                    <div>
+                        <span class="wd-product-name">${product.name}</span>
+                        <div class="wd-product-sub">${product.sku || ''}</div>
+                    </div>
+                </div>
+            </td>
+            <td>${product.category ? `<span class="wd-badge wd-badge-outline">${product.category}</span>` : '<span class="wd-badge wd-badge-warning">Missing</span>'}</td>
+            <td>${product.sku || '-'}</td>
+            <td>${product.unit_price ? `$${product.unit_price}` : '<span class="wd-text-muted">—</span>'}</td>
+            <td>${product.moq ? product.moq : '<span class="wd-badge wd-badge-warning">Missing</span>'}</td>
+            <td>
                 ${product.certifications?.length > 0
-                    ? product.certifications.map(c => `<span class="cert-badge">${c}</span>`).join('')
-                    : '<span class="missing">None</span>'}
-            </div>
-            <div class="product-actions">
-                <button class="btn-edit" onclick="editProduct(${product.id})">Edit</button>
-            </div>
-        </div>
+                    ? product.certifications.map(c => `<span class="wd-badge wd-badge-success">${c}</span>`).join(' ')
+                    : '<span class="wd-text-muted">None</span>'}
+            </td>
+            <td><span class="wd-badge ${isIncomplete(product) ? 'wd-badge-warning' : 'wd-badge-success'}">${isIncomplete(product) ? 'Incomplete' : 'Complete'}</span></td>
+            <td>
+                <button class="wd-btn ${isIncomplete(product) ? 'wd-btn-warning' : 'wd-btn-outline'} wd-btn-sm" onclick="editProduct(${product.id})">${isIncomplete(product) ? 'Fill in' : 'Edit'}</button>
+            </td>
+        </tr>
     `).join('');
 }
 
@@ -1913,24 +1941,24 @@ function loadExtractedProducts() {
     tbody.innerHTML = extractedProducts.map(product => {
         const isIncomplete = product.status === 'incomplete';
         return `
-            <tr class="${isIncomplete ? 'incomplete-row' : ''}">
+            <tr class="${isIncomplete ? 'wd-row-warning' : ''}">
                 <td class="col-checkbox"><input type="checkbox" class="extract-checkbox" data-id="${product.id}" onchange="updateSelectedCount()" checked></td>
                 <td>
-                    <div class="product-cell">
-                        <span class="product-thumb">${product.emoji}</span>
-                        <span class="product-name">${product.name}</span>
+                    <div class="wd-product-cell">
+                        <span class="wd-product-thumb">${product.emoji}</span>
+                        <span class="wd-product-name">${product.name}</span>
                     </div>
                 </td>
                 <td>
                     ${product.category
-                        ? `<span class="category-badge">${getCategoryLabel(product.category)}</span>`
-                        : `<span class="category-badge missing">${t('products.missing') || 'Missing'}</span>`
+                        ? `<span class="wd-badge wd-badge-outline">${getCategoryLabel(product.category)}</span>`
+                        : `<span class="wd-badge wd-badge-warning">${t('products.missing') || 'Missing'}</span>`
                     }
                 </td>
-                <td>${product.price || '<span class="missing-data">-</span>'}</td>
-                <td><span class="status-dot ${product.status}"></span> ${t('products.' + product.status) || product.status}</td>
+                <td>${product.price || '<span class="wd-text-muted">-</span>'}</td>
+                <td><span class="wd-badge ${isIncomplete ? 'wd-badge-warning' : 'wd-badge-success'}">${t('products.' + product.status) || product.status}</span></td>
                 <td>
-                    <button class="btn btn-sm ${isIncomplete ? 'btn-warning' : 'btn-outline'}"
+                    <button class="wd-btn wd-btn-sm ${isIncomplete ? 'wd-btn-warning' : 'wd-btn-outline'}"
                             onclick="editExtractedProduct('${product.id}')">
                         ${isIncomplete ? t('products.fillIn') || 'Fill in' : t('products.edit') || 'Edit'}
                     </button>
@@ -2154,29 +2182,29 @@ function renderPriceMatchTable() {
         const needsFillIn = !product.category || (!originalPrice && !newPrice);
 
         return `
-            <tr class="${needsFillIn ? 'incomplete-row' : ''}">
+            <tr class="${needsFillIn ? 'wd-row-warning' : ''}">
                 <td class="col-checkbox"></td>
                 <td>
-                    <div class="product-cell">
-                        <span class="product-thumb">${product.emoji}</span>
-                        <span class="product-name">${product.name}</span>
+                    <div class="wd-product-cell">
+                        <span class="wd-product-thumb">${product.emoji}</span>
+                        <span class="wd-product-name">${product.name}</span>
                     </div>
                 </td>
                 <td>
                     ${product.category
-                        ? `<span class="category-badge">${getCategoryLabel(product.category)}</span>`
-                        : `<span class="category-badge missing">${t('products.missing') || 'Missing'}</span>`
+                        ? `<span class="wd-badge wd-badge-outline">${getCategoryLabel(product.category)}</span>`
+                        : `<span class="wd-badge wd-badge-warning">${t('products.missing') || 'Missing'}</span>`
                     }
                 </td>
-                <td>${originalPrice || '<span class="missing-data">-</span>'}</td>
-                <td class="${priceChanged ? 'price-updated' : ''}">
+                <td>${originalPrice || '<span class="wd-text-muted">-</span>'}</td>
+                <td class="${priceChanged ? 'wd-price-updated' : ''}">
                     ${hasPriceList
-                        ? (newPrice || '<span class="missing-data">-</span>')
-                        : '<span class="missing-data">-</span>'
+                        ? (newPrice || '<span class="wd-text-muted">-</span>')
+                        : '<span class="wd-text-muted">-</span>'
                     }
                 </td>
                 <td>
-                    <button class="btn btn-sm ${needsFillIn ? 'btn-warning' : 'btn-outline'}"
+                    <button class="wd-btn wd-btn-sm ${needsFillIn ? 'wd-btn-warning' : 'wd-btn-outline'}"
                             onclick="editProductPrice('${product.id}')">
                         ${needsFillIn ? t('products.fillIn') || 'Fill in' : t('products.edit') || 'Edit'}
                     </button>
@@ -2321,7 +2349,14 @@ function viewPODetail(poNumber) {
     // 데이터 바인딩
     document.getElementById('po-detail-number').textContent = data.number;
     document.getElementById('po-detail-status').textContent = data.status;
-    document.getElementById('po-detail-status').className = 'status-badge ' + data.statusClass;
+    const statusBadgeMap = {
+        'shipping-requested': 'wd-badge wd-badge-info',
+        'confirmed': 'wd-badge wd-badge-confirmed',
+        'received': 'wd-badge wd-badge-received',
+        'cancelled': 'wd-badge wd-badge-cancelled',
+        'pending': 'wd-badge wd-badge-warning'
+    };
+    document.getElementById('po-detail-status').className = statusBadgeMap[data.statusClass] || 'wd-badge wd-badge-info';
     document.getElementById('po-detail-date').textContent = data.date;
 
     document.getElementById('po-exporter-name').textContent = data.exporter.name;
@@ -2345,10 +2380,10 @@ function viewPODetail(poNumber) {
     tbody.innerHTML = data.items.map(item => `
         <tr>
             <td>${item.name}</td>
-            <td class="text-right">${item.qty}</td>
+            <td class="wd-text-right">${item.qty}</td>
             <td>${item.unit}</td>
-            <td class="text-right">${item.price}</td>
-            <td class="text-right">${item.total}</td>
+            <td class="wd-text-right">${item.price}</td>
+            <td class="wd-text-right">${item.total}</td>
         </tr>
     `).join('');
 
@@ -2718,6 +2753,117 @@ async function savePOAsDraft() {
     }
 }
 
+// ---- PO Modal Helper Functions ----
+
+function addPOItemRow() {
+    const tbody = document.getElementById('add-po-items-tbody');
+    if (!tbody) return;
+    const idx = tbody.querySelectorAll('tr').length;
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-row', idx);
+    tr.innerHTML = `
+        <td><input type="text" class="wd-input wd-input-sm po-item-name" required placeholder="Product name"></td>
+        <td><input type="number" class="wd-input wd-input-sm po-item-qty" required min="1" value="1" onchange="calculatePOItemSubtotal(${idx})"></td>
+        <td>
+            <select class="wd-select wd-select-sm po-item-unit">
+                <option value="pcs">pcs</option>
+                <option value="boxes">boxes</option>
+                <option value="cases">cases</option>
+                <option value="pallets">pallets</option>
+                <option value="kg">kg</option>
+                <option value="lbs">lbs</option>
+                <option value="liters">liters</option>
+            </select>
+        </td>
+        <td><input type="number" class="wd-input wd-input-sm po-item-price" required min="0" step="0.01" value="0" onchange="calculatePOItemSubtotal(${idx})"></td>
+        <td class="po-item-subtotal wd-text-right wd-text-bold">0.00</td>
+        <td>
+            <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removePOItemRow(${idx})" title="Remove">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </td>
+    `;
+    tbody.appendChild(tr);
+}
+
+function removePOItemRow(idx) {
+    const tbody = document.getElementById('add-po-items-tbody');
+    if (!tbody) return;
+    const rows = tbody.querySelectorAll('tr');
+    if (rows.length <= 1) { showToast('At least one item row is required', 'warning'); return; }
+    const row = tbody.querySelector(`tr[data-row="${idx}"]`);
+    if (row) row.remove();
+    // Re-index remaining rows
+    tbody.querySelectorAll('tr').forEach((tr, i) => {
+        tr.setAttribute('data-row', i);
+        const qtyInput = tr.querySelector('.po-item-qty');
+        const priceInput = tr.querySelector('.po-item-price');
+        const removeBtn = tr.querySelector('.wd-btn-icon-danger');
+        if (qtyInput) qtyInput.setAttribute('onchange', `calculatePOItemSubtotal(${i})`);
+        if (priceInput) priceInput.setAttribute('onchange', `calculatePOItemSubtotal(${i})`);
+        if (removeBtn) removeBtn.setAttribute('onclick', `removePOItemRow(${i})`);
+    });
+    updatePOTotal();
+}
+
+function onPOProductSelect(idx) {
+    // For text input mode this is a no-op; kept for compatibility
+}
+
+function calculatePOItemSubtotal(idx) {
+    const tbody = document.getElementById('add-po-items-tbody');
+    if (!tbody) return;
+    const row = tbody.querySelector(`tr[data-row="${idx}"]`);
+    if (!row) return;
+    const qty = parseFloat(row.querySelector('.po-item-qty')?.value) || 0;
+    const price = parseFloat(row.querySelector('.po-item-price')?.value) || 0;
+    const subtotal = qty * price;
+    const subtotalTd = row.querySelector('.po-item-subtotal');
+    if (subtotalTd) subtotalTd.textContent = subtotal.toFixed(2);
+    updatePOTotal();
+}
+
+function updatePOTotal() {
+    const tbody = document.getElementById('add-po-items-tbody');
+    if (!tbody) return;
+    let total = 0;
+    tbody.querySelectorAll('.po-item-subtotal').forEach(td => {
+        total += parseFloat(td.textContent) || 0;
+    });
+    const totalEl = document.getElementById('add-po-total-amount');
+    if (totalEl) totalEl.textContent = total.toFixed(2);
+    const currencyEl = document.getElementById('add-po-currency-symbol');
+    const currencySelect = document.getElementById('add-po-currency');
+    if (currencyEl && currencySelect) currencyEl.textContent = currencySelect.value;
+}
+
+function updatePOCurrency() {
+    updatePOTotal();
+}
+
+function handlePOFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 20 * 1024 * 1024) { showToast('File size exceeds 20MB limit', 'error'); event.target.value = ''; return; }
+    const uploadArea = document.getElementById('po-upload-area');
+    const uploadedFile = document.getElementById('po-uploaded-file');
+    const filenameEl = document.getElementById('po-uploaded-filename');
+    if (uploadArea) uploadArea.style.display = 'none';
+    if (uploadedFile) uploadedFile.style.display = 'flex';
+    if (filenameEl) filenameEl.textContent = file.name;
+    window._poUploadedFile = file;
+}
+
+function removePOFile() {
+    const uploadArea = document.getElementById('po-upload-area');
+    const uploadedFile = document.getElementById('po-uploaded-file');
+    const fileInput = document.getElementById('po-file-input');
+    if (uploadArea) uploadArea.style.display = '';
+    if (uploadedFile) uploadedFile.style.display = 'none';
+    if (fileInput) fileInput.value = '';
+    window._poUploadedFile = null;
+}
+
 async function loadPODataForEdit(poId) {
     try {
         const token = localStorage.getItem('token');
@@ -2891,7 +3037,316 @@ function closePIModal() {
 }
 
 async function createAndSendPI() {
-    showToast('PI creation - coming soon', 'info');
+    const piData = collectPIData();
+    if (!piData) return;
+    piData.status = 'sent';
+
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const url = window._editingPIId ? `${baseUrl}/pi/${window._editingPIId}` : `${baseUrl}/pi`;
+        const method = window._editingPIId ? 'PATCH' : 'POST';
+
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(piData)
+        });
+        if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.message || 'Failed'); }
+
+        showToast(window._editingPIId ? 'PI updated & sent!' : 'PI created & sent!', 'success');
+        closePIModal();
+        if (typeof loadPIListFromAPI === 'function') loadPIListFromAPI();
+    } catch (e) {
+        showToast(e.message || 'Failed to create PI', 'error');
+    }
+}
+
+// ---- PI Modal Helper Functions ----
+
+function togglePISource(source) {
+    const poSelection = document.getElementById('pi-po-selection');
+    const buyerSection = document.getElementById('pi-buyer-section');
+    const buyerSelect = document.getElementById('pi-buyer-select');
+
+    if (source === 'po') {
+        if (poSelection) poSelection.style.display = '';
+        if (buyerSelect) buyerSelect.disabled = false;
+    } else {
+        if (poSelection) poSelection.style.display = 'none';
+        if (buyerSelect) buyerSelect.disabled = false;
+    }
+    // Reset items and buyer info
+    resetPIItems();
+    const infoCard = document.getElementById('pi-buyer-info-card');
+    if (infoCard) infoCard.style.display = 'none';
+    const creditSection = document.getElementById('pi-credit-section');
+    if (creditSection) creditSection.style.display = 'none';
+}
+
+function loadPOForPI() {
+    const poSelect = document.getElementById('pi-po-select');
+    if (!poSelect || !poSelect.value) return;
+
+    const selectedOption = poSelect.selectedOptions[0];
+    const buyerCode = selectedOption?.getAttribute('data-buyer');
+
+    // Auto-select the buyer associated with this PO
+    if (buyerCode) {
+        const buyerSelect = document.getElementById('pi-buyer-select');
+        if (buyerSelect) {
+            buyerSelect.value = buyerCode;
+            loadBuyerForPI();
+        }
+    }
+
+    showToast('PO data loaded. Add products below.', 'info');
+}
+
+function loadBuyerForPI() {
+    const buyerSelect = document.getElementById('pi-buyer-select');
+    if (!buyerSelect) return;
+
+    const selectedOption = buyerSelect.selectedOptions[0];
+    const infoCard = document.getElementById('pi-buyer-info-card');
+    const creditSection = document.getElementById('pi-credit-section');
+
+    if (!buyerSelect.value) {
+        if (infoCard) infoCard.style.display = 'none';
+        if (creditSection) creditSection.style.display = 'none';
+        return;
+    }
+
+    const name = selectedOption?.getAttribute('data-name') || '-';
+    const country = selectedOption?.getAttribute('data-country') || '-';
+    const credit = parseFloat(selectedOption?.getAttribute('data-credit')) || 0;
+    const currency = document.getElementById('pi-currency')?.value || 'USD';
+
+    const companyEl = document.getElementById('pi-buyer-company-display');
+    const countryEl = document.getElementById('pi-buyer-country-display');
+    const creditEl = document.getElementById('pi-buyer-credit-display');
+
+    if (companyEl) companyEl.textContent = name;
+    if (countryEl) countryEl.textContent = country;
+    if (creditEl) creditEl.textContent = `${currency} ${credit.toFixed(2)}`;
+    if (infoCard) infoCard.style.display = '';
+
+    // Show credit section if credit > 0
+    if (credit > 0) {
+        if (creditSection) creditSection.style.display = '';
+        const badge = document.getElementById('available-credit-badge');
+        if (badge) badge.textContent = `${currency} ${credit.toFixed(2)} available`;
+        // Populate credit list
+        const creditList = document.getElementById('pi-available-credits');
+        if (creditList) {
+            creditList.innerHTML = `
+                <label class="wd-checkbox-card" style="display: flex; align-items: center; gap: 8px; padding: 12px;">
+                    <input type="checkbox" class="pi-credit-checkbox" value="${credit.toFixed(2)}" onchange="calculatePITotals()">
+                    <span>Buyer Credit: ${currency} ${credit.toFixed(2)}</span>
+                </label>
+            `;
+        }
+    } else {
+        if (creditSection) creditSection.style.display = 'none';
+    }
+
+    window._piBuyerCredit = credit;
+    calculatePITotals();
+}
+
+function previewProductToAdd() {
+    // Enable/disable the Add Product button based on selection
+    const productSelect = document.getElementById('pi-product-select');
+    const addBtn = productSelect?.parentElement?.querySelector('.wd-btn-primary');
+    if (addBtn) {
+        addBtn.disabled = !productSelect.value;
+    }
+}
+
+function addProductToPI() {
+    const productSelect = document.getElementById('pi-product-select');
+    if (!productSelect || !productSelect.value) { showToast('Select a product first', 'warning'); return; }
+
+    const selectedOption = productSelect.selectedOptions[0];
+    const productId = productSelect.value;
+    const name = selectedOption.getAttribute('data-name') || selectedOption.textContent;
+    const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+    const unit = selectedOption.getAttribute('data-unit') || 'pcs';
+
+    const tbody = document.getElementById('pi-items-tbody');
+    if (!tbody) return;
+
+    // Remove empty state row
+    const emptyRow = tbody.querySelector('.wd-empty-row');
+    if (emptyRow) emptyRow.remove();
+
+    // Check for duplicates
+    const existing = tbody.querySelector(`tr[data-product-id="${productId}"]`);
+    if (existing) { showToast('Product already added', 'warning'); return; }
+
+    const idx = tbody.querySelectorAll('tr').length;
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-row', idx);
+    tr.setAttribute('data-product-id', productId);
+    tr.innerHTML = `
+        <td class="wd-text-bold">${name}</td>
+        <td><input type="number" class="wd-input wd-input-sm pi-item-qty" min="1" value="1" onchange="calculatePITotals()"></td>
+        <td>${unit}</td>
+        <td><input type="number" class="wd-input wd-input-sm pi-item-price" min="0" step="0.01" value="${price.toFixed(2)}" onchange="calculatePITotals()"></td>
+        <td class="pi-item-amount wd-text-right wd-text-bold">${price.toFixed(2)}</td>
+        <td>
+            <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removePIItemRow(this)" title="Remove">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </td>
+    `;
+    tbody.appendChild(tr);
+
+    // Reset selection
+    productSelect.value = '';
+    previewProductToAdd();
+    calculatePITotals();
+}
+
+function removePIItemRow(btn) {
+    const row = btn.closest('tr');
+    if (row) row.remove();
+
+    const tbody = document.getElementById('pi-items-tbody');
+    if (tbody && tbody.querySelectorAll('tr').length === 0) {
+        tbody.innerHTML = `
+            <tr class="wd-empty-row">
+                <td colspan="6" class="wd-text-center wd-text-muted" style="padding: 24px;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 8px; opacity: 0.5;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+                    <div data-i18n="pi.noItemsYet">No items added yet. Select a PO or add products above.</div>
+                </td>
+            </tr>
+        `;
+    }
+    calculatePITotals();
+}
+
+function resetPIItems() {
+    const tbody = document.getElementById('pi-items-tbody');
+    if (tbody) {
+        tbody.innerHTML = `
+            <tr class="wd-empty-row">
+                <td colspan="6" class="wd-text-center wd-text-muted" style="padding: 24px;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 8px; opacity: 0.5;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+                    <div data-i18n="pi.noItemsYet">No items added yet. Select a PO or add products above.</div>
+                </td>
+            </tr>
+        `;
+    }
+    calculatePITotals();
+}
+
+function calculatePITotals() {
+    const tbody = document.getElementById('pi-items-tbody');
+    let subtotal = 0;
+
+    if (tbody) {
+        tbody.querySelectorAll('tr:not(.wd-empty-row)').forEach(row => {
+            const qty = parseFloat(row.querySelector('.pi-item-qty')?.value) || 0;
+            const price = parseFloat(row.querySelector('.pi-item-price')?.value) || 0;
+            const amount = qty * price;
+            const amountTd = row.querySelector('.pi-item-amount');
+            if (amountTd) amountTd.textContent = amount.toFixed(2);
+            subtotal += amount;
+        });
+    }
+
+    // Calculate credit discount
+    let creditDiscount = 0;
+    document.querySelectorAll('.pi-credit-checkbox:checked').forEach(cb => {
+        creditDiscount += parseFloat(cb.value) || 0;
+    });
+    // Cap discount at subtotal
+    creditDiscount = Math.min(creditDiscount, subtotal);
+
+    const total = subtotal - creditDiscount;
+    const currency = document.getElementById('pi-currency')?.value || 'USD';
+
+    const subtotalEl = document.getElementById('pi-subtotal');
+    const discountEl = document.getElementById('pi-credit-discount');
+    const totalEl = document.getElementById('pi-total');
+
+    if (subtotalEl) subtotalEl.textContent = `${currency} ${subtotal.toFixed(2)}`;
+    if (discountEl) discountEl.textContent = `-${currency} ${creditDiscount.toFixed(2)}`;
+    if (totalEl) totalEl.textContent = `${currency} ${total.toFixed(2)}`;
+}
+
+function updatePICurrency() {
+    calculatePITotals();
+    // Update buyer credit display
+    loadBuyerForPI();
+}
+
+function collectPIData() {
+    const buyerSelect = document.getElementById('pi-buyer-select');
+    if (!buyerSelect?.value) { showToast('Select a buyer', 'error'); return null; }
+
+    const tbody = document.getElementById('pi-items-tbody');
+    const items = [];
+    if (tbody) {
+        tbody.querySelectorAll('tr:not(.wd-empty-row)').forEach(row => {
+            items.push({
+                productId: row.getAttribute('data-product-id') || '',
+                productName: row.querySelector('td:first-child')?.textContent || '',
+                quantity: parseInt(row.querySelector('.pi-item-qty')?.value) || 0,
+                unitPrice: parseFloat(row.querySelector('.pi-item-price')?.value) || 0,
+                unit: row.querySelectorAll('td')[2]?.textContent || 'pcs'
+            });
+        });
+    }
+
+    if (items.length === 0) { showToast('Add at least one product', 'error'); return null; }
+
+    // Credit discount
+    let creditDiscount = 0;
+    document.querySelectorAll('.pi-credit-checkbox:checked').forEach(cb => {
+        creditDiscount += parseFloat(cb.value) || 0;
+    });
+
+    return {
+        buyerId: buyerSelect.value,
+        buyerName: buyerSelect.selectedOptions[0]?.getAttribute('data-name') || '',
+        piDate: document.getElementById('pi-date')?.value || new Date().toISOString().split('T')[0],
+        currency: document.getElementById('pi-currency')?.value || 'USD',
+        incoterms: document.getElementById('pi-incoterms')?.value || 'FOB',
+        paymentTerms: document.getElementById('pi-payment-method')?.value || 'tt30',
+        validUntil: document.getElementById('pi-valid-until')?.value || undefined,
+        remarks: document.getElementById('pi-remarks')?.value || undefined,
+        items,
+        creditDiscount,
+        poNumber: document.getElementById('pi-po-select')?.value || undefined
+    };
+}
+
+async function saveAsDraft() {
+    const piData = collectPIData();
+    if (!piData) return;
+    piData.status = 'draft';
+
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const url = window._editingPIId ? `${baseUrl}/pi/${window._editingPIId}` : `${baseUrl}/pi`;
+        const method = window._editingPIId ? 'PATCH' : 'POST';
+
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(piData)
+        });
+        if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.message || 'Failed'); }
+
+        showToast('PI saved as draft!', 'success');
+        closePIModal();
+        if (typeof loadPIListFromAPI === 'function') loadPIListFromAPI();
+    } catch (e) {
+        showToast(e.message || 'Failed to save draft', 'error');
+    }
 }
 
 // PI 탭 필터 (Active/Cancelled)
@@ -3317,6 +3772,169 @@ function showProductTooltip(event, month) {
     if (tooltipRect.right > window.innerWidth) {
         tooltip.style.left = (window.innerWidth - tooltipRect.width - 16) + 'px';
     }
+}
+
+// ==================== Buyer Discovery ====================
+
+function switchBuyerTab(tab) {
+    // Update tab buttons
+    document.getElementById('tab-inquired')?.classList.toggle('active', tab === 'inquired');
+    document.getElementById('tab-potential')?.classList.toggle('active', tab === 'potential');
+
+    // Show/hide panels
+    const inquiredPanel = document.getElementById('buyer-tab-inquired');
+    const potentialPanel = document.getElementById('buyer-tab-potential');
+    if (inquiredPanel) inquiredPanel.style.display = tab === 'inquired' ? 'block' : 'none';
+    if (potentialPanel) potentialPanel.style.display = tab === 'potential' ? 'block' : 'none';
+
+    if (tab === 'inquired') {
+        loadInquiredBuyers();
+    }
+}
+
+async function loadInquiredBuyers() {
+    const container = document.getElementById('inquired-buyers-list');
+    if (!container) return;
+
+    container.innerHTML = '<p style="color: var(--wd-gray-400); text-align: center; padding: 40px 0;">Loading...</p>';
+
+    try {
+        const data = await apiCall('/inquiries');
+        renderInquiredBuyers(data.inquiries || []);
+    } catch (error) {
+        console.error('Failed to load inquiries:', error);
+        container.innerHTML = '<p style="color: var(--wd-gray-400); text-align: center; padding: 40px 0;">Failed to load inquiries. Please try again.</p>';
+    }
+}
+
+function renderInquiredBuyers(inquiries) {
+    const container = document.getElementById('inquired-buyers-list');
+    if (!container) return;
+
+    if (!inquiries || inquiries.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 60px 20px; color: var(--wd-gray-400);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 16px; opacity: 0.5;">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <p style="font-size: 16px; margin-bottom: 8px;">No inquiries yet</p>
+                <p style="font-size: 14px;">Buyer inquiries will appear here when buyers contact you.</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = inquiries.map(inquiry => {
+        const statusBadge = getInquiryStatusBadge(inquiry.status);
+        const productNames = (inquiry.products || []).map(p => p.name).join(', ') || 'N/A';
+        const timeAgo = getTimeAgo(inquiry.created_at);
+
+        return `
+            <div class="wd-discovery-card" data-inquiry-id="${inquiry.id}">
+                <div class="wd-discovery-header">
+                    <div class="wd-discovery-company">
+                        <h4 class="wd-discovery-name">${escapeHtml(inquiry.buyer_company)}</h4>
+                        ${inquiry.buyer_country ? `<span class="wd-discovery-country">${escapeHtml(inquiry.buyer_country)}</span>` : ''}
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        ${statusBadge}
+                        <select class="wd-input" style="width: auto; padding: 4px 8px; font-size: 12px;" onchange="updateInquiryStatus('${inquiry.id}', this.value)">
+                            <option value="active" ${inquiry.status === 'active' ? 'selected' : ''}>Active</option>
+                            <option value="responded" ${inquiry.status === 'responded' ? 'selected' : ''}>Responded</option>
+                            <option value="closed" ${inquiry.status === 'closed' ? 'selected' : ''}>Closed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="wd-discovery-body">
+                    <div class="wd-discovery-info-grid">
+                        <div class="wd-discovery-info">
+                            <span class="wd-discovery-label">Contact</span>
+                            <span class="wd-discovery-value">${escapeHtml(inquiry.buyer_contact || 'N/A')}</span>
+                        </div>
+                        <div class="wd-discovery-info">
+                            <span class="wd-discovery-label">Email</span>
+                            <span class="wd-discovery-value">${escapeHtml(inquiry.buyer_email || 'N/A')}</span>
+                        </div>
+                        <div class="wd-discovery-info">
+                            <span class="wd-discovery-label">Interested In</span>
+                            <span class="wd-discovery-value">${escapeHtml(productNames)}</span>
+                        </div>
+                        <div class="wd-discovery-info">
+                            <span class="wd-discovery-label">Created</span>
+                            <span class="wd-discovery-value">${timeAgo}</span>
+                        </div>
+                    </div>
+                    ${inquiry.message ? `<p style="margin-top: 12px; font-size: 13px; color: var(--wd-gray-600); line-height: 1.5;">${escapeHtml(inquiry.message)}</p>` : ''}
+                </div>
+                <div class="wd-discovery-footer">
+                    <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="deleteInquiry('${inquiry.id}')">Delete</button>
+                    <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="viewInquiryDetail('${inquiry.id}')">View Details</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function getInquiryStatusBadge(status) {
+    const map = {
+        active: '<span class="wd-badge wd-badge-success">Active</span>',
+        responded: '<span class="wd-badge wd-badge-info">Responded</span>',
+        closed: '<span class="wd-badge wd-badge-warning">Closed</span>',
+    };
+    return map[status] || '<span class="wd-badge">' + (status || 'Unknown') + '</span>';
+}
+
+function getTimeAgo(dateStr) {
+    if (!dateStr) return 'N/A';
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 60) return minutes <= 1 ? 'Just now' : `${minutes} minutes ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    const days = Math.floor(hours / 24);
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+async function updateInquiryStatus(inquiryId, status) {
+    try {
+        await apiCall(`/inquiries/${inquiryId}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status }),
+        });
+        showToast(`Inquiry status updated to ${status}`, 'success');
+        loadInquiredBuyers();
+    } catch (error) {
+        console.error('Failed to update inquiry status:', error);
+        showToast('Failed to update status', 'error');
+    }
+}
+
+async function deleteInquiry(inquiryId) {
+    if (!confirm('Are you sure you want to delete this inquiry?')) return;
+
+    try {
+        await apiCall(`/inquiries/${inquiryId}`, { method: 'DELETE' });
+        showToast('Inquiry deleted', 'success');
+        loadInquiredBuyers();
+    } catch (error) {
+        console.error('Failed to delete inquiry:', error);
+        showToast('Failed to delete inquiry', 'error');
+    }
+}
+
+function viewInquiryDetail(inquiryId) {
+    showToast('Inquiry detail view coming soon', 'info');
+}
+
+function showSubscriptionModal() {
+    showToast('Premium subscription coming soon!', 'info');
 }
 
 // Product tooltip 숨기기
