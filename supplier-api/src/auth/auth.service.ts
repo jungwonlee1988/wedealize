@@ -174,52 +174,49 @@ export class AuthService {
   async googleAuth(dto: GoogleAuthDto): Promise<{ access_token: string; supplier_id: string; email: string; company_name: string }> {
     const { credential } = dto;
 
-    try {
-      // Decode JWT token (in production, verify with Google's public keys)
-      const decoded = this.jwtService.decode(credential) as any;
+    // Decode JWT token
+    const decoded = this.jwtService.decode(credential) as any;
 
-      if (!decoded || !decoded.email) {
-        throw new UnauthorizedException('Invalid Google credential');
-      }
+    if (!decoded || !decoded.email) {
+      throw new UnauthorizedException('Invalid Google credential');
+    }
 
-      const { email, name, picture, sub: googleId } = decoded;
+    const { email, name, picture, sub: googleId } = decoded;
 
-      const supabase = this.supabaseService.getAdminClient();
+    const supabase = this.supabaseService.getAdminClient();
 
-      // Check if user exists
-      let { data: supplier } = await supabase
-        .from('suppliers')
-        .select('*')
-        .eq('email', email)
-        .single();
+    // Check if user exists - use maybeSingle to avoid error on 0 rows
+    const { data: supplier, error } = await supabase
+      .from('suppliers')
+      .select('*')
+      .eq('email', email)
+      .maybeSingle();
 
-      if (!supplier) {
-        throw new UnauthorizedException('No account found for this email. Please register first.');
-      }
-
-      if (!supplier.google_id) {
-        // Link Google account
-        await supabase
-          .from('suppliers')
-          .update({ google_id: googleId, profile_image: picture })
-          .eq('id', supplier.id);
-      }
-
-      const token = this.generateToken(supplier);
-
-      return {
-        access_token: token,
-        supplier_id: supplier.id,
-        email: supplier.email,
-        company_name: supplier.company_name,
-      };
-    } catch (error) {
-      if (error instanceof UnauthorizedException) {
-        throw error;
-      }
-      this.logger.error('Google auth error:', error);
+    if (error) {
+      this.logger.error('Google auth DB error:', error);
       throw new UnauthorizedException('Google authentication failed');
     }
+
+    if (!supplier) {
+      throw new UnauthorizedException('No account found for this email. Please register first.');
+    }
+
+    if (!supplier.google_id) {
+      // Link Google account
+      await supabase
+        .from('suppliers')
+        .update({ google_id: googleId, profile_image: picture })
+        .eq('id', supplier.id);
+    }
+
+    const token = this.generateToken(supplier);
+
+    return {
+      access_token: token,
+      supplier_id: supplier.id,
+      email: supplier.email,
+      company_name: supplier.company_name,
+    };
   }
 
   // Forgot password
