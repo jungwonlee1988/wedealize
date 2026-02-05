@@ -1892,17 +1892,21 @@ class SalesModule {
             notes: $('#account-notes')?.value
         };
 
-        // Generate account ID if new
-        const isEdit = this.editingAccountId;
-        const accountId = isEdit ? this.editingAccountId : this.generateAccountId();
+        const isEdit = !!this.editingAccountId;
 
-        toast.success('Account saved successfully!');
-        this.closeAccountModal();
-
-        // Log activity
-        this.logActivity(isEdit ? 'updated' : 'created', 'account', accountId, accountData.companyName);
-
-        console.log('Account Data:', accountData);
+        try {
+            if (isEdit) {
+                await api.patch(`/accounts/${this.editingAccountId}`, accountData);
+            } else {
+                await api.post('/accounts', accountData);
+            }
+            toast.success(isEdit ? 'Account updated!' : 'Account created!');
+            this.closeAccountModal();
+            if (typeof loadAccountListFromAPI === 'function') loadAccountListFromAPI();
+            this.logActivity(isEdit ? 'updated' : 'created', 'account', this.editingAccountId, accountData.companyName);
+        } catch (error) {
+            toast.error(error.message || 'Failed to save account');
+        }
     }
 
     /**
