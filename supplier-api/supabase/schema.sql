@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS suppliers (
     profile_image VARCHAR(500),
     google_id VARCHAR(255),
     email_verified BOOLEAN DEFAULT FALSE,
+    is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

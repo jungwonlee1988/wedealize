@@ -6,6 +6,7 @@
     <title>Admin Dashboard - WeDealize</title>
     <link rel="stylesheet" href="design-system.css">
     <link rel="icon" type="image/png" href="./favicon.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -137,6 +138,176 @@
             color: var(--wd-success);
         }
 
+        /* Platform Stats (secondary row) */
+        .platform-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .platform-stat-card {
+            background: var(--wd-white);
+            border: 1px solid var(--wd-gray-200);
+            border-radius: var(--wd-radius-md);
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .platform-stat-card .stat-label {
+            font-size: var(--wd-font-size-xs);
+            color: var(--wd-gray-500);
+            margin-bottom: 4px;
+        }
+
+        .platform-stat-card .stat-value {
+            font-size: var(--wd-font-size-xl);
+            font-weight: var(--wd-font-bold);
+            color: var(--wd-gray-800);
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .chart-card {
+            background: var(--wd-white);
+            border: 1px solid var(--wd-gray-200);
+            border-radius: var(--wd-radius-lg);
+            padding: 20px;
+        }
+
+        .chart-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .chart-card-title {
+            font-size: var(--wd-font-size-md);
+            font-weight: var(--wd-font-semibold);
+            color: var(--wd-black);
+        }
+
+        .chart-period-select {
+            padding: 4px 8px;
+            border: 1px solid var(--wd-gray-300);
+            border-radius: var(--wd-radius-sm);
+            font-size: var(--wd-font-size-sm);
+            background: var(--wd-white);
+            cursor: pointer;
+        }
+
+        .chart-type-select {
+            padding: 4px 8px;
+            border: 1px solid var(--wd-gray-300);
+            border-radius: var(--wd-radius-sm);
+            font-size: var(--wd-font-size-sm);
+            background: var(--wd-white);
+            cursor: pointer;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+        }
+
+        /* Activity Feed */
+        .activity-card {
+            background: var(--wd-white);
+            border: 1px solid var(--wd-gray-200);
+            border-radius: var(--wd-radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .activity-card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--wd-gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .activity-card-header:hover {
+            background: var(--wd-gray-50);
+        }
+
+        .activity-card-title {
+            font-size: var(--wd-font-size-md);
+            font-weight: var(--wd-font-semibold);
+            color: var(--wd-black);
+        }
+
+        .activity-toggle-icon {
+            transition: transform 0.2s;
+            color: var(--wd-gray-500);
+        }
+
+        .activity-toggle-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .activity-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-list.collapsed {
+            display: none;
+        }
+
+        .activity-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--wd-gray-100);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .activity-icon.signup { background: #e3f2fd; color: #1565c0; }
+        .activity-icon.product { background: #e8f5e9; color: #2e7d32; }
+        .activity-icon.order { background: #fff3e0; color: #e65100; }
+        .activity-icon.pi { background: #f3e5f5; color: #7b1fa2; }
+
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-message {
+            font-size: var(--wd-font-size-sm);
+            color: var(--wd-gray-800);
+            line-height: 1.4;
+        }
+
+        .activity-time {
+            font-size: var(--wd-font-size-xs);
+            color: var(--wd-gray-500);
+            margin-top: 2px;
+        }
+
         /* Toolbar */
         .toolbar {
             display: flex;
@@ -194,6 +365,25 @@
             border-color: var(--wd-primary);
         }
 
+        .btn-export {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border: 1px solid var(--wd-gray-300);
+            border-radius: var(--wd-radius-md);
+            background: var(--wd-white);
+            font-size: var(--wd-font-size-base);
+            color: var(--wd-gray-700);
+            cursor: pointer;
+            transition: all var(--wd-transition-fast);
+        }
+
+        .btn-export:hover {
+            background: var(--wd-gray-50);
+            border-color: var(--wd-gray-400);
+        }
+
         /* Table Container */
         .table-container {
             background: var(--wd-white);
@@ -243,6 +433,11 @@
             border-bottom: 1px solid var(--wd-gray-100);
         }
 
+        .suppliers-table tbody tr {
+            cursor: pointer;
+            transition: background var(--wd-transition-fast);
+        }
+
         .suppliers-table tbody tr:hover {
             background: var(--wd-gray-50);
         }
@@ -281,6 +476,25 @@
         .verified-badge.unverified {
             background: var(--wd-gray-200);
             color: var(--wd-gray-600);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: var(--wd-radius-full);
+            font-size: var(--wd-font-size-xs);
+            font-weight: var(--wd-font-medium);
+        }
+
+        .status-badge.active {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-badge.inactive {
+            background: #ffebee;
+            color: #c62828;
         }
 
         /* Pagination */
@@ -378,16 +592,306 @@
             to { transform: rotate(360deg); }
         }
 
+        /* ───── Modal Styles ───── */
+        .wd-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .wd-modal-overlay.hidden {
+            display: none;
+        }
+
+        .wd-modal-lg {
+            background: var(--wd-white);
+            border-radius: var(--wd-radius-xl);
+            width: 100%;
+            max-width: 720px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--wd-shadow-xl);
+        }
+
+        .wd-modal-sm {
+            background: var(--wd-white);
+            border-radius: var(--wd-radius-xl);
+            width: 100%;
+            max-width: 420px;
+            box-shadow: var(--wd-shadow-xl);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--wd-gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h2 {
+            font-size: var(--wd-font-size-lg);
+            font-weight: var(--wd-font-semibold);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--wd-gray-500);
+            border-radius: var(--wd-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--wd-gray-100);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--wd-gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Detail Tabs */
+        .detail-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--wd-gray-200);
+            margin-bottom: 20px;
+        }
+
+        .detail-tab {
+            padding: 10px 20px;
+            font-size: var(--wd-font-size-sm);
+            font-weight: var(--wd-font-medium);
+            color: var(--wd-gray-500);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            transition: all var(--wd-transition-fast);
+        }
+
+        .detail-tab:hover {
+            color: var(--wd-gray-700);
+        }
+
+        .detail-tab.active {
+            color: var(--wd-black);
+            border-bottom-color: var(--wd-black);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Supplier Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .info-label {
+            font-size: var(--wd-font-size-xs);
+            color: var(--wd-gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: var(--wd-font-size-base);
+            color: var(--wd-black);
+        }
+
+        /* Related Data Counts */
+        .counts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .count-card {
+            background: var(--wd-gray-50);
+            border: 1px solid var(--wd-gray-200);
+            border-radius: var(--wd-radius-md);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .count-card .count-value {
+            font-size: var(--wd-font-size-2xl);
+            font-weight: var(--wd-font-bold);
+            color: var(--wd-black);
+        }
+
+        .count-card .count-label {
+            font-size: var(--wd-font-size-xs);
+            color: var(--wd-gray-500);
+            margin-top: 4px;
+        }
+
+        /* Edit Form */
+        .edit-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .edit-form .wd-form-group {
+            margin-bottom: 0;
+        }
+
+        .edit-form .wd-form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Delete Modal */
+        .delete-warning {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .delete-warning-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #ffebee;
+            color: #c62828;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+        }
+
+        .delete-warning h3 {
+            font-size: var(--wd-font-size-lg);
+            color: var(--wd-black);
+            margin-bottom: 8px;
+        }
+
+        .delete-warning p {
+            font-size: var(--wd-font-size-sm);
+            color: var(--wd-gray-600);
+            line-height: 1.5;
+        }
+
+        .btn-danger {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--wd-radius-md);
+            font-size: var(--wd-font-size-base);
+            font-weight: var(--wd-font-medium);
+            cursor: pointer;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        /* Status Action Buttons in Modal */
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--wd-gray-200);
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            padding: 12px 20px;
+            border-radius: var(--wd-radius-md);
+            font-size: var(--wd-font-size-sm);
+            color: white;
+            box-shadow: var(--wd-shadow-lg);
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s;
+            max-width: 400px;
+        }
+
+        .toast.success { background: #2e7d32; }
+        .toast.error { background: #c62828; }
+        .toast.info { background: #1565c0; }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .platform-stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .platform-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .toolbar {
@@ -403,16 +907,28 @@
                 width: 100%;
             }
 
-            .suppliers-table th:nth-child(4),
-            .suppliers-table td:nth-child(4),
             .suppliers-table th:nth-child(5),
-            .suppliers-table td:nth-child(5) {
+            .suppliers-table td:nth-child(5),
+            .suppliers-table th:nth-child(6),
+            .suppliers-table td:nth-child(6) {
                 display: none;
+            }
+
+            .info-grid,
+            .edit-form {
+                grid-template-columns: 1fr;
+            }
+
+            .counts-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <!-- Auth Screen -->
     <div id="authScreen" class="auth-screen">
         <div class="auth-box">
@@ -442,7 +958,7 @@
 
         <!-- Content -->
         <main class="admin-content">
-            <!-- Stats -->
+            <!-- Supplier Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-card-label">Total Suppliers</div>
@@ -462,6 +978,76 @@
                 </div>
             </div>
 
+            <!-- Platform Stats -->
+            <div class="platform-stats-grid" id="platformStatsGrid">
+                <div class="platform-stat-card">
+                    <div class="stat-label">Products</div>
+                    <div class="stat-value" id="pStatProducts">-</div>
+                </div>
+                <div class="platform-stat-card">
+                    <div class="stat-label">Orders</div>
+                    <div class="stat-value" id="pStatOrders">-</div>
+                </div>
+                <div class="platform-stat-card">
+                    <div class="stat-label">Proforma Invoices</div>
+                    <div class="stat-value" id="pStatPIs">-</div>
+                </div>
+                <div class="platform-stat-card">
+                    <div class="stat-label">Inquiries</div>
+                    <div class="stat-value" id="pStatInquiries">-</div>
+                </div>
+                <div class="platform-stat-card">
+                    <div class="stat-label">Credits</div>
+                    <div class="stat-value" id="pStatCredits">-</div>
+                </div>
+                <div class="platform-stat-card">
+                    <div class="stat-label">Active Suppliers</div>
+                    <div class="stat-value" id="pStatSuppliers">-</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <span class="chart-card-title">Signup Trends</span>
+                        <select id="trendPeriod" class="chart-period-select">
+                            <option value="daily">Daily (30d)</option>
+                            <option value="weekly">Weekly (90d)</option>
+                            <option value="monthly">Monthly (365d)</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="signupChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <span class="chart-card-title">Distribution</span>
+                        <select id="distributionType" class="chart-type-select">
+                            <option value="category">By Category</option>
+                            <option value="country">By Country</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="activity-card">
+                <div class="activity-card-header" id="activityToggle">
+                    <span class="activity-card-title">Recent Activity</span>
+                    <svg class="activity-toggle-icon" id="activityToggleIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                </div>
+                <div class="activity-list" id="activityList">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+
             <!-- Toolbar -->
             <div class="toolbar">
                 <div class="search-box">
@@ -477,6 +1063,14 @@
                 <select id="categoryFilter" class="filter-select">
                     <option value="">All Categories</option>
                 </select>
+                <button id="exportBtn" class="btn-export">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Export CSV
+                </button>
                 <button id="refreshBtn" class="wd-btn wd-btn-outline">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M23 4v6h-6"></path>
@@ -504,6 +1098,43 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Supplier Detail Modal -->
+    <div id="supplierModal" class="wd-modal-overlay hidden">
+        <div class="wd-modal-lg">
+            <div class="modal-header">
+                <h2 id="modalTitle">Supplier Detail</h2>
+                <button class="modal-close" onclick="closeSupplierModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-tabs">
+                    <button class="detail-tab active" onclick="switchTab('info')">Info</button>
+                    <button class="detail-tab" onclick="switchTab('edit')">Edit</button>
+                    <button class="detail-tab" onclick="switchTab('related')">Related Data</button>
+                </div>
+                <div id="tabInfo" class="tab-content active"></div>
+                <div id="tabEdit" class="tab-content"></div>
+                <div id="tabRelated" class="tab-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="wd-modal-overlay hidden">
+        <div class="wd-modal-sm">
+            <div class="modal-body">
+                <div class="delete-warning">
+                    <div class="delete-warning-icon">!</div>
+                    <h3>Delete Supplier?</h3>
+                    <p id="deleteMessage">This action is permanent and will remove all associated data including products, orders, invoices, and team members.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="wd-btn wd-btn-outline" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" id="confirmDeleteBtn" onclick="deleteSupplier()">Delete Permanently</button>
+            </div>
+        </div>
     </div>
 
     <script src="admin.js"></script>

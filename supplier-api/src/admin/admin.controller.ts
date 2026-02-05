@@ -1,7 +1,11 @@
-import { Controller, Get, Query, UnauthorizedException, Headers } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import {
+  Controller, Get, Patch, Delete, Query, Param, Body, Headers, Header,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiQuery, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AdminService, SupplierListQuery } from './admin.service';
+import { UpdateSupplierDto } from './dto/admin-supplier.dto';
 
 @ApiTags('Admin')
 @Controller('api/v1/admin')
@@ -18,17 +22,17 @@ export class AdminController {
     }
   }
 
+  // ───── Supplier List & Filters ─────
+
   @Get('suppliers')
   @ApiOperation({ summary: 'Get list of suppliers with pagination and filters' })
-  @ApiQuery({ name: 'page', required: false, type: Number, description: 'Page number (default: 1)' })
-  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Items per page (default: 20)' })
-  @ApiQuery({ name: 'search', required: false, type: String, description: 'Search by company name or email' })
-  @ApiQuery({ name: 'country', required: false, type: String, description: 'Filter by country' })
-  @ApiQuery({ name: 'category', required: false, type: String, description: 'Filter by category' })
-  @ApiQuery({ name: 'startDate', required: false, type: String, description: 'Filter by start date (ISO format)' })
-  @ApiQuery({ name: 'endDate', required: false, type: String, description: 'Filter by end date (ISO format)' })
-  @ApiResponse({ status: 200, description: 'List of suppliers' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'search', required: false, type: String })
+  @ApiQuery({ name: 'country', required: false, type: String })
+  @ApiQuery({ name: 'category', required: false, type: String })
+  @ApiQuery({ name: 'startDate', required: false, type: String })
+  @ApiQuery({ name: 'endDate', required: false, type: String })
   async getSuppliers(
     @Headers('x-admin-key') adminKey: string,
     @Query('page') page?: string,
@@ -56,8 +60,6 @@ export class AdminController {
 
   @Get('suppliers/stats')
   @ApiOperation({ summary: 'Get supplier statistics' })
-  @ApiResponse({ status: 200, description: 'Supplier statistics' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getSupplierStats(@Headers('x-admin-key') adminKey: string) {
     this.validateAdminKey(adminKey);
     return this.adminService.getSupplierStats();
@@ -65,8 +67,6 @@ export class AdminController {
 
   @Get('suppliers/countries')
   @ApiOperation({ summary: 'Get list of unique countries' })
-  @ApiResponse({ status: 200, description: 'List of countries' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getCountries(@Headers('x-admin-key') adminKey: string) {
     this.validateAdminKey(adminKey);
     return this.adminService.getCountries();
@@ -74,10 +74,120 @@ export class AdminController {
 
   @Get('suppliers/categories')
   @ApiOperation({ summary: 'Get list of unique categories' })
-  @ApiResponse({ status: 200, description: 'List of categories' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getCategories(@Headers('x-admin-key') adminKey: string) {
     this.validateAdminKey(adminKey);
     return this.adminService.getCategories();
+  }
+
+  // ───── Export (must be before :id) ─────
+
+  @Get('suppliers/export')
+  @ApiOperation({ summary: 'Export suppliers as CSV' })
+  @Header('Content-Type', 'text/csv')
+  @Header('Content-Disposition', 'attachment; filename=suppliers.csv')
+  @ApiQuery({ name: 'search', required: false, type: String })
+  @ApiQuery({ name: 'country', required: false, type: String })
+  @ApiQuery({ name: 'category', required: false, type: String })
+  async exportSuppliers(
+    @Headers('x-admin-key') adminKey: string,
+    @Query('search') search?: string,
+    @Query('country') country?: string,
+    @Query('category') category?: string,
+  ) {
+    this.validateAdminKey(adminKey);
+    return this.adminService.exportSuppliers({ search, country, category });
+  }
+
+  // ───── Supplier Detail / Update / Delete ─────
+
+  @Get('suppliers/:id')
+  @ApiOperation({ summary: 'Get supplier detail with related counts' })
+  @ApiParam({ name: 'id', type: String })
+  async getSupplierDetail(
+    @Headers('x-admin-key') adminKey: string,
+    @Param('id') id: string,
+  ) {
+    this.validateAdminKey(adminKey);
+    return this.adminService.getSupplierDetail(id);
+  }
+
+  @Patch('suppliers/:id')
+  @ApiOperation({ summary: 'Update supplier info' })
+  @ApiParam({ name: 'id', type: String })
+  async updateSupplier(
+    @Headers('x-admin-key') adminKey: string,
+    @Param('id') id: string,
+    @Body() dto: UpdateSupplierDto,
+  ) {
+    this.validateAdminKey(adminKey);
+    return this.adminService.updateSupplier(id, dto);
+  }
+
+  @Patch('suppliers/:id/status')
+  @ApiOperation({ summary: 'Toggle supplier active status' })
+  @ApiParam({ name: 'id', type: String })
+  async toggleSupplierStatus(
+    @Headers('x-admin-key') adminKey: string,
+    @Param('id') id: string,
+    @Body('isActive') isActive: boolean,
+  ) {
+    this.validateAdminKey(adminKey);
+    return this.adminService.toggleSupplierStatus(id, isActive);
+  }
+
+  @Delete('suppliers/:id')
+  @ApiOperation({ summary: 'Permanently delete a supplier' })
+  @ApiParam({ name: 'id', type: String })
+  async deleteSupplier(
+    @Headers('x-admin-key') adminKey: string,
+    @Param('id') id: string,
+  ) {
+    this.validateAdminKey(adminKey);
+    return this.adminService.deleteSupplier(id);
+  }
+
+  // ───── Platform Stats & Analytics ─────
+
+  @Get('stats/platform')
+  @ApiOperation({ summary: 'Get platform-wide statistics' })
+  async getPlatformStats(@Headers('x-admin-key') adminKey: string) {
+    this.validateAdminKey(adminKey);
+    return this.adminService.getPlatformStats();
+  }
+
+  @Get('stats/signup-trends')
+  @ApiOperation({ summary: 'Get signup trends chart data' })
+  @ApiQuery({ name: 'period', required: false, enum: ['daily', 'weekly', 'monthly'] })
+  @ApiQuery({ name: 'days', required: false, type: Number })
+  async getSignupTrends(
+    @Headers('x-admin-key') adminKey: string,
+    @Query('period') period?: string,
+    @Query('days') days?: string,
+  ) {
+    this.validateAdminKey(adminKey);
+    return this.adminService.getSignupTrends(
+      period || 'daily',
+      days ? parseInt(days, 10) : 30,
+    );
+  }
+
+  @Get('stats/distributions')
+  @ApiOperation({ summary: 'Get category and country distribution data' })
+  async getDistributions(@Headers('x-admin-key') adminKey: string) {
+    this.validateAdminKey(adminKey);
+    return this.adminService.getDistributions();
+  }
+
+  // ───── Activity Feed ─────
+
+  @Get('activity/recent')
+  @ApiOperation({ summary: 'Get recent activity feed' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  async getRecentActivity(
+    @Headers('x-admin-key') adminKey: string,
+    @Query('limit') limit?: string,
+  ) {
+    this.validateAdminKey(adminKey);
+    return this.adminService.getRecentActivity(limit ? parseInt(limit, 10) : 20);
   }
 }

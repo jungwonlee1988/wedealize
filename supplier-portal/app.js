@@ -5,6 +5,19 @@
 // API_BASE_URL은 i18n.js에서 정의됨
 const API_TIMEOUT = 15000; // 15초 타임아웃
 
+// 401 응답 시 세션 만료 처리
+function handleSessionExpired() {
+    showToast('Session expired. Please log in again.', 'error');
+    localStorage.removeItem('supplier_logged_in');
+    localStorage.removeItem('supplier_token');
+    localStorage.removeItem('supplier_id');
+    localStorage.removeItem('supplier_email');
+    localStorage.removeItem('supplier_name');
+    setTimeout(() => {
+        window.location.href = '../index.html';
+    }, 1500);
+}
+
 // API 호출 헬퍼 (타임아웃 포함)
 async function apiCall(endpoint, options = {}) {
     const token = localStorage.getItem('supplier_token');
@@ -29,6 +42,11 @@ async function apiCall(endpoint, options = {}) {
         });
 
         clearTimeout(timeoutId);
+
+        if (response.status === 401) {
+            handleSessionExpired();
+            throw new Error('Session expired');
+        }
 
         if (!response.ok) {
             const error = await response.json();
@@ -3383,12 +3401,11 @@ function collectPIData() {
     });
 
     return {
-        buyerId: buyerSelect.value,
         buyerName: buyerSelect.selectedOptions[0]?.getAttribute('data-name') || '',
         piDate: document.getElementById('pi-date')?.value || new Date().toISOString().split('T')[0],
         currency: document.getElementById('pi-currency')?.value || 'USD',
         incoterms: document.getElementById('pi-incoterms')?.value || 'FOB',
-        paymentTerms: document.getElementById('pi-payment-method')?.value || 'tt30',
+        paymentMethod: document.getElementById('pi-payment-method')?.value || 'tt30',
         validUntil: document.getElementById('pi-valid-until')?.value || undefined,
         remarks: document.getElementById('pi-remarks')?.value || undefined,
         items,
@@ -3902,6 +3919,11 @@ async function saveAccount() {
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify(payload)
         });
+
+        if (res.status === 401) {
+            handleSessionExpired();
+            return;
+        }
 
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
