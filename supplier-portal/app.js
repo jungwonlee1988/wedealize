@@ -3011,7 +3011,7 @@ function editPO(poId) {
 
 // ==================== PI Management ====================
 
-function openPIModal(piId) {
+async function openPIModal(piId) {
     const modalEl = document.getElementById('pi-modal');
     const form = document.getElementById('pi-form');
     const titleEl = document.getElementById('pi-modal-title');
@@ -3028,7 +3028,74 @@ function openPIModal(piId) {
         if (titleEl) titleEl.textContent = 'Create Proforma Invoice';
     }
 
+    // Dynamically populate buyer dropdown from POs and Credits
+    await populatePIBuyerDropdown();
+
+    // Reset credit section
+    const creditSection = document.getElementById('pi-credit-section');
+    if (creditSection) creditSection.style.display = 'none';
+
+    resetPIItems();
     modalEl.style.display = 'flex';
+}
+
+async function populatePIBuyerDropdown() {
+    const buyerSelect = document.getElementById('pi-buyer-select');
+    if (!buyerSelect) return;
+
+    buyerSelect.innerHTML = '<option value="">Loading buyers...</option>';
+
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+
+        // Fetch POs and Credits in parallel to build buyer list
+        const [poRes, creditRes] = await Promise.all([
+            fetch(`${baseUrl}/po`, { headers: { 'Authorization': `Bearer ${token}` } }),
+            fetch(`${baseUrl}/credits?status=approved`, { headers: { 'Authorization': `Bearer ${token}` } })
+        ]);
+
+        const buyerMap = new Map(); // key: buyer_name, value: { email, country }
+
+        if (poRes.ok) {
+            const poList = await poRes.json();
+            (Array.isArray(poList) ? poList : []).forEach(po => {
+                if (po.buyer_name && !buyerMap.has(po.buyer_name)) {
+                    buyerMap.set(po.buyer_name, {
+                        email: po.buyer_email || '',
+                        country: po.buyer_country || ''
+                    });
+                }
+            });
+        }
+
+        if (creditRes.ok) {
+            const creditList = await creditRes.json();
+            (Array.isArray(creditList) ? creditList : []).forEach(c => {
+                if (c.buyer_name && !buyerMap.has(c.buyer_name)) {
+                    buyerMap.set(c.buyer_name, { email: '', country: '' });
+                }
+            });
+        }
+
+        buyerSelect.innerHTML = '<option value="">Select a buyer...</option>';
+        buyerMap.forEach((info, name) => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.setAttribute('data-name', name);
+            opt.setAttribute('data-email', info.email);
+            opt.setAttribute('data-country', info.country);
+            opt.textContent = name + (info.country ? ` (${info.country})` : '');
+            buyerSelect.appendChild(opt);
+        });
+
+        if (buyerMap.size === 0) {
+            buyerSelect.innerHTML = '<option value="">No buyers found</option>';
+        }
+    } catch (e) {
+        console.error('Failed to load buyers:', e);
+        buyerSelect.innerHTML = '<option value="">Failed to load buyers</option>';
+    }
 }
 
 function closePIModal() {
