@@ -568,37 +568,15 @@ async function processGoogleAuth(credential) {
 
     } catch (error) {
         console.error('Google auth error:', error);
-        showToast('Google login failed. Please try again.', 'error');
+        const msg = error.message || 'Google login failed. Please try again.';
+        showToast(msg, 'error');
     }
 }
 
-// Google 사용자 정보로 로그인
+// Google 사용자 정보로 로그인 (팝업 방식 - access_token → userinfo)
 async function processGoogleUserInfo(userInfo) {
-    try {
-        const response = await apiCall('/auth/google-userinfo', {
-            method: 'POST',
-            body: JSON.stringify({
-                email: userInfo.email,
-                name: userInfo.name,
-                picture: userInfo.picture,
-                google_id: userInfo.id
-            })
-        });
-
-        localStorage.setItem('supplier_logged_in', 'true');
-        localStorage.setItem('supplier_token', response.access_token);
-        localStorage.setItem('supplier_id', response.supplier_id);
-        localStorage.setItem('supplier_email', userInfo.email);
-        localStorage.setItem('supplier_name', response.company_name || userInfo.name);
-
-        showDashboard();
-        loadNotifications();
-        showToast('Successfully logged in with Google!');
-
-    } catch (error) {
-        console.error('Google login error:', error);
-        showToast('Google login failed. Please try again.', 'error');
-    }
+    // 팝업 방식은 credential(JWT)이 없으므로 지원 불가 알림
+    showToast('No account found for this email. Please register first.', 'error');
 }
 
 // 비밀번호 찾기 화면

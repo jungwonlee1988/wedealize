@@ -194,26 +194,10 @@ export class AuthService {
         .single();
 
       if (!supplier) {
-        // Create new user
-        const { data: newSupplier, error } = await supabase
-          .from('suppliers')
-          .insert({
-            email,
-            company_name: name,
-            google_id: googleId,
-            profile_image: picture,
-            email_verified: true,
-            created_at: new Date().toISOString(),
-          })
-          .select()
-          .single();
+        throw new UnauthorizedException('No account found for this email. Please register first.');
+      }
 
-        if (error) {
-          throw new BadRequestException('Failed to create account');
-        }
-
-        supplier = newSupplier;
-      } else if (!supplier.google_id) {
+      if (!supplier.google_id) {
         // Link Google account
         await supabase
           .from('suppliers')
