@@ -190,7 +190,10 @@ const englishTranslations = {
         notes: "Notes",
         notesPlaceholder: "Additional notes or special instructions...",
         cancel: "Cancel",
-        save: "Save PO"
+        save: "Save PO",
+        saveAsDraft: "Save as Draft",
+        draft: "Draft",
+        savePO: "Register PO"
     },
     credit: {
         title: "Credit",
@@ -230,7 +233,9 @@ const englishTranslations = {
         reasonShort: "Short shipment",
         reasonWrong: "Wrong product",
         reasonExpired: "Expired/Near expiry",
-        reasonOther: "Other"
+        reasonOther: "Other",
+        saveAsDraft: "Save as Draft",
+        draft: "Draft"
     },
     pi: {
         title: "Invoice",
@@ -321,12 +326,12 @@ const englishTranslations = {
         country: "Country",
         contactPerson: "Contact Person",
         tradeTerms: "Trade Terms",
-        lastOrder: "Last PI",
+        lastOrder: "Last Invoice",
         totalOrders: "Total Orders",
         availableCredit: "Available Credit",
-        piStatus: "PI Status",
-        piCompleted: "PI Completed",
-        piInProgress: "PI In Progress",
+        invoiceStatus: "Invoice Status",
+        piCompleted: "Completed",
+        piInProgress: "In Progress",
         topProducts: "Top Products",
         status: "Status",
         actions: "Actions",

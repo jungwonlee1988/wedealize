@@ -1370,6 +1370,10 @@
                                                             <span>All</span>
                                                         </label>
                                                         <label class="wd-filter-option">
+                                                            <input type="radio" name="status-filter" value="draft" onchange="applyStatusFilter('draft')">
+                                                            <span>Draft</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
                                                             <input type="radio" name="status-filter" value="received" onchange="applyStatusFilter('received')">
                                                             <span>Received</span>
                                                         </label>
@@ -1392,8 +1396,8 @@
                                                 <span data-i18n="sales.totalAmount">Total Amount</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
-                                            <th class="sortable" onclick="sortPOTable('exporter')">
-                                                <span data-i18n="sales.exporter">Exporter</span>
+                                            <th class="sortable" onclick="sortPOTable('buyer')">
+                                                <span data-i18n="sales.buyer">Buyer</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
                                             <th data-i18n="sales.paymentTerms">Payment Terms</th>
@@ -1406,6 +1410,22 @@
                                         </tr>
                                     </thead>
                                 <tbody id="po-list-tbody">
+                                    <tr data-status="draft" data-po="PO-2026-0051" onclick="viewPODetail('PO-2026-0051')" class="wd-cursor-pointer">
+                                        <td>PO-2026-0051</td>
+                                        <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
+                                        <td>Organic Almond Butter 500g</td>
+                                        <td>USD 2,450</td>
+                                        <td>Green Valley Foods</td>
+                                        <td>T/T</td>
+                                        <td>FOB</td>
+                                        <td>2026.02.05 09:30</td>
+                                        <td>
+                                            <div class="wd-author-cell">
+                                                <div class="wd-author-avatar">JL</div>
+                                                <span class="wd-author-name">Jungwon Lee</span>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <tr data-status="received" data-po="20260202171" onclick="viewPODetail('20260202171')" class="wd-cursor-pointer">
                                         <td>20260202171</td>
                                         <td><span class="wd-badge wd-badge-info">Received</span></td>
@@ -1839,7 +1859,8 @@
                                 </div>
                                 <div class="wd-modal-footer">
                                     <button class="wd-btn wd-btn-outline" onclick="closeAddPOModal()" data-i18n="common.cancel">Cancel</button>
-                                    <button class="wd-btn wd-btn-primary" onclick="savePO()" data-i18n="po.savePO">Save PO</button>
+                                    <button class="wd-btn wd-btn-secondary" onclick="savePOAsDraft()" data-i18n="po.saveAsDraft">Save as Draft</button>
+                                    <button class="wd-btn wd-btn-primary" onclick="savePO()" data-i18n="po.savePO">Register PO</button>
                                 </div>
                             </div>
                         </div>
@@ -2356,6 +2377,10 @@
                                                             <span>All</span>
                                                         </label>
                                                         <label class="wd-filter-option">
+                                                            <input type="radio" name="credit-status-filter" value="draft" onchange="applyCreditStatusFilter('draft')">
+                                                            <span>Draft</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
                                                             <input type="radio" name="credit-status-filter" value="approved" onchange="applyCreditStatusFilter('approved')">
                                                             <span>Approved</span>
                                                         </label>
@@ -2384,6 +2409,16 @@
                                         </tr>
                                     </thead>
                                     <tbody id="credit-table-body">
+                                        <tr data-status="draft" data-tab="active" data-credit="CR-2024-005" onclick="viewCreditDetail('CR-2024-005')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">CR-2024-005</span></td>
+                                            <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0090')">PI-2024-0090</a></td>
+                                            <td>Pacific Foods Corp</td>
+                                            <td>Coconut Milk Powder 1KG</td>
+                                            <td>Short shipment (8 units)</td>
+                                            <td><span class="wd-text-bold">$96.00</span></td>
+                                            <td>2024-02-05</td>
+                                        </tr>
                                         <tr data-status="approved" data-tab="active" data-credit="CR-2024-001" onclick="viewCreditDetail('CR-2024-001')" class="wd-cursor-pointer">
                                             <td><span class="wd-text-mono">CR-2024-001</span></td>
                                             <td><span class="wd-badge wd-badge-success">Approved</span></td>
@@ -2494,6 +2529,7 @@
                                 </div>
                                 <div class="wd-modal-footer">
                                     <button class="wd-btn wd-btn-outline" onclick="closeCreditModal()" data-i18n="common.cancel">Cancel</button>
+                                    <button class="wd-btn wd-btn-secondary" onclick="saveCreditAsDraft()" data-i18n="credit.saveAsDraft">Save as Draft</button>
                                     <button class="wd-btn wd-btn-primary" onclick="saveCredit()" data-i18n="credit.submitCredit">Submit Credit</button>
                                 </div>
                             </div>
@@ -2549,7 +2585,7 @@
                                             </th>
                                             <th data-i18n="accounts.country">Country</th>
                                             <th class="th-filter">
-                                                <span data-i18n="accounts.piStatus">PI Status</span>
+                                                <span data-i18n="accounts.invoiceStatus">Invoice Status</span>
                                                 <div class="wd-column-filter">
                                                     <button class="wd-filter-btn" onclick="toggleAccountPIFilter(event)">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2563,11 +2599,11 @@
                                                         </label>
                                                         <label class="wd-filter-option">
                                                             <input type="radio" name="account-pi-filter" value="completed" onchange="applyAccountPIFilter('completed')">
-                                                            <span>PI Completed</span>
+                                                            <span>Completed</span>
                                                         </label>
                                                         <label class="wd-filter-option">
                                                             <input type="radio" name="account-pi-filter" value="in-progress" onchange="applyAccountPIFilter('in-progress')">
-                                                            <span>PI In Progress</span>
+                                                            <span>In Progress</span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -2581,7 +2617,7 @@
                                                 <span class="sort-icon">↕</span>
                                             </th>
                                             <th data-i18n="accounts.topProducts">Top Products</th>
-                                            <th data-i18n="accounts.lastOrder">Last PI</th>
+                                            <th data-i18n="accounts.lastOrder">Last Invoice</th>
                                         </tr>
                                     </thead>
                                     <tbody id="accounts-table-body">
