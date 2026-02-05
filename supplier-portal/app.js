@@ -3103,7 +3103,7 @@ function loadPOForPI() {
     showToast('PO data loaded. Add products below.', 'info');
 }
 
-function loadBuyerForPI() {
+async function loadBuyerForPI() {
     const buyerSelect = document.getElementById('pi-buyer-select');
     if (!buyerSelect) return;
 
@@ -3119,7 +3119,6 @@ function loadBuyerForPI() {
 
     const name = selectedOption?.getAttribute('data-name') || '-';
     const country = selectedOption?.getAttribute('data-country') || '-';
-    const credit = parseFloat(selectedOption?.getAttribute('data-credit')) || 0;
     const currency = document.getElementById('pi-currency')?.value || 'USD';
 
     const companyEl = document.getElementById('pi-buyer-company-display');
@@ -3128,29 +3127,53 @@ function loadBuyerForPI() {
 
     if (companyEl) companyEl.textContent = name;
     if (countryEl) countryEl.textContent = country;
-    if (creditEl) creditEl.textContent = `${currency} ${credit.toFixed(2)}`;
     if (infoCard) infoCard.style.display = '';
 
-    // Show credit section if credit > 0
-    if (credit > 0) {
-        if (creditSection) creditSection.style.display = '';
-        const badge = document.getElementById('available-credit-badge');
-        if (badge) badge.textContent = `${currency} ${credit.toFixed(2)} available`;
-        // Populate credit list
-        const creditList = document.getElementById('pi-available-credits');
-        if (creditList) {
-            creditList.innerHTML = `
-                <label class="wd-checkbox-card" style="display: flex; align-items: center; gap: 8px; padding: 12px;">
-                    <input type="checkbox" class="pi-credit-checkbox" value="${credit.toFixed(2)}" onchange="calculatePITotals()">
-                    <span>Buyer Credit: ${currency} ${credit.toFixed(2)}</span>
-                </label>
-            `;
+    // Fetch actual approved credits for this buyer from API
+    try {
+        const token = localStorage.getItem('token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/credits/buyer/${encodeURIComponent(name)}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!res.ok) throw new Error('Failed to load credits');
+        const buyerCredits = await res.json();
+        const totalCredit = buyerCredits.reduce((sum, c) => sum + parseFloat(c.amount), 0);
+
+        if (creditEl) creditEl.textContent = `${currency} ${totalCredit.toFixed(2)}`;
+
+        if (buyerCredits.length > 0) {
+            if (creditSection) creditSection.style.display = '';
+            const badge = document.getElementById('available-credit-badge');
+            if (badge) badge.textContent = `${currency} ${totalCredit.toFixed(2)} available`;
+
+            const creditList = document.getElementById('pi-available-credits');
+            if (creditList) {
+                creditList.innerHTML = buyerCredits.map(credit => `
+                    <label class="wd-checkbox-card" style="display: flex; align-items: center; gap: 8px; padding: 12px;">
+                        <input type="checkbox" class="pi-credit-checkbox"
+                               value="${credit.id}"
+                               data-amount="${credit.amount}"
+                               onchange="calculatePITotals()">
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 600;">${credit.credit_number}</span>
+                            <span class="wd-text-muted" style="font-size: 12px;">from ${credit.invoice_number || 'N/A'} · ${credit.reason}</span>
+                        </div>
+                        <span style="font-weight: 600; color: var(--success);">-${currency} ${parseFloat(credit.amount).toFixed(2)}</span>
+                    </label>
+                `).join('');
+            }
+        } else {
+            if (creditSection) creditSection.style.display = 'none';
+            if (creditEl) creditEl.textContent = `${currency} 0.00`;
         }
-    } else {
+    } catch (e) {
+        console.error('Failed to load credits:', e);
         if (creditSection) creditSection.style.display = 'none';
+        if (creditEl) creditEl.textContent = `${currency} 0.00`;
     }
 
-    window._piBuyerCredit = credit;
     calculatePITotals();
 }
 
@@ -3256,10 +3279,10 @@ function calculatePITotals() {
         });
     }
 
-    // Calculate credit discount
+    // Calculate credit discount from individual credit checkboxes
     let creditDiscount = 0;
     document.querySelectorAll('.pi-credit-checkbox:checked').forEach(cb => {
-        creditDiscount += parseFloat(cb.value) || 0;
+        creditDiscount += parseFloat(cb.dataset.amount) || 0;
     });
     // Cap discount at subtotal
     creditDiscount = Math.min(creditDiscount, subtotal);
@@ -3302,10 +3325,13 @@ function collectPIData() {
 
     if (items.length === 0) { showToast('Add at least one product', 'error'); return null; }
 
-    // Credit discount
-    let creditDiscount = 0;
+    // Collect applied credits with creditId and amount
+    const appliedCredits = [];
     document.querySelectorAll('.pi-credit-checkbox:checked').forEach(cb => {
-        creditDiscount += parseFloat(cb.value) || 0;
+        appliedCredits.push({
+            creditId: cb.value,
+            amount: parseFloat(cb.dataset.amount) || 0
+        });
     });
 
     return {
@@ -3318,7 +3344,7 @@ function collectPIData() {
         validUntil: document.getElementById('pi-valid-until')?.value || undefined,
         remarks: document.getElementById('pi-remarks')?.value || undefined,
         items,
-        creditDiscount,
+        appliedCredits: appliedCredits.length > 0 ? appliedCredits : undefined,
         poNumber: document.getElementById('pi-po-select')?.value || undefined
     };
 }
