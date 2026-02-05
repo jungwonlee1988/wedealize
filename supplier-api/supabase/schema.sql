@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS suppliers (
     password VARCHAR(255),
     company_name VARCHAR(255) NOT NULL,
     country VARCHAR(50),
-    category VARCHAR(100),
+    category TEXT[],
     phone VARCHAR(50),
     website VARCHAR(255),
     description TEXT,
@@ -251,6 +251,7 @@ CREATE TABLE IF NOT EXISTS buyer_inquiry_products (
 );
 
 -- Create indexes for better query performance
+CREATE INDEX IF NOT EXISTS idx_suppliers_category_gin ON suppliers USING GIN (category);
 CREATE INDEX IF NOT EXISTS idx_products_supplier ON products(supplier_id);
 CREATE INDEX IF NOT EXISTS idx_orders_supplier ON orders(supplier_id);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);

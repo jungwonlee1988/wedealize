@@ -62,9 +62,9 @@ export class AdminService {
       queryBuilder = queryBuilder.eq('country', country);
     }
 
-    // Apply category filter
+    // Apply category filter (TEXT[] column)
     if (category) {
-      queryBuilder = queryBuilder.eq('category', category);
+      queryBuilder = queryBuilder.contains('category', [category]);
     }
 
     // Apply date range filter
@@ -166,9 +166,16 @@ export class AdminService {
 
     if (!data) return [];
 
-    // Get unique categories
-    const categories = [...new Set(data.map(d => d.category).filter(Boolean))];
-    return categories.sort();
+    // Flatten TEXT[] arrays → unique list
+    const all: string[] = [];
+    data.forEach(d => {
+      if (Array.isArray(d.category)) {
+        d.category.forEach((c: string) => { if (c) all.push(c); });
+      } else if (d.category) {
+        all.push(d.category);
+      }
+    });
+    return [...new Set(all)].sort();
   }
 
   // ───── New Methods ─────
@@ -227,7 +234,7 @@ export class AdminService {
     const updateData: Record<string, any> = {};
     if (dto.companyName !== undefined) updateData.company_name = dto.companyName;
     if (dto.country !== undefined) updateData.country = dto.country;
-    if (dto.category !== undefined) updateData.category = dto.category;
+    if (dto.categories !== undefined) updateData.category = dto.categories;
     if (dto.phone !== undefined) updateData.phone = dto.phone;
     if (dto.website !== undefined) updateData.website = dto.website;
     if (dto.description !== undefined) updateData.description = dto.description;
@@ -389,10 +396,14 @@ export class AdminService {
       supabase.from('suppliers').select('country').not('country', 'is', null),
     ]);
 
-    // Category distribution
+    // Category distribution (TEXT[] column)
     const categoryGroups: Record<string, number> = {};
     (categoryData.data || []).forEach(row => {
-      if (row.category) {
+      if (Array.isArray(row.category)) {
+        row.category.forEach((c: string) => {
+          if (c) categoryGroups[c] = (categoryGroups[c] || 0) + 1;
+        });
+      } else if (row.category) {
         categoryGroups[row.category] = (categoryGroups[row.category] || 0) + 1;
       }
     });
@@ -500,7 +511,7 @@ export class AdminService {
       queryBuilder = queryBuilder.eq('country', filters.country);
     }
     if (filters.category) {
-      queryBuilder = queryBuilder.eq('category', filters.category);
+      queryBuilder = queryBuilder.contains('category', [filters.category]);
     }
     if (filters.startDate) {
       queryBuilder = queryBuilder.gte('created_at', filters.startDate);
@@ -523,7 +534,7 @@ export class AdminService {
       s.email,
       `"${(s.company_name || '').replace(/"/g, '""')}"`,
       s.country || '',
-      s.category || '',
+      Array.isArray(s.category) ? s.category.join('; ') : (s.category || ''),
       s.phone || '',
       s.website || '',
       s.employees || '',

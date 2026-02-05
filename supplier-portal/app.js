@@ -812,10 +812,14 @@ function toggleSidebar() {
     localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
 }
 
-// Restore sidebar state on page load
+// Restore sidebar state on page load + render category grid
 document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('sidebar-collapsed') === 'true') {
         document.querySelector('.wd-sidebar')?.classList.add('collapsed');
+    }
+    // Render registration category checkbox grid
+    if (document.getElementById('reg-categories-container')) {
+        renderCategoryCheckboxGrid('reg-categories-container');
     }
 });
 
@@ -2092,15 +2096,116 @@ function loadExtractedProducts() {
 // 카테고리 라벨 가져오기
 function getCategoryLabel(category) {
     const labels = {
-        oils: 'Oils & Vinegars',
-        dairy: 'Dairy & Cheese',
-        organic: 'Organic & Health',
-        beverages: 'Beverages',
-        snacks: 'Snacks',
-        sauces: 'Sauces'
+        'evoo': 'Extra Virgin Olive Oil', 'olive-oil': 'Olive Oil', 'seed-oils': 'Seed Oils',
+        'nut-oils': 'Nut Oils', 'truffle-oil': 'Truffle Oil', 'balsamic': 'Balsamic Vinegar',
+        'wine-vinegar': 'Wine Vinegar', 'sauces': 'Sauces & Pesto', 'mustard-dressings': 'Mustard & Dressings',
+        'hard-cheese': 'Hard Cheese', 'soft-cheese': 'Soft Cheese', 'aged-cheese': 'Aged Cheese',
+        'butter-cream': 'Butter & Cream', 'cured-meats': 'Cured Meats', 'sausages': 'Sausages',
+        'smoked-meats': 'Smoked Meats', 'dried-pasta': 'Dried Pasta', 'fresh-pasta': 'Fresh Pasta',
+        'rice': 'Rice', 'flour-semolina': 'Flour & Semolina', 'bread': 'Bread',
+        'biscuits-cookies': 'Biscuits & Cookies', 'chocolate': 'Chocolate', 'pastries': 'Pastries',
+        'tomato-products': 'Tomato Products', 'pickles-olives': 'Pickles & Olives',
+        'preserved-veg': 'Preserved Vegetables', 'jams-spreads': 'Jams & Spreads',
+        'wine': 'Wine', 'spirits': 'Spirits', 'coffee': 'Coffee', 'tea': 'Tea',
+        'juices-soft': 'Juices & Soft Drinks', 'fresh-fish': 'Fresh Fish', 'canned-fish': 'Canned Fish',
+        'shellfish': 'Shellfish', 'smoked-fish': 'Smoked Fish', 'spice-blends': 'Spice Blends',
+        'herbs': 'Herbs', 'honey': 'Honey', 'nuts-dried-fruit': 'Nuts & Dried Fruit',
+        'chips-crackers': 'Chips & Crackers', 'bars': 'Snack Bars', 'organic': 'Organic',
+        'gluten-free': 'Gluten-Free', 'vegan-plant': 'Vegan & Plant-Based', 'frozen': 'Frozen Foods',
+        // Legacy keys
+        'oils': 'Oils & Vinegars', 'dairy': 'Dairy & Cheese', 'beverages': 'Beverages',
+        'snacks': 'Snacks', 'pasta': 'Pasta & Grains', 'canned': 'Canned Goods', 'deli': 'Deli & Meats'
     };
+    if (Array.isArray(category)) {
+        return category.map(c => labels[c] || c).join(', ');
+    }
     return labels[category] || category;
 }
+
+// Category checkbox grid for registration form
+const CATEGORY_GROUPS = {
+    'Oils & Fats': ['evoo', 'olive-oil', 'seed-oils', 'nut-oils', 'truffle-oil'],
+    'Vinegars & Condiments': ['balsamic', 'wine-vinegar', 'sauces', 'mustard-dressings'],
+    'Dairy & Cheese': ['hard-cheese', 'soft-cheese', 'aged-cheese', 'butter-cream'],
+    'Meat & Charcuterie': ['cured-meats', 'sausages', 'smoked-meats'],
+    'Pasta & Grains': ['dried-pasta', 'fresh-pasta', 'rice', 'flour-semolina'],
+    'Bakery & Confectionery': ['bread', 'biscuits-cookies', 'chocolate', 'pastries'],
+    'Canned & Preserved': ['tomato-products', 'pickles-olives', 'preserved-veg', 'jams-spreads'],
+    'Beverages': ['wine', 'spirits', 'coffee', 'tea', 'juices-soft'],
+    'Seafood': ['fresh-fish', 'canned-fish', 'shellfish', 'smoked-fish'],
+    'Spices, Herbs & Sweeteners': ['spice-blends', 'herbs', 'honey'],
+    'Snacks & Nuts': ['nuts-dried-fruit', 'chips-crackers', 'bars'],
+    'Specialty & Health': ['organic', 'gluten-free', 'vegan-plant', 'frozen']
+};
+
+const CATEGORY_LABELS = {
+    'evoo': 'Extra Virgin Olive Oil', 'olive-oil': 'Olive Oil', 'seed-oils': 'Seed Oils',
+    'nut-oils': 'Nut Oils', 'truffle-oil': 'Truffle Oil', 'balsamic': 'Balsamic Vinegar',
+    'wine-vinegar': 'Wine Vinegar', 'sauces': 'Sauces & Pesto', 'mustard-dressings': 'Mustard & Dressings',
+    'hard-cheese': 'Hard Cheese', 'soft-cheese': 'Soft Cheese', 'aged-cheese': 'Aged Cheese',
+    'butter-cream': 'Butter & Cream', 'cured-meats': 'Cured Meats', 'sausages': 'Sausages',
+    'smoked-meats': 'Smoked Meats', 'dried-pasta': 'Dried Pasta', 'fresh-pasta': 'Fresh Pasta',
+    'rice': 'Rice', 'flour-semolina': 'Flour & Semolina', 'bread': 'Bread',
+    'biscuits-cookies': 'Biscuits & Cookies', 'chocolate': 'Chocolate', 'pastries': 'Pastries',
+    'tomato-products': 'Tomato Products', 'pickles-olives': 'Pickles & Olives',
+    'preserved-veg': 'Preserved Vegetables', 'jams-spreads': 'Jams & Spreads',
+    'wine': 'Wine', 'spirits': 'Spirits', 'coffee': 'Coffee', 'tea': 'Tea',
+    'juices-soft': 'Juices & Soft Drinks', 'fresh-fish': 'Fresh Fish', 'canned-fish': 'Canned Fish',
+    'shellfish': 'Shellfish', 'smoked-fish': 'Smoked Fish', 'spice-blends': 'Spice Blends',
+    'herbs': 'Herbs', 'honey': 'Honey', 'nuts-dried-fruit': 'Nuts & Dried Fruit',
+    'chips-crackers': 'Chips & Crackers', 'bars': 'Snack Bars', 'organic': 'Organic',
+    'gluten-free': 'Gluten-Free', 'vegan-plant': 'Vegan & Plant-Based', 'frozen': 'Frozen Foods'
+};
+
+function renderCategoryCheckboxGrid(containerId, selectedSlugs) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const selected = selectedSlugs || [];
+    let html = '';
+    for (const [group, slugs] of Object.entries(CATEGORY_GROUPS)) {
+        html += `<div class="wd-category-group" data-group="${group}">`;
+        html += `<h5 class="wd-category-group-title">${group}</h5>`;
+        html += `<div class="wd-checkbox-grid">`;
+        for (const slug of slugs) {
+            const checked = selected.includes(slug) ? 'checked' : '';
+            html += `<label class="wd-checkbox-card" data-slug="${slug}" data-label="${(CATEGORY_LABELS[slug] || slug).toLowerCase()}">
+                <input type="checkbox" value="${slug}" ${checked} onchange="updateRegCategoryCount()">
+                <span class="wd-checkbox-label">${CATEGORY_LABELS[slug] || slug}</span>
+            </label>`;
+        }
+        html += `</div></div>`;
+    }
+    container.innerHTML = html;
+    updateRegCategoryCount();
+}
+
+function updateRegCategoryCount() {
+    const count = document.querySelectorAll('#reg-categories-container input:checked').length;
+    const badge = document.getElementById('reg-category-count');
+    if (badge) badge.textContent = count + ' selected';
+}
+
+function filterRegCategories(query) {
+    const q = (query || '').toLowerCase();
+    const container = document.getElementById('reg-categories-container');
+    if (!container) return;
+    container.querySelectorAll('.wd-category-group').forEach(group => {
+        let anyVisible = false;
+        group.querySelectorAll('.wd-checkbox-card').forEach(card => {
+            const label = card.getAttribute('data-label') || '';
+            const slug = card.getAttribute('data-slug') || '';
+            const match = !q || label.includes(q) || slug.includes(q);
+            card.style.display = match ? '' : 'none';
+            if (match) anyVisible = true;
+        });
+        group.style.display = anyVisible ? '' : 'none';
+    });
+}
+
+// Bridge to window for HTML event handlers
+window.renderCategoryCheckboxGrid = renderCategoryCheckboxGrid;
+window.filterRegCategories = filterRegCategories;
+window.updateRegCategoryCount = updateRegCategoryCount;
 
 // 가격표 리셋 - 원래 카탈로그 가격으로 복원
 function resetPriceList() {

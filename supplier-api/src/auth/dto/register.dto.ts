@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsArray, IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {
@@ -21,10 +21,11 @@ export class RegisterDto {
   @IsString()
   country?: string;
 
-  @ApiProperty({ example: 'oils', required: false })
+  @ApiProperty({ example: ['evoo', 'balsamic'], required: false })
   @IsOptional()
-  @IsString()
-  category?: string;
+  @IsArray()
+  @IsString({ each: true })
+  categories?: string[];
 }
 
 export class SendVerificationDto {
@@ -63,8 +64,9 @@ export class VerifyEmailDto {
   @IsString()
   country?: string;
 
-  @ApiProperty({ example: 'oils', required: false })
+  @ApiProperty({ example: ['evoo', 'balsamic'], required: false })
   @IsOptional()
-  @IsString()
-  category?: string;
+  @IsArray()
+  @IsString({ each: true })
+  categories?: string[];
 }

@@ -2092,6 +2092,20 @@
     border-radius: 0 var(--wd-radius-md) var(--wd-radius-md) 0;
 }
 
+/* ==================== Category Groups ==================== */
+.wd-category-group {
+    margin-bottom: var(--wd-space-4);
+}
+
+.wd-category-group-title {
+    font-size: var(--wd-font-size-xs);
+    font-weight: var(--wd-font-semibold);
+    color: var(--wd-gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--wd-space-2);
+}
+
 /* ==================== Checkbox Cards ==================== */
 .wd-checkbox-grid {
     display: grid;

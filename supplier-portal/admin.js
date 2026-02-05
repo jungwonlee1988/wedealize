@@ -371,7 +371,7 @@
                                 </div>
                             </td>
                             <td>${escapeHtml(supplier.country || '-')}</td>
-                            <td>${escapeHtml(getCategoryLabel(supplier.category))}</td>
+                            <td>${renderCategoryBadges(supplier.category)}</td>
                             <td>
                                 <span class="verified-badge ${supplier.email_verified ? 'verified' : 'unverified'}">
                                     ${supplier.email_verified ? 'Verified' : 'Unverified'}
@@ -666,7 +666,7 @@
                 </div>
                 <div class="info-item">
                     <span class="info-label">Category</span>
-                    <span class="info-value">${escapeHtml(getCategoryLabel(s.category))}</span>
+                    <span class="info-value">${renderCategoryBadges(s.category)}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Phone</span>
@@ -737,13 +737,9 @@
                     <input type="text" id="editCountry" class="wd-input" value="${escapeHtml(s.country || '')}">
                 </div>
                 <div class="wd-form-group">
-                    <label class="wd-form-label">Category</label>
-                    <select id="editCategory" class="wd-input">
-                        <option value="">Select Category</option>
-                        ${['oils','dairy','organic','beverages','snacks','sauces','pasta','canned','deli']
-                            .map(c => `<option value="${c}" ${s.category === c ? 'selected' : ''}>${getCategoryLabel(c)}</option>`)
-                            .join('')}
-                    </select>
+                    <label class="wd-form-label">Categories</label>
+                    <div id="editCategoryContainer" style="max-height:240px;overflow-y:auto;border:1px solid var(--wd-gray-200);border-radius:6px;padding:8px">
+                    </div>
                 </div>
                 <div class="wd-form-group">
                     <label class="wd-form-label">Phone</label>
@@ -771,6 +767,36 @@
                 </div>
             </div>
         `;
+
+        // Populate edit category checkboxes
+        const editContainer = document.getElementById('editCategoryContainer');
+        if (editContainer) {
+            const selected = Array.isArray(s.category) ? s.category : (s.category ? [s.category] : []);
+            const groups = {
+                'Oils & Fats': ['evoo','olive-oil','seed-oils','nut-oils','truffle-oil'],
+                'Vinegars & Condiments': ['balsamic','wine-vinegar','sauces','mustard-dressings'],
+                'Dairy & Cheese': ['hard-cheese','soft-cheese','aged-cheese','butter-cream'],
+                'Meat & Charcuterie': ['cured-meats','sausages','smoked-meats'],
+                'Pasta & Grains': ['dried-pasta','fresh-pasta','rice','flour-semolina'],
+                'Bakery & Confectionery': ['bread','biscuits-cookies','chocolate','pastries'],
+                'Canned & Preserved': ['tomato-products','pickles-olives','preserved-veg','jams-spreads'],
+                'Beverages': ['wine','spirits','coffee','tea','juices-soft'],
+                'Seafood': ['fresh-fish','canned-fish','shellfish','smoked-fish'],
+                'Spices, Herbs & Sweeteners': ['spice-blends','herbs','honey'],
+                'Snacks & Nuts': ['nuts-dried-fruit','chips-crackers','bars'],
+                'Specialty & Health': ['organic','gluten-free','vegan-plant','frozen']
+            };
+            let html = '';
+            for (const [group, slugs] of Object.entries(groups)) {
+                html += `<div style="margin-bottom:8px"><strong style="font-size:12px;color:var(--wd-gray-600)">${group}</strong><div class="wd-checkbox-grid" style="margin-top:4px">`;
+                for (const slug of slugs) {
+                    const checked = selected.includes(slug) ? 'checked' : '';
+                    html += `<label class="wd-checkbox-card"><input type="checkbox" class="edit-cat-cb" value="${slug}" ${checked}><span class="wd-checkbox-label">${getCategoryLabel(slug)}</span></label>`;
+                }
+                html += `</div></div>`;
+            }
+            editContainer.innerHTML = html;
+        }
     }
 
     function renderRelatedData() {
@@ -815,7 +841,7 @@
         const dto = {};
         const companyName = document.getElementById('editCompanyName').value.trim();
         const country = document.getElementById('editCountry').value.trim();
-        const category = document.getElementById('editCategory').value;
+        const categories = Array.from(document.querySelectorAll('.edit-cat-cb:checked')).map(cb => cb.value);
         const phone = document.getElementById('editPhone').value.trim();
         const website = document.getElementById('editWebsite').value.trim();
         const yearEstablished = document.getElementById('editYearEstablished').value;
@@ -824,7 +850,7 @@
 
         if (companyName) dto.companyName = companyName;
         if (country !== undefined) dto.country = country;
-        if (category !== undefined) dto.category = category;
+        dto.categories = categories;
         if (phone !== undefined) dto.phone = phone;
         if (website !== undefined) dto.website = website;
         if (yearEstablished) dto.yearEstablished = parseInt(yearEstablished, 10);
@@ -1042,17 +1068,41 @@
 
     function getCategoryLabel(category) {
         const labels = {
-            oils: 'Oils & Vinegars',
-            dairy: 'Dairy & Cheese',
-            organic: 'Organic & Health',
-            beverages: 'Beverages',
-            snacks: 'Snacks',
-            sauces: 'Sauces',
-            pasta: 'Pasta & Grains',
-            canned: 'Canned Goods',
-            deli: 'Deli & Meats'
+            'evoo': 'Extra Virgin Olive Oil', 'olive-oil': 'Olive Oil', 'seed-oils': 'Seed Oils',
+            'nut-oils': 'Nut Oils', 'truffle-oil': 'Truffle Oil', 'balsamic': 'Balsamic Vinegar',
+            'wine-vinegar': 'Wine Vinegar', 'sauces': 'Sauces & Pesto', 'mustard-dressings': 'Mustard & Dressings',
+            'hard-cheese': 'Hard Cheese', 'soft-cheese': 'Soft Cheese', 'aged-cheese': 'Aged Cheese',
+            'butter-cream': 'Butter & Cream', 'cured-meats': 'Cured Meats', 'sausages': 'Sausages',
+            'smoked-meats': 'Smoked Meats', 'dried-pasta': 'Dried Pasta', 'fresh-pasta': 'Fresh Pasta',
+            'rice': 'Rice', 'flour-semolina': 'Flour & Semolina', 'bread': 'Bread',
+            'biscuits-cookies': 'Biscuits & Cookies', 'chocolate': 'Chocolate', 'pastries': 'Pastries',
+            'tomato-products': 'Tomato Products', 'pickles-olives': 'Pickles & Olives',
+            'preserved-veg': 'Preserved Vegetables', 'jams-spreads': 'Jams & Spreads',
+            'wine': 'Wine', 'spirits': 'Spirits', 'coffee': 'Coffee', 'tea': 'Tea',
+            'juices-soft': 'Juices & Soft Drinks', 'fresh-fish': 'Fresh Fish', 'canned-fish': 'Canned Fish',
+            'shellfish': 'Shellfish', 'smoked-fish': 'Smoked Fish', 'spice-blends': 'Spice Blends',
+            'herbs': 'Herbs', 'honey': 'Honey', 'nuts-dried-fruit': 'Nuts & Dried Fruit',
+            'chips-crackers': 'Chips & Crackers', 'bars': 'Snack Bars', 'organic': 'Organic',
+            'gluten-free': 'Gluten-Free', 'vegan-plant': 'Vegan & Plant-Based', 'frozen': 'Frozen Foods',
+            'oils': 'Oils & Vinegars', 'dairy': 'Dairy & Cheese', 'beverages': 'Beverages',
+            'snacks': 'Snacks', 'pasta': 'Pasta & Grains', 'canned': 'Canned Goods', 'deli': 'Deli & Meats'
         };
+        if (Array.isArray(category)) {
+            if (category.length === 0) return '-';
+            return category.map(c => labels[c] || c).join(', ');
+        }
         return labels[category] || category || '-';
+    }
+
+    function renderCategoryBadges(category) {
+        if (!category) return '-';
+        const cats = Array.isArray(category) ? category : [category];
+        if (cats.length === 0) return '-';
+        if (cats.length <= 2) {
+            return cats.map(c => `<span class="status-badge active" style="font-size:11px;margin:1px">${escapeHtml(getCategoryLabel(c))}</span>`).join(' ');
+        }
+        return cats.slice(0, 2).map(c => `<span class="status-badge active" style="font-size:11px;margin:1px">${escapeHtml(getCategoryLabel(c))}</span>`).join(' ')
+            + ` <span class="status-badge" style="font-size:11px;margin:1px">+${cats.length - 2}</span>`;
     }
 
     function escapeHtml(text) {

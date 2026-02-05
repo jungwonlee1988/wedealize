@@ -375,28 +375,11 @@
                             <input type="password" class="wd-input" id="reg-password" data-i18n-placeholder="auth.minChars" placeholder="Minimum 8 characters" required minlength="8">
                         </div>
                         <div class="wd-form-group">
-                            <label class="wd-form-label" for="reg-category"><span data-i18n="auth.productCategory">Product Category</span> *</label>
-                            <select class="wd-select" id="reg-category" required>
-                                <option value="" data-i18n="auth.selectCategory">Select category</option>
-                                <option value="olive-oil">Olive Oil & Cooking Oils</option>
-                                <option value="vinegar">Vinegars & Balsamic</option>
-                                <option value="cheese">Cheese & Dairy</option>
-                                <option value="cured-meat">Cured Meats & Charcuterie</option>
-                                <option value="pasta">Pasta & Grains</option>
-                                <option value="sauces">Sauces, Pesto & Condiments</option>
-                                <option value="canned">Canned & Preserved Foods</option>
-                                <option value="snacks">Snacks & Confectionery</option>
-                                <option value="bakery">Bakery & Baked Goods</option>
-                                <option value="honey">Honey & Sweeteners</option>
-                                <option value="wine">Wine & Spirits</option>
-                                <option value="beverages">Non-Alcoholic Beverages</option>
-                                <option value="coffee-tea">Coffee & Tea</option>
-                                <option value="frozen">Frozen Foods</option>
-                                <option value="organic">Organic & Health Foods</option>
-                                <option value="spices">Spices & Herbs</option>
-                                <option value="seafood">Seafood & Fish</option>
-                                <option value="other">Other</option>
-                            </select>
+                            <label class="wd-form-label"><span data-i18n="auth.productCategory">Product Categories</span> * <span class="wd-badge wd-badge-outline" id="reg-category-count" style="font-size:11px;margin-left:6px">0 selected</span></label>
+                            <input type="text" class="wd-input" id="reg-category-search" placeholder="Search categories..." oninput="filterRegCategories(this.value)" style="margin-bottom:8px">
+                            <div id="reg-categories-container" style="max-height:320px;overflow-y:auto;border:1px solid var(--wd-gray-200);border-radius:var(--wd-radius-md);padding:12px">
+                                <!-- Populated by JS via renderCategoryCheckboxGrid() -->
+                            </div>
                         </div>
                         <div class="wd-form-options">
                             <label class="wd-checkbox">
@@ -3933,24 +3916,77 @@
                                     <label class="wd-form-label">Category</label>
                                     <select class="wd-select" id="edit-product-category">
                                         <option value="">Select category...</option>
-                                        <option value="olive-oil">Olive Oil & Cooking Oils</option>
-                                        <option value="vinegar">Vinegars & Balsamic</option>
-                                        <option value="cheese">Cheese & Dairy</option>
-                                        <option value="cured-meat">Cured Meats & Charcuterie</option>
-                                        <option value="pasta">Pasta & Grains</option>
-                                        <option value="sauces">Sauces, Pesto & Condiments</option>
-                                        <option value="canned">Canned & Preserved Foods</option>
-                                        <option value="snacks">Snacks & Confectionery</option>
-                                        <option value="bakery">Bakery & Baked Goods</option>
-                                        <option value="honey">Honey & Sweeteners</option>
-                                        <option value="wine">Wine & Spirits</option>
-                                        <option value="beverages">Non-Alcoholic Beverages</option>
-                                        <option value="coffee-tea">Coffee & Tea</option>
-                                        <option value="frozen">Frozen Foods</option>
-                                        <option value="organic">Organic & Health Foods</option>
-                                        <option value="spices">Spices & Herbs</option>
-                                        <option value="seafood">Seafood & Fish</option>
-                                        <option value="other">Other</option>
+                                        <optgroup label="Oils & Fats">
+                                            <option value="evoo">Extra Virgin Olive Oil</option>
+                                            <option value="olive-oil">Olive Oil</option>
+                                            <option value="seed-oils">Seed Oils</option>
+                                            <option value="nut-oils">Nut Oils</option>
+                                            <option value="truffle-oil">Truffle Oil</option>
+                                        </optgroup>
+                                        <optgroup label="Vinegars & Condiments">
+                                            <option value="balsamic">Balsamic Vinegar</option>
+                                            <option value="wine-vinegar">Wine Vinegar</option>
+                                            <option value="sauces">Sauces & Pesto</option>
+                                            <option value="mustard-dressings">Mustard & Dressings</option>
+                                        </optgroup>
+                                        <optgroup label="Dairy & Cheese">
+                                            <option value="hard-cheese">Hard Cheese</option>
+                                            <option value="soft-cheese">Soft Cheese</option>
+                                            <option value="aged-cheese">Aged Cheese</option>
+                                            <option value="butter-cream">Butter & Cream</option>
+                                        </optgroup>
+                                        <optgroup label="Meat & Charcuterie">
+                                            <option value="cured-meats">Cured Meats</option>
+                                            <option value="sausages">Sausages</option>
+                                            <option value="smoked-meats">Smoked Meats</option>
+                                        </optgroup>
+                                        <optgroup label="Pasta & Grains">
+                                            <option value="dried-pasta">Dried Pasta</option>
+                                            <option value="fresh-pasta">Fresh Pasta</option>
+                                            <option value="rice">Rice</option>
+                                            <option value="flour-semolina">Flour & Semolina</option>
+                                        </optgroup>
+                                        <optgroup label="Bakery & Confectionery">
+                                            <option value="bread">Bread</option>
+                                            <option value="biscuits-cookies">Biscuits & Cookies</option>
+                                            <option value="chocolate">Chocolate</option>
+                                            <option value="pastries">Pastries</option>
+                                        </optgroup>
+                                        <optgroup label="Canned & Preserved">
+                                            <option value="tomato-products">Tomato Products</option>
+                                            <option value="pickles-olives">Pickles & Olives</option>
+                                            <option value="preserved-veg">Preserved Vegetables</option>
+                                            <option value="jams-spreads">Jams & Spreads</option>
+                                        </optgroup>
+                                        <optgroup label="Beverages">
+                                            <option value="wine">Wine</option>
+                                            <option value="spirits">Spirits</option>
+                                            <option value="coffee">Coffee</option>
+                                            <option value="tea">Tea</option>
+                                            <option value="juices-soft">Juices & Soft Drinks</option>
+                                        </optgroup>
+                                        <optgroup label="Seafood">
+                                            <option value="fresh-fish">Fresh Fish</option>
+                                            <option value="canned-fish">Canned Fish</option>
+                                            <option value="shellfish">Shellfish</option>
+                                            <option value="smoked-fish">Smoked Fish</option>
+                                        </optgroup>
+                                        <optgroup label="Spices, Herbs & Sweeteners">
+                                            <option value="spice-blends">Spice Blends</option>
+                                            <option value="herbs">Herbs</option>
+                                            <option value="honey">Honey</option>
+                                        </optgroup>
+                                        <optgroup label="Snacks & Nuts">
+                                            <option value="nuts-dried-fruit">Nuts & Dried Fruit</option>
+                                            <option value="chips-crackers">Chips & Crackers</option>
+                                            <option value="bars">Snack Bars</option>
+                                        </optgroup>
+                                        <optgroup label="Specialty & Health">
+                                            <option value="organic">Organic</option>
+                                            <option value="gluten-free">Gluten-Free</option>
+                                            <option value="vegan-plant">Vegan & Plant-Based</option>
+                                            <option value="frozen">Frozen Foods</option>
+                                        </optgroup>
                                     </select>
                                 </div>
                                 <div class="wd-form-group">

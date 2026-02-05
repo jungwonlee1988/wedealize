@@ -120,16 +120,22 @@ class AuthModule {
     async handleRegister(e) {
         if (e) e.preventDefault();
 
+        const categories = Array.from(document.querySelectorAll('#reg-categories-container input:checked')).map(cb => cb.value);
         const data = {
             company: $('#reg-company')?.value,
             email: $('#reg-email')?.value,
             password: $('#reg-password')?.value,
             country: $('#reg-country')?.value,
-            category: $('#reg-category')?.value
+            categories
         };
 
         if (!data.company || !data.email || !data.password) {
             toast.warning('Please fill in all required fields');
+            return;
+        }
+
+        if (!categories.length) {
+            toast.warning('Please select at least one product category');
             return;
         }
 

@@ -79,7 +79,7 @@ export class AuthService {
 
   // Verify email and complete registration
   async verifyEmailAndRegister(dto: VerifyEmailDto): Promise<{ access_token: string; supplier_id: string; email: string; company_name: string }> {
-    const { email, code, companyName, password, country, category } = dto;
+    const { email, code, companyName, password, country, categories } = dto;
 
     const supabase = this.supabaseService.getAdminClient();
 
@@ -114,7 +114,7 @@ export class AuthService {
         password: hashedPassword,
         company_name: companyName,
         country,
-        category,
+        category: categories || null,
         email_verified: true,
         created_at: new Date().toISOString(),
       })

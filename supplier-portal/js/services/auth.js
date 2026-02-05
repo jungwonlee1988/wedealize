@@ -75,7 +75,7 @@ class AuthService {
                 companyName: this.pendingRegistration.company,
                 password: this.pendingRegistration.password,
                 country: this.pendingRegistration.country,
-                category: this.pendingRegistration.category
+                categories: this.pendingRegistration.categories
             });
 
             this.completeRegistration(response);
