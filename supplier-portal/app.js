@@ -673,6 +673,25 @@ function showDashboard() {
 // 초기 로드 시 로그인 상태 확인
 document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('supplier_logged_in') === 'true') {
+        const token = localStorage.getItem('supplier_token');
+        if (!token) {
+            handleSessionExpired();
+            return;
+        }
+
+        // JWT 토큰 만료 여부 로컬 확인
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            if (payload.exp && payload.exp * 1000 < Date.now()) {
+                handleSessionExpired();
+                return;
+            }
+        } catch (e) {
+            console.warn('Token decode failed:', e);
+            handleSessionExpired();
+            return;
+        }
+
         showDashboard();
     }
 
@@ -3950,6 +3969,11 @@ async function loadAccountListFromAPI() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
+        if (res.status === 401) {
+            handleSessionExpired();
+            return;
+        }
+
         if (!res.ok) throw new Error('Failed to load accounts');
         const accounts = await res.json();
 
@@ -3999,6 +4023,10 @@ async function deleteAccountFromAPI(accountId) {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
+        if (res.status === 401) {
+            handleSessionExpired();
+            return;
+        }
         if (!res.ok) throw new Error('Failed to delete account');
         showToast('Account deleted', 'success');
         loadAccountListFromAPI();
