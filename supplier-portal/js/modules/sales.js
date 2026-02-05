@@ -2,6 +2,7 @@
 // PO Management UI and interactions
 
 import poService from '../services/po.js';
+import api from '../services/api.js';
 import store from '../core/store.js';
 import eventBus, { Events } from '../core/eventBus.js';
 import toast from '../components/toast.js';
@@ -40,6 +41,183 @@ class SalesModule {
      */
     async loadPOList() {
         return await poService.loadPOList();
+    }
+
+    /**
+     * Load PI list from API
+     */
+    async loadPIList() {
+        try {
+            const piList = await api.get('/pi');
+            this.renderPITableRows(piList);
+            return piList;
+        } catch (error) {
+            console.error('Failed to load PI list:', error);
+            // Silently fail - keep existing demo data in HTML
+            return [];
+        }
+    }
+
+    /**
+     * Render PI list into table
+     */
+    renderPITableRows(piList) {
+        const tbody = $('#pi-table-body');
+        if (!tbody || !piList) return;
+
+        if (piList.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="wd-text-center wd-text-muted" style="padding: 40px;">
+                        No proforma invoices yet. Click "Create PI" to get started.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = piList.map(pi => {
+            const statusBadgeClass = {
+                draft: 'wd-badge-outline',
+                sent: 'wd-badge-primary',
+                cancelled: 'wd-badge-danger'
+            }[pi.status] || 'wd-badge-outline';
+
+            const paymentBadgeClass = pi.payment_status === 'paid' ? 'wd-badge-success' : 'wd-badge-warning';
+            const itemCount = pi.proforma_invoice_items?.length || 0;
+            const piDate = pi.pi_date ? new Date(pi.pi_date).toLocaleDateString() : '-';
+
+            return `
+                <tr data-status="${pi.status}" data-payment="${pi.payment_status}" data-id="${pi.id}">
+                    <td>
+                        <a href="#" class="wd-link pi-number" onclick="viewPIDetail('${pi.id}')">${pi.pi_number}</a>
+                    </td>
+                    <td>
+                        ${pi.po_number ? `<a href="#" class="wd-link po-ref" onclick="viewPOFromPI('${pi.po_number}')">${pi.po_number}</a>` : '<span class="wd-text-muted">-</span>'}
+                    </td>
+                    <td>
+                        <div class="wd-buyer-cell">
+                            <span class="buyer-name">${pi.buyer_name}</span>
+                            ${pi.buyer_country ? `<span class="wd-text-muted">${pi.buyer_country}</span>` : ''}
+                        </div>
+                    </td>
+                    <td>${piDate}</td>
+                    <td class="wd-text-right">$${parseFloat(pi.subtotal).toFixed(2)}</td>
+                    <td class="wd-text-right wd-text-success">${parseFloat(pi.credit_discount) > 0 ? `-$${parseFloat(pi.credit_discount).toFixed(2)}` : '-'}</td>
+                    <td class="wd-text-right wd-text-bold">$${parseFloat(pi.total_amount).toFixed(2)}</td>
+                    <td><span class="wd-badge ${statusBadgeClass}">${pi.status.charAt(0).toUpperCase() + pi.status.slice(1)}</span></td>
+                    <td>
+                        <div class="wd-action-btns">
+                            ${pi.status === 'draft' ? `<button class="wd-btn-text wd-btn-sm" onclick="sendPI('${pi.id}')">Send</button>` : ''}
+                            <button class="wd-btn-icon" onclick="editPI('${pi.id}')" title="Edit">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        // Apply current filter
+        this.filterPIList();
+    }
+
+    /**
+     * Load Credit list from API
+     */
+    async loadCreditList() {
+        try {
+            const creditList = await api.get('/credits');
+            this.renderCreditTableRows(creditList);
+            return creditList;
+        } catch (error) {
+            console.error('Failed to load credit list:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Render Credit list into table
+     */
+    renderCreditTableRows(creditList) {
+        const tbody = $('#credit-table-body');
+        if (!tbody || !creditList) return;
+
+        if (creditList.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="wd-text-center wd-text-muted" style="padding: 40px;">
+                        No credits yet. Click "New Credit" to register one.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = creditList.map(credit => {
+            const statusBadgeClass = {
+                draft: 'wd-badge-outline',
+                approved: 'wd-badge-success',
+                used: 'wd-badge-primary',
+                cancelled: 'wd-badge-danger'
+            }[credit.status] || 'wd-badge-outline';
+
+            const reasonLabels = {
+                damaged: 'Damaged',
+                quality: 'Quality Issue',
+                short: 'Short Shipment',
+                wrong: 'Wrong Item',
+                expired: 'Expired',
+                other: 'Other'
+            };
+
+            const createdDate = credit.created_at ? new Date(credit.created_at).toLocaleDateString() : '-';
+
+            return `
+                <tr data-status="${credit.status}" data-id="${credit.id}">
+                    <td>
+                        <a href="#" class="wd-link" onclick="viewCreditDetail('${credit.id}')">${credit.credit_number}</a>
+                    </td>
+                    <td>
+                        ${credit.invoice_number ? `<a href="#" class="wd-link" onclick="viewInvoiceFromCredit('${credit.invoice_number}')">${credit.invoice_number}</a>` : '<span class="wd-text-muted">-</span>'}
+                    </td>
+                    <td>
+                        <span class="buyer-name">${credit.buyer_name}</span>
+                    </td>
+                    <td>
+                        <span class="wd-product-name">${credit.product_name || '-'}</span>
+                    </td>
+                    <td>${reasonLabels[credit.reason] || credit.reason}</td>
+                    <td class="wd-text-right wd-text-bold">$${parseFloat(credit.amount).toFixed(2)}</td>
+                    <td><span class="wd-badge ${statusBadgeClass}">${credit.status.charAt(0).toUpperCase() + credit.status.slice(1)}</span></td>
+                    <td>${createdDate}</td>
+                    <td>
+                        <div class="wd-action-btns">
+                            ${credit.status === 'draft' ? `<button class="wd-btn-text wd-btn-sm" onclick="approveCredit('${credit.id}')">Approve</button>` : ''}
+                            <button class="wd-btn-icon" onclick="editCredit('${credit.id}')" title="Edit">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        // Apply current filter
+        this.filterCredits();
+    }
+
+    /**
+     * Approve a credit (draft → approved)
+     */
+    async approveCredit(creditId) {
+        try {
+            await api.patch(`/credits/${creditId}`, { status: 'approved' });
+            toast.success('Credit approved!');
+            this.loadCreditList();
+        } catch (error) {
+            toast.error(error.message || 'Failed to approve credit');
+        }
     }
 
     /**
@@ -150,20 +328,22 @@ class SalesModule {
     /**
      * Confirm PO
      */
-    async confirmPO(poNumber) {
+    async confirmPO(poId) {
         const confirmed = await modal.confirm({
             title: 'Confirm Order',
-            message: `Confirm order ${poNumber}?`,
+            message: `Confirm this purchase order?`,
             confirmText: 'Confirm',
             type: 'primary'
         });
 
         if (confirmed) {
-            await poService.confirmPO(poNumber);
-            toast.success(`Order ${poNumber} confirmed!`);
-
-            // Log activity
-            this.logActivity('confirmed', 'po', poNumber, poNumber);
+            try {
+                await poService.confirmPO(poId);
+                toast.success('Order confirmed!');
+                this.loadPOList();
+            } catch (error) {
+                toast.error(error.message || 'Failed to confirm PO');
+            }
         }
     }
 
@@ -205,26 +385,54 @@ class SalesModule {
         const tbody = $('#po-list-tbody');
         if (!tbody || !orders) return;
 
-        tbody.innerHTML = orders.map(order => `
-            <tr data-status="${order.status}" data-po="${order.poNumber}" data-buyer="${order.buyerName}">
+        if (orders.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;color:#888;">No purchase orders found</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = orders.map(order => {
+            const poNumber = order.po_number || order.poNumber || '';
+            const buyerName = order.buyer_name || order.buyerName || '';
+            const buyerCountry = order.buyer_country || order.country || '';
+            const status = order.status || '';
+            const totalAmount = order.total_amount ?? order.totalAmount ?? 0;
+            const currency = order.currency || 'USD';
+            const paymentTerms = order.payment_terms || order.paymentTerms || '-';
+            const incoterms = order.incoterms || '-';
+            const createdBy = order.created_by || order.createdBy || '-';
+            const updatedAt = order.updated_at || order.updatedAt || order.created_at || '';
+            const items = order.order_items || order.items || [];
+            const itemCount = typeof items === 'number' ? items : items.length;
+            const productName = Array.isArray(items) && items.length > 0
+                ? (items[0].product_name || items[0].productName || '-')
+                : '-';
+            const formattedAmount = typeof totalAmount === 'number'
+                ? `${currency} ${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`
+                : totalAmount;
+            const formattedDate = updatedAt ? new Date(updatedAt).toLocaleDateString() : '-';
+            const orderId = order.id || '';
+
+            return `
+            <tr data-status="${status}" data-po="${poNumber}" data-buyer="${buyerName}" data-id="${orderId}">
                 <td>
-                    <a href="#" class="po-number" onclick="viewPODetail('${order.poNumber}')">${order.poNumber}</a>
+                    <a href="#" class="po-number" onclick="viewPODetail('${orderId}')">${poNumber}</a>
                 </td>
+                <td><span class="status-badge ${status}">${this.getStatusLabel(status)}</span></td>
+                <td>${productName}${itemCount > 1 ? ` (+${itemCount - 1})` : ''}</td>
+                <td><span class="amount">${formattedAmount}</span></td>
                 <td>
                     <div class="buyer-cell">
-                        <span class="buyer-name">${order.buyerName}</span>
-                        <span class="buyer-country">${this.getCountryFlag(order.country)} ${order.country}</span>
+                        <span class="buyer-name">${buyerName}</span>
                     </div>
                 </td>
-                <td>${order.orderDate}</td>
-                <td>${order.items} items</td>
-                <td><span class="amount">${order.totalAmount}</span></td>
-                <td><span class="status-badge ${order.status}">${this.getStatusLabel(order.status)}</span></td>
+                <td>${paymentTerms}</td>
+                <td>${incoterms}</td>
+                <td>${formattedDate}</td>
                 <td>
-                    ${this.getActionButtons(order)}
+                    ${this.getPOActionButtons(order)}
                 </td>
-            </tr>
-        `).join('');
+            </tr>`;
+        }).join('');
 
         // Apply current filter after rendering
         this.filterPOList();
@@ -252,8 +460,10 @@ class SalesModule {
      */
     getStatusLabel(status) {
         const labels = {
+            draft: 'Draft',
             pending: 'Pending',
             confirmed: 'Confirmed',
+            shipping: 'Shipping',
             shipped: 'Shipped',
             delivered: 'Delivered',
             cancelled: 'Cancelled'
@@ -262,19 +472,31 @@ class SalesModule {
     }
 
     /**
-     * Get action buttons based on status
+     * Get PO action buttons based on status
      */
-    getActionButtons(order) {
-        switch (order.status) {
-            case 'pending':
-                return `<button class="btn btn-sm btn-primary" onclick="confirmPO('${order.poNumber}')">Confirm</button>`;
-            case 'confirmed':
-                return `<button class="btn btn-sm btn-outline" onclick="updateShipping('${order.poNumber}')">Update Shipping</button>`;
-            case 'shipped':
-                return `<button class="btn btn-sm btn-outline" onclick="trackShipment('${order.poNumber}')">Track</button>`;
-            default:
-                return `<button class="btn btn-sm btn-outline" onclick="viewPODetail('${order.poNumber}')">View</button>`;
+    getPOActionButtons(order) {
+        const orderId = order.id || '';
+        const poNumber = order.po_number || order.poNumber || '';
+        let buttons = '';
+
+        if (order.status === 'draft' || order.status === 'pending') {
+            buttons += `<button class="btn btn-sm btn-outline" onclick="editPO('${orderId}')" title="Edit">Edit</button> `;
+            buttons += `<button class="btn btn-sm btn-danger" onclick="deletePO('${orderId}')" title="Delete">Delete</button>`;
         }
+        if (order.status === 'pending') {
+            buttons = `<button class="btn btn-sm btn-primary" onclick="confirmPO('${orderId}')">Confirm</button> ` + buttons;
+        }
+        if (order.status === 'confirmed') {
+            buttons = `<button class="btn btn-sm btn-outline" onclick="viewPODetail('${orderId}')">View</button>`;
+        }
+        if (order.status === 'shipping' || order.status === 'shipped') {
+            buttons = `<button class="btn btn-sm btn-outline" onclick="viewPODetail('${orderId}')">Track</button>`;
+        }
+        if (!buttons) {
+            buttons = `<button class="btn btn-sm btn-outline" onclick="viewPODetail('${orderId}')">View</button>`;
+        }
+
+        return buttons;
     }
 
     /**
@@ -310,6 +532,45 @@ class SalesModule {
         }
 
         modalEl.style.display = 'flex';
+    }
+
+    /**
+     * Load credit data for editing
+     */
+    async loadCreditData(creditId) {
+        try {
+            const credit = await api.get(`/credits/${creditId}`);
+
+            const invoiceSelect = $('#credit-invoice-select');
+            if (invoiceSelect && credit.invoice_number) {
+                invoiceSelect.value = credit.invoice_number;
+            }
+
+            const reasonSelect = $('#credit-reason');
+            if (reasonSelect && credit.reason) {
+                reasonSelect.value = credit.reason;
+            }
+
+            const qtyInput = $('#credit-qty');
+            if (qtyInput && credit.affected_quantity) {
+                qtyInput.value = credit.affected_quantity;
+            }
+
+            const amountInput = $('#credit-amount');
+            if (amountInput && credit.amount) {
+                amountInput.value = credit.amount;
+            }
+
+            const descInput = $('#credit-description');
+            if (descInput && credit.description) {
+                descInput.value = credit.description;
+            }
+
+            // Store editing credit id
+            this._editingCreditId = creditId;
+        } catch (error) {
+            toast.error(error.message || 'Failed to load credit data');
+        }
     }
 
     /**
@@ -382,6 +643,38 @@ class SalesModule {
     }
 
     /**
+     * Save credit as draft
+     */
+    async saveCreditAsDraft() {
+        const creditData = this.collectCreditFormData();
+        creditData.status = 'draft';
+
+        if (!creditData.buyerName) {
+            toast.error('Please select an invoice to identify the buyer');
+            return;
+        }
+
+        if (!creditData.reason) {
+            toast.error('Please select a reason');
+            return;
+        }
+
+        try {
+            const result = await api.post('/credits', creditData);
+            toast.success('Credit saved as draft!');
+            this.closeCreditModal();
+
+            this.logActivity('created', 'credit', result.credit_number, `${result.credit_number} (Draft)`, {
+                status: 'draft'
+            });
+
+            this.loadCreditList();
+        } catch (error) {
+            toast.error(error.message || 'Failed to save credit as draft');
+        }
+    }
+
+    /**
      * Save credit
      */
     async saveCredit() {
@@ -391,25 +684,46 @@ class SalesModule {
             return;
         }
 
+        const creditData = this.collectCreditFormData();
+        creditData.status = 'approved';
+
+        if (!creditData.buyerName) {
+            toast.error('Please select an invoice to identify the buyer');
+            return;
+        }
+
+        try {
+            const result = await api.post('/credits', creditData);
+            toast.success('Credit submitted successfully!');
+            this.closeCreditModal();
+
+            this.logActivity('created', 'credit', result.credit_number, result.credit_number);
+
+            this.loadCreditList();
+        } catch (error) {
+            toast.error(error.message || 'Failed to submit credit');
+        }
+    }
+
+    /**
+     * Collect credit form data
+     */
+    collectCreditFormData() {
         const invoiceSelect = $('#credit-invoice-select');
         const selectedOption = invoiceSelect?.options[invoiceSelect.selectedIndex];
+        const productSelect = $('#credit-product-select');
+        const productOption = productSelect?.options[productSelect?.selectedIndex];
 
-        const creditData = {
-            invoiceNumber: invoiceSelect?.value,
+        return {
+            invoiceNumber: invoiceSelect?.value || null,
             buyerName: selectedOption?.dataset.buyer || '',
-            productSku: $('#credit-product-select')?.value,
-            reason: $('#credit-reason')?.value,
-            quantity: parseInt($('#credit-qty')?.value) || 0,
+            productName: productOption?.textContent?.split(' (')[0] || '',
+            productSku: productSelect?.value || null,
+            reason: $('#credit-reason')?.value || '',
+            affectedQuantity: parseInt($('#credit-qty')?.value) || 0,
             amount: parseFloat($('#credit-amount')?.value) || 0,
-            description: $('#credit-description')?.value
+            description: $('#credit-description')?.value || null
         };
-
-        // Demo: Show success
-        toast.success('Credit submitted successfully!');
-        this.closeCreditModal();
-
-        // TODO: API call to save credit
-        console.log('Credit data:', creditData);
     }
 
     /**
@@ -526,194 +840,12 @@ class SalesModule {
     // ==================== PI (Proforma Invoice) Management ====================
 
     /**
-     * Open PI modal for new or edit
-     */
-    openPIModal(piId = null) {
-        const modalEl = $('#pi-modal');
-        const titleEl = $('#pi-modal-title');
-        const form = $('#pi-form');
-
-        if (!modalEl) return;
-
-        // Reset form
-        if (form) form.reset();
-        this.clearPIItems();
-        this.clearPICredits();
-        this.updatePISummary();
-
-        if (piId) {
-            titleEl.textContent = 'Edit Proforma Invoice';
-            this.loadPIData(piId);
-        } else {
-            titleEl.textContent = 'Create Proforma Invoice';
-        }
-
-        modalEl.style.display = 'flex';
-    }
-
-    /**
      * Close PI modal
      */
     closePIModal() {
         const modalEl = $('#pi-modal');
         if (modalEl) {
             modalEl.style.display = 'none';
-        }
-    }
-
-    /**
-     * Load PO data when creating PI
-     * Credits are loaded based on Buyer, not PO
-     */
-    loadPOForPI() {
-        const poSelect = $('#pi-po-select');
-        const itemsContainer = $('#pi-items-container');
-        const creditsContainer = $('#pi-available-credits');
-        const creditBadge = $('#available-credit-badge');
-
-        if (!poSelect || !itemsContainer) return;
-
-        const poNumber = poSelect.value;
-        const selectedOption = poSelect.options[poSelect.selectedIndex];
-
-        if (!poNumber) {
-            this.clearPIItems();
-            this.clearPICredits();
-            this.updatePISummary();
-            this.hidePISections();
-            return;
-        }
-
-        // Show all sections when PO is selected
-        this.showPISections();
-
-        // Demo: PO items data with buyer info
-        const poData = {
-            'PO-2024-0156': {
-                buyer: 'ABC Distribution',
-                items: [
-                    { sku: 'OIL-001', name: 'Extra Virgin Olive Oil 500ml', qty: 100, price: 25.00 },
-                    { sku: 'OIL-002', name: 'Balsamic Vinegar 250ml', qty: 50, price: 18.00 }
-                ]
-            },
-            'PO-2024-0142': {
-                buyer: 'XYZ Foods Ltd',
-                items: [
-                    { sku: 'CHE-003', name: 'Aged Parmesan 24 months', qty: 30, price: 160.00 },
-                    { sku: 'CHE-001', name: 'Mozzarella Fresh 200g', qty: 80, price: 12.00 }
-                ]
-            },
-            'PO-2024-0138': {
-                buyer: 'Global Trade Co',
-                items: [
-                    { sku: 'HON-002', name: 'Organic Honey 350g', qty: 200, price: 18.00 },
-                    { sku: 'HON-001', name: 'Raw Honey 500g', qty: 150, price: 22.00 }
-                ]
-            }
-        };
-
-        // Demo: Credits by Buyer (not by PO)
-        // These are unused/approved credits from this buyer's previous invoices
-        const creditsByBuyer = {
-            'ABC Distribution': [
-                { id: 'CR-2024-001', invoiceRef: 'INV-2024-0089', reason: 'Damaged packaging', amount: 125.00, status: 'approved' }
-            ],
-            'XYZ Foods Ltd': [
-                { id: 'CR-2024-002', invoiceRef: 'INV-2024-0088', reason: 'Quality issue', amount: 320.00, status: 'approved' }
-            ],
-            'Global Trade Co': []  // No available credits
-        };
-
-        const data = poData[poNumber];
-        if (!data) {
-            this.clearPIItems();
-            this.clearPICredits();
-            return;
-        }
-
-        // Render items
-        const itemsTbody = $('#pi-items-tbody');
-        if (itemsTbody) {
-            itemsTbody.innerHTML = data.items.map((item, idx) => `
-                <tr data-sku="${item.sku}">
-                    <td>
-                        <div class="wd-product-cell">
-                            <span class="wd-product-name">${item.name}</span>
-                            <span class="wd-product-sku">SKU: ${item.sku}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <input type="number" class="wd-input wd-input-sm pi-qty" value="${item.qty}" min="1"
-                               onchange="updatePIItemTotal(${idx})" style="width: 70px;">
-                    </td>
-                    <td>
-                        <input type="number" class="wd-input wd-input-sm pi-price" value="${item.price}" min="0" step="0.01"
-                               onchange="updatePIItemTotal(${idx})" style="width: 90px;">
-                    </td>
-                    <td class="pi-item-total wd-text-right">$${(item.qty * item.price).toFixed(2)}</td>
-                </tr>
-            `).join('');
-        }
-
-        // Load credits based on Buyer (not PO)
-        const buyerCredits = creditsByBuyer[data.buyer] || [];
-        const totalAvailableCredit = buyerCredits.reduce((sum, c) => sum + c.amount, 0);
-
-        if (creditBadge) {
-            creditBadge.textContent = `$${totalAvailableCredit.toFixed(2)} available`;
-        }
-
-        if (creditsContainer) {
-            if (buyerCredits.length > 0) {
-                creditsContainer.innerHTML = buyerCredits.map(credit => `
-                    <div class="wd-credit-item">
-                        <label class="wd-checkbox-label">
-                            <input type="checkbox" class="pi-credit-check" value="${credit.id}"
-                                   data-amount="${credit.amount}" onchange="updatePISummary()">
-                            <div class="credit-info">
-                                <span class="credit-id">${credit.id}</span>
-                                <span class="credit-ref">from ${credit.invoiceRef}</span>
-                                <span class="credit-reason">${credit.reason}</span>
-                            </div>
-                            <span class="credit-amount wd-text-success">-$${credit.amount.toFixed(2)}</span>
-                        </label>
-                    </div>
-                `).join('');
-            } else {
-                creditsContainer.innerHTML = '<p class="wd-text-muted">No available credits for this buyer</p>';
-            }
-        }
-
-        this.updatePISummary();
-    }
-
-    /**
-     * Show PI form sections
-     */
-    showPISections() {
-        $('#pi-items-section')?.style && ($('#pi-items-section').style.display = 'block');
-        $('#pi-credit-section')?.style && ($('#pi-credit-section').style.display = 'block');
-        $('#pi-summary-section')?.style && ($('#pi-summary-section').style.display = 'block');
-        $('#pi-terms-section')?.style && ($('#pi-terms-section').style.display = 'block');
-    }
-
-    /**
-     * Hide PI form sections
-     */
-    hidePISections() {
-        $('#pi-items-section')?.style && ($('#pi-items-section').style.display = 'none');
-        $('#pi-credit-section')?.style && ($('#pi-credit-section').style.display = 'none');
-        $('#pi-summary-section')?.style && ($('#pi-summary-section').style.display = 'none');
-        $('#pi-terms-section')?.style && ($('#pi-terms-section').style.display = 'none');
-    }
-
-    /**
-     * Clear PI items
-     */
-    clearPIItems() {
-        const container = $('#pi-items-tbody');
-        if (container) {
-            container.innerHTML = '<tr><td colspan="4" class="wd-text-center wd-text-muted">Select a PO to load items</td></tr>';
         }
     }
 
@@ -732,33 +864,14 @@ class SalesModule {
     }
 
     /**
-     * Update PI item total when qty/price changes
-     */
-    updatePIItemTotal(index) {
-        const rows = $$('#pi-items-tbody tr');
-        if (!rows[index]) return;
-
-        const row = rows[index];
-        const qty = parseFloat(row.querySelector('.pi-qty')?.value) || 0;
-        const price = parseFloat(row.querySelector('.pi-price')?.value) || 0;
-        const totalCell = row.querySelector('.pi-item-total');
-
-        if (totalCell) {
-            totalCell.textContent = `$${(qty * price).toFixed(2)}`;
-        }
-
-        this.updatePISummary();
-    }
-
-    /**
      * Update PI summary (subtotal, credits, total)
      */
     updatePISummary() {
         // Calculate subtotal from items
         let subtotal = 0;
-        $$('#pi-items-tbody tr').forEach(row => {
-            const qty = parseFloat(row.querySelector('.pi-qty')?.value) || 0;
-            const price = parseFloat(row.querySelector('.pi-price')?.value) || 0;
+        $$('#pi-items-tbody tr:not(.wd-empty-row)').forEach(row => {
+            const qty = parseFloat(row.querySelector('.pi-item-qty')?.value || row.querySelector('.pi-qty')?.value) || 0;
+            const price = parseFloat(row.querySelector('.pi-item-price')?.value || row.querySelector('.pi-price')?.value) || 0;
             subtotal += qty * price;
         });
 
@@ -865,17 +978,22 @@ class SalesModule {
     /**
      * Send PI to buyer
      */
-    async sendPI(piNumber) {
+    async sendPI(piId) {
         const confirmed = await modal.confirm({
             title: 'Send Proforma Invoice',
-            message: `Send ${piNumber} to the buyer?`,
+            message: `Send this PI to the buyer?`,
             confirmText: 'Send',
             type: 'primary'
         });
 
         if (confirmed) {
-            toast.success(`${piNumber} sent to buyer!`);
-            // TODO: API call to send PI
+            try {
+                await api.post(`/pi/${piId}/send`);
+                toast.success('PI sent to buyer!');
+                this.loadPIList();
+            } catch (error) {
+                toast.error(error.message || 'Failed to send PI');
+            }
         }
     }
 
@@ -896,25 +1014,31 @@ class SalesModule {
     async saveAsDraft() {
         const piData = this.collectPIFormData();
 
-        if (!piData.poNumber) {
-            toast.error('Please select a PO');
+        if (!piData.items || piData.items.length === 0) {
+            toast.error('Please add at least one item');
             return;
         }
 
-        // Generate PI number
-        const piNumber = this.generatePINumber();
+        if (!piData.buyerName) {
+            toast.error('Please select a buyer');
+            return;
+        }
 
-        toast.success('PI saved as draft!');
-        this.closePIModal();
+        try {
+            const result = await api.post('/pi', { ...piData, status: 'draft' });
+            toast.success('PI saved as draft!');
+            this.closePIModal();
 
-        // Log activity
-        this.logActivity('created', 'pi', piNumber, `${piNumber} (Draft)`, {
-            poNumber: piData.poNumber,
-            status: 'draft'
-        });
+            this.logActivity('created', 'pi', result.pi_number, `${result.pi_number} (Draft)`, {
+                poNumber: piData.poNumber,
+                status: 'draft'
+            });
 
-        // TODO: API call to save draft
-        console.log('PI Draft:', piData);
+            // Refresh PI list
+            this.loadPIList();
+        } catch (error) {
+            toast.error(error.message || 'Failed to save PI as draft');
+        }
     }
 
     /**
@@ -923,8 +1047,13 @@ class SalesModule {
     async createAndSendPI() {
         const piData = this.collectPIFormData();
 
-        if (!piData.poNumber) {
-            toast.error('Please select a PO');
+        if (!piData.items || piData.items.length === 0) {
+            toast.error('Please add at least one item');
+            return;
+        }
+
+        if (!piData.buyerName) {
+            toast.error('Please select a buyer');
             return;
         }
 
@@ -936,20 +1065,21 @@ class SalesModule {
         });
 
         if (confirmed) {
-            // Generate PI number
-            const piNumber = this.generatePINumber();
+            try {
+                const result = await api.post('/pi', { ...piData, status: 'sent' });
+                toast.success('PI created and sent to buyer!');
+                this.closePIModal();
 
-            toast.success('PI created and sent to buyer!');
-            this.closePIModal();
+                this.logActivity('sent', 'pi', result.pi_number, result.pi_number, {
+                    poNumber: piData.poNumber,
+                    buyer: piData.buyerName
+                });
 
-            // Log activity
-            this.logActivity('sent', 'pi', piNumber, piNumber, {
-                poNumber: piData.poNumber,
-                buyer: piData.buyer
-            });
-
-            // TODO: API call to create and send PI
-            console.log('PI Data:', piData);
+                // Refresh PI list
+                this.loadPIList();
+            } catch (error) {
+                toast.error(error.message || 'Failed to create and send PI');
+            }
         }
     }
 
@@ -972,18 +1102,29 @@ class SalesModule {
         const poText = selectedOption?.text || '';
         // Extract buyer name from option text (e.g., "PO-2024-0156 - ABC Distribution (Feb 01, 2024)")
         const buyerMatch = poText.match(/- (.+?) \(/);
-        const buyerName = buyerMatch ? buyerMatch[1] : '';
+
+        // Try buyer select first (enhanced modal), fall back to PO-based buyer
+        const buyerSelect = $('#pi-buyer-select');
+        const buyerOption = buyerSelect?.options[buyerSelect?.selectedIndex];
+        const buyerName = buyerOption?.dataset?.name || (buyerMatch ? buyerMatch[1] : '');
 
         const items = [];
-        $$('#pi-items-tbody tr').forEach(row => {
-            const sku = row.dataset.sku;
-            if (!sku) return;
+        $$('#pi-items-tbody tr:not(.wd-empty-row)').forEach(row => {
+            const name = row.querySelector('.pi-item-name')?.value || row.querySelector('.wd-product-name')?.textContent || '';
+            const sku = row.querySelector('.pi-item-sku')?.value || row.dataset.sku || '';
+            const qty = parseInt(row.querySelector('.pi-item-qty')?.value || row.querySelector('.pi-qty')?.value) || 0;
+            const unit = row.querySelector('.pi-item-unit')?.value || 'pcs';
+            const price = parseFloat(row.querySelector('.pi-item-price')?.value || row.querySelector('.pi-price')?.value) || 0;
 
-            items.push({
-                sku: sku,
-                qty: parseInt(row.querySelector('.pi-qty')?.value) || 0,
-                price: parseFloat(row.querySelector('.pi-price')?.value) || 0
-            });
+            if (name && qty > 0) {
+                items.push({
+                    productName: name,
+                    productSku: sku,
+                    quantity: qty,
+                    unit: unit,
+                    unitPrice: price
+                });
+            }
         });
 
         const appliedCredits = [];
@@ -995,22 +1136,65 @@ class SalesModule {
         });
 
         return {
-            poNumber: poSelect?.value,
+            poNumber: poSelect?.value || null,
             buyerName: buyerName,
+            buyerEmail: buyerOption?.dataset?.email || null,
+            buyerCountry: buyerOption?.dataset?.country || null,
+            piDate: $('#pi-date')?.value || new Date().toISOString().split('T')[0],
+            validUntil: $('#pi-valid-until')?.value || null,
             items: items,
             appliedCredits: appliedCredits,
-            paymentMethod: $('#pi-payment-method')?.value,
-            validUntil: $('#pi-valid-until')?.value,
-            remarks: $('#pi-remarks')?.value
+            currency: $('#pi-currency')?.value || 'USD',
+            incoterms: $('#pi-incoterms')?.value || null,
+            paymentMethod: $('#pi-payment-method')?.value || null,
+            remarks: $('#pi-remarks')?.value || null
         };
     }
 
     /**
      * Load PI data for editing
      */
-    loadPIData(piId) {
-        // TODO: Load PI data from API
-        toast.info(`Loading PI ${piId}...`);
+    async loadPIData(piId) {
+        try {
+            const pi = await api.get(`/pi/${piId}`);
+            // Populate form fields
+            const dateInput = $('#pi-date');
+            if (dateInput && pi.pi_date) dateInput.value = pi.pi_date;
+
+            const validInput = $('#pi-valid-until');
+            if (validInput && pi.valid_until) validInput.value = pi.valid_until;
+
+            const currencyInput = $('#pi-currency');
+            if (currencyInput && pi.currency) currencyInput.value = pi.currency;
+
+            const incotermsInput = $('#pi-incoterms');
+            if (incotermsInput && pi.incoterms) incotermsInput.value = pi.incoterms;
+
+            const paymentInput = $('#pi-payment-method');
+            if (paymentInput && pi.payment_method) paymentInput.value = pi.payment_method;
+
+            const remarksInput = $('#pi-remarks');
+            if (remarksInput && pi.remarks) remarksInput.value = pi.remarks;
+
+            // Load items
+            if (pi.proforma_invoice_items && pi.proforma_invoice_items.length > 0) {
+                const tbody = $('#pi-items-tbody');
+                if (tbody) {
+                    tbody.innerHTML = '';
+                    this.piItemCounter = 0;
+                    pi.proforma_invoice_items.forEach(item => {
+                        this.addItemRowToPI(item.product_sku, item.product_name, item.quantity, item.unit, parseFloat(item.unit_price));
+                    });
+                }
+            }
+
+            this.updatePISummary();
+
+            // Store editing PI id
+            this._editingPIId = piId;
+        } catch (error) {
+            toast.error(error.message || 'Failed to load PI data');
+        }
     }
 
     /**
@@ -1026,16 +1210,18 @@ class SalesModule {
     // ==================== PO Manual Registration ====================
 
     /**
-     * Open Add PO modal
+     * Open Add PO modal (or edit if poId provided)
      */
-    openAddPOModal() {
+    openAddPOModal(poId = null) {
         const modalEl = $('#add-po-modal');
         const form = $('#add-po-form');
+        const titleEl = modalEl?.querySelector('.wd-modal-title, .modal-title, h2, h3');
 
         if (!modalEl) return;
 
         // Reset form
         if (form) form.reset();
+        this.editingPOId = null;
 
         // Clear uploaded files
         const uploadedFile = $('#po-uploaded-file');
@@ -1049,6 +1235,14 @@ class SalesModule {
         const today = new Date().toISOString().split('T')[0];
         const orderDateInput = $('#add-po-date');
         if (orderDateInput) orderDateInput.value = today;
+
+        if (poId) {
+            this.editingPOId = poId;
+            if (titleEl) titleEl.textContent = 'Edit Purchase Order';
+            this.loadPOData(poId);
+        } else {
+            if (titleEl) titleEl.textContent = 'Add Purchase Order';
+        }
 
         modalEl.style.display = 'flex';
     }
@@ -1374,6 +1568,50 @@ class SalesModule {
     }
 
     /**
+     * Save PO as draft
+     */
+    async savePOAsDraft() {
+        try {
+            const rawItems = this.collectPOItems();
+            const items = rawItems.map(item => ({
+                productName: item.name,
+                quantity: item.quantity,
+                unit: item.unit,
+                unitPrice: item.unitPrice,
+            }));
+
+            const poData = {
+                poNumber: $('#add-po-number')?.value || undefined,
+                orderDate: $('#add-po-date')?.value || undefined,
+                buyerName: $('#add-po-buyer-company')?.value,
+                buyerContact: $('#add-po-buyer-contact')?.value || undefined,
+                buyerEmail: $('#add-po-buyer-email')?.value || undefined,
+                buyerPhone: $('#add-po-buyer-phone')?.value || undefined,
+                buyerAddress: $('#add-po-buyer-address')?.value || undefined,
+                currency: $('#add-po-currency')?.value || 'USD',
+                incoterms: $('#add-po-incoterms')?.value || undefined,
+                paymentTerms: $('#add-po-payment-terms')?.value || undefined,
+                items,
+                notes: $('#add-po-notes')?.value || undefined,
+                status: 'draft'
+            };
+
+            if (this.editingPOId) {
+                await api.patch(`/po/${this.editingPOId}`, poData);
+                toast.success('PO draft updated!');
+            } else {
+                await poService.createPO(poData);
+                toast.success('PO saved as draft!');
+            }
+
+            this.closeAddPOModal();
+            this.loadPOList();
+        } catch (error) {
+            toast.error(error.message || 'Failed to save PO draft');
+        }
+    }
+
+    /**
      * Save PO (manual registration)
      */
     async savePO() {
@@ -1383,53 +1621,56 @@ class SalesModule {
             return;
         }
 
-        // Collect form data
-        const poData = {
-            poNumber: $('#add-po-number')?.value || this.generatePONumber(),
-            orderDate: $('#add-po-date')?.value,
-            buyer: {
-                company: $('#add-po-buyer-company')?.value,
-                contact: $('#add-po-buyer-contact')?.value,
-                email: $('#add-po-buyer-email')?.value,
-                phone: $('#add-po-buyer-phone')?.value,
-                address: $('#add-po-buyer-address')?.value
-            },
-            tradeTerms: {
-                currency: $('#add-po-currency')?.value,
-                incoterms: $('#add-po-incoterms')?.value,
-                paymentTerms: $('#add-po-payment-terms')?.value
-            },
-            items: this.collectPOItems(),
-            notes: $('#add-po-notes')?.value,
-            attachments: this.poUploadedFiles || []
-        };
-
-        // Validate required fields
-        if (!poData.buyer.company) {
+        const buyerCompany = $('#add-po-buyer-company')?.value;
+        if (!buyerCompany) {
             toast.error('Buyer company is required');
             return;
         }
 
-        if (poData.items.length === 0 || !poData.items.some(item => item.name)) {
+        const rawItems = this.collectPOItems();
+        if (rawItems.length === 0 || !rawItems.some(item => item.name)) {
             toast.error('At least one product item is required');
             return;
         }
 
-        // Demo: Show success
-        toast.success(`PO ${poData.poNumber} registered successfully!`);
-        this.closeAddPOModal();
+        const items = rawItems.map(item => ({
+            productName: item.name,
+            quantity: item.quantity,
+            unit: item.unit,
+            unitPrice: item.unitPrice,
+        }));
 
-        // Log activity
-        this.logActivity('registered', 'po', poData.poNumber, poData.poNumber, {
-            buyer: poData.buyer.company,
-            itemCount: poData.items.length
-        });
+        const poData = {
+            poNumber: $('#add-po-number')?.value || undefined,
+            orderDate: $('#add-po-date')?.value || undefined,
+            buyerName: buyerCompany,
+            buyerContact: $('#add-po-buyer-contact')?.value || undefined,
+            buyerEmail: $('#add-po-buyer-email')?.value || undefined,
+            buyerPhone: $('#add-po-buyer-phone')?.value || undefined,
+            buyerAddress: $('#add-po-buyer-address')?.value || undefined,
+            currency: $('#add-po-currency')?.value || 'USD',
+            incoterms: $('#add-po-incoterms')?.value || undefined,
+            paymentTerms: $('#add-po-payment-terms')?.value || undefined,
+            items,
+            notes: $('#add-po-notes')?.value || undefined,
+            status: 'pending'
+        };
 
-        // TODO: API call to save PO
-        console.log('PO Data:', poData);
+        try {
+            if (this.editingPOId) {
+                await api.patch(`/po/${this.editingPOId}`, poData);
+                toast.success('PO updated successfully!');
+            } else {
+                const result = await poService.createPO(poData);
+                const poNum = result?.po_number || poData.poNumber || 'PO';
+                toast.success(`PO ${poNum} registered successfully!`);
+            }
 
-        // Refresh PO list
-        this.loadPOList();
+            this.closeAddPOModal();
+            this.loadPOList();
+        } catch (error) {
+            toast.error(error.message || 'Failed to save PO');
+        }
     }
 
     /**
@@ -1465,6 +1706,84 @@ class SalesModule {
         });
 
         return items;
+    }
+
+    /**
+     * Load PO data into form for editing
+     */
+    async loadPOData(poId) {
+        try {
+            const data = await poService.getPODetail(poId);
+            if (!data) return;
+
+            const setVal = (sel, val) => { const el = $(sel); if (el && val) el.value = val; };
+
+            setVal('#add-po-number', data.po_number);
+            setVal('#add-po-date', data.order_date ? data.order_date.split('T')[0] : '');
+            setVal('#add-po-buyer-company', data.buyer_name);
+            setVal('#add-po-buyer-contact', data.buyer_contact);
+            setVal('#add-po-buyer-email', data.buyer_email);
+            setVal('#add-po-buyer-phone', data.buyer_phone);
+            setVal('#add-po-buyer-address', data.buyer_address);
+            setVal('#add-po-currency', data.currency);
+            setVal('#add-po-incoterms', data.incoterms);
+            setVal('#add-po-payment-terms', data.payment_terms);
+            setVal('#add-po-notes', data.notes);
+
+            // Populate items
+            const items = data.order_items || [];
+            if (items.length > 0) {
+                const tbody = $('#add-po-items-tbody');
+                if (!tbody) return;
+
+                tbody.innerHTML = items.map((item, idx) => `
+                    <tr data-row="${idx}">
+                        <td><input type="text" class="wd-input wd-input-sm po-item-name" required placeholder="Product name" value="${item.product_name || ''}"></td>
+                        <td><input type="number" class="wd-input wd-input-sm po-item-qty" required min="1" value="${item.quantity || 1}" onchange="calculatePOItemSubtotal(${idx})"></td>
+                        <td>
+                            <select class="wd-select wd-select-sm po-item-unit">
+                                ${['pcs', 'boxes', 'cases', 'pallets', 'kg', 'lbs', 'liters'].map(u =>
+                                    `<option value="${u}" ${(item.unit || 'pcs') === u ? 'selected' : ''}>${u}</option>`
+                                ).join('')}
+                            </select>
+                        </td>
+                        <td><input type="number" class="wd-input wd-input-sm po-item-price" required min="0" step="0.01" value="${item.unit_price || 0}" onchange="calculatePOItemSubtotal(${idx})"></td>
+                        <td class="po-item-subtotal wd-text-right wd-text-bold">${((item.quantity || 0) * (item.unit_price || 0)).toFixed(2)}</td>
+                        <td>
+                            <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removePOItemRow(${idx})" title="Remove">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                this.updatePOTotal();
+            }
+        } catch (error) {
+            toast.error('Failed to load PO data');
+        }
+    }
+
+    /**
+     * Delete PO
+     */
+    async deletePO(poId) {
+        if (!confirm('Are you sure you want to delete this purchase order?')) return;
+
+        try {
+            await poService.deletePO(poId);
+            toast.success('PO deleted successfully');
+            this.loadPOList();
+        } catch (error) {
+            toast.error(error.message || 'Failed to delete PO');
+        }
+    }
+
+    /**
+     * Edit PO - opens modal in edit mode
+     */
+    editPO(poId) {
+        this.openAddPOModal(poId);
     }
 
     // ==================== Account Management ====================
@@ -1986,48 +2305,54 @@ class SalesModule {
     /**
      * Load credits for buyer
      */
-    loadCreditsForBuyer(buyerId) {
+    async loadCreditsForBuyer(buyerNameOrId) {
         const creditSection = $('#pi-credit-section');
         const creditsContainer = $('#pi-available-credits');
         const creditBadge = $('#available-credit-badge');
 
         if (!creditSection || !creditsContainer) return;
 
-        // Demo credits by buyer
-        const creditsByBuyer = {
-            'ACC-001': [
-                { id: 'CR-2024-001', invoiceRef: 'INV-2024-0089', reason: 'Damaged packaging', amount: 125.00 }
-            ],
-            'ACC-002': [
-                { id: 'CR-2024-002', invoiceRef: 'INV-2024-0088', reason: 'Quality issue', amount: 320.00 }
-            ],
-            'ACC-003': []
-        };
+        // Get buyer name from the buyer select option
+        const buyerSelect = $('#pi-buyer-select');
+        const buyerOption = buyerSelect?.options[buyerSelect?.selectedIndex];
+        const buyerName = buyerOption?.dataset?.name || buyerNameOrId || '';
 
-        const buyerCredits = creditsByBuyer[buyerId] || [];
-        const totalCredit = buyerCredits.reduce((sum, c) => sum + c.amount, 0);
-
-        if (creditBadge) {
-            creditBadge.textContent = `$${totalCredit.toFixed(2)} available`;
+        if (!buyerName) {
+            creditSection.style.display = 'none';
+            return;
         }
 
-        if (buyerCredits.length > 0) {
-            creditSection.style.display = 'block';
-            creditsContainer.innerHTML = buyerCredits.map(credit => `
-                <div class="wd-credit-item">
-                    <label class="wd-checkbox-label">
-                        <input type="checkbox" class="pi-credit-check" value="${credit.id}"
-                               data-amount="${credit.amount}" onchange="updatePISummary()">
-                        <div class="credit-info">
-                            <span class="credit-id">${credit.id}</span>
-                            <span class="credit-ref">from ${credit.invoiceRef}</span>
-                            <span class="credit-reason">${credit.reason}</span>
-                        </div>
-                        <span class="credit-amount wd-text-success">-$${credit.amount.toFixed(2)}</span>
-                    </label>
-                </div>
-            `).join('');
-        } else {
+        try {
+            const buyerCredits = await api.get(`/credits/buyer/${encodeURIComponent(buyerName)}`);
+            const totalCredit = buyerCredits.reduce((sum, c) => sum + parseFloat(c.amount), 0);
+
+            if (creditBadge) {
+                creditBadge.textContent = `$${totalCredit.toFixed(2)} available`;
+            }
+
+            if (buyerCredits.length > 0) {
+                creditSection.style.display = 'block';
+                creditsContainer.innerHTML = buyerCredits.map(credit => `
+                    <div class="wd-credit-item">
+                        <label class="wd-checkbox-label">
+                            <input type="checkbox" class="pi-credit-check" value="${credit.id}"
+                                   data-amount="${credit.amount}" onchange="updatePISummary()">
+                            <div class="credit-info">
+                                <span class="credit-id">${credit.credit_number}</span>
+                                <span class="credit-ref">from ${credit.invoice_number || 'N/A'}</span>
+                                <span class="credit-reason">${credit.reason}</span>
+                            </div>
+                            <span class="credit-amount wd-text-success">-$${parseFloat(credit.amount).toFixed(2)}</span>
+                        </label>
+                    </div>
+                `).join('');
+            } else {
+                creditSection.style.display = 'none';
+                creditsContainer.innerHTML = '<p class="wd-text-muted">No available credits for this buyer</p>';
+            }
+        } catch (error) {
+            console.error('Failed to load credits for buyer:', error);
+            // Fallback: hide credit section
             creditSection.style.display = 'none';
             creditsContainer.innerHTML = '<p class="wd-text-muted">No available credits for this buyer</p>';
         }
@@ -2572,7 +2897,7 @@ class SalesModule {
         if (event) event.preventDefault();
 
         const email = $('#invite-email')?.value;
-        const role = $('#invite-role')?.value;
+        const role = $('#invite-role')?.value || 'member';
         const message = $('#invite-message')?.value;
 
         if (!email) {
@@ -2580,18 +2905,33 @@ class SalesModule {
             return;
         }
 
-        // TODO: API call to send invite
-        toast.success(`Invitation sent to ${email}`);
-        this.closeInviteMemberModal();
+        const submitBtn = $('#invite-member-form')?.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+        }
 
-        // Add pending member to table
-        this.addPendingMember(email, role);
+        try {
+            const result = await api.post('/team/invite', { email, role, message });
+            toast.success(`Invitation sent to ${email}`);
+            this.closeInviteMemberModal();
+
+            // Add pending member to table with real ID
+            this.addPendingMember(email, role, result.member?.id);
+        } catch (error) {
+            toast.error(error.message || 'Failed to send invitation');
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Invite';
+            }
+        }
     }
 
     /**
      * Add pending member to table
      */
-    addPendingMember(email, role) {
+    addPendingMember(email, role, memberId) {
         const tbody = $('#team-members-tbody');
         if (!tbody) return;
 
@@ -2602,8 +2942,10 @@ class SalesModule {
             viewer: { text: 'Viewer', class: 'wd-badge-outline' }
         };
         const roleInfo = roleLabels[role] || roleLabels.member;
+        const rowId = memberId || initials;
 
         const newRow = document.createElement('tr');
+        newRow.dataset.memberId = rowId;
         newRow.innerHTML = `
             <td>
                 <div class="wd-member-cell">
@@ -2619,8 +2961,8 @@ class SalesModule {
             <td>Invite sent</td>
             <td>
                 <div class="wd-action-btns">
-                    <button class="wd-btn-text wd-btn-sm" onclick="resendInvite('${initials}')">Resend</button>
-                    <button class="wd-btn-icon wd-btn-icon-danger" onclick="cancelInvite('${initials}')" title="Cancel">
+                    <button class="wd-btn-text wd-btn-sm" onclick="resendInvite('${rowId}')">Resend</button>
+                    <button class="wd-btn-icon wd-btn-icon-danger" onclick="cancelInvite('${rowId}')" title="Cancel">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                 </div>
@@ -2643,47 +2985,76 @@ class SalesModule {
     /**
      * Remove team member
      */
-    removeMember(memberId) {
+    async removeMember(memberId) {
         if (confirm('Are you sure you want to remove this team member?')) {
-            // Find and remove the row
-            const tbody = $('#team-members-tbody');
-            const rows = tbody?.querySelectorAll('tr');
-            rows?.forEach(row => {
-                const avatar = row.querySelector('.wd-member-avatar');
-                if (avatar && avatar.textContent.trim() === memberId) {
-                    row.remove();
-                }
-            });
+            try {
+                await api.delete(`/team/members/${memberId}`);
 
-            toast.success('Team member removed');
-            this.updateTeamMemberCountDisplay();
+                // Find and remove the row
+                const tbody = $('#team-members-tbody');
+                const row = tbody?.querySelector(`tr[data-member-id="${memberId}"]`);
+                if (row) {
+                    row.remove();
+                } else {
+                    // Fallback: find by avatar text
+                    const rows = tbody?.querySelectorAll('tr');
+                    rows?.forEach(r => {
+                        const avatar = r.querySelector('.wd-member-avatar');
+                        if (avatar && avatar.textContent.trim() === memberId) {
+                            r.remove();
+                        }
+                    });
+                }
+
+                toast.success('Team member removed');
+                this.updateTeamMemberCountDisplay();
+            } catch (error) {
+                toast.error(error.message || 'Failed to remove team member');
+            }
         }
     }
 
     /**
      * Resend invite
      */
-    resendInvite(memberId) {
-        toast.success('Invitation resent successfully');
+    async resendInvite(memberId) {
+        try {
+            await api.post(`/team/resend-invite/${memberId}`);
+            toast.success('Invitation resent successfully');
+        } catch (error) {
+            toast.error(error.message || 'Failed to resend invitation');
+        }
     }
 
     /**
      * Cancel invite
      */
-    cancelInvite(memberId) {
+    async cancelInvite(memberId) {
         if (confirm('Are you sure you want to cancel this invitation?')) {
-            // Find and remove the row
-            const tbody = $('#team-members-tbody');
-            const rows = tbody?.querySelectorAll('tr');
-            rows?.forEach(row => {
-                const avatar = row.querySelector('.wd-member-avatar');
-                if (avatar && avatar.textContent.trim() === memberId) {
-                    row.remove();
-                }
-            });
+            try {
+                await api.delete(`/team/members/${memberId}`);
 
-            toast.info('Invitation cancelled');
-            this.updateTeamMemberCountDisplay();
+                // Find and remove the row
+                const tbody = $('#team-members-tbody');
+                const row = tbody?.querySelector(`tr[data-member-id="${memberId}"]`);
+                if (row) {
+                    row.remove();
+                } else {
+                    // Fallback: find by avatar text
+                    const rows = tbody?.querySelectorAll('tr');
+                    rows?.forEach(r => {
+                        const avatar = r.querySelector('.wd-member-avatar');
+                        if (avatar && avatar.textContent.trim() === memberId) {
+                            r.remove();
+                        }
+                    });
+                }
+
+                toast.info('Invitation cancelled');
+                this.updateTeamMemberCountDisplay();
+            } catch (error) {
+                toast.error(error.message || 'Failed to cancel invitation');
+            }
         }
     }
 
@@ -3014,7 +3385,7 @@ window.searchPO = () => salesModule.searchPO();
 window.toggleStatusFilter = (event) => salesModule.toggleStatusFilter(event);
 window.applyStatusFilter = (status) => salesModule.applyStatusFilter(status);
 window.viewPODetail = (poNumber) => salesModule.viewPODetail(poNumber);
-window.confirmPO = (poNumber) => salesModule.confirmPO(poNumber);
+window.confirmPO = (poId) => salesModule.confirmPO(poId);
 window.updateShipping = (poNumber) => salesModule.updateShipping(poNumber);
 window.trackShipment = (poNumber) => salesModule.trackShipment(poNumber);
 window.exportPOList = () => salesModule.exportPOList();
@@ -3025,6 +3396,7 @@ window.closeCreditModal = () => salesModule.closeCreditModal();
 window.loadInvoiceProducts = () => salesModule.loadInvoiceProducts();
 window.handleCreditFiles = (event) => salesModule.handleCreditFiles(event);
 window.saveCredit = () => salesModule.saveCredit();
+window.saveCreditAsDraft = () => salesModule.saveCreditAsDraft();
 window.filterCredits = () => salesModule.filterCredits();
 window.viewCreditDetail = (creditId) => salesModule.viewCreditDetail(creditId);
 window.editCredit = (creditId) => salesModule.editCredit(creditId);
@@ -3033,12 +3405,15 @@ window.exportCredits = () => salesModule.exportCredits();
 window.toggleCreditStatusFilter = (event) => salesModule.toggleCreditStatusFilter(event);
 window.applyCreditStatusFilter = (status) => salesModule.applyCreditStatusFilter(status);
 window.sortCreditTable = (column) => salesModule.sortCreditTable(column);
+window.approveCredit = (creditId) => salesModule.approveCredit(creditId);
+window.loadPIList = () => salesModule.loadPIList();
+window.loadCreditList = () => salesModule.loadCreditList();
 
 // PI (Proforma Invoice) Management global functions
 window.openPIModal = (piId) => salesModule.openPIModal(piId);
 window.closePIModal = () => salesModule.closePIModal();
 window.loadPOForPI = () => salesModule.loadPOForPI();
-window.updatePIItemTotal = (index) => salesModule.updatePIItemTotal(index);
+window.updatePIItemTotal = (index) => salesModule.updatePIItemRow(index);
 window.updatePISummary = () => salesModule.updatePISummary();
 window.filterPIList = () => salesModule.filterPIList();
 window.viewPI = (piNumber) => salesModule.viewPI(piNumber);
@@ -3082,8 +3457,10 @@ window.applyAccountPIFilter = (status) => salesModule.applyAccountPIFilter(statu
 window.sortAccountTable = (column) => salesModule.sortAccountTable(column);
 
 // PO Manual Registration global functions
-window.openAddPOModal = () => salesModule.openAddPOModal();
+window.openAddPOModal = (poId) => salesModule.openAddPOModal(poId);
 window.closeAddPOModal = () => salesModule.closeAddPOModal();
+window.editPO = (poId) => salesModule.editPO(poId);
+window.deletePO = (poId) => salesModule.deletePO(poId);
 window.handlePOFileUpload = (event) => salesModule.handlePOFileUpload(event);
 window.removePOFile = () => salesModule.removePOFile();
 window.addPOItemRow = () => salesModule.addPOItemRow();
@@ -3092,6 +3469,7 @@ window.calculatePOItemSubtotal = (rowIndex) => salesModule.calculatePOItemSubtot
 window.updatePOTotal = () => salesModule.updatePOTotal();
 window.updatePOCurrency = () => salesModule.updatePOTotal();
 window.savePO = () => salesModule.savePO();
+window.savePOAsDraft = () => salesModule.savePOAsDraft();
 window.onPOProductSelect = (rowIndex) => salesModule.onPOProductSelect(rowIndex);
 
 // Buyer Discovery global functions

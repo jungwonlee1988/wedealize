@@ -10,15 +10,13 @@ class POService {
     /**
      * Load PO list
      */
-    async loadPOList() {
-        const supplierId = store.get('auth.supplierId') || '1';
-
+    async loadPOList(params = {}) {
         try {
-            const data = await api.get(`/po/${supplierId}`);
-            store.set('po.items', data.orders);
-            eventBus.emit(Events.PO_LOADED, data.orders);
-            return data.orders;
-
+            const data = await api.get('/po', params);
+            const orders = Array.isArray(data) ? data : (data.orders || []);
+            store.set('po.items', orders);
+            eventBus.emit(Events.PO_LOADED, orders);
+            return orders;
         } catch (error) {
             console.log('Using demo PO data');
             const demoPO = this.getDemoPOData();
@@ -29,44 +27,68 @@ class POService {
     }
 
     /**
-     * Get PO details
-     * @param {string} poNumber - PO number
+     * Get PO details by ID
+     * @param {string} poId - PO ID
      */
-    async getPODetail(poNumber) {
+    async getPODetail(poId) {
         try {
-            const data = await api.get(`/po/detail/${poNumber}`);
+            const data = await api.get(`/po/${poId}`);
             return data;
         } catch (error) {
-            // Demo data
-            return this.getDemoPODetail(poNumber);
+            return this.getDemoPODetail(poId);
         }
     }
 
     /**
-     * Confirm PO
-     * @param {string} poNumber - PO number
+     * Create PO
+     * @param {Object} poData - PO data
      */
-    async confirmPO(poNumber) {
+    async createPO(poData) {
+        return api.post('/po', poData);
+    }
+
+    /**
+     * Update PO
+     * @param {string} poId - PO ID
+     * @param {Object} poData - PO data
+     */
+    async updatePO(poId, poData) {
+        return api.patch(`/po/${poId}`, poData);
+    }
+
+    /**
+     * Delete PO
+     * @param {string} poId - PO ID
+     */
+    async deletePO(poId) {
+        return api.delete(`/po/${poId}`);
+    }
+
+    /**
+     * Confirm PO
+     * @param {string} poId - PO ID
+     */
+    async confirmPO(poId) {
         try {
-            await api.post(`/po/${poNumber}/confirm`);
-            eventBus.emit(Events.PO_CONFIRMED, poNumber);
+            await api.post(`/po/${poId}/confirm`);
+            eventBus.emit(Events.PO_CONFIRMED, poId);
             return { success: true };
         } catch (error) {
             console.log('Demo mode: PO confirmed');
-            eventBus.emit(Events.PO_CONFIRMED, poNumber);
+            eventBus.emit(Events.PO_CONFIRMED, poId);
             return { success: true, demo: true };
         }
     }
 
     /**
      * Update shipping info
-     * @param {string} poNumber - PO number
+     * @param {string} poId - PO ID
      * @param {Object} shippingData - Shipping information
      */
-    async updateShipping(poNumber, shippingData) {
+    async updateShipping(poId, shippingData) {
         try {
-            await api.put(`/po/${poNumber}/shipping`, shippingData);
-            eventBus.emit(Events.PO_UPDATED, { poNumber, shippingData });
+            await api.put(`/po/${poId}/shipping`, shippingData);
+            eventBus.emit(Events.PO_UPDATED, { poId, shippingData });
             return { success: true };
         } catch (error) {
             console.log('Demo mode: shipping updated');
