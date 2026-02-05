@@ -3,7 +3,7 @@
 // ==================== API Configuration ====================
 
 // API_BASE_URL은 i18n.js에서 정의됨
-const API_TIMEOUT = 3000; // 3초 타임아웃
+const API_TIMEOUT = 15000; // 15초 타임아웃
 
 // API 호출 헬퍼 (타임아웃 포함)
 async function apiCall(endpoint, options = {}) {
@@ -2654,6 +2654,189 @@ function applyPIFilters() {
 function sortPITable(column) {
     console.log('Sorting PI by:', column);
     // TODO: 정렬 로직 구현
+}
+
+// ==================== Credit Management ====================
+
+// Credit 탭 전환 (Active / Cancelled)
+function filterCreditByTab(tabType) {
+    // 탭 활성화 상태 업데이트
+    const tabs = document.querySelectorAll('#panel-credit-management .wd-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Hidden filter 업데이트
+    const tabFilter = document.getElementById('credit-tab-filter');
+    if (tabFilter) tabFilter.value = tabType;
+
+    // 통합 필터 적용
+    applyCreditFilters();
+}
+
+// Credit Status 필터 드롭다운 토글
+function toggleCreditStatusFilter(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('credit-status-filter-dropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+}
+
+// Credit Status 필터 적용
+function applyCreditStatusFilter(status) {
+    const dropdown = document.getElementById('credit-status-filter-dropdown');
+    if (dropdown) dropdown.classList.remove('show');
+
+    // Hidden filter에 저장
+    const statusFilter = document.getElementById('credit-status-filter');
+    if (statusFilter) statusFilter.value = status;
+
+    applyCreditFilters();
+}
+
+// Credit 통합 필터 적용 (탭 + 상태 + 검색)
+function applyCreditFilters() {
+    const tabFilter = document.getElementById('credit-tab-filter')?.value || 'active';
+    const statusFilter = document.getElementById('credit-status-filter')?.value || 'all';
+    const searchValue = document.getElementById('credit-search')?.value?.toLowerCase() || '';
+
+    const rows = document.querySelectorAll('#credit-table-body tr');
+    rows.forEach(row => {
+        const rowTab = row.dataset.tab || 'active';
+        const rowStatus = row.dataset.status || '';
+
+        let showByTab = tabFilter === 'active' ? rowTab !== 'cancelled' : rowTab === 'cancelled';
+        let showByStatus = statusFilter === 'all' || rowStatus === statusFilter;
+
+        // 검색 필터
+        let showBySearch = true;
+        if (searchValue) {
+            const rowText = row.textContent.toLowerCase();
+            showBySearch = rowText.includes(searchValue);
+        }
+
+        row.style.display = (showByTab && showByStatus && showBySearch) ? '' : 'none';
+    });
+}
+
+// Credit 검색 필터
+function filterCredits() {
+    applyCreditFilters();
+}
+
+// Credit 모달 열기
+function openCreditModal() {
+    const modal = document.getElementById('credit-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // 폼 초기화
+        const form = document.getElementById('credit-form');
+        if (form) form.reset();
+        const fileList = document.getElementById('credit-file-list');
+        if (fileList) fileList.innerHTML = '';
+        const productSelect = document.getElementById('credit-product-select');
+        if (productSelect) {
+            productSelect.innerHTML = '<option value="">Select Invoice first...</option>';
+        }
+    }
+}
+
+// Credit 모달 닫기
+function closeCreditModal() {
+    const modal = document.getElementById('credit-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Credit 저장
+function saveCredit() {
+    const form = document.getElementById('credit-form');
+    if (!form) return;
+
+    const invoice = document.getElementById('credit-invoice-select')?.value;
+    const product = document.getElementById('credit-product-select')?.value;
+    const reason = document.getElementById('credit-reason')?.value;
+    const qty = document.getElementById('credit-qty')?.value;
+    const amount = document.getElementById('credit-amount')?.value;
+
+    if (!invoice || !product || !reason || !qty || !amount) {
+        showToast('Please fill in all required fields', 'error');
+        return;
+    }
+
+    // 모달 닫기 및 성공 메시지
+    closeCreditModal();
+    showToast('Credit submitted successfully', 'success');
+}
+
+// 인보이스 선택 시 상품 목록 로드
+function loadInvoiceProducts() {
+    const invoiceSelect = document.getElementById('credit-invoice-select');
+    const productSelect = document.getElementById('credit-product-select');
+    if (!invoiceSelect || !productSelect) return;
+
+    const invoice = invoiceSelect.value;
+    if (!invoice) {
+        productSelect.innerHTML = '<option value="">Select Invoice first...</option>';
+        return;
+    }
+
+    // 샘플 상품 데이터 (인보이스별)
+    const productsByInvoice = {
+        'INV-2024-0089': [
+            { value: 'olive-oil-500', label: 'Extra Virgin Olive Oil 500ml - $25.00/unit' },
+            { value: 'balsamic-250', label: 'Balsamic Vinegar 250ml - $18.00/unit' }
+        ],
+        'INV-2024-0088': [
+            { value: 'parmesan-24m', label: 'Aged Parmesan 24 months - $160.00/unit' },
+            { value: 'mozzarella-500', label: 'Buffalo Mozzarella 500g - $22.00/unit' }
+        ],
+        'INV-2024-0087': [
+            { value: 'honey-350', label: 'Organic Honey 350g - $18.00/unit' },
+            { value: 'maple-500', label: 'Maple Syrup 500ml - $24.00/unit' }
+        ]
+    };
+
+    const products = productsByInvoice[invoice] || [];
+    productSelect.innerHTML = '<option value="">Select product...</option>';
+    products.forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.value;
+        option.textContent = p.label;
+        productSelect.appendChild(option);
+    });
+}
+
+// Credit 파일 첨부 핸들러
+function handleCreditFiles(event) {
+    const files = event.target.files;
+    const fileList = document.getElementById('credit-file-list');
+    if (!fileList || !files) return;
+
+    fileList.innerHTML = '';
+    Array.from(files).forEach(file => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'wd-file-item';
+        fileItem.innerHTML = `
+            <span class="wd-file-name">${file.name}</span>
+            <span class="wd-file-size">(${(file.size / 1024).toFixed(1)} KB)</span>
+        `;
+        fileList.appendChild(fileItem);
+    });
+}
+
+// Credit 테이블 정렬
+function sortCreditTable(column) {
+    console.log('Sorting Credit by:', column);
+    // TODO: 정렬 로직 구현
+}
+
+// Credit 상세 보기
+function viewCreditDetail(creditId) {
+    console.log('Viewing credit detail:', creditId);
+    showToast(`Viewing details for ${creditId}`, 'info');
+    // TODO: Credit 상세 화면/드로어 구현
 }
 
 // ==================== Account Management ====================

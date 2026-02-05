@@ -2,7 +2,7 @@
 // 영어 기준 동적 AI 번역 시스템
 
 // API 설정
-const API_BASE_URL = window.API_BASE_URL || 'https://supplier-api-theta.vercel.app/api/v1/supplier';
+const API_BASE_URL = window.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
 
 // 영어 원본 (Source of Truth)
 const englishTranslations = {
@@ -196,6 +196,8 @@ const englishTranslations = {
         title: "Credit",
         subtitle: "Manage product claims and credits for invoice deductions",
         newCredit: "New Credit",
+        activeCredits: "Active Credits",
+        cancelledCredits: "Cancelled Credits",
         pendingCredits: "Pending Credits",
         approvedCredits: "Approved Credits",
         totalCreditAmount: "Total Credit Amount",

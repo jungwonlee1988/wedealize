@@ -2337,6 +2337,12 @@
                                 </div>
                             </div>
 
+                            <!-- Tabs -->
+                            <div class="wd-tabs" style="padding: 0 24px;">
+                                <button class="wd-tab active" onclick="filterCreditByTab('active')" data-i18n="credit.activeCredits">Active Credits</button>
+                                <button class="wd-tab" onclick="filterCreditByTab('cancelled')" data-i18n="credit.cancelledCredits">Cancelled Credits</button>
+                            </div>
+
                             <!-- Filter Bar -->
                             <div class="po-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
                                 <div></div>
@@ -2349,8 +2355,9 @@
                                 </div>
                             </div>
 
-                            <!-- Hidden filter value holder -->
+                            <!-- Hidden filter value holders -->
                             <input type="hidden" id="credit-status-filter" value="all">
+                            <input type="hidden" id="credit-tab-filter" value="active">
 
                             <!-- Credit Table -->
                             <div class="wd-section-x">
@@ -2375,20 +2382,12 @@
                                                             <span>All</span>
                                                         </label>
                                                         <label class="wd-filter-option">
-                                                            <input type="radio" name="credit-status-filter" value="pending" onchange="applyCreditStatusFilter('pending')">
-                                                            <span>Pending</span>
-                                                        </label>
-                                                        <label class="wd-filter-option">
                                                             <input type="radio" name="credit-status-filter" value="approved" onchange="applyCreditStatusFilter('approved')">
                                                             <span>Approved</span>
                                                         </label>
                                                         <label class="wd-filter-option">
                                                             <input type="radio" name="credit-status-filter" value="used" onchange="applyCreditStatusFilter('used')">
                                                             <span>Used</span>
-                                                        </label>
-                                                        <label class="wd-filter-option">
-                                                            <input type="radio" name="credit-status-filter" value="rejected" onchange="applyCreditStatusFilter('rejected')">
-                                                            <span>Rejected</span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -2411,9 +2410,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="credit-table-body">
-                                        <tr data-status="pending" data-credit="CR-2024-001" onclick="viewCreditDetail('CR-2024-001')" class="wd-cursor-pointer">
+                                        <tr data-status="approved" data-tab="active" data-credit="CR-2024-001" onclick="viewCreditDetail('CR-2024-001')" class="wd-cursor-pointer">
                                             <td><span class="wd-text-mono">CR-2024-001</span></td>
-                                            <td><span class="wd-badge wd-badge-warning">Pending</span></td>
+                                            <td><span class="wd-badge wd-badge-success">Approved</span></td>
                                             <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0089')">PI-2024-0089</a></td>
                                             <td>ABC Distribution</td>
                                             <td>Extra Virgin Olive Oil 500ml</td>
@@ -2421,7 +2420,7 @@
                                             <td><span class="wd-text-bold">$125.00</span></td>
                                             <td>2024-02-01</td>
                                         </tr>
-                                        <tr data-status="approved" data-credit="CR-2024-002" onclick="viewCreditDetail('CR-2024-002')" class="wd-cursor-pointer">
+                                        <tr data-status="approved" data-tab="active" data-credit="CR-2024-002" onclick="viewCreditDetail('CR-2024-002')" class="wd-cursor-pointer">
                                             <td><span class="wd-text-mono">CR-2024-002</span></td>
                                             <td><span class="wd-badge wd-badge-success">Approved</span></td>
                                             <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0088')">PI-2024-0088</a></td>
@@ -2431,7 +2430,7 @@
                                             <td><span class="wd-text-bold">$320.00</span></td>
                                             <td>2024-01-28</td>
                                         </tr>
-                                        <tr data-status="used" data-credit="CR-2024-003" onclick="viewCreditDetail('CR-2024-003')" class="wd-cursor-pointer">
+                                        <tr data-status="used" data-tab="active" data-credit="CR-2024-003" onclick="viewCreditDetail('CR-2024-003')" class="wd-cursor-pointer">
                                             <td><span class="wd-text-mono">CR-2024-003</span></td>
                                             <td><span class="wd-badge wd-badge-info">Used</span></td>
                                             <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0087')">PI-2024-0087</a></td>
@@ -2440,6 +2439,16 @@
                                             <td>Short shipment (10 units)</td>
                                             <td><span class="wd-text-bold">$180.00</span></td>
                                             <td>2024-01-20</td>
+                                        </tr>
+                                        <tr data-status="cancelled" data-tab="cancelled" data-credit="CR-2024-004" onclick="viewCreditDetail('CR-2024-004')" class="wd-cursor-pointer" style="display:none;">
+                                            <td><span class="wd-text-mono">CR-2024-004</span></td>
+                                            <td><span class="wd-badge wd-badge-danger">Cancelled</span></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0086')">PI-2024-0086</a></td>
+                                            <td>Fresh Goods Inc</td>
+                                            <td>Truffle Oil 250ml</td>
+                                            <td>Wrong product (3 units)</td>
+                                            <td><span class="wd-text-bold">$210.00</span></td>
+                                            <td>2024-01-15</td>
                                         </tr>
                                     </tbody>
                                 </table>
