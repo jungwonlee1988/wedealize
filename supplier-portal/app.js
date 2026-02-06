@@ -2639,8 +2639,8 @@ function loadExtractedProducts() {
                         <span class="wd-product-name">${escapeHtml(name)}</span>
                     </div>
                 </td>
-                <td>${product.brand || m}</td>
                 <td>${product.unit_spec || m}</td>
+                <td>${product.brand || m}</td>
                 <td>
                     ${product.category
                         ? `<span class="wd-badge wd-badge-outline">${getCategoryLabel(product.category)}</span>`
