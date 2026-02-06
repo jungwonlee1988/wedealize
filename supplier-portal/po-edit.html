@@ -110,12 +110,19 @@
 
                     <div class="dashboard-content">
                         <div class="compact-form">
-                            <div class="page-header">
+                            <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
                                 <div class="page-header-left" style="display: flex; align-items: center; gap: 12px;">
                                     <a href="portal.html#po-management" class="btn-back">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                                     </a>
                                     <h1 class="page-title">Add Purchase Order</h1>
+                                </div>
+                                <div class="page-header-actions" style="display: flex; gap: 8px;">
+                                    <a href="portal.html#po-management" class="wd-btn wd-btn-outline" style="padding: 6px 14px; font-size: 0.875rem;">Cancel</a>
+                                    <button type="submit" form="po-edit-form" class="wd-btn wd-btn-primary" style="padding: 6px 14px; font-size: 0.875rem;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                                        Save PO
+                                    </button>
                                 </div>
                             </div>
 
@@ -254,13 +261,6 @@
                                     </div>
                                 </div>
 
-                                <div class="compact-actions">
-                                    <a href="portal.html#po-management" class="wd-btn wd-btn-outline">Cancel</a>
-                                    <button type="submit" class="wd-btn wd-btn-primary">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-                                        Save PO
-                                    </button>
-                                </div>
                             </form>
                         </div>
                     </div>
