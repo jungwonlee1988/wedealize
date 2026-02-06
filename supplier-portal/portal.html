@@ -14,8 +14,8 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 </head>
-<body>
-    <div class="portal-app">
+<body style="margin: 0; padding: 0; height: 100vh; overflow: hidden;">
+    <div class="portal-app" style="height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
         <!-- Header -->
         <header class="portal-header">
             <div class="header-content">
@@ -46,7 +46,7 @@
         </header>
 
         <!-- Main Content -->
-        <main class="portal-main">
+        <main class="portal-main" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
             <!-- Login/Register Section (Initial Screen) -->
             <section class="wd-auth-section" id="auth-section">
                 <div class="wd-auth-card">
