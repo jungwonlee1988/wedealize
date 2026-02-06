@@ -70,9 +70,9 @@ body {
     background: white;
     border-bottom: 1px solid var(--gray-200);
     padding: 0;
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 100;
+    flex-shrink: 0;
 }
 
 .header-content {
@@ -309,6 +309,7 @@ body.dashboard-mode .portal-badge {
 /* Main */
 .portal-main {
     flex: 1;
+    min-height: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -703,6 +704,7 @@ body.dashboard-mode .portal-badge {
 .dashboard-section {
     padding: 0;
     flex: 1;
+    min-height: 0;
     overflow: hidden;
     display: flex;
 }
@@ -711,6 +713,7 @@ body.dashboard-mode .portal-badge {
     display: flex;
     width: 100%;
     height: 100%;
+    min-height: 0;
     overflow: hidden;
 }
 
@@ -826,11 +829,11 @@ body.dashboard-mode .portal-badge {
 /* Dashboard Content */
 .dashboard-content {
     flex: 1;
+    min-height: 0;
     padding: 30px;
     overflow-y: auto;
     overflow-x: hidden;
     background: var(--gray-100);
-    height: 100%;
 }
 
 .dashboard-panel {
