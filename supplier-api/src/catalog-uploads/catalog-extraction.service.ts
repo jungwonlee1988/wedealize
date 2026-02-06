@@ -90,6 +90,8 @@ For each product, return a JSON object with ALL of these fields (set to null if 
 Rules:
 - Extract ALL products visible in the images
 - product_name is REQUIRED, all other fields are optional
+- IMPORTANT: Do NOT include volume/weight/size in product_name. Strip specs like "500ml", "1L", "5L", "1kg" from the name and put them in unit_spec instead. Example: "Olive Oil 5L" → product_name:"Olive Oil", unit_spec:"5L"
+- Similarly, strip packaging type from product_name and put in packaging_type. Example: "Olive Oil Lattina Tin 5L" → product_name:"Olive Oil", packaging_type:"tin", unit_spec:"5L"
 - Convert all prices to numeric values (no currency symbols)
 - Choose the most specific category slug that matches
 - For unit_spec, parse both value and measure (e.g. "330ml" → unit_value:330, unit_measure:"ml")
