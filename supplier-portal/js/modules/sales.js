@@ -785,11 +785,7 @@ class SalesModule {
      * View Invoice from credit
      */
     viewInvoiceFromCredit(invoiceNumber) {
-        // Navigate to INV Management and show detail
-        window.showSection('inv-management');
-        setTimeout(() => {
-            this.viewINV(invoiceNumber);
-        }, 300);
+        window.location.href = `inv-edit.html?id=${encodeURIComponent(invoiceNumber)}`;
     }
 
     /**
@@ -934,16 +930,14 @@ class SalesModule {
      * View INV detail (click row)
      */
     viewINVDetail(invNumber) {
-        toast.info(`Viewing details for ${invNumber}`);
-        // TODO: Show INV detail drawer/modal
+        window.location.href = `inv-edit.html?id=${encodeURIComponent(invNumber)}`;
     }
 
     /**
      * View INV
      */
     viewINV(invNumber) {
-        toast.info(`Viewing INV ${invNumber}`);
-        // TODO: Show INV detail view/print preview
+        window.location.href = `inv-edit.html?id=${encodeURIComponent(invNumber)}`;
     }
 
     /**
@@ -2119,22 +2113,8 @@ class SalesModule {
      * Create INV for specific account
      */
     createINVForAccount(accountId) {
-        this.openINVModal();
-
-        // Wait for modal to open then select buyer
-        setTimeout(() => {
-            const buyerSelect = $('#inv-buyer-select');
-            if (buyerSelect) {
-                buyerSelect.value = accountId;
-                this.loadBuyerForINV();
-            }
-            // Switch to manual mode
-            const newRadio = document.querySelector('input[name="inv-source"][value="new"]');
-            if (newRadio) {
-                newRadio.checked = true;
-                this.toggleINVSource('new');
-            }
-        }, 100);
+        // Navigate to INV edit page with account param
+        window.location.href = `inv-edit.html?id=new${accountId ? `&account=${encodeURIComponent(accountId)}` : ''}`;
     }
 
     // ==================== Enhanced INV Modal ====================

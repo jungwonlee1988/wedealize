@@ -14,16 +14,35 @@
         .credit-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: var(--wd-gray-50); border-radius: 4px; margin-bottom: 4px; font-size: 0.8rem; }
         .credit-item:last-child { margin-bottom: 0; }
         .total-box { background: var(--wd-gray-50); padding: 10px 12px; border-radius: 6px; margin-top: 8px; }
+        /* Status bar for detail mode */
+        .inv-status-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding: 12px 16px; background: var(--wd-gray-50); border-radius: 8px; }
+        .inv-status-bar .inv-number { font-size: 1.1rem; font-weight: 700; color: var(--wd-gray-900); }
+        .inv-status-bar .inv-date { font-size: 0.85rem; color: var(--wd-gray-500); }
+        /* Edit toggle */
+        .edit-toggle { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--wd-gray-500); }
+        .edit-toggle input { cursor: pointer; }
+        /* Mode visibility */
+        .new-mode-only { display: none; }
+        .detail-mode-only { display: none; }
+        body.new-mode .new-mode-only { display: block; }
+        body.new-mode .detail-mode-only { display: none !important; }
+        body.detail-mode .detail-mode-only { display: block; }
+        body.detail-mode .new-mode-only { display: none !important; }
+        /* View/Edit mode for detail */
+        .view-mode .edit-input { display: none !important; }
+        .view-mode .view-value { display: block; }
+        .edit-mode .edit-input { display: block !important; }
+        .edit-mode .view-value { display: none !important; }
     </style>
 </head>
-<body>
+<body class="new-mode">
     <div class="portal-app">
         <header class="portal-header">
             <div class="header-content">
                 <div class="logo"><img src="logo.png" alt="WeDealize" height="32"></div>
                 <nav class="header-nav">
                     <div class="language-dropdown" id="language-dropdown">
-                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">🇺🇸 EN ▼</button>
+                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">EN</button>
                         <div class="language-menu" id="language-menu"><div class="language-list" id="language-list"></div></div>
                     </div>
                     <div class="user-menu" id="user-menu">
@@ -70,20 +89,40 @@
                     </aside>
 
                     <div class="dashboard-content">
-                        <div class="compact-form">
+                        <div class="compact-form" id="inv-form-container">
                             <div class="page-header">
                                 <div class="page-header-left">
                                     <a href="portal.html#inv-management" class="btn-back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
-                                    <h1 class="page-title">Add Invoice</h1>
+                                    <h1 class="page-title" id="page-title">Add Invoice</h1>
                                 </div>
                                 <div class="page-header-actions">
-                                    <a href="portal.html#inv-management" class="wd-btn wd-btn-outline">Cancel</a>
-                                    <button type="button" onclick="saveINVAsDraft()" class="wd-btn wd-btn-secondary">Save Draft</button>
-                                    <button type="submit" form="inv-edit-form" class="wd-btn wd-btn-primary">
+                                    <!-- Detail mode actions -->
+                                    <label class="edit-toggle detail-mode-only">
+                                        <input type="checkbox" id="edit-mode-toggle" onchange="toggleEditMode()">
+                                        <span>Edit Mode</span>
+                                    </label>
+                                    <button type="button" onclick="downloadINV()" class="wd-btn wd-btn-outline detail-mode-only" title="Download">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    </button>
+                                    <button type="button" id="save-btn" onclick="saveINV()" class="wd-btn wd-btn-primary detail-mode-only" style="display: none;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                        Save Changes
+                                    </button>
+                                    <!-- New mode actions -->
+                                    <a href="portal.html#inv-management" class="wd-btn wd-btn-outline new-mode-only">Cancel</a>
+                                    <button type="button" onclick="saveINVAsDraft()" class="wd-btn wd-btn-secondary new-mode-only">Save Draft</button>
+                                    <button type="submit" form="inv-edit-form" class="wd-btn wd-btn-primary new-mode-only">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                         Send INV
                                     </button>
                                 </div>
+                            </div>
+
+                            <!-- Detail Mode: Status Bar -->
+                            <div class="inv-status-bar detail-mode-only">
+                                <span class="inv-number" id="inv-number-display">INV-2026-0001</span>
+                                <span class="wd-badge wd-badge-info" id="inv-status">Sent</span>
+                                <span class="inv-date" id="inv-date-display">2026.02.03 13:44</span>
                             </div>
 
                             <form id="inv-edit-form">
@@ -95,22 +134,22 @@
                                             <h3 class="compact-section-title"><span class="section-icon">📋</span> Basic Info</h3>
                                             <div class="compact-row">
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label">INV Number <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <label class="wd-form-label">INV Number <span class="wd-badge wd-badge-warning new-mode-only">Required</span></label>
                                                     <input type="text" class="wd-input" id="inv-number" required placeholder="INV-2026-0001">
                                                 </div>
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label">INV Date <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <label class="wd-form-label">INV Date <span class="wd-badge wd-badge-warning new-mode-only">Required</span></label>
                                                     <input type="date" class="wd-input" id="inv-date" required>
                                                 </div>
                                             </div>
-                                            <div class="wd-form-group" style="margin-top: 10px;">
+                                            <div class="wd-form-group new-mode-only" style="margin-top: 10px;">
                                                 <label class="wd-form-label">Source</label>
                                                 <div style="display: flex; gap: 16px; font-size: 0.8rem;">
                                                     <label style="display: flex; align-items: center; gap: 4px;"><input type="radio" name="inv-source" value="po" checked onchange="toggleINVSource('po')"> From PO</label>
                                                     <label style="display: flex; align-items: center; gap: 4px;"><input type="radio" name="inv-source" value="new" onchange="toggleINVSource('new')"> Manual</label>
                                                 </div>
                                             </div>
-                                            <div class="wd-form-group" id="inv-po-selection" style="margin-top: 10px;">
+                                            <div class="wd-form-group new-mode-only" id="inv-po-selection" style="margin-top: 10px;">
                                                 <label class="wd-form-label">Select PO</label>
                                                 <select class="wd-input wd-select" id="inv-po-select" onchange="loadPOForINV()">
                                                     <option value="">Select PO...</option>
@@ -118,33 +157,64 @@
                                                     <option value="PO-2024-0142">PO-2024-0142 - XYZ Foods</option>
                                                 </select>
                                             </div>
+                                            <!-- Detail mode: show linked PO -->
+                                            <div class="wd-form-group detail-mode-only" style="margin-top: 10px;">
+                                                <label class="wd-form-label">Linked PO</label>
+                                                <a href="#" id="linked-po-number" style="font-size: 0.9rem; font-weight: 500; color: var(--wd-primary); text-decoration: none;">-</a>
+                                            </div>
                                         </div>
 
-                                        <!-- Buyer Info -->
+                                        <!-- Seller (Exporter) Info -->
                                         <div class="compact-section">
-                                            <h3 class="compact-section-title"><span class="section-icon">🏢</span> Buyer Info</h3>
+                                            <h3 class="compact-section-title"><span class="section-icon">🏭</span> Seller (Exporter)</h3>
                                             <div class="compact-row">
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label">Company <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <select class="wd-input wd-select" id="inv-buyer-select" required onchange="loadBuyerForINV()">
-                                                        <option value="">Select buyer...</option>
-                                                        <option value="ACC-001">ABC Distribution</option>
-                                                        <option value="ACC-002">XYZ Foods Ltd</option>
-                                                    </select>
+                                                    <label class="wd-form-label">Company <span class="wd-badge wd-badge-warning new-mode-only">Required</span></label>
+                                                    <input type="text" class="wd-input" id="inv-exporter-name" required placeholder="Company name">
                                                 </div>
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Contact</label>
-                                                    <input type="text" class="wd-input" id="inv-buyer-contact" placeholder="Contact name">
+                                                    <input type="text" class="wd-input" id="inv-exporter-contact" placeholder="Contact name">
                                                 </div>
                                             </div>
                                             <div class="compact-row">
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Email</label>
-                                                    <input type="email" class="wd-input" id="inv-buyer-email" placeholder="email@company.com">
+                                                    <input type="email" class="wd-input" id="inv-exporter-email" placeholder="email@company.com">
                                                 </div>
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Phone</label>
-                                                    <input type="tel" class="wd-input" id="inv-buyer-phone" placeholder="+1 234 567 8900">
+                                                    <input type="tel" class="wd-input" id="inv-exporter-phone" placeholder="+1 234 567 8900">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Buyer (Importer) Info -->
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">🏢</span> Buyer (Importer)</h3>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Company</label>
+                                                    <select class="wd-input wd-select new-mode-only" id="inv-buyer-select" onchange="loadBuyerForINV()">
+                                                        <option value="">Select buyer...</option>
+                                                        <option value="ACC-001">ABC Distribution</option>
+                                                        <option value="ACC-002">XYZ Foods Ltd</option>
+                                                    </select>
+                                                    <input type="text" class="wd-input detail-mode-only" id="inv-importer-name" placeholder="Company name">
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Contact</label>
+                                                    <input type="text" class="wd-input" id="inv-importer-contact" placeholder="Contact name">
+                                                </div>
+                                            </div>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Email</label>
+                                                    <input type="email" class="wd-input" id="inv-importer-email" placeholder="email@company.com">
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Phone</label>
+                                                    <input type="tel" class="wd-input" id="inv-importer-phone" placeholder="+1 234 567 8900">
                                                 </div>
                                             </div>
                                         </div>
@@ -169,6 +239,7 @@
                                                     <select class="wd-input wd-select" id="inv-incoterms">
                                                         <option value="FOB">FOB</option>
                                                         <option value="CIF">CIF</option>
+                                                        <option value="FCA">FCA</option>
                                                         <option value="EXW">EXW</option>
                                                         <option value="DDP">DDP</option>
                                                     </select>
@@ -176,9 +247,9 @@
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Payment</label>
                                                     <select class="wd-input wd-select" id="inv-payment-terms">
+                                                        <option value="TT">T/T</option>
                                                         <option value="NET30">Net 30</option>
                                                         <option value="NET60">Net 60</option>
-                                                        <option value="TT">T/T</option>
                                                         <option value="LC">L/C</option>
                                                     </select>
                                                 </div>
@@ -195,8 +266,8 @@
                                             </div>
                                         </div>
 
-                                        <!-- Available Credits -->
-                                        <div class="compact-section">
+                                        <!-- Available Credits (New mode only) -->
+                                        <div class="compact-section new-mode-only">
                                             <h3 class="compact-section-title"><span class="section-icon">💳</span> Available Credits</h3>
                                             <div id="inv-available-credits" style="max-height: 100px; overflow-y: auto;">
                                                 <p style="font-size: 0.75rem; color: var(--wd-gray-400); text-align: center; padding: 12px;">Select buyer to see available credits</p>
@@ -215,7 +286,7 @@
                                     <!-- Invoice Items - Full Width -->
                                     <div class="compact-section items-section">
                                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                            <h3 class="compact-section-title" style="margin-bottom: 0;"><span class="section-icon">📦</span> Invoice Items</h3>
+                                            <h3 class="compact-section-title" style="margin-bottom: 0;"><span class="section-icon">📦</span> Invoice Items (<span id="items-count">1</span>)</h3>
                                             <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="addINVItemRow()" style="padding: 4px 8px; font-size: 0.75rem;">+ Add Item</button>
                                         </div>
                                         <table class="wd-table compact-table">
@@ -242,7 +313,7 @@
                                         </table>
                                         <div class="total-box">
                                             <div class="summary-row"><span>Subtotal:</span><span id="inv-subtotal">$0.00</span></div>
-                                            <div class="summary-row" style="color: var(--wd-success);"><span>Credit Applied:</span><span id="inv-credit-discount">-$0.00</span></div>
+                                            <div class="summary-row new-mode-only" style="color: var(--wd-success);"><span>Credit Applied:</span><span id="inv-credit-discount">-$0.00</span></div>
                                             <div class="summary-row total"><span>Total:</span><span id="inv-total">$0.00</span></div>
                                         </div>
                                     </div>
@@ -266,12 +337,14 @@
             document.getElementById('sidebar-user-name').textContent = localStorage.getItem('user_name') || 'User';
             document.getElementById('sidebar-user-email').textContent = localStorage.getItem('user_email') || '';
             document.getElementById('user-menu').style.display = 'flex';
-            document.getElementById('inv-date').value = new Date().toISOString().split('T')[0];
+            // Set default date for new mode
+            const dateInput = document.getElementById('inv-date');
+            if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
         });
         function toggleLanguageDropdown() { document.getElementById('language-menu').classList.toggle('show'); }
         function toggleSidebar() { document.querySelector('.wd-sidebar').classList.toggle('collapsed'); }
         function toggleSubmenu(el) { el.closest('.wd-nav-group').classList.toggle('expanded'); }
-        function navigateTo(section) { window.location.href = `portal.html#${section}`; }
+        function navigateTo(section) { window.location.href = 'portal.html#' + section; }
         function logout() { localStorage.clear(); window.location.href = 'portal.html'; }
     </script>
 </body>
