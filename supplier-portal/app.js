@@ -1411,7 +1411,7 @@ function updateProductStats(products) {
         setTextById('dash-missing-moq', '0 products');
         setTextById('dash-missing-price', '0 products');
         setTextById('dash-missing-certs', '0 products');
-        updateQualityRing(0, []);
+        updateQualityCard(0, [], 0);
         return;
     }
 
@@ -1444,44 +1444,79 @@ function updateProductStats(products) {
     setTextById('dash-missing-price', `${missingPrice} products`);
     setTextById('dash-missing-certs', `${missingCerts} products`);
 
-    // --- Product list quality ring + checklist ---
-    const checkIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
-    const crossIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-
+    // --- Product list quality card ---
     const fields = [
         { label: 'Name', filled: hasName, total },
         { label: 'Price', filled: hasPrice, total },
         { label: 'MOQ', filled: hasMoq, total, filter: 'moq' },
         { label: 'SKU', filled: hasSku, total },
         { label: 'Category', filled: hasCategory, total },
-        { label: 'Certifications', filled: hasCerts, total, filter: 'cert' },
+        { label: 'Certs', filled: hasCerts, total, filter: 'cert' },
     ];
 
-    updateQualityRing(avgCompleteness, fields, checkIcon, crossIcon);
+    updateQualityCard(avgCompleteness, fields, total);
 }
 
-function updateQualityRing(pct, fields, checkIcon, crossIcon) {
-    const ring = document.getElementById('quality-ring');
+function updateQualityCard(pct, fields, totalProducts) {
+    // -- SVG ring --
+    const circle = document.getElementById('dq-ring-circle');
     const ringVal = document.getElementById('quality-ring-value');
-    const checklist = document.getElementById('quality-checklist');
+    const circumference = 2 * Math.PI * 52; // r=52
 
-    if (ring) ring.style.setProperty('--percentage', pct);
+    if (circle) {
+        const offset = circumference - (pct / 100) * circumference;
+        circle.style.strokeDasharray = circumference;
+        circle.style.strokeDashoffset = offset;
+        // Color: green ≥80, warning 50-79, red <50
+        if (pct >= 80) circle.style.stroke = 'var(--wd-success)';
+        else if (pct >= 50) circle.style.stroke = 'var(--wd-warning)';
+        else circle.style.stroke = 'var(--wd-error)';
+    }
     if (ringVal) ringVal.textContent = `${pct}%`;
 
-    if (checklist) {
-        if (!fields.length) {
-            checklist.innerHTML = '<li style="color:#999;">No products yet.</li>';
-            return;
+    // -- Summary text --
+    const summary = document.getElementById('dq-summary');
+    if (summary) {
+        const completeFields = fields.filter(f => f.filled === f.total).length;
+        const totalFields = fields.length;
+        if (pct === 100) {
+            summary.innerHTML = `<span class="wd-dq-summary-text"><strong>All ${totalProducts} products</strong> have complete data across <strong>${totalFields} fields</strong>. Your catalog is ready for buyers.</span>`;
+        } else {
+            const missingCount = fields.reduce((sum, f) => sum + (f.total - f.filled), 0);
+            summary.innerHTML = `<span class="wd-dq-summary-text"><strong>${completeFields}/${totalFields} fields</strong> fully complete across <strong>${totalProducts} products</strong>. ${missingCount} missing value${missingCount > 1 ? 's' : ''} to fill.</span>`;
         }
-        checklist.innerHTML = fields.map(f => {
-            const isComplete = f.filled === f.total;
-            const cls = isComplete ? 'wd-quality-complete' : 'wd-quality-incomplete';
-            const icon = isComplete ? checkIcon : crossIcon;
-            const missing = f.total - f.filled;
-            const link = (!isComplete && f.filter) ? ` - <a href="#" class="wd-link" onclick="filterMissing('${f.filter}')">${missing} missing</a>` : '';
-            return `<li class="${cls}">${icon} ${f.label} (${f.filled}/${f.total})${link}</li>`;
-        }).join('');
     }
+
+    // -- Field cards --
+    const container = document.getElementById('quality-checklist');
+    if (!container) return;
+
+    if (!fields.length || totalProducts === 0) {
+        container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#999;">No products yet.</div>';
+        return;
+    }
+
+    container.innerHTML = fields.map(f => {
+        const isComplete = f.filled === f.total;
+        const pctField = Math.round((f.filled / f.total) * 100);
+        const missing = f.total - f.filled;
+        const barCls = isComplete ? '' : ' incomplete';
+        const countCls = isComplete ? 'complete' : 'incomplete';
+        const link = (!isComplete && f.filter)
+            ? `<a href="#" class="wd-dq-field-link" onclick="filterMissing('${f.filter}'); return false;">${missing} missing &rarr;</a>`
+            : '';
+        return `
+            <div class="wd-dq-field">
+                <div class="wd-dq-field-top">
+                    <span class="wd-dq-field-label">${f.label}</span>
+                    <span class="wd-dq-field-count ${countCls}">${f.filled}/${f.total}</span>
+                </div>
+                <div class="wd-dq-field-bar">
+                    <div class="wd-dq-field-bar-fill${barCls}" style="width:${pctField}%;"></div>
+                </div>
+                ${link}
+            </div>`;
+    }).join('');
 }
 
 function setTextById(id, text) {
@@ -4507,101 +4542,14 @@ function filterAccounts() {
     });
 }
 
-// ---- Company Certifications CRUD (API-connected) ----
-
-window._editingCertId = null;
+// ---- Company Certifications CRUD (page-based) ----
 
 function openCompanyCertModal(certId) {
-    const modal = document.getElementById('company-cert-modal');
-    const titleEl = document.getElementById('company-cert-modal-title');
-    const form = document.getElementById('company-cert-form');
-    if (form) form.reset();
-    window._editingCertId = null;
-
+    // Redirect to cert-edit page instead of opening modal
     if (certId) {
-        window._editingCertId = certId;
-        if (titleEl) titleEl.textContent = 'Edit Certification';
-        loadCertIntoForm(certId);
+        window.location.href = `cert-edit.html?id=${certId}`;
     } else {
-        if (titleEl) titleEl.textContent = 'Add Certification';
-    }
-
-    if (modal) modal.style.display = 'flex';
-}
-
-function closeCompanyCertModal() {
-    const modal = document.getElementById('company-cert-modal');
-    if (modal) modal.style.display = 'none';
-    window._editingCertId = null;
-}
-
-async function loadCertIntoForm(certId) {
-    try {
-        const token = localStorage.getItem('supplier_token');
-        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
-        const res = await fetch(`${baseUrl}/certifications`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!res.ok) throw new Error('Failed to load certifications');
-        const { certifications } = await res.json();
-        const cert = certifications.find(c => c.id === certId);
-        if (!cert) return;
-
-        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-        setVal('cert-name', cert.name);
-        setVal('cert-issuer', cert.issuer);
-        setVal('cert-issue-date', cert.issue_date);
-        setVal('cert-expiry-date', cert.expiry_date);
-        setVal('cert-status', cert.status || 'valid');
-    } catch (e) {
-        console.error('Failed to load cert into form:', e);
-    }
-}
-
-async function saveCompanyCert() {
-    const name = document.getElementById('cert-name')?.value?.trim();
-    if (!name) {
-        showToast('Certification name is required', 'error');
-        return;
-    }
-
-    const payload = {
-        name,
-        issuer: document.getElementById('cert-issuer')?.value || '',
-        issueDate: document.getElementById('cert-issue-date')?.value || '',
-        expiryDate: document.getElementById('cert-expiry-date')?.value || '',
-        status: document.getElementById('cert-status')?.value || 'valid',
-    };
-
-    try {
-        const token = localStorage.getItem('supplier_token');
-        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
-        const isEdit = !!window._editingCertId;
-        const url = isEdit ? `${baseUrl}/certifications/${window._editingCertId}` : `${baseUrl}/certifications`;
-        const method = isEdit ? 'PATCH' : 'POST';
-
-        const res = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify(payload)
-        });
-
-        if (res.status === 401) {
-            handleSessionExpired();
-            return;
-        }
-
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.message || 'Failed to save certification');
-        }
-
-        showToast(isEdit ? 'Certification updated!' : 'Certification added!', 'success');
-        closeCompanyCertModal();
-        loadCompanyCerts();
-    } catch (e) {
-        console.error('Failed to save certification:', e);
-        showToast(e.message || 'Failed to save certification', 'error');
+        window.location.href = 'cert-edit.html?id=new';
     }
 }
 
@@ -4636,16 +4584,16 @@ async function loadCompanyCerts() {
 
         tbody.innerHTML = certifications.map(cert => `
             <tr>
-                <td><strong>${escapeHtml(cert.name)}</strong></td>
+                <td><a href="cert-edit.html?id=${cert.id}" style="color:var(--wd-primary); text-decoration:none; font-weight:600;">${escapeHtml(cert.name)}</a></td>
                 <td>${escapeHtml(cert.issuer || '-')}</td>
                 <td>${cert.issue_date || '-'}</td>
                 <td>${cert.expiry_date || '-'}</td>
                 <td>${statusBadge(cert.status)}</td>
                 <td>
                     <div style="display:flex; gap:4px;">
-                        <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="openCompanyCertModal('${cert.id}')" title="Edit">
+                        <a href="cert-edit.html?id=${cert.id}" class="wd-btn wd-btn-sm wd-btn-outline" title="Edit">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                        </button>
+                        </a>
                         <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="deleteCompanyCert('${cert.id}')" title="Delete" style="color:#ef4444;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         </button>

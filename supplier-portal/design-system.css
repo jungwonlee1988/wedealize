@@ -1863,77 +1863,174 @@
     color: var(--wd-gray-400);
 }
 
-/* ==================== Quality Chart & Checklist ==================== */
-.wd-quality-chart {
+/* ==================== Data Quality Card ==================== */
+.wd-dq-card {
+    background: var(--wd-white);
+    border: 1px solid var(--wd-gray-200);
+    border-radius: var(--wd-radius-lg);
+    padding: 24px;
+    overflow: hidden;
+}
+
+.wd-dq-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.wd-dq-score {
+    position: relative;
+    width: 88px;
+    height: 88px;
     flex-shrink: 0;
 }
 
-.wd-quality-ring {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: conic-gradient(
-        var(--wd-success) calc(var(--percentage) * 3.6deg),
-        var(--wd-gray-200) calc(var(--percentage) * 3.6deg)
-    );
+.wd-dq-ring-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.wd-dq-ring-bg {
+    fill: none;
+    stroke: var(--wd-gray-200);
+    stroke-width: 8;
+}
+
+.wd-dq-ring-fill {
+    fill: none;
+    stroke: var(--wd-success);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s;
+}
+
+.wd-dq-score-text {
+    position: absolute;
+    inset: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative;
 }
 
-.wd-quality-ring::before {
-    content: '';
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: var(--wd-white);
-}
-
-.wd-quality-value {
-    position: relative;
-    z-index: 1;
-    font-size: var(--wd-font-size-lg);
-    font-weight: var(--wd-font-bold);
+.wd-dq-pct {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
     color: var(--wd-black);
 }
 
-.wd-quality-details {
+.wd-dq-score-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--wd-gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.wd-dq-summary {
     flex: 1;
 }
 
-.wd-quality-checklist {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--wd-space-2);
+.wd-dq-summary-text {
+    font-size: 14px;
+    color: var(--wd-gray-600);
+    line-height: 1.5;
 }
 
-.wd-quality-checklist li {
+.wd-dq-summary-text strong {
+    color: var(--wd-black);
+}
+
+.wd-dq-fields {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.wd-dq-field {
+    background: var(--sys-color-bg-2, #f8f9fa);
+    border-radius: var(--wd-radius-md);
+    padding: 12px 14px;
+    transition: box-shadow 0.15s;
+}
+
+.wd-dq-field:hover {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.wd-dq-field-top {
     display: flex;
     align-items: center;
-    gap: var(--wd-space-2);
-    font-size: var(--wd-font-size-sm);
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.wd-dq-field-label {
+    font-size: 12px;
+    font-weight: 600;
     color: var(--wd-gray-600);
 }
 
-.wd-quality-complete {
+.wd-dq-field-count {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 10px;
+}
+
+.wd-dq-field-count.complete {
+    background: var(--wd-success-light);
     color: var(--wd-success);
 }
 
-.wd-quality-incomplete {
-    color: var(--wd-gray-600);
+.wd-dq-field-count.incomplete {
+    background: var(--wd-warning-light);
+    color: var(--wd-warning-dark);
 }
 
-.wd-quality-complete svg {
-    color: var(--wd-success);
+.wd-dq-field-bar {
+    height: 4px;
+    background: var(--wd-gray-200);
+    border-radius: 2px;
+    overflow: hidden;
 }
 
-.wd-quality-incomplete svg {
-    color: var(--wd-error);
+.wd-dq-field-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--wd-success);
+}
+
+.wd-dq-field-bar-fill.incomplete {
+    background: var(--wd-warning);
+}
+
+.wd-dq-field-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--wd-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.wd-dq-field-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .wd-dq-fields {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .wd-dq-header {
+        flex-direction: column;
+        text-align: center;
+    }
 }
 
 /* ==================== Inquiry Cards ==================== */
