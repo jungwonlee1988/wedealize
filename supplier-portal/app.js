@@ -3759,9 +3759,12 @@ function sortCreditTable(column) {
 
 // Credit 상세 보기
 function viewCreditDetail(creditId) {
-    console.log('Viewing credit detail:', creditId);
-    showToast(`Viewing details for ${creditId}`, 'info');
-    // TODO: Credit 상세 화면/드로어 구현
+    window.location.href = `credit-edit.html?id=${encodeURIComponent(creditId)}`;
+}
+
+// View Invoice from Credit list
+function viewInvoiceFromCredit(invoiceNumber) {
+    window.location.href = `inv-edit.html?id=${encodeURIComponent(invoiceNumber)}`;
 }
 
 // ==================== Account Management ====================
