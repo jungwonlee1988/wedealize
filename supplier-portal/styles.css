@@ -698,11 +698,13 @@ body.dashboard-mode .portal-badge {
 /* Dashboard */
 .dashboard-section {
     padding: 0;
+    height: calc(100vh - 70px);
+    overflow: hidden;
 }
 
 .dashboard-container {
     display: flex;
-    height: calc(100vh - 70px);
+    height: 100%;
     overflow: hidden;
 }
 
