@@ -672,24 +672,24 @@
                                             <div class="wd-progress-section">
                                                 <div class="wd-progress-header">
                                                     <span data-i18n="dashboard.dataCompleteness">Data Completeness</span>
-                                                    <span class="wd-progress-value">65%</span>
+                                                    <span class="wd-progress-value" id="dash-completeness-pct">-</span>
                                                 </div>
                                                 <div class="wd-progress-bar">
-                                                    <div class="wd-progress-fill" style="width: 65%;"></div>
+                                                    <div class="wd-progress-fill" id="dash-completeness-bar" style="width: 0%;"></div>
                                                 </div>
                                             </div>
                                             <div class="wd-incomplete-list">
                                                 <div class="wd-incomplete-item">
                                                     <span class="wd-incomplete-label" data-i18n="dashboard.missingMOQ">Missing MOQ</span>
-                                                    <span class="wd-incomplete-count">5 products</span>
+                                                    <span class="wd-incomplete-count" id="dash-missing-moq">-</span>
                                                 </div>
                                                 <div class="wd-incomplete-item">
-                                                    <span class="wd-incomplete-label" data-i18n="dashboard.missingImages">Missing Images</span>
-                                                    <span class="wd-incomplete-count">3 products</span>
+                                                    <span class="wd-incomplete-label" data-i18n="dashboard.missingPrice">Missing Price</span>
+                                                    <span class="wd-incomplete-count" id="dash-missing-price">-</span>
                                                 </div>
                                                 <div class="wd-incomplete-item">
                                                     <span class="wd-incomplete-label" data-i18n="dashboard.missingCerts">Missing Certifications</span>
-                                                    <span class="wd-incomplete-count">8 products</span>
+                                                    <span class="wd-incomplete-count" id="dash-missing-certs">-</span>
                                                 </div>
                                             </div>
                                             <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="showSection('product-list')" style="width: 100%; margin-top: 12px;">
@@ -983,33 +983,14 @@
                             <div class="wd-card" style="margin: 24px 24px 0;">
                                 <div class="wd-card-body" style="display: flex; gap: 32px; align-items: flex-start;">
                                     <div class="wd-quality-chart">
-                                        <div class="wd-quality-ring" style="--percentage: 65;">
-                                            <span class="wd-quality-value">65%</span>
+                                        <div class="wd-quality-ring" id="quality-ring" style="--percentage: 0;">
+                                            <span class="wd-quality-value" id="quality-ring-value">-</span>
                                         </div>
                                     </div>
                                     <div class="wd-quality-details">
                                         <h4 style="margin: 0 0 12px; font-size: 14px; font-weight: 600;" data-i18n="products.dataCompleteness">Data Completeness</h4>
-                                        <ul class="wd-quality-checklist">
-                                            <li class="wd-quality-complete">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                                                <span data-i18n="products.requiredFields">Required fields</span> (24/24)
-                                            </li>
-                                            <li class="wd-quality-complete">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                                                <span data-i18n="catalog.priceList">Price</span> (20/24)
-                                            </li>
-                                            <li class="wd-quality-incomplete">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                                MOQ (19/24) - <a href="#" class="wd-link" onclick="filterMissing('moq')">Add missing</a>
-                                            </li>
-                                            <li class="wd-quality-incomplete">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                                <span data-i18n="products.missingImages">Images</span> (12/24) - <a href="#" class="wd-link" onclick="filterMissing('images')">Add missing</a>
-                                            </li>
-                                            <li class="wd-quality-incomplete">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                                <span data-i18n="modal.certifications">Certifications</span> (8/24) - <a href="#" class="wd-link" onclick="filterMissing('cert')">Add missing</a>
-                                            </li>
+                                        <ul class="wd-quality-checklist" id="quality-checklist">
+                                            <li style="color:#999;">Loading...</li>
                                         </ul>
                                     </div>
                                 </div>

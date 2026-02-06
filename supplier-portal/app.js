@@ -663,6 +663,26 @@ function showDashboard() {
         const hash = window.location.hash.slice(1);
         initSidebar(hash || 'overview');
     }
+
+    // Load dashboard product stats from server
+    loadDashboardProductStats();
+}
+
+async function loadDashboardProductStats() {
+    try {
+        const token = localStorage.getItem('supplier_token');
+        if (!token) return;
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/products`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.status === 401) return;
+        if (!res.ok) return;
+        const data = await res.json();
+        updateProductStats(data.products || []);
+    } catch (e) {
+        console.error('Failed to load dashboard stats:', e);
+    }
 }
 
 // 초기 로드 시 로그인 상태 확인
@@ -1368,91 +1388,116 @@ function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// ==================== Data Completeness Check ====================
+// ==================== Data Completeness (computed from real product data) ====================
 
-async function checkDataCompleteness() {
-    const supplierId = localStorage.getItem('supplier_id') || '1';
-
-    try {
-        const data = await apiCall(`/data-completeness/${supplierId}`);
-        updateCompletenessUI(data);
-    } catch (error) {
-        console.error('Failed to fetch completeness data:', error);
-        // 데모 데이터 사용
-        const demoData = {
-            completeness_score: 65,
-            total_products: 24,
-            missing_summary: [
-                { type: 'moq', label: 'Minimum Order Quantity', count: 5, priority: 'high', products: ['Aged Parmesan', 'Raw Honey', 'Balsamic Vinegar'] },
-                { type: 'certifications', label: 'Certifications', count: 8, priority: 'medium', products: [] },
-                { type: 'images', label: 'Product Images', count: 12, priority: 'medium', products: [] }
-            ],
-            recommendations: [
-                'Critical: Please add Minimum Order Quantity for 5 products.',
-                'Adding certifications can increase buyer confidence.'
-            ]
-        };
-        updateCompletenessUI(demoData);
+function updateProductStats(products) {
+    const total = products.length;
+    if (total === 0) {
+        // No products: show 0 everywhere
+        setTextById('stat-completeness', '0%');
+        setTextById('stat-products', '0');
+        setTextById('dash-completeness-pct', '0%');
+        setStyleById('dash-completeness-bar', 'width', '0%');
+        setTextById('dash-missing-moq', '0 products');
+        setTextById('dash-missing-price', '0 products');
+        setTextById('dash-missing-certs', '0 products');
+        updateQualityRing(0, []);
+        return;
     }
+
+    // Count fields per product
+    const hasName = products.filter(p => p.name).length;
+    const hasPrice = products.filter(p => p.min_price != null).length;
+    const hasMoq = products.filter(p => p.moq != null).length;
+    const hasCerts = products.filter(p => p.certifications?.length > 0).length;
+    const hasSku = products.filter(p => p.sku).length;
+    const hasCategory = products.filter(p => p.category).length;
+    const hasDescription = products.filter(p => p.description).length;
+
+    // Average completeness from DB completeness field (or recalculate)
+    const avgCompleteness = Math.round(
+        products.reduce((sum, p) => sum + (p.completeness || 0), 0) / total
+    );
+
+    const missingPrice = total - hasPrice;
+    const missingMoq = total - hasMoq;
+    const missingCerts = total - hasCerts;
+
+    // --- Dashboard stat card ---
+    setTextById('stat-completeness', `${avgCompleteness}%`);
+    setTextById('stat-products', String(total));
+
+    // --- Dashboard Product Status card ---
+    setTextById('dash-completeness-pct', `${avgCompleteness}%`);
+    setStyleById('dash-completeness-bar', 'width', `${avgCompleteness}%`);
+    setTextById('dash-missing-moq', `${missingMoq} products`);
+    setTextById('dash-missing-price', `${missingPrice} products`);
+    setTextById('dash-missing-certs', `${missingCerts} products`);
+
+    // --- Product list quality ring + checklist ---
+    const checkIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+    const crossIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+    const fields = [
+        { label: 'Name', filled: hasName, total },
+        { label: 'Price', filled: hasPrice, total },
+        { label: 'MOQ', filled: hasMoq, total, filter: 'moq' },
+        { label: 'SKU', filled: hasSku, total },
+        { label: 'Category', filled: hasCategory, total },
+        { label: 'Certifications', filled: hasCerts, total, filter: 'cert' },
+    ];
+
+    updateQualityRing(avgCompleteness, fields, checkIcon, crossIcon);
 }
 
-function updateCompletenessUI(data) {
-    // 완성도가 100% 미만이면 알림 표시
-    if (data.completeness_score < 100) {
-        showDataCompletenessAlert(data);
-    }
+function updateQualityRing(pct, fields, checkIcon, crossIcon) {
+    const ring = document.getElementById('quality-ring');
+    const ringVal = document.getElementById('quality-ring-value');
+    const checklist = document.getElementById('quality-checklist');
 
-    // 대시보드 통계 업데이트
-    const completenessEl = document.getElementById('stat-completeness');
-    if (completenessEl) {
-        completenessEl.textContent = `${data.completeness_score}%`;
-    }
+    if (ring) ring.style.setProperty('--percentage', pct);
+    if (ringVal) ringVal.textContent = `${pct}%`;
 
-    // 누락 항목별 카운트 업데이트
-    if (data.missing_summary) {
-        for (const item of data.missing_summary) {
-            const countEl = document.getElementById(`missing-${item.type}-count`);
-            if (countEl) {
-                countEl.textContent = item.count;
-            }
+    if (checklist) {
+        if (!fields.length) {
+            checklist.innerHTML = '<li style="color:#999;">No products yet.</li>';
+            return;
         }
+        checklist.innerHTML = fields.map(f => {
+            const isComplete = f.filled === f.total;
+            const cls = isComplete ? 'wd-quality-complete' : 'wd-quality-incomplete';
+            const icon = isComplete ? checkIcon : crossIcon;
+            const missing = f.total - f.filled;
+            const link = (!isComplete && f.filter) ? ` - <a href="#" class="wd-link" onclick="filterMissing('${f.filter}')">${missing} missing</a>` : '';
+            return `<li class="${cls}">${icon} ${f.label} (${f.filled}/${f.total})${link}</li>`;
+        }).join('');
     }
 }
 
-function showDataCompletenessAlert(data) {
-    const alert = document.getElementById('data-completeness-alert');
-    if (!alert) return;
+function setTextById(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+}
+function setStyleById(id, prop, val) {
+    const el = document.getElementById(id);
+    if (el) el.style[prop] = val;
+}
 
-    alert.style.display = 'flex';
-
-    // 완성도 점수 업데이트
-    const scoreEl = alert.querySelector('.completeness-score');
-    if (scoreEl) {
-        scoreEl.textContent = `${data.completeness_score}%`;
-    }
-
-    // 누락 항목 목록 업데이트
-    const missingList = alert.querySelector('.missing-list');
-    if (missingList && data.missing_summary) {
-        missingList.innerHTML = data.missing_summary
-            .filter(item => item.count > 0)
-            .slice(0, 3)
-            .map(item => `
-                <div class="missing-item ${item.priority}">
-                    <span class="missing-label">${item.label}</span>
-                    <span class="missing-count">${item.count} products</span>
-                    <button class="btn-fix" onclick="filterMissing('${item.type}')">Fix</button>
-                </div>
-            `).join('');
-    }
-
-    // 권장 사항 표시
-    const recommendationsEl = alert.querySelector('.recommendations');
-    if (recommendationsEl && data.recommendations) {
-        recommendationsEl.innerHTML = data.recommendations
-            .slice(0, 2)
-            .map(rec => `<p class="recommendation">${rec}</p>`)
-            .join('');
+// Legacy stub for catalog upload flow
+async function checkDataCompleteness() {
+    // Now handled by updateProductStats after loadProducts
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/products`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            updateProductStats(data.products || []);
+        }
+    } catch (e) {
+        console.error('Failed to refresh product stats:', e);
     }
 }
 
@@ -1467,8 +1512,11 @@ function dismissCompletenessAlert() {
 
 function filterMissing(type) {
     showSection('product-list');
-    document.getElementById('product-filter').value = `no-${type}`;
-    // 필터 적용
+    const filterEl = document.getElementById('product-list-filter');
+    if (filterEl) {
+        filterEl.value = `no-${type}`;
+        filterProductList();
+    }
 }
 
 // ==================== Product CRUD ====================
@@ -1599,6 +1647,7 @@ function renderProductList(products) {
     _productListAll = products;
     _productListPage = 1;
     renderProductListPage();
+    updateProductStats(products);
 }
 
 function renderProductListPage() {
