@@ -917,6 +917,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 서브메뉴 토글
 function toggleSubmenu(btn) {
+    // 사이드바가 접힌 상태인지 확인
+    const sidebar = document.querySelector('.wd-sidebar');
+    const isCollapsed = sidebar && sidebar.classList.contains('collapsed');
+
+    // 접힌 상태에서는 첫 번째 하위 탭으로 바로 이동
+    if (isCollapsed) {
+        const navGroup = btn.closest('.wd-nav-group') || btn.closest('.nav-group');
+        if (navGroup) {
+            const firstChild = navGroup.querySelector('.wd-nav-child, .nav-child');
+            if (firstChild) {
+                const section = firstChild.getAttribute('data-section');
+                if (section) {
+                    showSection(section);
+                    return;
+                }
+                // onclick 속성에서 section 추출 시도
+                const onclick = firstChild.getAttribute('onclick');
+                if (onclick) {
+                    const match = onclick.match(/showSection\(['"]([^'"]+)['"]\)/);
+                    if (match) {
+                        showSection(match[1]);
+                        return;
+                    }
+                }
+            }
+        }
+        return;
+    }
+
     // 기존 nav-group 지원
     let navGroup = btn.closest('.nav-group');
     if (navGroup) {
