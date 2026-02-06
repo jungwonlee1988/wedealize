@@ -476,7 +476,7 @@
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                                     </div>
                                     <div class="wd-stat-content">
-                                        <span class="wd-stat-value" id="stat-monthly-orders">$45,600</span>
+                                        <span class="wd-stat-value" id="stat-monthly-orders">$0</span>
                                         <span class="wd-stat-label" data-i18n="dashboard.monthlyOrders">This Month Orders</span>
                                     </div>
                                 </div>
@@ -485,7 +485,7 @@
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
                                     </div>
                                     <div class="wd-stat-content">
-                                        <span class="wd-stat-value" id="stat-products">24</span>
+                                        <span class="wd-stat-value" id="stat-products">0</span>
                                         <span class="wd-stat-label" data-i18n="dashboard.productsListed">Products Listed</span>
                                     </div>
                                 </div>
@@ -494,7 +494,7 @@
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                     </div>
                                     <div class="wd-stat-content">
-                                        <span class="wd-stat-value" id="stat-completeness">65%</span>
+                                        <span class="wd-stat-value" id="stat-completeness">0%</span>
                                         <span class="wd-stat-label" data-i18n="dashboard.dataCompleteness">Data Completeness</span>
                                     </div>
                                 </div>
@@ -503,7 +503,7 @@
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                                     </div>
                                     <div class="wd-stat-content">
-                                        <span class="wd-stat-value" id="stat-active-buyers">8</span>
+                                        <span class="wd-stat-value" id="stat-active-buyers">0</span>
                                         <span class="wd-stat-label" data-i18n="dashboard.activeBuyers">Active Buyers</span>
                                     </div>
                                 </div>
@@ -519,40 +519,14 @@
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                                                 <span data-i18n="dashboard.actionRequired">Action Required</span>
                                             </h3>
-                                            <span class="wd-badge wd-badge-warning">6</span>
+                                            <span class="wd-badge wd-badge-warning" id="action-required-count">0</span>
                                         </div>
                                         <div class="wd-card-body">
-                                            <div class="wd-action-list">
-                                                <a href="#" class="wd-action-item" onclick="showSection('po-management'); return false;">
-                                                    <div class="wd-action-icon wd-action-icon-warning">
-                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                                    </div>
-                                                    <div class="wd-action-content">
-                                                        <span class="wd-action-title" data-i18n="dashboard.receivedPO">Received PO</span>
-                                                        <span class="wd-action-desc">3 orders waiting for confirmation</span>
-                                                    </div>
-                                                    <span class="wd-action-badge wd-action-badge-urgent">3</span>
-                                                </a>
-                                                <a href="#" class="wd-action-item" onclick="showSection('inv-management'); return false;">
-                                                    <div class="wd-action-icon wd-action-icon-info">
-                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                                                    </div>
-                                                    <div class="wd-action-content">
-                                                        <span class="wd-action-title" data-i18n="dashboard.draftINV">Draft INV</span>
-                                                        <span class="wd-action-desc">2 invoices pending to send</span>
-                                                    </div>
-                                                    <span class="wd-action-badge">2</span>
-                                                </a>
-                                                <a href="#" class="wd-action-item" onclick="showSection('inquiries'); return false;">
-                                                    <div class="wd-action-icon wd-action-icon-primary">
-                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                                                    </div>
-                                                    <div class="wd-action-content">
-                                                        <span class="wd-action-title" data-i18n="dashboard.newInquiries">New Inquiries</span>
-                                                        <span class="wd-action-desc">1 inquiry needs response</span>
-                                                    </div>
-                                                    <span class="wd-action-badge">1</span>
-                                                </a>
+                                            <div class="wd-action-list" id="action-required-list">
+                                                <!-- Data loaded dynamically via API -->
+                                                <div class="wd-empty-state" style="padding: 16px; text-align: center; color: var(--wd-gray-400);">
+                                                    <p>No actions required</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -593,42 +567,10 @@
                                             <a href="#" class="wd-card-link" onclick="showSection('po-management'); return false;" data-i18n="common.viewAll">View All</a>
                                         </div>
                                         <div class="wd-card-body">
-                                            <div class="wd-activity-list">
-                                                <div class="wd-activity-item">
-                                                    <div class="wd-activity-icon wd-activity-icon-success">
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                                                    </div>
-                                                    <div class="wd-activity-content">
-                                                        <span class="wd-activity-title">INV #INV-2024-0089 sent</span>
-                                                        <span class="wd-activity-meta">ABC Distribution · 2 hours ago</span>
-                                                    </div>
-                                                </div>
-                                                <div class="wd-activity-item">
-                                                    <div class="wd-activity-icon wd-activity-icon-info">
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                                    </div>
-                                                    <div class="wd-activity-content">
-                                                        <span class="wd-activity-title">PO #PO-2024-0156 received</span>
-                                                        <span class="wd-activity-meta">XYZ Foods Ltd · 5 hours ago</span>
-                                                    </div>
-                                                </div>
-                                                <div class="wd-activity-item">
-                                                    <div class="wd-activity-icon wd-activity-icon-primary">
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                                                    </div>
-                                                    <div class="wd-activity-content">
-                                                        <span class="wd-activity-title">New inquiry from Global Trade</span>
-                                                        <span class="wd-activity-meta">Global Trade Co · Yesterday</span>
-                                                    </div>
-                                                </div>
-                                                <div class="wd-activity-item">
-                                                    <div class="wd-activity-icon wd-activity-icon-success">
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                                                    </div>
-                                                    <div class="wd-activity-content">
-                                                        <span class="wd-activity-title">PO #PO-2024-0155 confirmed</span>
-                                                        <span class="wd-activity-meta">ABC Distribution · Yesterday</span>
-                                                    </div>
+                                            <div class="wd-activity-list" id="recent-activity-list">
+                                                <!-- Data loaded dynamically via API -->
+                                                <div class="wd-empty-state" style="padding: 24px; text-align: center; color: var(--wd-gray-400);">
+                                                    <p>No recent activity</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -648,19 +590,19 @@
                                         <div class="wd-card-body">
                                             <div class="wd-performance-grid">
                                                 <div class="wd-performance-item">
-                                                    <span class="wd-performance-value">12</span>
+                                                    <span class="wd-performance-value" id="perf-orders-received">0</span>
                                                     <span class="wd-performance-label" data-i18n="dashboard.ordersReceived">Orders Received</span>
                                                 </div>
                                                 <div class="wd-performance-item">
-                                                    <span class="wd-performance-value">$45,600</span>
+                                                    <span class="wd-performance-value" id="perf-order-amount">$0</span>
                                                     <span class="wd-performance-label" data-i18n="dashboard.orderAmount">Order Amount</span>
                                                 </div>
                                                 <div class="wd-performance-item">
-                                                    <span class="wd-performance-value">8</span>
+                                                    <span class="wd-performance-value" id="perf-inv-issued">0</span>
                                                     <span class="wd-performance-label" data-i18n="dashboard.invIssued">INV Issued</span>
                                                 </div>
                                                 <div class="wd-performance-item">
-                                                    <span class="wd-performance-value">$38,200</span>
+                                                    <span class="wd-performance-value" id="perf-inv-amount">$0</span>
                                                     <span class="wd-performance-label" data-i18n="dashboard.invAmount">INV Amount</span>
                                                 </div>
                                             </div>
@@ -671,21 +613,10 @@
                                                     <span class="wd-compact-title" data-i18n="dashboard.topBuyers">Top Buyers</span>
                                                     <a href="#" class="wd-card-link" onclick="showSection('accounts'); return false;" data-i18n="common.viewAll">View All</a>
                                                 </div>
-                                                <div class="wd-buyer-list-compact">
-                                                    <div class="wd-buyer-compact">
-                                                        <span class="wd-buyer-rank-sm">1</span>
-                                                        <span class="wd-buyer-name-sm">ABC Distribution</span>
-                                                        <span class="wd-buyer-amount-sm">$45,600</span>
-                                                    </div>
-                                                    <div class="wd-buyer-compact">
-                                                        <span class="wd-buyer-rank-sm">2</span>
-                                                        <span class="wd-buyer-name-sm">XYZ Foods Ltd</span>
-                                                        <span class="wd-buyer-amount-sm">$38,200</span>
-                                                    </div>
-                                                    <div class="wd-buyer-compact">
-                                                        <span class="wd-buyer-rank-sm">3</span>
-                                                        <span class="wd-buyer-name-sm">Global Trade Co</span>
-                                                        <span class="wd-buyer-amount-sm">$28,500</span>
+                                                <div class="wd-buyer-list-compact" id="top-buyers-list">
+                                                    <!-- Data loaded dynamically via API -->
+                                                    <div class="wd-empty-state" style="padding: 12px; text-align: center; color: var(--wd-gray-400); font-size: 13px;">
+                                                        <p>No buyers yet</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -705,23 +636,23 @@
                                             <div class="wd-progress-section">
                                                 <div class="wd-progress-header">
                                                     <span data-i18n="dashboard.collectionRate">Collection Rate</span>
-                                                    <span class="wd-progress-value wd-text-success">68%</span>
+                                                    <span class="wd-progress-value wd-text-muted" id="collection-rate">0%</span>
                                                 </div>
                                                 <div class="wd-progress-bar">
-                                                    <div class="wd-progress-fill wd-progress-fill-success" style="width: 68%;"></div>
+                                                    <div class="wd-progress-fill wd-progress-fill-success" id="collection-rate-bar" style="width: 0%;"></div>
                                                 </div>
                                             </div>
                                             <div class="wd-payment-stats" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;">
                                                 <div class="wd-payment-stat">
-                                                    <span class="wd-payment-stat-value">$29,475</span>
+                                                    <span class="wd-payment-stat-value" id="payment-total-sent">$0</span>
                                                     <span class="wd-payment-stat-label wd-text-muted" data-i18n="dashboard.totalSent">Total Sent</span>
                                                 </div>
                                                 <div class="wd-payment-stat">
-                                                    <span class="wd-payment-stat-value wd-text-success">$20,043</span>
+                                                    <span class="wd-payment-stat-value wd-text-success" id="payment-collected">$0</span>
                                                     <span class="wd-payment-stat-label wd-text-muted" data-i18n="dashboard.collected">Collected</span>
                                                 </div>
                                                 <div class="wd-payment-stat">
-                                                    <span class="wd-payment-stat-value wd-text-warning">$9,432</span>
+                                                    <span class="wd-payment-stat-value wd-text-warning" id="payment-outstanding">$0</span>
                                                     <span class="wd-payment-stat-label wd-text-muted" data-i18n="dashboard.outstanding">Outstanding</span>
                                                 </div>
                                             </div>
@@ -1147,56 +1078,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="product-list-tbody">
-                                        <tr onclick="editProduct(1)" style="cursor: pointer;">
-                                            <td>
-                                                <div class="wd-product-cell">
-                                                    <div class="wd-product-thumb">
-                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
-                                                    </div>
-                                                    <div>
-                                                        <a href="#" class="wd-product-name wd-link" onclick="editProduct(1); return false;">Extra Virgin Olive Oil 500ml</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="wd-badge wd-badge-outline" data-i18n="categories.oils">Oils & Vinegars</span></td>
-                                            <td>OIL-001</td>
-                                            <td>$7.20 - $8.50</td>
-                                            <td>200 <span data-i18n="units.bottles">bottles</span></td>
-                                            <td>
-                                                <span class="wd-badge wd-badge-success">Organic</span>
-                                                <span class="wd-badge wd-badge-success">HACCP</span>
-                                            </td>
-                                            <td><span class="wd-badge wd-badge-success">Complete</span></td>
-                                            <td>
-                                                <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editProduct(1); event.stopPropagation();" data-i18n="products.edit">Edit</button>
-                                            </td>
-                                        </tr>
-                                        <tr class="wd-row-warning" onclick="editProduct(3)" style="cursor: pointer;">
-                                            <td>
-                                                <div class="wd-product-cell">
-                                                    <div class="wd-product-thumb">
-                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
-                                                    </div>
-                                                    <div>
-                                                        <a href="#" class="wd-product-name wd-link" onclick="editProduct(3); return false;">Aged Parmesan 24 months</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="wd-badge wd-badge-outline" data-i18n="categories.dairy">Dairy & Cheese</span></td>
-                                            <td>CHE-003</td>
-                                            <td>$18.00 - $22.00</td>
-                                            <td class="wd-missing-data">
-                                                <span class="wd-badge wd-badge-warning">Missing</span>
-                                                <button class="wd-btn-link" onclick="addMOQ(3); event.stopPropagation();">+ Add</button>
-                                            </td>
-                                            <td>
-                                                <span class="wd-badge wd-badge-info">DOP</span>
-                                            </td>
-                                            <td><span class="wd-badge wd-badge-warning">Incomplete</span></td>
-                                            <td>
-                                                <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="editProduct(3); event.stopPropagation();" data-i18n="products.fillIn">Fill in</button>
-                                            </td>
-                                        </tr>
+                                        <!-- Data loaded dynamically via API -->
                                     </tbody>
                                 </table>
                             </div>
@@ -1322,73 +1204,7 @@
                                         </tr>
                                     </thead>
                                 <tbody id="po-list-tbody">
-                                    <tr data-status="draft" data-po="PO-2026-0051" onclick="viewPODetail('PO-2026-0051')" class="wd-cursor-pointer">
-                                        <td>PO-2026-0051</td>
-                                        <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
-                                        <td>Organic Almond Butter 500g</td>
-                                        <td>USD 2,450</td>
-                                        <td>Green Valley Foods</td>
-                                        <td>T/T</td>
-                                        <td>FOB</td>
-                                        <td>2026.02.05 09:30</td>
-                                        <td>
-                                            <div class="wd-author-cell">
-                                                <div class="wd-author-avatar">JL</div>
-                                                <span class="wd-author-name">Jungwon Lee</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr data-status="received" data-po="20260202171" onclick="viewPODetail('20260202171')" class="wd-cursor-pointer">
-                                        <td>20260202171</td>
-                                        <td><span class="wd-badge wd-badge-info">Received</span></td>
-                                        <td>Thin Banana Slices 60g</td>
-                                        <td>USD 1,128</td>
-                                        <td>CJ UNIWORLD CORPORATION</td>
-                                        <td>T/T</td>
-                                        <td>EXW</td>
-                                        <td>2026.02.04 15:51</td>
-                                        <td>
-                                            <div class="wd-author-cell">
-                                                <div class="wd-author-avatar">JL</div>
-                                                <span class="wd-author-name">Jungwon Lee</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr data-status="confirmed" data-po="PO20260203048953" onclick="viewPODetail('PO20260203048953')" class="wd-cursor-pointer">
-                                        <td>PO20260203048953</td>
-                                        <td><span class="wd-badge wd-badge-success">Confirmed</span></td>
-                                        <td>Frozen Butter Croissant Dough (24% Butter)</td>
-                                        <td>EUR 806.4</td>
-                                        <td>DELIFRANCE</td>
-                                        <td>T/T</td>
-                                        <td>FCA</td>
-                                        <td>2026.02.03 13:44</td>
-                                        <td>
-                                            <div class="wd-author-cell">
-                                                <div class="wd-author-avatar">MK</div>
-                                                <span class="wd-author-name">Minjun Kim</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr data-status="confirmed" data-po="PO2026012800A2C" onclick="viewPODetail('PO2026012800A2C')" class="wd-cursor-pointer">
-                                        <td>PO2026012800A2C</td>
-                                        <td><span class="wd-badge wd-badge-success">Confirmed</span></td>
-                                        <td>
-                                            Pistachio Spread 1KG
-                                            <a href="#" class="wd-link" onclick="event.stopPropagation();">+1 more</a>
-                                        </td>
-                                        <td>EUR 16,272</td>
-                                        <td>Amorelli Spreads BV</td>
-                                        <td>T/T</td>
-                                        <td>EXW</td>
-                                        <td>2026.02.03 10:21</td>
-                                        <td>
-                                            <div class="wd-author-cell">
-                                                <div class="wd-author-avatar">JL</div>
-                                                <span class="wd-author-name">Jungwon Lee</span>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <!-- Data loaded dynamically via API -->
                                 </tbody>
                             </table>
                             </div>
@@ -1893,117 +1709,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="inv-table-body">
-                                        <tr data-status="draft" data-payment="unpaid" data-tab="active" data-inv="INV-2026-0089" onclick="viewINVDetail('INV-2026-0089')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">INV-2026-0089</span></td>
-                                            <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
-                                            <td><span class="wd-badge wd-badge-outline">-</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0156')">PO-2026-0156</a></td>
-                                            <td>ABC Distribution</td>
-                                            <td>$3,125.00</td>
-                                            <td>2026-02-04</td>
-                                            <td>
-                                                <div class="wd-author-cell">
-                                                    <div class="wd-author-avatar">JL</div>
-                                                    <span class="wd-author-name">Jungwon Lee</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr data-status="sent" data-payment="unpaid" data-tab="active" data-inv="INV-2026-0088" onclick="viewINVDetail('INV-2026-0088')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">INV-2026-0088</span></td>
-                                            <td><span class="wd-badge wd-badge-primary">Sent</span></td>
-                                            <td>
-                                                <span class="wd-badge wd-badge-warning-light">
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                                    Unpaid
-                                                </span>
-                                            </td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0142')">PO-2026-0142</a></td>
-                                            <td>XYZ Foods Ltd</td>
-                                            <td>$8,130.00</td>
-                                            <td>2026-02-01</td>
-                                            <td>
-                                                <div class="wd-author-cell">
-                                                    <div class="wd-author-avatar">MK</div>
-                                                    <span class="wd-author-name">Minjun Kim</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr data-status="sent" data-payment="paid" data-tab="active" data-inv="INV-2026-0087" onclick="viewINVDetail('INV-2026-0087')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">INV-2026-0087</span></td>
-                                            <td><span class="wd-badge wd-badge-primary">Sent</span></td>
-                                            <td>
-                                                <span class="wd-badge wd-badge-success-light">
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                                    Paid
-                                                </span>
-                                            </td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0138')">PO-2026-0138</a></td>
-                                            <td>Global Trade Co</td>
-                                            <td>$12,800.00</td>
-                                            <td>2026-01-28</td>
-                                            <td>
-                                                <div class="wd-author-cell">
-                                                    <div class="wd-author-avatar">JL</div>
-                                                    <span class="wd-author-name">Jungwon Lee</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr data-status="sent" data-payment="paid" data-tab="active" data-inv="INV-2026-0086" onclick="viewINVDetail('INV-2026-0086')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">INV-2026-0086</span></td>
-                                            <td><span class="wd-badge wd-badge-primary">Sent</span></td>
-                                            <td>
-                                                <span class="wd-badge wd-badge-success-light">
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                                    Paid
-                                                </span>
-                                            </td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0130')">PO-2026-0130</a></td>
-                                            <td>ABC Distribution</td>
-                                            <td>$5,420.00</td>
-                                            <td>2026-01-20</td>
-                                            <td>
-                                                <div class="wd-author-cell">
-                                                    <div class="wd-author-avatar">JL</div>
-                                                    <span class="wd-author-name">Jungwon Lee</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr data-status="sent" data-payment="unpaid" data-tab="active" data-inv="INV-2026-0085" onclick="viewINVDetail('INV-2026-0085')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">INV-2026-0085</span></td>
-                                            <td><span class="wd-badge wd-badge-primary">Sent</span></td>
-                                            <td>
-                                                <span class="wd-badge wd-badge-warning-light">
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                                    Unpaid
-                                                </span>
-                                            </td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0125')">PO-2026-0125</a></td>
-                                            <td>Fresh Foods Inc</td>
-                                            <td>$1,302.00</td>
-                                            <td>2026-01-15</td>
-                                            <td>
-                                                <div class="wd-author-cell">
-                                                    <div class="wd-author-avatar">MK</div>
-                                                    <span class="wd-author-name">Minjun Kim</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <!-- Cancelled INVs (hidden by default) -->
-                                        <tr data-status="cancelled" data-payment="unpaid" data-tab="cancelled" data-inv="INV-2026-0082" onclick="viewINVDetail('INV-2026-0082')" class="wd-cursor-pointer" style="display: none;">
-                                            <td><span class="wd-text-mono">INV-2026-0082</span></td>
-                                            <td><span class="wd-badge wd-badge-danger">Cancelled</span></td>
-                                            <td><span class="wd-badge wd-badge-outline">-</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0118')">PO-2026-0118</a></td>
-                                            <td>Metro Imports</td>
-                                            <td>$4,500.00</td>
-                                            <td>2026-01-10</td>
-                                            <td>
-                                                <div class="wd-author-cell">
-                                                    <div class="wd-author-avatar">JL</div>
-                                                    <span class="wd-author-name">Jungwon Lee</span>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        <!-- Data loaded dynamically via API -->
                                     </tbody>
                                 </table>
                             </div>
@@ -2322,56 +2028,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="credit-table-body">
-                                        <tr data-status="draft" data-tab="active" data-credit="CR-2024-005" onclick="viewCreditDetail('CR-2024-005')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">CR-2024-005</span></td>
-                                            <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0090')">INV-2024-0090</a></td>
-                                            <td>Pacific Foods Corp</td>
-                                            <td>Coconut Milk Powder 1KG</td>
-                                            <td>Short shipment (8 units)</td>
-                                            <td><span class="wd-text-bold">$96.00</span></td>
-                                            <td>2024-02-05</td>
-                                        </tr>
-                                        <tr data-status="approved" data-tab="active" data-credit="CR-2024-001" onclick="viewCreditDetail('CR-2024-001')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">CR-2024-001</span></td>
-                                            <td><span class="wd-badge wd-badge-success">Approved</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0089')">INV-2024-0089</a></td>
-                                            <td>ABC Distribution</td>
-                                            <td>Extra Virgin Olive Oil 500ml</td>
-                                            <td>Damaged packaging (5 units)</td>
-                                            <td><span class="wd-text-bold">$125.00</span></td>
-                                            <td>2024-02-01</td>
-                                        </tr>
-                                        <tr data-status="approved" data-tab="active" data-credit="CR-2024-002" onclick="viewCreditDetail('CR-2024-002')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">CR-2024-002</span></td>
-                                            <td><span class="wd-badge wd-badge-success">Approved</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0088')">INV-2024-0088</a></td>
-                                            <td>XYZ Foods Ltd</td>
-                                            <td>Aged Parmesan 24 months</td>
-                                            <td>Quality issue - mold (2 units)</td>
-                                            <td><span class="wd-text-bold">$320.00</span></td>
-                                            <td>2024-01-28</td>
-                                        </tr>
-                                        <tr data-status="used" data-tab="active" data-credit="CR-2024-003" onclick="viewCreditDetail('CR-2024-003')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">CR-2024-003</span></td>
-                                            <td><span class="wd-badge wd-badge-info">Used</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0087')">INV-2024-0087</a></td>
-                                            <td>Global Trade Co</td>
-                                            <td>Organic Honey 350g</td>
-                                            <td>Short shipment (10 units)</td>
-                                            <td><span class="wd-text-bold">$180.00</span></td>
-                                            <td>2024-01-20</td>
-                                        </tr>
-                                        <tr data-status="cancelled" data-tab="cancelled" data-credit="CR-2024-004" onclick="viewCreditDetail('CR-2024-004')" class="wd-cursor-pointer" style="display:none;">
-                                            <td><span class="wd-text-mono">CR-2024-004</span></td>
-                                            <td><span class="wd-badge wd-badge-danger">Cancelled</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0086')">INV-2024-0086</a></td>
-                                            <td>Fresh Goods Inc</td>
-                                            <td>Truffle Oil 250ml</td>
-                                            <td>Wrong product (3 units)</td>
-                                            <td><span class="wd-text-bold">$210.00</span></td>
-                                            <td>2024-01-15</td>
-                                        </tr>
+                                        <!-- Data loaded dynamically via API -->
                                     </tbody>
                                 </table>
                             </div>
@@ -2534,103 +2191,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="accounts-table-body">
-                                        <tr data-account-id="ACC-001" data-pi-status="in-progress" onclick="viewAccountDetail('ACC-001')" class="wd-cursor-pointer">
-                                            <td>
-                                                <div class="wd-company-cell">
-                                                    <span class="wd-company-name">ABC Distribution</span>
-                                                    <span class="wd-company-code">🇰🇷 South Korea</span>
-                                                </div>
-                                            </td>
-                                            <td>Kim Min-jun</td>
-                                            <td>
-                                                <div class="wd-inv-status-cell">
-                                                    <span class="wd-badge wd-badge-primary">2 In Progress</span>
-                                                    <span class="wd-badge wd-badge-success">5 Completed</span>
-                                                </div>
-                                            </td>
-                                            <td><span class="wd-text-bold">$8,545</span></td>
-                                            <td>$45,600</td>
-                                            <td>
-                                                <div class="wd-products-preview">
-                                                    <span class="wd-product-chip">Olive Oil 500ml</span>
-                                                    <span class="wd-product-chip">Parmesan 24mo</span>
-                                                    <a href="#" class="wd-link" onclick="event.stopPropagation(); viewAccountProducts('ACC-001')">+3</a>
-                                                </div>
-                                            </td>
-                                            <td>2024-02-04</td>
-                                        </tr>
-                                        <tr data-account-id="ACC-002" data-pi-status="in-progress" onclick="viewAccountDetail('ACC-002')" class="wd-cursor-pointer">
-                                            <td>
-                                                <div class="wd-company-cell">
-                                                    <span class="wd-company-name">XYZ Foods Ltd</span>
-                                                    <span class="wd-company-code">🇯🇵 Japan</span>
-                                                </div>
-                                            </td>
-                                            <td>Tanaka Yuki</td>
-                                            <td>
-                                                <div class="wd-inv-status-cell">
-                                                    <span class="wd-badge wd-badge-primary">1 In Progress</span>
-                                                    <span class="wd-badge wd-badge-success">8 Completed</span>
-                                                </div>
-                                            </td>
-                                            <td><span class="wd-text-bold">$12,130</span></td>
-                                            <td>$78,200</td>
-                                            <td>
-                                                <div class="wd-products-preview">
-                                                    <span class="wd-product-chip">Honey 350g</span>
-                                                    <span class="wd-product-chip">Truffle Oil</span>
-                                                    <a href="#" class="wd-link" onclick="event.stopPropagation(); viewAccountProducts('ACC-002')">+5</a>
-                                                </div>
-                                            </td>
-                                            <td>2024-02-01</td>
-                                        </tr>
-                                        <tr data-account-id="ACC-003" data-pi-status="completed" onclick="viewAccountDetail('ACC-003')" class="wd-cursor-pointer">
-                                            <td>
-                                                <div class="wd-company-cell">
-                                                    <span class="wd-company-name">Global Trade Co</span>
-                                                    <span class="wd-company-code">🇺🇸 United States</span>
-                                                </div>
-                                            </td>
-                                            <td>John Smith</td>
-                                            <td>
-                                                <div class="wd-inv-status-cell">
-                                                    <span class="wd-badge wd-badge-success">12 Completed</span>
-                                                </div>
-                                            </td>
-                                            <td><span class="wd-text-bold">$18,800</span></td>
-                                            <td>$122,000</td>
-                                            <td>
-                                                <div class="wd-products-preview">
-                                                    <span class="wd-product-chip">Balsamic Vinegar</span>
-                                                    <span class="wd-product-chip">Dried Pasta</span>
-                                                    <a href="#" class="wd-link" onclick="event.stopPropagation(); viewAccountProducts('ACC-003')">+8</a>
-                                                </div>
-                                            </td>
-                                            <td>2024-01-28</td>
-                                        </tr>
-                                        <tr data-account-id="ACC-004" data-pi-status="completed" onclick="viewAccountDetail('ACC-004')" class="wd-cursor-pointer">
-                                            <td>
-                                                <div class="wd-company-cell">
-                                                    <span class="wd-company-name">Euro Gourmet GmbH</span>
-                                                    <span class="wd-company-code">🇩🇪 Germany</span>
-                                                </div>
-                                            </td>
-                                            <td>Hans Mueller</td>
-                                            <td>
-                                                <div class="wd-inv-status-cell">
-                                                    <span class="wd-badge wd-badge-success">6 Completed</span>
-                                                </div>
-                                            </td>
-                                            <td><span class="wd-text-bold">$5,200</span></td>
-                                            <td>$38,500</td>
-                                            <td>
-                                                <div class="wd-products-preview">
-                                                    <span class="wd-product-chip">Olive Oil 1L</span>
-                                                    <a href="#" class="wd-link" onclick="event.stopPropagation(); viewAccountProducts('ACC-004')">+2</a>
-                                                </div>
-                                            </td>
-                                            <td>2024-01-15</td>
-                                        </tr>
+                                        <!-- Data loaded dynamically via API -->
                                     </tbody>
                                 </table>
                             </div>
@@ -3154,64 +2715,8 @@
 
                             <!-- Inquiry List -->
                             <div style="padding: 24px;">
-                                <div class="wd-inquiry-list">
-                                    <div class="wd-inquiry-card wd-inquiry-new">
-                                        <div class="wd-inquiry-header">
-                                            <div class="wd-inquiry-badges">
-                                                <span class="wd-badge wd-badge-primary">New</span>
-                                                <span class="wd-badge wd-badge-info">Quotation Request</span>
-                                            </div>
-                                            <span class="wd-inquiry-date">2 hours ago</span>
-                                        </div>
-                                        <div class="wd-inquiry-body">
-                                            <h4 class="wd-inquiry-title">Extra Virgin Olive Oil Quotation Request</h4>
-                                            <p class="wd-inquiry-from">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                                ABC Distribution Co. (South Korea)
-                                            </p>
-                                            <div class="wd-inquiry-meta">
-                                                <span class="wd-inquiry-meta-item">
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
-                                                    500 bottles
-                                                </span>
-                                                <span class="wd-inquiry-meta-item">
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                                                    CIF Busan
-                                                </span>
-                                            </div>
-                                            <p class="wd-inquiry-message">"We are interested in your organic olive oil for the Korean market..."</p>
-                                        </div>
-                                        <div class="wd-inquiry-footer">
-                                            <button class="wd-btn wd-btn-outline" data-i18n="inquiry.viewDetails">View Details</button>
-                                            <button class="wd-btn wd-btn-primary" data-i18n="inquiry.sendQuotation">Send Quotation</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="wd-inquiry-card">
-                                        <div class="wd-inquiry-header">
-                                            <div class="wd-inquiry-badges">
-                                                <span class="wd-badge wd-badge-warning">Sample Request</span>
-                                            </div>
-                                            <span class="wd-inquiry-date">1 day ago</span>
-                                        </div>
-                                        <div class="wd-inquiry-body">
-                                            <h4 class="wd-inquiry-title">Aged Parmesan Sample Request</h4>
-                                            <p class="wd-inquiry-from">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                                XYZ Foods Ltd. (Japan)
-                                            </p>
-                                            <div class="wd-inquiry-meta">
-                                                <span class="wd-inquiry-meta-item">
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
-                                                    3 units
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="wd-inquiry-footer">
-                                            <button class="wd-btn wd-btn-outline" data-i18n="inquiry.viewDetails">View Details</button>
-                                            <button class="wd-btn wd-btn-primary" data-i18n="inquiry.approveSample">Approve Sample</button>
-                                        </div>
-                                    </div>
+                                <div class="wd-inquiry-list" id="inquiry-list">
+                                    <!-- Data loaded dynamically via API -->
                                 </div>
                             </div>
                         </div>
