@@ -315,14 +315,10 @@ class SalesModule {
     }
 
     /**
-     * View PO detail
+     * View PO detail - redirect to dedicated page
      */
     async viewPODetail(poNumber) {
-        toast.info(`Viewing details for ${poNumber}`);
-
-        const detail = await poService.getPODetail(poNumber);
-        // TODO: Show PO detail modal with detail data
-        console.log('PO Detail:', detail);
+        window.location.href = `po-edit.html?id=${encodeURIComponent(poNumber)}`;
     }
 
     /**
@@ -1183,10 +1179,8 @@ class SalesModule {
      * View PO from INV
      */
     viewPOFromINV(poNumber) {
-        window.showSection('po-management');
-        setTimeout(() => {
-            this.viewPODetail(poNumber);
-        }, 300);
+        // Redirect directly to PO detail page
+        window.location.href = `po-edit.html?id=${encodeURIComponent(poNumber)}`;
     }
 
     // ==================== PO Manual Registration ====================

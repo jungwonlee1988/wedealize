@@ -2524,92 +2524,9 @@ function searchPO() {
     applyPOFilters();
 }
 
-// PO 상세 보기
+// PO 상세 보기 - 별도 페이지로 이동
 function viewPODetail(poNumber) {
-    // 패널 전환
-    document.getElementById('panel-po-management').style.display = 'none';
-    document.getElementById('panel-po-detail').style.display = 'block';
-
-    // 샘플 데이터 (실제로는 API에서 가져옴)
-    const poData = {
-        'PO-2026-0042': {
-            number: 'PO20260203048953',
-            status: '운송요청완료',
-            statusClass: 'shipping-requested',
-            date: '2026.02.03 13:44',
-            exporter: {
-                name: 'DELIFRANCE',
-                contact: 'Anne, CHU',
-                email: 'anne.chu@delifrance.com',
-                phone: '+33 (0)6 73 18 08 52'
-            },
-            importer: {
-                name: 'SELLER-NOTE.CO.,LTD',
-                contact: 'jay',
-                email: 'jay@seller-note.com',
-                phone: '821026387225'
-            },
-            trade: {
-                incoterms: 'FCA (운송인 인도)',
-                paymentTerms: 'T/T (전신환송금)',
-                currency: 'EUR'
-            },
-            items: [
-                { name: '냉동 버터 크로아상 생지(버터 24%)', qty: 40, unit: 'boxes', price: 20.16, total: 806.4 }
-            ],
-            totalQty: 40,
-            totalAmount: 806.4,
-            notes: '-'
-        }
-    };
-
-    const data = poData[poNumber] || poData['PO-2026-0042'];
-
-    // 데이터 바인딩
-    document.getElementById('po-detail-number').textContent = data.number;
-    document.getElementById('po-detail-status').textContent = data.status;
-    const statusBadgeMap = {
-        'shipping-requested': 'wd-badge wd-badge-info',
-        'confirmed': 'wd-badge wd-badge-confirmed',
-        'received': 'wd-badge wd-badge-received',
-        'cancelled': 'wd-badge wd-badge-cancelled',
-        'pending': 'wd-badge wd-badge-warning'
-    };
-    document.getElementById('po-detail-status').className = statusBadgeMap[data.statusClass] || 'wd-badge wd-badge-info';
-    document.getElementById('po-detail-date').textContent = data.date;
-
-    document.getElementById('po-exporter-name').textContent = data.exporter.name;
-    document.getElementById('po-exporter-contact').textContent = data.exporter.contact;
-    document.getElementById('po-exporter-email').textContent = data.exporter.email;
-    document.getElementById('po-exporter-phone').textContent = data.exporter.phone;
-
-    document.getElementById('po-importer-name').textContent = data.importer.name;
-    document.getElementById('po-importer-contact').textContent = data.importer.contact;
-    document.getElementById('po-importer-email').textContent = data.importer.email;
-    document.getElementById('po-importer-phone').textContent = data.importer.phone;
-
-    document.getElementById('po-incoterms').textContent = data.trade.incoterms;
-    document.getElementById('po-payment-terms').textContent = data.trade.paymentTerms;
-    document.getElementById('po-currency').textContent = data.trade.currency;
-
-    document.getElementById('po-items-count').textContent = data.items.length;
-
-    // 품목 테이블
-    const tbody = document.getElementById('po-items-tbody');
-    tbody.innerHTML = data.items.map(item => `
-        <tr>
-            <td>${item.name}</td>
-            <td class="wd-text-right">${item.qty}</td>
-            <td>${item.unit}</td>
-            <td class="wd-text-right">${item.price}</td>
-            <td class="wd-text-right">${item.total}</td>
-        </tr>
-    `).join('');
-
-    document.getElementById('po-total-qty').textContent = data.totalQty;
-    document.getElementById('po-total-currency').textContent = data.trade.currency;
-    document.getElementById('po-total-amount').textContent = data.totalAmount;
-    document.getElementById('po-notes').textContent = data.notes;
+    window.location.href = `po-edit.html?id=${encodeURIComponent(poNumber)}`;
 }
 
 // PO 목록으로 돌아가기

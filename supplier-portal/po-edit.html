@@ -3,11 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase Order - WeDealize Supplier Portal</title>
+    <title>PO Detail - WeDealize Supplier Portal</title>
     <link rel="icon" type="image/png" href="./favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="compact-form.css">
+    <style>
+        .po-status-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding: 12px 16px; background: var(--wd-gray-50); border-radius: 8px; }
+        .po-status-bar .po-number { font-size: 1.1rem; font-weight: 700; color: var(--wd-gray-900); }
+        .po-status-bar .po-date { font-size: 0.85rem; color: var(--wd-gray-500); }
+        .info-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: var(--wd-gray-50); border-radius: 8px; }
+        .info-avatar { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--wd-primary-50); border-radius: 8px; font-size: 1.2rem; }
+        .info-details { flex: 1; }
+        .info-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; }
+        .info-contact { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.8rem; color: var(--wd-gray-600); }
+        .info-contact-item { display: flex; align-items: center; gap: 4px; }
+        .info-contact-item svg { color: var(--wd-gray-400); }
+        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .info-item { display: flex; flex-direction: column; gap: 4px; }
+        .info-label { font-size: 0.75rem; color: var(--wd-gray-500); text-transform: uppercase; }
+        .info-value { font-size: 0.9rem; font-weight: 500; }
+        .total-row { background: var(--wd-gray-50); font-weight: 600; }
+        .notes-box { padding: 12px; background: var(--wd-gray-50); border-radius: 6px; font-size: 0.85rem; min-height: 60px; }
+        .edit-toggle { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--wd-gray-500); }
+        .edit-toggle input { cursor: pointer; }
+        .view-mode .edit-input { display: none !important; }
+        .view-mode .view-value { display: block; }
+        .edit-mode .edit-input { display: block !important; }
+        .edit-mode .view-value { display: none !important; }
+        .compact-form { max-width: 1000px; }
+        .edit-mode .edit-col { display: table-cell !important; }
+        .view-mode .edit-col { display: none !important; }
+    </style>
 </head>
 <body>
     <div class="portal-app">
@@ -16,10 +43,8 @@
                 <div class="logo"><img src="logo.png" alt="WeDealize" height="32"></div>
                 <nav class="header-nav">
                     <div class="language-dropdown" id="language-dropdown">
-                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">🇺🇸 EN ▼</button>
-                        <div class="language-menu" id="language-menu">
-                            <div class="language-list" id="language-list"></div>
-                        </div>
+                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">EN</button>
+                        <div class="language-menu" id="language-menu"><div class="language-list" id="language-list"></div></div>
                     </div>
                     <div class="user-menu" id="user-menu">
                         <span class="user-name" id="user-name"></span>
@@ -35,207 +60,210 @@
                     <aside class="wd-sidebar">
                         <div class="wd-sidebar-header">
                             <span class="wd-sidebar-logo">WeDealize</span>
-                            <button class="wd-sidebar-toggle" onclick="toggleSidebar()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-                            </button>
+                            <button class="wd-sidebar-toggle" onclick="toggleSidebar()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
                         </div>
                         <nav class="wd-sidebar-nav">
-                            <a class="wd-nav-item" onclick="navigateTo('overview')">
-                                <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                                <span>Overview</span>
-                            </a>
+                            <a class="wd-nav-item" onclick="navigateTo('overview')"><svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Overview</span></a>
                             <div class="wd-nav-group">
-                                <a class="wd-nav-item wd-nav-parent" onclick="toggleSubmenu(this)">
-                                    <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                                    <span>Product</span>
-                                    <svg class="wd-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                                </a>
+                                <a class="wd-nav-item wd-nav-parent" onclick="toggleSubmenu(this)"><svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span>Product</span><svg class="wd-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
                                 <div class="wd-nav-submenu">
                                     <a class="wd-nav-item wd-nav-child" onclick="navigateTo('catalog')"><span>Catalog Registration</span></a>
                                     <a class="wd-nav-item wd-nav-child" onclick="navigateTo('product-list')"><span>Product List</span></a>
                                 </div>
                             </div>
                             <div class="wd-nav-group expanded">
-                                <a class="wd-nav-item wd-nav-parent" onclick="toggleSubmenu(this)">
-                                    <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                    <span>Sales</span>
-                                    <svg class="wd-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                                </a>
+                                <a class="wd-nav-item wd-nav-parent" onclick="toggleSubmenu(this)"><svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Sales</span><svg class="wd-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
                                 <div class="wd-nav-submenu">
                                     <a class="wd-nav-item wd-nav-child active" onclick="navigateTo('po-management')"><span>PO Management</span></a>
-                                    <a class="wd-nav-item wd-nav-child" onclick="navigateTo('pi-management')"><span>PI Management</span></a>
+                                    <a class="wd-nav-item wd-nav-child" onclick="navigateTo('inv-management')"><span>INV Management</span></a>
                                     <a class="wd-nav-item wd-nav-child" onclick="navigateTo('credit-management')"><span>Credit Management</span></a>
                                 </div>
                             </div>
-                            <a class="wd-nav-item" onclick="navigateTo('accounts')">
-                                <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                                <span>Accounts</span>
-                            </a>
+                            <a class="wd-nav-item" onclick="navigateTo('accounts')"><svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Accounts</span></a>
                         </nav>
                         <div class="wd-sidebar-footer">
                             <div class="wd-user-profile">
                                 <div class="wd-user-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-                                <div class="wd-user-info">
-                                    <span class="wd-user-name" id="sidebar-user-name">User</span>
-                                    <span class="wd-user-email" id="sidebar-user-email"></span>
-                                </div>
+                                <div class="wd-user-info"><span class="wd-user-name" id="sidebar-user-name">User</span><span class="wd-user-email" id="sidebar-user-email"></span></div>
                             </div>
                         </div>
                     </aside>
 
                     <div class="dashboard-content">
-                        <div class="compact-form">
+                        <div class="compact-form view-mode" id="po-form-container">
                             <div class="page-header">
                                 <div class="page-header-left">
-                                    <a href="portal.html#po-management" class="btn-back">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                                    </a>
-                                    <h1 class="page-title">Add Purchase Order</h1>
+                                    <a href="portal.html#po-management" class="btn-back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+                                    <h1 class="page-title">PO Detail</h1>
                                 </div>
                                 <div class="page-header-actions">
-                                    <a href="portal.html#po-management" class="wd-btn wd-btn-outline">Cancel</a>
-                                    <button type="submit" form="po-edit-form" class="wd-btn wd-btn-primary">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-                                        Save PO
+                                    <label class="edit-toggle">
+                                        <input type="checkbox" id="edit-mode-toggle" onchange="toggleEditMode()">
+                                        <span>Edit Mode</span>
+                                    </label>
+                                    <button type="button" onclick="downloadPO()" class="wd-btn wd-btn-outline" title="Download">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    </button>
+                                    <button type="button" id="save-btn" onclick="savePO()" class="wd-btn wd-btn-primary" style="display: none;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                        Save Changes
                                     </button>
                                 </div>
+                            </div>
+
+                            <!-- PO Status Bar -->
+                            <div class="po-status-bar">
+                                <span class="po-number" id="po-number-display">PO-2026-0001</span>
+                                <span class="wd-badge wd-badge-info" id="po-status">Received</span>
+                                <span class="po-date" id="po-date-display">2026.02.03 13:44</span>
                             </div>
 
                             <form id="po-edit-form">
                                 <div class="compact-grid">
                                     <!-- Left Column -->
                                     <div class="compact-column">
-                                        <!-- Basic Info -->
+                                        <!-- Exporter Info -->
                                         <div class="compact-section">
-                                            <h3 class="compact-section-title"><span class="section-icon">📋</span> Basic Info</h3>
-                                            <div class="compact-row">
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">PO Number <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <input type="text" class="wd-input" id="po-number" required placeholder="PO-2026-0001">
-                                                </div>
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">Order Date <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <input type="date" class="wd-input" id="po-date" required>
+                                            <h3 class="compact-section-title"><span class="section-icon">🏭</span> Exporter Information</h3>
+                                            <div class="info-card">
+                                                <div class="info-avatar">🏢</div>
+                                                <div class="info-details">
+                                                    <div class="info-name view-value" id="exporter-name-view">DELIFRANCE</div>
+                                                    <input type="text" class="wd-input edit-input" id="exporter-name" value="DELIFRANCE">
+                                                    <div class="info-contact" style="margin-top: 8px;">
+                                                        <span class="info-contact-item">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                                            <span class="view-value" id="exporter-contact-view">Anne, CHU</span>
+                                                            <input type="text" class="wd-input edit-input" id="exporter-contact" value="Anne, CHU" style="width: 120px;">
+                                                        </span>
+                                                        <span class="info-contact-item">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                                            <span class="view-value" id="exporter-email-view">anne.chu@delifrance.com</span>
+                                                            <input type="email" class="wd-input edit-input" id="exporter-email" value="anne.chu@delifrance.com" style="width: 180px;">
+                                                        </span>
+                                                        <span class="info-contact-item">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                                            <span class="view-value" id="exporter-phone-view">+33 6 73 18 08 52</span>
+                                                            <input type="tel" class="wd-input edit-input" id="exporter-phone" value="+33 6 73 18 08 52" style="width: 140px;">
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Buyer Info -->
+                                        <!-- Importer Info -->
                                         <div class="compact-section">
-                                            <h3 class="compact-section-title"><span class="section-icon">🏢</span> Buyer Info</h3>
-                                            <div class="compact-row">
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">Company <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <input type="text" class="wd-input" id="po-buyer-company" required placeholder="ABC Distribution">
+                                            <h3 class="compact-section-title"><span class="section-icon">🏢</span> Importer Information</h3>
+                                            <div class="info-card">
+                                                <div class="info-avatar">🏢</div>
+                                                <div class="info-details">
+                                                    <div class="info-name view-value" id="importer-name-view">SELLER-NOTE.CO.,LTD</div>
+                                                    <input type="text" class="wd-input edit-input" id="importer-name" value="SELLER-NOTE.CO.,LTD">
+                                                    <div class="info-contact" style="margin-top: 8px;">
+                                                        <span class="info-contact-item">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                                            <span class="view-value" id="importer-contact-view">Jay</span>
+                                                            <input type="text" class="wd-input edit-input" id="importer-contact" value="Jay" style="width: 120px;">
+                                                        </span>
+                                                        <span class="info-contact-item">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                                            <span class="view-value" id="importer-email-view">jay@seller-note.com</span>
+                                                            <input type="email" class="wd-input edit-input" id="importer-email" value="jay@seller-note.com" style="width: 180px;">
+                                                        </span>
+                                                        <span class="info-contact-item">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                                            <span class="view-value" id="importer-phone-view">+82 10 2638 7225</span>
+                                                            <input type="tel" class="wd-input edit-input" id="importer-phone" value="+82 10 2638 7225" style="width: 140px;">
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">Contact</label>
-                                                    <input type="text" class="wd-input" id="po-buyer-contact" placeholder="John Smith">
-                                                </div>
-                                            </div>
-                                            <div class="compact-row">
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">Email</label>
-                                                    <input type="email" class="wd-input" id="po-buyer-email" placeholder="john@company.com">
-                                                </div>
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">Phone</label>
-                                                    <input type="tel" class="wd-input" id="po-buyer-phone" placeholder="+1 234 567 8900">
-                                                </div>
-                                            </div>
-                                            <div class="wd-form-group">
-                                                <label class="wd-form-label">Address</label>
-                                                <input type="text" class="wd-input" id="po-buyer-address" placeholder="Full shipping address">
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Right Column -->
                                     <div class="compact-column">
-                                        <!-- Trade Terms -->
+                                        <!-- Trade Info -->
                                         <div class="compact-section">
-                                            <h3 class="compact-section-title"><span class="section-icon">🌍</span> Trade Terms</h3>
-                                            <div class="compact-row-3">
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">Currency</label>
-                                                    <select class="wd-input wd-select" id="po-currency">
-                                                        <option value="USD">USD</option>
-                                                        <option value="EUR">EUR</option>
-                                                        <option value="KRW">KRW</option>
-                                                    </select>
-                                                </div>
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">Incoterms</label>
-                                                    <select class="wd-input wd-select" id="po-incoterms">
+                                            <h3 class="compact-section-title"><span class="section-icon">🌍</span> Trade Information</h3>
+                                            <div class="info-grid">
+                                                <div class="info-item">
+                                                    <span class="info-label">Incoterms</span>
+                                                    <span class="info-value view-value" id="incoterms-view">FCA</span>
+                                                    <select class="wd-input wd-select edit-input" id="incoterms">
+                                                        <option value="FCA">FCA</option>
                                                         <option value="FOB">FOB</option>
                                                         <option value="CIF">CIF</option>
                                                         <option value="EXW">EXW</option>
                                                         <option value="DDP">DDP</option>
                                                     </select>
                                                 </div>
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">Payment</label>
-                                                    <select class="wd-input wd-select" id="po-payment-terms">
+                                                <div class="info-item">
+                                                    <span class="info-label">Payment Terms</span>
+                                                    <span class="info-value view-value" id="payment-terms-view">T/T</span>
+                                                    <select class="wd-input wd-select edit-input" id="payment-terms">
+                                                        <option value="TT">T/T</option>
                                                         <option value="NET30">Net 30</option>
                                                         <option value="NET60">Net 60</option>
-                                                        <option value="TT">T/T</option>
                                                         <option value="LC">L/C</option>
+                                                    </select>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="info-label">Currency</span>
+                                                    <span class="info-value view-value" id="currency-view">EUR</span>
+                                                    <select class="wd-input wd-select edit-input" id="currency">
+                                                        <option value="EUR">EUR</option>
+                                                        <option value="USD">USD</option>
+                                                        <option value="KRW">KRW</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Upload & Notes -->
+                                        <!-- Notes -->
                                         <div class="compact-section">
-                                            <h3 class="compact-section-title"><span class="section-icon">📄</span> Document & Notes</h3>
-                                            <div class="compact-row">
-                                                <div class="compact-upload" onclick="document.getElementById('po-file-input').click()">
-                                                    <input type="file" id="po-file-input" accept=".pdf,.png,.jpg,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handlePOFileUpload(event)">
-                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                                    <p id="po-file-name">Upload PO document</p>
-                                                </div>
-                                                <div class="wd-form-group">
-                                                    <label class="wd-form-label">Notes</label>
-                                                    <textarea class="wd-input wd-textarea" id="po-notes" rows="2" placeholder="Additional notes..."></textarea>
-                                                </div>
-                                            </div>
+                                            <h3 class="compact-section-title"><span class="section-icon">📝</span> Notes</h3>
+                                            <div class="notes-box view-value" id="notes-view">-</div>
+                                            <textarea class="wd-input wd-textarea edit-input" id="notes" rows="3" placeholder="Special notes..."></textarea>
                                         </div>
                                     </div>
 
-                                    <!-- Order Items - Full Width -->
+                                    <!-- Items - Full Width -->
                                     <div class="compact-section items-section">
                                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                            <h3 class="compact-section-title" style="margin-bottom: 0;"><span class="section-icon">📦</span> Order Items</h3>
-                                            <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="addPOItemRow()" style="padding: 4px 8px; font-size: 0.75rem;">+ Add Item</button>
+                                            <h3 class="compact-section-title" style="margin-bottom: 0;"><span class="section-icon">📦</span> Items (<span id="items-count">1</span>)</h3>
+                                            <button type="button" class="wd-btn wd-btn-outline wd-btn-sm edit-input" onclick="addPOItemRow()" style="padding: 4px 8px; font-size: 0.75rem;">+ Add Item</button>
                                         </div>
                                         <table class="wd-table compact-table">
                                             <thead>
                                                 <tr>
-                                                    <th style="width:35%">Product Name</th>
-                                                    <th style="width:12%">Qty</th>
-                                                    <th style="width:12%">Unit</th>
-                                                    <th style="width:15%">Price</th>
-                                                    <th style="width:15%">Subtotal</th>
-                                                    <th style="width:8%"></th>
+                                                    <th style="width:40%">Item Name</th>
+                                                    <th style="width:12%; text-align: right;">Quantity</th>
+                                                    <th style="width:10%">Unit</th>
+                                                    <th style="width:15%; text-align: right;">Unit Price</th>
+                                                    <th style="width:15%; text-align: right;">Subtotal</th>
+                                                    <th style="width:8%" class="edit-col"></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="po-items-tbody">
-                                                <tr data-row="0">
-                                                    <td><input type="text" class="wd-input po-item-name" placeholder="Product name"></td>
-                                                    <td><input type="number" class="wd-input po-item-qty" min="1" value="1" onchange="calculatePOItemSubtotal(0)"></td>
-                                                    <td><select class="wd-select po-item-unit"><option>pcs</option><option>boxes</option><option>cases</option><option>kg</option></select></td>
-                                                    <td><input type="number" class="wd-input po-item-price" min="0" step="0.01" value="0" onchange="calculatePOItemSubtotal(0)"></td>
-                                                    <td class="po-item-subtotal" style="text-align:right;font-weight:600;">0.00</td>
-                                                    <td><button type="button" class="wd-btn-icon" onclick="removePOItemRow(0)" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
+                                                <tr>
+                                                    <td>Frozen Butter Croissant Dough (24% Butter)</td>
+                                                    <td style="text-align: right;">40</td>
+                                                    <td>boxes</td>
+                                                    <td style="text-align: right;">20.16</td>
+                                                    <td style="text-align: right;">806.40</td>
+                                                    <td class="edit-col"></td>
                                                 </tr>
                                             </tbody>
+                                            <tfoot>
+                                                <tr class="total-row">
+                                                    <td colspan="2">Total Quantity: <strong id="total-qty">40</strong></td>
+                                                    <td colspan="4" style="text-align: right;">Total: <strong><span id="total-currency">EUR</span> <span id="total-amount">806.40</span></strong></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
-                                        <div class="total-box">
-                                            <span>Total: </span><span class="po-currency-symbol">$</span><span id="po-total" style="font-size:1.1rem;font-weight:700;">0.00</span>
-                                        </div>
                                     </div>
                                 </div>
-
                             </form>
                         </div>
                     </div>
@@ -251,16 +279,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('supplier_token');
             if (!token) { window.location.href = 'portal.html'; return; }
-            const userName = localStorage.getItem('user_name') || 'User';
-            document.getElementById('user-name').textContent = userName;
-            document.getElementById('sidebar-user-name').textContent = userName;
+            document.getElementById('user-name').textContent = localStorage.getItem('user_name') || 'User';
+            document.getElementById('sidebar-user-name').textContent = localStorage.getItem('user_name') || 'User';
             document.getElementById('sidebar-user-email').textContent = localStorage.getItem('user_email') || '';
             document.getElementById('user-menu').style.display = 'flex';
         });
         function toggleLanguageDropdown() { document.getElementById('language-menu').classList.toggle('show'); }
         function toggleSidebar() { document.querySelector('.wd-sidebar').classList.toggle('collapsed'); }
         function toggleSubmenu(el) { el.closest('.wd-nav-group').classList.toggle('expanded'); }
-        function navigateTo(section) { window.location.href = `portal.html#${section}`; }
+        function navigateTo(section) { window.location.href = 'portal.html#' + section; }
         function logout() { localStorage.clear(); window.location.href = 'portal.html'; }
     </script>
 </body>
