@@ -2637,13 +2637,13 @@ function loadExtractedProducts() {
         return `
             <tr>
                 <td class="col-checkbox"><input type="checkbox" class="extract-checkbox" data-id="${product.id}" onchange="updateSelectedCount()" checked></td>
-                <td>${product.brand || m}</td>
                 <td>
                     <div class="wd-product-cell">
                         <span class="wd-product-thumb">${product.emoji}</span>
                         <span class="wd-product-name">${escapeHtml(name)}</span>
                     </div>
                 </td>
+                <td>${product.brand || m}</td>
                 <td>${product.unit_spec || m}</td>
                 <td>
                     ${product.category
