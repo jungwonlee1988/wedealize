@@ -894,6 +894,9 @@ function showSection(sectionName) {
         case 'inquiries':
             if (typeof loadInquiriesFromAPI === 'function') loadInquiriesFromAPI();
             break;
+        case 'profile':
+            loadCompanyCerts();
+            break;
     }
     if (sectionName === 'catalog') {
         loadUploadHistory();
@@ -954,6 +957,9 @@ function showSectionFromHash(sectionName) {
             break;
         case 'inquiries':
             if (typeof loadInquiriesFromAPI === 'function') loadInquiriesFromAPI();
+            break;
+        case 'profile':
+            loadCompanyCerts();
             break;
     }
 }
@@ -1854,14 +1860,14 @@ function extractProductsFromTable() {
 // 데모 상품 데이터
 function getDemoProducts() {
     return [
-        { name: 'Extra Virgin Olive Oil 500ml', category: 'Oils & Vinegars', sku: 'OIL-001', price: '$7.20 - $8.50', moq: '200 bottles', certifications: ['Organic', 'HACCP'], status: 'Complete' },
+        { name: 'Extra Virgin Olive Oil 500ml', category: 'Oils & Vinegars', sku: 'OIL-001', price: '$7.20 - $8.50', moq: '200 bottles', certifications: ['Organic'], status: 'Complete' },
         { name: 'Aged Parmesan 24 months', category: 'Dairy & Cheese', sku: 'CHE-003', price: '$18.00 - $22.00', moq: '', certifications: ['DOP'], status: 'Incomplete' },
         { name: 'Raw Organic Honey 500g', category: 'Organic & Health', sku: 'HON-005', price: '$12.00', moq: '100 jars', certifications: ['Organic'], status: 'Complete' },
         { name: 'Balsamic Vinegar 250ml', category: 'Oils & Vinegars', sku: 'VIN-002', price: '$12.00 - $15.00', moq: '150 bottles', certifications: ['IGP'], status: 'Complete' },
         { name: 'Truffle Oil 100ml', category: 'Oils & Vinegars', sku: 'OIL-010', price: '$25.00', moq: '50 bottles', certifications: [], status: 'Incomplete' },
         { name: 'Artisan Pasta 500g', category: 'Pasta & Grains', sku: 'PAS-001', price: '$4.50', moq: '300 packs', certifications: ['Organic'], status: 'Complete' },
         { name: 'San Marzano Tomatoes 400g', category: 'Canned Goods', sku: 'CAN-001', price: '$3.20', moq: '500 cans', certifications: ['DOP'], status: 'Complete' },
-        { name: 'Prosciutto di Parma 200g', category: 'Deli & Meats', sku: 'MEA-001', price: '$15.00 - $18.00', moq: '100 packs', certifications: ['DOP', 'HACCP'], status: 'Complete' },
+        { name: 'Prosciutto di Parma 200g', category: 'Deli & Meats', sku: 'MEA-001', price: '$15.00 - $18.00', moq: '100 packs', certifications: ['DOP'], status: 'Complete' },
         { name: 'Pecorino Romano 300g', category: 'Dairy & Cheese', sku: 'CHE-005', price: '$14.00', moq: '', certifications: ['DOP'], status: 'Incomplete' },
         { name: 'Limoncello 500ml', category: 'Beverages', sku: 'BEV-001', price: '$18.00', moq: '100 bottles', certifications: [], status: 'Incomplete' }
     ];
@@ -4440,6 +4446,181 @@ function filterAccounts() {
         const text = row.textContent.toLowerCase();
         row.style.display = text.includes(searchTerm) ? '' : 'none';
     });
+}
+
+// ---- Company Certifications CRUD (API-connected) ----
+
+window._editingCertId = null;
+
+function openCompanyCertModal(certId) {
+    const modal = document.getElementById('company-cert-modal');
+    const titleEl = document.getElementById('company-cert-modal-title');
+    const form = document.getElementById('company-cert-form');
+    if (form) form.reset();
+    window._editingCertId = null;
+
+    if (certId) {
+        window._editingCertId = certId;
+        if (titleEl) titleEl.textContent = 'Edit Certification';
+        loadCertIntoForm(certId);
+    } else {
+        if (titleEl) titleEl.textContent = 'Add Certification';
+    }
+
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeCompanyCertModal() {
+    const modal = document.getElementById('company-cert-modal');
+    if (modal) modal.style.display = 'none';
+    window._editingCertId = null;
+}
+
+async function loadCertIntoForm(certId) {
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/certifications`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed to load certifications');
+        const { certifications } = await res.json();
+        const cert = certifications.find(c => c.id === certId);
+        if (!cert) return;
+
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+        setVal('cert-name', cert.name);
+        setVal('cert-issuer', cert.issuer);
+        setVal('cert-issue-date', cert.issue_date);
+        setVal('cert-expiry-date', cert.expiry_date);
+        setVal('cert-status', cert.status || 'valid');
+    } catch (e) {
+        console.error('Failed to load cert into form:', e);
+    }
+}
+
+async function saveCompanyCert() {
+    const name = document.getElementById('cert-name')?.value?.trim();
+    if (!name) {
+        showToast('Certification name is required', 'error');
+        return;
+    }
+
+    const payload = {
+        name,
+        issuer: document.getElementById('cert-issuer')?.value || '',
+        issueDate: document.getElementById('cert-issue-date')?.value || '',
+        expiryDate: document.getElementById('cert-expiry-date')?.value || '',
+        status: document.getElementById('cert-status')?.value || 'valid',
+    };
+
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const isEdit = !!window._editingCertId;
+        const url = isEdit ? `${baseUrl}/certifications/${window._editingCertId}` : `${baseUrl}/certifications`;
+        const method = isEdit ? 'PATCH' : 'POST';
+
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.status === 401) {
+            handleSessionExpired();
+            return;
+        }
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Failed to save certification');
+        }
+
+        showToast(isEdit ? 'Certification updated!' : 'Certification added!', 'success');
+        closeCompanyCertModal();
+        loadCompanyCerts();
+    } catch (e) {
+        console.error('Failed to save certification:', e);
+        showToast(e.message || 'Failed to save certification', 'error');
+    }
+}
+
+async function loadCompanyCerts() {
+    const tbody = document.getElementById('company-certs-table-body');
+    if (!tbody) return;
+
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/certifications`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.status === 401) {
+            handleSessionExpired();
+            return;
+        }
+
+        if (!res.ok) throw new Error('Failed to load certifications');
+        const { certifications } = await res.json();
+
+        if (!certifications.length) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">No certifications yet. Click "Add Certification" to add one.</td></tr>`;
+            return;
+        }
+
+        const statusBadge = (s) => {
+            const map = { valid: 'wd-badge-success', expired: 'wd-badge-danger', pending: 'wd-badge-warning' };
+            return `<span class="wd-badge ${map[s] || 'wd-badge-secondary'}">${escapeHtml(s || 'valid')}</span>`;
+        };
+
+        tbody.innerHTML = certifications.map(cert => `
+            <tr>
+                <td><strong>${escapeHtml(cert.name)}</strong></td>
+                <td>${escapeHtml(cert.issuer || '-')}</td>
+                <td>${cert.issue_date || '-'}</td>
+                <td>${cert.expiry_date || '-'}</td>
+                <td>${statusBadge(cert.status)}</td>
+                <td>
+                    <div style="display:flex; gap:4px;">
+                        <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="openCompanyCertModal('${cert.id}')" title="Edit">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </button>
+                        <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="deleteCompanyCert('${cert.id}')" title="Delete" style="color:#ef4444;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    } catch (e) {
+        console.error('Failed to load certifications:', e);
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">No certifications yet. Click "Add Certification" to add one.</td></tr>`;
+    }
+}
+
+async function deleteCompanyCert(certId) {
+    if (!confirm('Are you sure you want to delete this certification?')) return;
+
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/certifications/${certId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.status === 401) {
+            handleSessionExpired();
+            return;
+        }
+        if (!res.ok) throw new Error('Failed to delete certification');
+        showToast('Certification deleted', 'success');
+        loadCompanyCerts();
+    } catch (e) {
+        console.error('Failed to delete certification:', e);
+        showToast('Failed to delete certification', 'error');
+    }
 }
 
 // Product tooltip 표시
