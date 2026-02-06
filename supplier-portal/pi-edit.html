@@ -9,14 +9,11 @@
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="compact-form.css">
     <style>
-        .full-width { grid-column: 1 / -1; }
         .summary-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.875rem; }
         .summary-row.total { font-weight: 700; font-size: 1rem; border-top: 1px solid var(--wd-gray-200); padding-top: 8px; margin-top: 4px; }
-        .credit-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--wd-gray-50); border-radius: 6px; margin-bottom: 6px; font-size: 0.8rem; }
+        .credit-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: var(--wd-gray-50); border-radius: 4px; margin-bottom: 4px; font-size: 0.8rem; }
         .credit-item:last-child { margin-bottom: 0; }
-        .add-product-row { display: flex; gap: 8px; margin-bottom: 8px; }
-        .add-product-row select { flex: 1; }
-        .add-product-row button { white-space: nowrap; }
+        .total-box { background: var(--wd-gray-50); padding: 10px 12px; border-radius: 6px; margin-top: 8px; }
     </style>
 </head>
 <body>
@@ -90,85 +87,166 @@
                             </div>
 
                             <form id="pi-edit-form">
-                                <div class="compact-grid-3">
-                                    <!-- Source & Buyer -->
-                                    <div class="compact-section">
-                                        <h3 class="compact-section-title"><span class="section-icon">📄</span> Source & Buyer</h3>
-                                        <div class="wd-form-group" style="margin-bottom: 10px;">
-                                            <label class="wd-form-label">Source</label>
-                                            <div style="display: flex; gap: 12px; font-size: 0.8rem;">
-                                                <label><input type="radio" name="pi-source" value="po" checked onchange="togglePISource('po')"> From PO</label>
-                                                <label><input type="radio" name="pi-source" value="new" onchange="togglePISource('new')"> Manual</label>
+                                <div class="compact-grid">
+                                    <!-- Left Column -->
+                                    <div class="compact-column">
+                                        <!-- Basic Info -->
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">📋</span> Basic Info</h3>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">PI Number <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <input type="text" class="wd-input" id="pi-number" required placeholder="PI-2026-0001">
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">PI Date <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <input type="date" class="wd-input" id="pi-date" required>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="wd-form-group" id="pi-po-selection" style="margin-bottom: 10px;">
-                                            <label class="wd-form-label">Select PO</label>
-                                            <select class="wd-input wd-select" id="pi-po-select" onchange="loadPOForPI()">
-                                                <option value="">Select PO...</option>
-                                                <option value="PO-2024-0156">PO-2024-0156 - ABC Distribution</option>
-                                                <option value="PO-2024-0142">PO-2024-0142 - XYZ Foods</option>
-                                            </select>
-                                        </div>
-                                        <div class="compact-row">
-                                            <div class="wd-form-group">
-                                                <label class="wd-form-label">Buyer <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                <select class="wd-input wd-select" id="pi-buyer-select" required onchange="loadBuyerForPI()">
-                                                    <option value="">Select buyer...</option>
-                                                    <option value="ACC-001">ABC Distribution</option>
-                                                    <option value="ACC-002">XYZ Foods Ltd</option>
+                                            <div class="wd-form-group" style="margin-top: 10px;">
+                                                <label class="wd-form-label">Source</label>
+                                                <div style="display: flex; gap: 16px; font-size: 0.8rem;">
+                                                    <label style="display: flex; align-items: center; gap: 4px;"><input type="radio" name="pi-source" value="po" checked onchange="togglePISource('po')"> From PO</label>
+                                                    <label style="display: flex; align-items: center; gap: 4px;"><input type="radio" name="pi-source" value="new" onchange="togglePISource('new')"> Manual</label>
+                                                </div>
+                                            </div>
+                                            <div class="wd-form-group" id="pi-po-selection" style="margin-top: 10px;">
+                                                <label class="wd-form-label">Select PO</label>
+                                                <select class="wd-input wd-select" id="pi-po-select" onchange="loadPOForPI()">
+                                                    <option value="">Select PO...</option>
+                                                    <option value="PO-2024-0156">PO-2024-0156 - ABC Distribution</option>
+                                                    <option value="PO-2024-0142">PO-2024-0142 - XYZ Foods</option>
                                                 </select>
                                             </div>
-                                            <div class="wd-form-group">
-                                                <label class="wd-form-label">PI Date</label>
-                                                <input type="date" class="wd-input" id="pi-date">
+                                        </div>
+
+                                        <!-- Buyer Info -->
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">🏢</span> Buyer Info</h3>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Company <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <select class="wd-input wd-select" id="pi-buyer-select" required onchange="loadBuyerForPI()">
+                                                        <option value="">Select buyer...</option>
+                                                        <option value="ACC-001">ABC Distribution</option>
+                                                        <option value="ACC-002">XYZ Foods Ltd</option>
+                                                    </select>
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Contact</label>
+                                                    <input type="text" class="wd-input" id="pi-buyer-contact" placeholder="Contact name">
+                                                </div>
+                                            </div>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Email</label>
+                                                    <input type="email" class="wd-input" id="pi-buyer-email" placeholder="email@company.com">
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Phone</label>
+                                                    <input type="tel" class="wd-input" id="pi-buyer-phone" placeholder="+1 234 567 8900">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Items -->
-                                    <div class="compact-section">
-                                        <h3 class="compact-section-title"><span class="section-icon">📦</span> Items</h3>
-                                        <div class="add-product-row">
-                                            <select class="wd-input wd-select" id="pi-product-select" style="font-size: 0.8rem;">
-                                                <option value="">Select product...</option>
-                                                <option value="PROD-001" data-name="Olive Oil 500ml" data-price="25.00">Olive Oil 500ml</option>
-                                                <option value="PROD-002" data-name="Parmesan 1kg" data-price="65.00">Parmesan 1kg</option>
-                                                <option value="PROD-003" data-name="Honey 350g" data-price="18.00">Honey 350g</option>
-                                            </select>
-                                            <button type="button" class="wd-btn wd-btn-primary wd-btn-sm" onclick="addProductToPI()" style="padding: 4px 8px; font-size: 0.75rem;">+ Add</button>
+                                    <!-- Right Column -->
+                                    <div class="compact-column">
+                                        <!-- Trade Terms -->
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">🌍</span> Trade Terms</h3>
+                                            <div class="compact-row-3">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Currency</label>
+                                                    <select class="wd-input wd-select" id="pi-currency">
+                                                        <option value="USD">USD</option>
+                                                        <option value="EUR">EUR</option>
+                                                        <option value="KRW">KRW</option>
+                                                    </select>
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Incoterms</label>
+                                                    <select class="wd-input wd-select" id="pi-incoterms">
+                                                        <option value="FOB">FOB</option>
+                                                        <option value="CIF">CIF</option>
+                                                        <option value="EXW">EXW</option>
+                                                        <option value="DDP">DDP</option>
+                                                    </select>
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Payment</label>
+                                                    <select class="wd-input wd-select" id="pi-payment-terms">
+                                                        <option value="NET30">Net 30</option>
+                                                        <option value="NET60">Net 60</option>
+                                                        <option value="TT">T/T</option>
+                                                        <option value="LC">L/C</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Validity</label>
+                                                    <input type="date" class="wd-input" id="pi-validity">
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Delivery Date</label>
+                                                    <input type="date" class="wd-input" id="pi-delivery-date">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="max-height: 180px; overflow-y: auto;">
-                                            <table class="wd-table compact-table">
-                                                <thead>
-                                                    <tr><th>Product</th><th style="width:60px">Qty</th><th style="width:70px">Price</th><th style="width:24px"></th></tr>
-                                                </thead>
-                                                <tbody id="pi-items-tbody">
-                                                    <tr class="wd-empty-row"><td colspan="4" style="text-align:center;color:var(--wd-gray-400);padding:16px;font-size:0.75rem;">No items yet</td></tr>
-                                                </tbody>
-                                            </table>
+
+                                        <!-- Available Credits -->
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">💳</span> Available Credits</h3>
+                                            <div id="pi-available-credits" style="max-height: 100px; overflow-y: auto;">
+                                                <p style="font-size: 0.75rem; color: var(--wd-gray-400); text-align: center; padding: 12px;">Select buyer to see available credits</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Notes -->
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">📝</span> Notes</h3>
+                                            <div class="wd-form-group">
+                                                <textarea class="wd-input wd-textarea" id="pi-notes" rows="2" placeholder="Payment terms, delivery instructions..."></textarea>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <!-- Credits & Summary -->
-                                    <div class="compact-section">
-                                        <h3 class="compact-section-title"><span class="section-icon">💳</span> Credits & Summary</h3>
-                                        <div id="pi-available-credits" style="margin-bottom: 10px; max-height: 80px; overflow-y: auto;">
-                                            <p style="font-size: 0.75rem; color: var(--wd-gray-400);">Select buyer to see credits</p>
+                                    <!-- Invoice Items - Full Width -->
+                                    <div class="compact-section items-section">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                            <h3 class="compact-section-title" style="margin-bottom: 0;"><span class="section-icon">📦</span> Invoice Items</h3>
+                                            <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="addPIItemRow()" style="padding: 4px 8px; font-size: 0.75rem;">+ Add Item</button>
                                         </div>
-                                        <div style="border-top: 1px solid var(--wd-gray-200); padding-top: 8px;">
+                                        <table class="wd-table compact-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:35%">Product Name</th>
+                                                    <th style="width:12%">Qty</th>
+                                                    <th style="width:12%">Unit</th>
+                                                    <th style="width:15%">Price</th>
+                                                    <th style="width:15%">Subtotal</th>
+                                                    <th style="width:8%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="pi-items-tbody">
+                                                <tr data-row="0">
+                                                    <td><input type="text" class="wd-input pi-item-name" placeholder="Product name"></td>
+                                                    <td><input type="number" class="wd-input pi-item-qty" min="1" value="1" onchange="calculatePIItemSubtotal(0)"></td>
+                                                    <td><select class="wd-select pi-item-unit"><option>pcs</option><option>boxes</option><option>cases</option><option>kg</option></select></td>
+                                                    <td><input type="number" class="wd-input pi-item-price" min="0" step="0.01" value="0" onchange="calculatePIItemSubtotal(0)"></td>
+                                                    <td class="pi-item-subtotal" style="text-align:right;font-weight:600;">0.00</td>
+                                                    <td><button type="button" class="wd-btn-icon" onclick="removePIItemRow(0)" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="total-box">
                                             <div class="summary-row"><span>Subtotal:</span><span id="pi-subtotal">$0.00</span></div>
-                                            <div class="summary-row" style="color: var(--wd-success);"><span>Credit:</span><span id="pi-credit-discount">-$0.00</span></div>
+                                            <div class="summary-row" style="color: var(--wd-success);"><span>Credit Applied:</span><span id="pi-credit-discount">-$0.00</span></div>
                                             <div class="summary-row total"><span>Total:</span><span id="pi-total">$0.00</span></div>
                                         </div>
                                     </div>
-
-                                    <!-- Notes - Full Width -->
-                                    <div class="compact-section full-width">
-                                        <h3 class="compact-section-title"><span class="section-icon">📝</span> Notes & Terms</h3>
-                                        <textarea class="wd-input wd-textarea" id="pi-notes" rows="2" placeholder="Payment terms, delivery instructions..." style="min-height: 40px;"></textarea>
-                                    </div>
                                 </div>
-
                             </form>
                         </div>
                     </div>

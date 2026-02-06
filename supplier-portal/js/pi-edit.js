@@ -73,12 +73,18 @@
     }
 
     function populateForm(pi) {
-        const subtitle = document.getElementById('pi-subtitle');
-        if (subtitle) subtitle.textContent = pi.pi_number || '';
-
+        setInputValue('pi-number', pi.pi_number);
+        setInputValue('pi-date', pi.pi_date);
         setSelectValue('pi-po-select', pi.po_number);
         setSelectValue('pi-buyer-select', pi.buyer_id);
-        setInputValue('pi-date', pi.pi_date);
+        setInputValue('pi-buyer-contact', pi.buyer_contact);
+        setInputValue('pi-buyer-email', pi.buyer_email);
+        setInputValue('pi-buyer-phone', pi.buyer_phone);
+        setSelectValue('pi-currency', pi.currency);
+        setSelectValue('pi-incoterms', pi.incoterms);
+        setSelectValue('pi-payment-terms', pi.payment_terms);
+        setInputValue('pi-validity', pi.validity_date);
+        setInputValue('pi-delivery-date', pi.delivery_date);
         setInputValue('pi-notes', pi.notes);
 
         if (pi.items && pi.items.length > 0) {
@@ -109,7 +115,14 @@
     async function handleFormSubmit(e) {
         e.preventDefault();
 
+        const piNumber = document.getElementById('pi-number').value.trim();
         const buyerSelect = document.getElementById('pi-buyer-select');
+
+        if (!piNumber) {
+            showToast('PI Number is required', 'warning');
+            return;
+        }
+
         if (!buyerSelect.value) {
             showToast('Please select a buyer', 'warning');
             return;
@@ -117,7 +130,7 @@
 
         const formData = collectFormData();
 
-        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const submitBtn = document.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<span class="spinner"></span> Sending...';
         submitBtn.disabled = true;
@@ -139,15 +152,13 @@
     function collectFormData() {
         const items = [];
         document.querySelectorAll('#pi-items-tbody tr[data-row]').forEach(row => {
-            const productId = row.dataset.productId;
-            const name = row.querySelector('.pi-item-name')?.textContent || row.dataset.productName;
+            const name = row.querySelector('.pi-item-name')?.value || row.querySelector('.pi-item-name')?.textContent;
             const qty = row.querySelector('.pi-item-qty')?.value;
-            const unit = row.querySelector('.pi-item-unit')?.textContent || row.dataset.unit;
+            const unit = row.querySelector('.pi-item-unit')?.value || row.querySelector('.pi-item-unit')?.textContent;
             const price = row.querySelector('.pi-item-price')?.value;
 
             if (name && qty && price) {
                 items.push({
-                    product_id: productId,
                     product_name: name,
                     quantity: parseInt(qty),
                     unit: unit,
@@ -165,9 +176,18 @@
         });
 
         return {
+            pi_number: document.getElementById('pi-number').value.trim(),
+            pi_date: document.getElementById('pi-date').value,
             po_number: document.getElementById('pi-po-select').value,
             buyer_id: document.getElementById('pi-buyer-select').value,
-            pi_date: document.getElementById('pi-date').value,
+            buyer_contact: document.getElementById('pi-buyer-contact').value.trim(),
+            buyer_email: document.getElementById('pi-buyer-email').value.trim(),
+            buyer_phone: document.getElementById('pi-buyer-phone').value.trim(),
+            currency: document.getElementById('pi-currency').value,
+            incoterms: document.getElementById('pi-incoterms').value,
+            payment_terms: document.getElementById('pi-payment-terms').value,
+            validity_date: document.getElementById('pi-validity').value,
+            delivery_date: document.getElementById('pi-delivery-date').value,
             notes: document.getElementById('pi-notes').value.trim(),
             items: items,
             applied_credits: appliedCredits,
@@ -241,28 +261,24 @@
         const select = document.getElementById('pi-buyer-select');
         if (!select || !select.value) return;
 
-        const infoCard = document.getElementById('pi-buyer-info-card');
-        if (infoCard) infoCard.style.display = 'block';
-
-        // Demo data
+        // Demo buyer data
         const buyers = {
-            'ACC-001': { company: 'ABC Distribution Co.', country: 'USA', credit: '$320.00' },
-            'ACC-002': { company: 'XYZ Foods Ltd', country: 'UK', credit: '$180.00' },
-            'ACC-003': { company: 'Global Trade Co', country: 'Germany', credit: '$0.00' }
+            'ACC-001': { contact: 'John Smith', email: 'john@abcdist.com', phone: '+1 234 567 8901' },
+            'ACC-002': { contact: 'Jane Doe', email: 'jane@xyzfoods.com', phone: '+44 20 1234 5678' }
         };
 
-        const buyer = buyers[select.value] || { company: '-', country: '-', credit: '$0.00' };
-
-        document.getElementById('pi-buyer-company-display').textContent = buyer.company;
-        document.getElementById('pi-buyer-country-display').textContent = buyer.country;
-        document.getElementById('pi-buyer-credit-display').textContent = buyer.credit;
+        const buyer = buyers[select.value];
+        if (buyer) {
+            document.getElementById('pi-buyer-contact').value = buyer.contact;
+            document.getElementById('pi-buyer-email').value = buyer.email;
+            document.getElementById('pi-buyer-phone').value = buyer.phone;
+        }
 
         loadAvailableCredits(select.value);
     };
 
     function loadAvailableCredits(buyerId) {
         const container = document.getElementById('pi-available-credits');
-        const badge = document.getElementById('available-credit-badge');
 
         // Demo credits
         const credits = {
@@ -276,80 +292,54 @@
         };
 
         const buyerCredits = credits[buyerId] || [];
-        const totalCredit = buyerCredits.reduce((sum, c) => sum + c.amount, 0);
-
-        if (badge) badge.textContent = `$${totalCredit.toFixed(2)} available`;
 
         if (buyerCredits.length === 0) {
-            container.innerHTML = '<p class="wd-text-muted">No credits available for this buyer</p>';
+            container.innerHTML = '<p style="font-size: 0.75rem; color: var(--wd-gray-400); text-align: center; padding: 12px;">No credits available</p>';
             return;
         }
 
         container.innerHTML = buyerCredits.map(credit => `
-            <label class="wd-checkbox-card" style="display: flex; align-items: center; gap: 12px; padding: 12px; margin-bottom: 8px;">
+            <div class="credit-item">
                 <input type="checkbox" class="pi-credit-check" value="${credit.id}" data-amount="${credit.amount}" onchange="updatePISummary()">
                 <div style="flex: 1;">
                     <div style="font-weight: 500;">${credit.id} - $${credit.amount.toFixed(2)}</div>
-                    <div class="wd-text-sm wd-text-muted">${credit.reason} (${credit.date})</div>
+                    <div style="font-size: 0.7rem; color: var(--wd-gray-500);">${credit.reason}</div>
                 </div>
-            </label>
+            </div>
         `).join('');
     }
 
-    window.addProductToPI = function() {
-        const select = document.getElementById('pi-product-select');
-        if (!select || !select.value) {
-            showToast('Please select a product', 'warning');
-            return;
-        }
-
-        const option = select.selectedOptions[0];
-        const product = {
-            id: select.value,
-            name: option.dataset.name,
-            price: parseFloat(option.dataset.price),
-            unit: option.dataset.unit
-        };
-
-        addPIItemRow(product);
-        select.value = '';
-        updatePISummary();
-    };
-
-    function addPIItemRow(item) {
+    window.addPIItemRow = function(item = null) {
         const tbody = document.getElementById('pi-items-tbody');
-
-        // Remove empty row if exists
-        const emptyRow = tbody.querySelector('.wd-empty-row');
-        if (emptyRow) emptyRow.remove();
-
         const index = piItemRowIndex++;
+
         const row = document.createElement('tr');
         row.setAttribute('data-row', index);
-        row.dataset.productId = item.id || item.product_id || '';
-        row.dataset.productName = item.name || item.product_name || '';
-        row.dataset.unit = item.unit || 'pcs';
 
-        const qty = item.quantity || 1;
-        const price = item.price || item.unit_price || 0;
+        const name = item?.product_name || item?.name || '';
+        const qty = item?.quantity || 1;
+        const unit = item?.unit || 'pcs';
+        const price = item?.unit_price || item?.price || 0;
         const subtotal = qty * price;
 
         row.innerHTML = `
-            <td class="pi-item-name">${item.name || item.product_name || ''}</td>
-            <td><input type="number" class="wd-input wd-input-sm pi-item-qty" min="1" value="${qty}" onchange="updatePIItemSubtotal(${index})"></td>
-            <td class="pi-item-unit">${item.unit || 'pcs'}</td>
-            <td><input type="number" class="wd-input wd-input-sm pi-item-price" min="0" step="0.01" value="${price.toFixed(2)}" onchange="updatePIItemSubtotal(${index})"></td>
-            <td class="pi-item-subtotal wd-text-right wd-text-bold">$${subtotal.toFixed(2)}</td>
-            <td>
-                <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removePIItemRow(${index})" title="Remove">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-            </td>
+            <td><input type="text" class="wd-input pi-item-name" placeholder="Product name" value="${name}"></td>
+            <td><input type="number" class="wd-input pi-item-qty" min="1" value="${qty}" onchange="calculatePIItemSubtotal(${index})"></td>
+            <td><select class="wd-select pi-item-unit">
+                <option ${unit === 'pcs' ? 'selected' : ''}>pcs</option>
+                <option ${unit === 'boxes' ? 'selected' : ''}>boxes</option>
+                <option ${unit === 'cases' ? 'selected' : ''}>cases</option>
+                <option ${unit === 'kg' ? 'selected' : ''}>kg</option>
+            </select></td>
+            <td><input type="number" class="wd-input pi-item-price" min="0" step="0.01" value="${price}" onchange="calculatePIItemSubtotal(${index})"></td>
+            <td class="pi-item-subtotal" style="text-align:right;font-weight:600;">${subtotal.toFixed(2)}</td>
+            <td><button type="button" class="wd-btn-icon" onclick="removePIItemRow(${index})" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
         `;
         tbody.appendChild(row);
-    }
+        updatePISummary();
+    };
 
-    window.updatePIItemSubtotal = function(index) {
+    window.calculatePIItemSubtotal = function(index) {
         const row = document.querySelector(`#pi-items-tbody tr[data-row="${index}"]`);
         if (!row) return;
 
@@ -358,7 +348,7 @@
         const subtotal = qty * price;
 
         const subtotalEl = row.querySelector('.pi-item-subtotal');
-        if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+        if (subtotalEl) subtotalEl.textContent = subtotal.toFixed(2);
 
         updatePISummary();
     };
@@ -368,18 +358,6 @@
         if (row) {
             row.remove();
             updatePISummary();
-
-            // Show empty row if no items
-            const tbody = document.getElementById('pi-items-tbody');
-            if (!tbody.querySelector('tr[data-row]')) {
-                tbody.innerHTML = `
-                    <tr class="wd-empty-row">
-                        <td colspan="6" style="text-align: center; color: var(--wd-gray-400); padding: 32px;">
-                            No items added yet. Select a product and click "Add Product".
-                        </td>
-                    </tr>
-                `;
-            }
         }
     };
 
@@ -396,13 +374,16 @@
             creditTotal += parseFloat(checkbox.dataset.amount) || 0;
         });
 
+        const currency = document.getElementById('pi-currency')?.value || 'USD';
+        const symbol = currency === 'EUR' ? '€' : currency === 'KRW' ? '₩' : '$';
+
         const subtotalEl = document.getElementById('pi-subtotal');
         const creditEl = document.getElementById('pi-credit-discount');
         const totalEl = document.getElementById('pi-total');
 
-        if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-        if (creditEl) creditEl.textContent = `-$${creditTotal.toFixed(2)}`;
-        if (totalEl) totalEl.textContent = `$${Math.max(0, subtotal - creditTotal).toFixed(2)}`;
+        if (subtotalEl) subtotalEl.textContent = `${symbol}${subtotal.toFixed(2)}`;
+        if (creditEl) creditEl.textContent = `-${symbol}${creditTotal.toFixed(2)}`;
+        if (totalEl) totalEl.textContent = `${symbol}${Math.max(0, subtotal - creditTotal).toFixed(2)}`;
     };
 
     window.savePIAsDraft = async function() {
