@@ -1064,17 +1064,13 @@ function togglePriceListSection() {
 
 // 선택된 상품 수 업데이트
 function updateSelectedCount() {
-    const checkboxes = document.querySelectorAll('.extract-checkbox:checked');
-    const count = checkboxes.length;
-    const countEl = document.getElementById('selected-count');
-    const moveBtn = document.getElementById('move-to-list-btn');
+    const checked = document.querySelectorAll('.extract-checkbox:checked').length;
+    const total = document.querySelectorAll('.extract-checkbox').length;
+    const selectedEl = document.getElementById('selected-count');
+    const totalEl = document.getElementById('total-count');
 
-    if (countEl) {
-        countEl.textContent = `(${count})`;
-    }
-    if (moveBtn) {
-        moveBtn.disabled = count === 0;
-    }
+    if (selectedEl) selectedEl.textContent = checked;
+    if (totalEl) totalEl.textContent = total;
 }
 
 // 전체 선택 토글
@@ -2657,6 +2653,9 @@ function loadExtractedProducts() {
             </tr>
         `;
     }).join('');
+
+    // 초기 선택 카운트 세팅 (모두 체크됨)
+    updateSelectedCount();
 }
 
 // 카테고리 라벨 가져오기
