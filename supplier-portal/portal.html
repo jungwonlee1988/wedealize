@@ -13,6 +13,9 @@
     <script src="https://accounts.google.com/gsi/client" async defer>
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <!-- PDF.js for catalog extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';}</script>
     <script>
         // Prevent auth/dashboard flash: inject guard style before first paint
         // JS removes this style tag when it takes over control
@@ -798,6 +801,17 @@
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                             </button>
                                         </div>
+
+                                        <!-- Extraction Progress -->
+                                        <div id="extraction-progress" style="display: none; margin-top: 20px;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                                <span id="extraction-status-text" style="font-size: 14px; color: var(--text-secondary);">Preparing...</span>
+                                                <span id="extraction-progress-pct" style="font-size: 14px; font-weight: 600; color: var(--primary);">0%</span>
+                                            </div>
+                                            <div style="width: 100%; height: 8px; background: var(--bg-secondary); border-radius: 4px; overflow: hidden;">
+                                                <div id="extraction-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-dark, #1a5c3a)); border-radius: 4px; transition: width 0.3s ease;"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1108,7 +1122,7 @@
                                                     </div>
                                                 </div>
                                             </th>
-                                            <th data-i18n="catalog.actions">Actions</th>
+                                            <th>Created By</th>
                                         </tr>
                                     </thead>
                                     <tbody id="product-list-tbody">

@@ -1,7 +1,9 @@
-import { Controller, Post, Get, Patch, Delete, Body, Param, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Delete, Body, Param, HttpCode, HttpStatus, UseGuards, Request, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { CatalogUploadsService } from './catalog-uploads.service';
+import { CatalogExtractionService } from './catalog-extraction.service';
 import { CreateCatalogUploadDto, UpdateCatalogUploadDto } from './dto/create-catalog-upload.dto';
+import { ExtractCatalogDto } from './dto/extract-catalog.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Catalog Uploads')
@@ -9,7 +11,27 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class CatalogUploadsController {
-  constructor(private catalogUploadsService: CatalogUploadsService) {}
+  private readonly logger = new Logger(CatalogUploadsController.name);
+
+  constructor(
+    private catalogUploadsService: CatalogUploadsService,
+    private catalogExtractionService: CatalogExtractionService,
+  ) {}
+
+  @Post('catalog/extract')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Extract products from catalog images using AI' })
+  @ApiResponse({ status: 200, description: 'Products extracted' })
+  async extractCatalog(@Request() req, @Body() dto: ExtractCatalogDto) {
+    this.logger.log(`Extracting catalog for supplier ${req.user.id}, ${dto.images.length} images, batch ${dto.batchIndex ?? 0}/${dto.totalBatches ?? 1}`);
+    const products = await this.catalogExtractionService.extractProducts(dto.images, dto.fileName);
+    return {
+      products,
+      batchIndex: dto.batchIndex ?? 0,
+      totalBatches: dto.totalBatches ?? 1,
+      count: products.length,
+    };
+  }
 
   @Post('catalog-uploads')
   @HttpCode(HttpStatus.CREATED)

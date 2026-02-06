@@ -1128,12 +1128,102 @@ function moveToProductList() {
 
 // 추출된 상품 편집
 function editExtractedProduct(productId) {
-    // TODO: 모달 열기 및 데이터 로드
-    console.log('Edit extracted product:', productId);
+    const product = extractedProducts.find(p => p.id === productId);
+    if (!product) return;
+
     const modal = document.getElementById('product-modal');
-    if (modal) {
-        modal.style.display = 'flex';
+    if (!modal) return;
+
+    // Set modal title
+    const titleEl = document.getElementById('product-modal-title');
+    if (titleEl) titleEl.textContent = 'Edit Extracted Product';
+
+    // Populate form fields
+    const nameEl = document.getElementById('edit-product-name');
+    const skuEl = document.getElementById('edit-product-sku');
+    const catEl = document.getElementById('edit-product-category');
+    const descEl = document.getElementById('edit-product-description');
+    const minPriceEl = document.getElementById('edit-price-min');
+    const maxPriceEl = document.getElementById('edit-price-max');
+    const moqEl = document.getElementById('edit-moq');
+    const moqUnitEl = document.getElementById('edit-moq-unit');
+
+    if (nameEl) nameEl.value = product.name || '';
+    if (skuEl) skuEl.value = product.sku || '';
+    if (catEl) catEl.value = product.category || '';
+    if (descEl) descEl.value = product.description || '';
+    if (minPriceEl) minPriceEl.value = product.minPrice ?? '';
+    if (maxPriceEl) maxPriceEl.value = product.maxPrice ?? '';
+    if (moqEl) moqEl.value = product.moq ?? '';
+    if (moqUnitEl) moqUnitEl.value = product.moqUnit || '';
+
+    // Certifications checkboxes
+    const certGrid = document.getElementById('product-cert-grid');
+    if (certGrid) {
+        certGrid.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.checked = (product.certifications || []).some(c =>
+                c.toLowerCase().includes(cb.value.toLowerCase())
+            );
+        });
     }
+
+    // Store editing context for save
+    window._editingExtractedProductId = productId;
+    window._editingProductId = null; // not a DB product
+
+    modal.style.display = 'flex';
+}
+
+// Override saveProduct to also handle extracted product edits
+const _originalSaveProduct = typeof saveProduct === 'function' ? saveProduct : null;
+function saveExtractedProductFromModal() {
+    const productId = window._editingExtractedProductId;
+    if (!productId) return false;
+
+    const product = extractedProducts.find(p => p.id === productId);
+    if (!product) return false;
+
+    // Read form values back
+    product.name = document.getElementById('edit-product-name')?.value || product.name;
+    product.sku = document.getElementById('edit-product-sku')?.value || null;
+    product.category = document.getElementById('edit-product-category')?.value || null;
+    product.description = document.getElementById('edit-product-description')?.value || null;
+    product.minPrice = parseFloat(document.getElementById('edit-price-min')?.value) || null;
+    product.maxPrice = parseFloat(document.getElementById('edit-price-max')?.value) || null;
+    product.moq = parseInt(document.getElementById('edit-moq')?.value) || null;
+    product.moqUnit = document.getElementById('edit-moq-unit')?.value || null;
+
+    // Certifications
+    const certs = [];
+    document.querySelectorAll('#product-cert-grid input[type="checkbox"]:checked').forEach(cb => {
+        certs.push(cb.value);
+    });
+    product.certifications = certs;
+
+    // Recalculate status & price display
+    const hasPrice = product.minPrice != null || product.maxPrice != null;
+    product.status = (product.name && product.category && hasPrice) ? 'complete' : 'incomplete';
+    product.emoji = getCategoryEmoji(product.category);
+
+    if (product.minPrice != null && product.maxPrice != null && product.minPrice !== product.maxPrice) {
+        product.price = `$${product.minPrice.toFixed(2)} - $${product.maxPrice.toFixed(2)}`;
+    } else if (product.minPrice != null) {
+        product.price = `$${product.minPrice.toFixed(2)}`;
+    } else if (product.maxPrice != null) {
+        product.price = `$${product.maxPrice.toFixed(2)}`;
+    } else {
+        product.price = null;
+    }
+    product.originalPrice = product.price;
+
+    // Clear context & close modal
+    window._editingExtractedProductId = null;
+    document.getElementById('product-modal').style.display = 'none';
+
+    // Refresh table
+    loadExtractedProducts();
+    showToast('Product updated!', 'success');
+    return true;
 }
 
 // 상품 목록 필터
@@ -1579,9 +1669,16 @@ function editProduct(productId) {
 function closeProductModal() {
     document.getElementById('product-modal').style.display = 'none';
     window._editingProductId = null;
+    window._editingExtractedProductId = null;
 }
 
 async function saveProduct() {
+    // If editing an extracted product (not yet in DB), handle locally
+    if (window._editingExtractedProductId) {
+        saveExtractedProductFromModal();
+        return;
+    }
+
     const name = document.getElementById('edit-product-name')?.value?.trim();
     if (!name) {
         showToast('Product name is required', 'error');
@@ -1812,7 +1909,7 @@ function renderProductListPage() {
             : '<span class="wd-badge wd-badge-warning">Missing</span>';
 
         return `
-        <tr class="${isIncomplete(product) ? 'wd-row-warning' : ''}">
+        <tr class="${isIncomplete(product) ? 'wd-row-warning' : ''}" style="cursor:pointer;" onclick="editProduct('${product.id}')">
             <td>
                 <div class="wd-product-cell">
                     <div class="wd-product-thumb">
@@ -1834,14 +1931,7 @@ function renderProductListPage() {
                     : '<span class="wd-text-muted">None</span>'}
             </td>
             <td><span class="wd-badge ${isIncomplete(product) ? 'wd-badge-warning' : 'wd-badge-success'}">${isIncomplete(product) ? 'Incomplete' : 'Complete'}</span></td>
-            <td>
-                <div style="display:flex; gap:4px;">
-                    <button class="wd-btn ${isIncomplete(product) ? 'wd-btn-warning' : 'wd-btn-outline'} wd-btn-sm" onclick="editProduct('${product.id}')">${isIncomplete(product) ? 'Fill in' : 'Edit'}</button>
-                    <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="deleteProduct('${product.id}')" title="Delete" style="color:#ef4444;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                    </button>
-                </div>
-            </td>
+            <td><span class="wd-text-muted" style="font-size:0.8rem;">${product.created_at ? new Date(product.created_at).toLocaleDateString() : '-'}</span></td>
         </tr>`;
     }).join('');
 
@@ -2296,8 +2386,91 @@ function goToCatalogStep(stepNum) {
     } else if (stepNum === 3) {
         renderPriceMatchTable();
     } else if (stepNum === 4) {
-        showCompleteSummary();
+        registerExtractedProducts().then(count => {
+            showCompleteSummary(count);
+        });
     }
+}
+
+// ── PDF → Image rendering helpers ──
+
+async function renderPdfPageToBase64(pdfDoc, pageNum) {
+    const page = await pdfDoc.getPage(pageNum);
+    const scale = 1.5;
+    const viewport = page.getViewport({ scale });
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    const ctx = canvas.getContext('2d');
+    await page.render({ canvasContext: ctx, viewport }).promise;
+    return canvas.toDataURL('image/jpeg', 0.6);
+}
+
+async function renderAllPdfPages(file) {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const totalPages = pdf.numPages;
+    const images = [];
+    for (let i = 1; i <= totalPages; i++) {
+        updateExtractionProgress('rendering', i, totalPages);
+        const base64 = await renderPdfPageToBase64(pdf, i);
+        images.push({ data: base64, pageNumber: i });
+    }
+    return images;
+}
+
+async function sendExtractionBatch(images, fileName, batchIndex, totalBatches) {
+    return await apiCall('/catalog/extract', {
+        method: 'POST',
+        body: JSON.stringify({ images, fileName, batchIndex, totalBatches }),
+    });
+}
+
+function updateExtractionProgress(phase, current, total) {
+    const progressEl = document.getElementById('extraction-progress');
+    const barEl = document.getElementById('extraction-progress-bar');
+    const textEl = document.getElementById('extraction-status-text');
+    const pctEl = document.getElementById('extraction-progress-pct');
+    if (!progressEl) return;
+
+    progressEl.style.display = 'block';
+    let pct = 0;
+    let label = '';
+
+    if (phase === 'rendering') {
+        // 0% – 30%
+        pct = Math.round((current / total) * 30);
+        label = `Rendering page ${current}/${total}...`;
+    } else if (phase === 'extracting') {
+        // 30% – 95%
+        pct = 30 + Math.round((current / total) * 65);
+        label = `AI extracting batch ${current}/${total}...`;
+    } else if (phase === 'complete') {
+        pct = 100;
+        label = `Extraction complete! ${current} products found.`;
+    }
+
+    barEl.style.width = pct + '%';
+    textEl.textContent = label;
+    pctEl.textContent = pct + '%';
+}
+
+function getCategoryEmoji(category) {
+    const map = {
+        'evoo': '🫒', 'olive-oil': '🫒', 'seed-oils': '🫒', 'nut-oils': '🥜', 'truffle-oil': '🫒',
+        'balsamic': '🍷', 'wine-vinegar': '🍷', 'sauces': '🥫', 'mustard-dressings': '🥗',
+        'hard-cheese': '🧀', 'soft-cheese': '🧀', 'aged-cheese': '🧀', 'butter-cream': '🧈',
+        'cured-meats': '🥩', 'sausages': '🌭', 'smoked-meats': '🥓',
+        'dried-pasta': '🍝', 'fresh-pasta': '🍝', 'rice': '🍚', 'flour-semolina': '🌾',
+        'bread': '🍞', 'biscuits-cookies': '🍪', 'chocolate': '🍫', 'pastries': '🥐',
+        'tomato-products': '🍅', 'pickles-olives': '🫒', 'preserved-veg': '🥫', 'jams-spreads': '🍯',
+        'wine': '🍷', 'spirits': '🥃', 'coffee': '☕', 'tea': '🍵', 'juices-soft': '🧃',
+        'fresh-fish': '🐟', 'canned-fish': '🐟', 'shellfish': '🦐', 'smoked-fish': '🐟',
+        'spice-blends': '🌶️', 'herbs': '🌿', 'honey': '🍯',
+        'nuts-dried-fruit': '🥜', 'chips-crackers': '🍘', 'bars': '🍫',
+        'organic': '🌱', 'gluten-free': '🌾', 'vegan-plant': '🥬', 'frozen': '🧊',
+    };
+    return map[category] || '📦';
 }
 
 // 카탈로그 추출 시작
@@ -2307,52 +2480,156 @@ async function extractCatalog() {
         return;
     }
 
+    const file = uploadedFiles.catalog;
+    const isPdf = file.name.toLowerCase().endsWith('.pdf');
+
+    if (!isPdf) {
+        showToast('Currently only PDF files are supported for AI extraction.', 'error');
+        return;
+    }
+
     const extractBtn = document.getElementById('extract-btn');
     extractBtn.disabled = true;
     extractBtn.innerHTML = `<span class="spinner"></span> ${t('catalog.extracting') || 'Extracting...'}`;
 
-    const file = uploadedFiles.catalog;
-
     try {
-        // 파일 업로드 및 추출 API 호출
-        const result = await uploadFile('/upload/catalog', file);
-        currentJobId = result.job_id;
+        // Phase 1: Render PDF pages to images
+        const allImages = await renderAllPdfPages(file);
 
-        // 처리 상태 폴링
-        await pollCatalogExtraction();
+        // Phase 2: Send in batches of 5 pages
+        const BATCH_SIZE = 5;
+        const totalBatches = Math.ceil(allImages.length / BATCH_SIZE);
+        let allProducts = [];
+
+        for (let i = 0; i < totalBatches; i++) {
+            updateExtractionProgress('extracting', i + 1, totalBatches);
+            const batch = allImages.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE);
+            const result = await sendExtractionBatch(batch, file.name, i, totalBatches);
+            if (result.products && result.products.length) {
+                allProducts = allProducts.concat(result.products);
+            }
+        }
+
+        // Deduplicate by name (case-insensitive)
+        const seen = new Set();
+        const unique = [];
+        for (const p of allProducts) {
+            const key = (p.name || '').toLowerCase().trim();
+            if (key && !seen.has(key)) {
+                seen.add(key);
+                unique.push(p);
+            }
+        }
+
+        // Transform to frontend format
+        extractedProducts = unique.map((p, idx) => {
+            const hasName = !!p.name;
+            const hasCat = !!p.category;
+            const hasPrice = p.minPrice != null || p.maxPrice != null;
+            const isComplete = hasName && hasCat && hasPrice;
+
+            let priceStr = null;
+            if (p.minPrice != null && p.maxPrice != null && p.minPrice !== p.maxPrice) {
+                priceStr = `$${p.minPrice.toFixed(2)} - $${p.maxPrice.toFixed(2)}`;
+            } else if (p.minPrice != null) {
+                priceStr = `$${p.minPrice.toFixed(2)}`;
+            } else if (p.maxPrice != null) {
+                priceStr = `$${p.maxPrice.toFixed(2)}`;
+            }
+
+            return {
+                id: 'e' + (idx + 1),
+                name: p.name || 'Unknown Product',
+                sku: p.sku || null,
+                category: p.category || null,
+                description: p.description || null,
+                minPrice: p.minPrice ?? null,
+                maxPrice: p.maxPrice ?? null,
+                moq: p.moq ?? null,
+                moqUnit: p.moqUnit || null,
+                certifications: p.certifications || [],
+                specifications: p.specifications || null,
+                originalPrice: priceStr,
+                price: priceStr,
+                status: isComplete ? 'complete' : 'incomplete',
+                emoji: getCategoryEmoji(p.category),
+            };
+        });
+
+        updateExtractionProgress('complete', extractedProducts.length, 0);
 
         await recordCatalogUpload(file.name, 'product_catalog', file.size, 'processed', extractedProducts.length);
-        showToast(t('catalog.extractSuccess') || 'Products extracted successfully!', 'success');
+        showToast(`${extractedProducts.length} products extracted successfully!`, 'success');
         goToCatalogStep(2);
 
     } catch (error) {
         console.error('Extraction error:', error);
 
-        // 데모 모드: 시뮬레이션 데이터 생성
+        // Fallback: demo simulation
         await simulateCatalogExtraction();
         await recordCatalogUpload(file.name, 'product_catalog', file.size, 'processed', extractedProducts.length);
-        showToast(t('catalog.extractSuccess') || 'Products extracted successfully!', 'success');
+        showToast(t('catalog.extractSuccess') || 'Products extracted (demo mode)', 'success');
         goToCatalogStep(2);
     }
 
+    // Hide progress & restore button
+    const progressEl = document.getElementById('extraction-progress');
+    if (progressEl) progressEl.style.display = 'none';
     extractBtn.disabled = false;
     extractBtn.innerHTML = `<span data-i18n="catalog.extractProducts">${t('catalog.extractProducts') || 'Extract Products'}</span> <span class="btn-arrow">→</span>`;
 }
 
-// 카탈로그 추출 시뮬레이션 (데모 모드)
+// 카탈로그 추출 시뮬레이션 (데모 모드 폴백)
 async function simulateCatalogExtraction() {
-    // 로딩 시뮬레이션
     await delay(2000);
-
-    // 데모 추출 데이터 (originalPrice: 카탈로그에서 추출된 원본 가격)
     extractedProducts = [
-        { id: 'e1', name: 'Extra Virgin Olive Oil 500ml', category: 'oils', originalPrice: '$7.20 - $8.50', price: '$7.20 - $8.50', status: 'complete', emoji: '🫒' },
-        { id: 'e2', name: 'Aged Parmesan Cheese 12m', category: null, originalPrice: '$18.00', price: '$18.00', status: 'incomplete', emoji: '🧀' },
-        { id: 'e3', name: 'Raw Organic Honey 500g', category: 'organic', originalPrice: null, price: null, status: 'incomplete', emoji: '🍯' },
-        { id: 'e4', name: 'Balsamic Vinegar 250ml', category: 'oils', originalPrice: '$12.00 - $15.00', price: '$12.00 - $15.00', status: 'complete', emoji: '🍷' },
-        { id: 'e5', name: 'Truffle Oil 100ml', category: 'oils', originalPrice: '$25.00', price: '$25.00', status: 'complete', emoji: '🫒' },
-        { id: 'e6', name: 'Artisan Pasta 500g', category: null, originalPrice: '$4.50', price: '$4.50', status: 'incomplete', emoji: '🍝' }
+        { id: 'e1', name: 'Extra Virgin Olive Oil 500ml', sku: null, category: 'evoo', description: 'Premium EVOO', minPrice: 7.20, maxPrice: 8.50, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$7.20 - $8.50', price: '$7.20 - $8.50', status: 'complete', emoji: '🫒' },
+        { id: 'e2', name: 'Aged Parmesan Cheese 12m', sku: null, category: null, description: null, minPrice: 18.00, maxPrice: 18.00, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$18.00', price: '$18.00', status: 'incomplete', emoji: '🧀' },
+        { id: 'e3', name: 'Raw Organic Honey 500g', sku: null, category: 'honey', description: null, minPrice: null, maxPrice: null, moq: null, moqUnit: null, certifications: ['Organic'], specifications: null, originalPrice: null, price: null, status: 'incomplete', emoji: '🍯' },
+        { id: 'e4', name: 'Balsamic Vinegar 250ml', sku: null, category: 'balsamic', description: 'Traditional balsamic', minPrice: 12.00, maxPrice: 15.00, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$12.00 - $15.00', price: '$12.00 - $15.00', status: 'complete', emoji: '🍷' },
+        { id: 'e5', name: 'Truffle Oil 100ml', sku: null, category: 'truffle-oil', description: null, minPrice: 25.00, maxPrice: 25.00, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$25.00', price: '$25.00', status: 'complete', emoji: '🫒' },
+        { id: 'e6', name: 'Artisan Pasta 500g', sku: null, category: null, description: null, minPrice: 4.50, maxPrice: 4.50, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$4.50', price: '$4.50', status: 'incomplete', emoji: '🍝' }
     ];
+}
+
+// 선택된 상품을 DB에 등록
+async function registerExtractedProducts() {
+    // 체크된 상품만
+    const checkboxes = document.querySelectorAll('.extract-checkbox:checked');
+    const selectedIds = new Set();
+    checkboxes.forEach(cb => selectedIds.add(cb.getAttribute('data-id')));
+
+    const toRegister = extractedProducts.filter(p => selectedIds.has(p.id));
+    if (!toRegister.length) {
+        showToast('No products selected for registration.', 'error');
+        return 0;
+    }
+
+    // CreateProductDto 형식으로 변환
+    const dtos = toRegister.map(p => ({
+        name: p.name,
+        sku: p.sku || undefined,
+        category: p.category || undefined,
+        description: p.description || undefined,
+        minPrice: p.minPrice ?? undefined,
+        maxPrice: p.maxPrice ?? undefined,
+        moq: p.moq ?? undefined,
+        moqUnit: p.moqUnit || undefined,
+        certifications: (p.certifications && p.certifications.length) ? p.certifications : undefined,
+        status: 'active',
+    }));
+
+    try {
+        const result = await apiCall('/products/bulk', {
+            method: 'POST',
+            body: JSON.stringify(dtos),
+        });
+        return result.count || dtos.length;
+    } catch (error) {
+        console.error('Bulk registration failed:', error);
+        showToast('Failed to register products: ' + error.message, 'error');
+        return 0;
+    }
 }
 
 // 추출된 상품 로드 및 표시
@@ -2363,8 +2640,7 @@ function loadExtractedProducts() {
     const incompleteEl = document.getElementById('incomplete-count');
 
     if (!extractedProducts.length) {
-        // 데모 데이터 사용
-        simulateCatalogExtraction().then(() => loadExtractedProducts());
+        if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-secondary);">No products extracted yet.</td></tr>';
         return;
     }
 
@@ -2553,15 +2829,20 @@ function skipPriceMatching() {
 }
 
 // 완료 서머리 표시
-function showCompleteSummary() {
+function showCompleteSummary(registeredCount) {
+    const total = registeredCount ?? extractedProducts.length;
     const completeCount = extractedProducts.filter(p => p.status === 'complete').length;
     const incompleteCount = extractedProducts.length - completeCount;
     const priceCount = priceMatchedProducts.length || extractedProducts.filter(p => p.price).length;
 
-    document.getElementById('registered-count').textContent = extractedProducts.length;
+    document.getElementById('registered-count').textContent = total;
     document.getElementById('final-complete-count').textContent = completeCount;
     document.getElementById('final-incomplete-count').textContent = incompleteCount;
     document.getElementById('final-price-count').textContent = priceCount;
+
+    if (registeredCount > 0) {
+        showToast(`${registeredCount} products registered to your catalog!`, 'success');
+    }
 }
 
 // 새 카탈로그 등록 시작

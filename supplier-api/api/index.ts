@@ -5,6 +5,7 @@ import { AppModule } from '../src/app.module.js';
 import express, { Request, Response } from 'express';
 
 const server = express();
+server.use(express.json({ limit: '5mb' }));
 
 let app: any;
 

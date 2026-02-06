@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Patch, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards, Request, ParseArrayPipe } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto } from './dto/create-product.dto';
@@ -17,6 +17,17 @@ export class ProductsController {
   @ApiResponse({ status: 201, description: 'Product created' })
   async createProduct(@Request() req, @Body() dto: CreateProductDto) {
     return this.productsService.createProduct(req.user.id, dto);
+  }
+
+  @Post('products/bulk')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Bulk create products' })
+  @ApiResponse({ status: 201, description: 'Products created in bulk' })
+  async bulkCreateProducts(
+    @Request() req,
+    @Body(new ParseArrayPipe({ items: CreateProductDto })) dtos: CreateProductDto[],
+  ) {
+    return this.productsService.bulkCreateProducts(req.user.id, dtos);
   }
 
   @Get('products')

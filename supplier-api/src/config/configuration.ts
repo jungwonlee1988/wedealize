@@ -29,5 +29,7 @@ export default () => ({
 
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
 
+  anthropic: { apiKey: process.env.ANTHROPIC_API_KEY || '' },
+
   adminKey: process.env.ADMIN_KEY || 'wedealize-admin-2024',
 });

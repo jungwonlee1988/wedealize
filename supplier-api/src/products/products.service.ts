@@ -30,6 +30,8 @@ export class ProductsService {
       moq: dto.moq ?? null,
       moq_unit: dto.moqUnit || null,
       certifications: dto.certifications || [],
+      lead_time: dto.leadTime ?? null,
+      notes: dto.notes || null,
       status: dto.status || 'active',
     };
     row.completeness = this.calculateCompleteness(row);
@@ -46,6 +48,40 @@ export class ProductsService {
     }
 
     return data;
+  }
+
+  async bulkCreateProducts(supplierId: string, dtos: CreateProductDto[]) {
+    const supabase = this.supabaseService.getAdminClient();
+
+    const rows = dtos.map((dto) => {
+      const row: Record<string, any> = {
+        supplier_id: supplierId,
+        name: dto.name,
+        sku: dto.sku || null,
+        category: dto.category || null,
+        description: dto.description || null,
+        min_price: dto.minPrice ?? null,
+        max_price: dto.maxPrice ?? null,
+        moq: dto.moq ?? null,
+        moq_unit: dto.moqUnit || null,
+        certifications: dto.certifications || [],
+        status: dto.status || 'active',
+      };
+      row.completeness = this.calculateCompleteness(row);
+      return row;
+    });
+
+    const { data, error } = await supabase
+      .from('products')
+      .insert(rows)
+      .select();
+
+    if (error) {
+      this.logger.error('Failed to bulk create products:', error);
+      throw new BadRequestException('Failed to bulk create products');
+    }
+
+    return { products: data || [], count: (data || []).length };
   }
 
   async getProducts(supplierId: string, query: { status?: string; search?: string }) {
@@ -109,6 +145,8 @@ export class ProductsService {
     if (dto.moq !== undefined) updateData.moq = dto.moq;
     if (dto.moqUnit !== undefined) updateData.moq_unit = dto.moqUnit;
     if (dto.certifications !== undefined) updateData.certifications = dto.certifications;
+    if (dto.leadTime !== undefined) updateData.lead_time = dto.leadTime;
+    if (dto.notes !== undefined) updateData.notes = dto.notes;
     if (dto.status !== undefined) updateData.status = dto.status;
 
     // Recalculate completeness: merge existing + update
