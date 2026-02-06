@@ -3134,32 +3134,9 @@ function editPO(poId) {
 
 // ==================== PI Management ====================
 
-async function openPIModal(piId) {
-    const modalEl = document.getElementById('pi-modal');
-    const form = document.getElementById('pi-form');
-    const titleEl = document.getElementById('pi-modal-title');
-
-    if (!modalEl) return;
-
-    if (form) form.reset();
-    window._editingPIId = null;
-
-    if (piId) {
-        window._editingPIId = piId;
-        if (titleEl) titleEl.textContent = 'Edit Proforma Invoice';
-    } else {
-        if (titleEl) titleEl.textContent = 'Create Proforma Invoice';
-    }
-
-    // Dynamically populate buyer dropdown from POs and Credits
-    await populatePIBuyerDropdown();
-
-    // Reset credit section
-    const creditSection = document.getElementById('pi-credit-section');
-    if (creditSection) creditSection.style.display = 'none';
-
-    resetPIItems();
-    modalEl.style.display = 'flex';
+function openPIModal(piId) {
+    // Redirect to PI edit page instead of modal
+    window.location.href = piId ? `pi-edit.html?id=${piId}` : 'pi-edit.html?id=new';
 }
 
 async function populatePIBuyerDropdown() {
