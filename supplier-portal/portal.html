@@ -14,10 +14,18 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script>
-        // Prevent login screen flash for logged-in users
-        if (localStorage.getItem('supplier_logged_in') === 'true' && localStorage.getItem('supplier_token')) {
-            document.documentElement.classList.add('logged-in');
-        }
+        // Prevent auth/dashboard flash: check login + token expiry before first paint
+        try {
+            if (localStorage.getItem('supplier_logged_in') === 'true') {
+                var t = localStorage.getItem('supplier_token');
+                if (t) {
+                    var p = JSON.parse(atob(t.split('.')[1]));
+                    if (!p.exp || p.exp * 1000 > Date.now()) {
+                        document.documentElement.classList.add('logged-in');
+                    }
+                }
+            }
+        } catch(e) {}
     </script>
     <style>
         html.logged-in #auth-section { display: none !important; }
