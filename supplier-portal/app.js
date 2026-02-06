@@ -2510,12 +2510,15 @@ async function extractCatalog() {
             }
         }
 
-        // Deduplicate by name (case-insensitive)
+        // Deduplicate by product_name + brand + unit_spec
         const seen = new Set();
         const unique = [];
         for (const p of allProducts) {
-            const key = (p.product_name || p.name || '').toLowerCase().trim();
-            if (key && !seen.has(key)) {
+            const name = (p.product_name || p.name || '').toLowerCase().trim();
+            const brand = (p.brand || '').toLowerCase().trim();
+            const spec = (p.unit_spec || '').toLowerCase().trim();
+            const key = `${name}|${brand}|${spec}`;
+            if (name && !seen.has(key)) {
                 seen.add(key);
                 unique.push(p);
             }
