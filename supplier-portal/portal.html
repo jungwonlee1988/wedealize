@@ -1025,7 +1025,21 @@
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="display: flex; justify-content: flex-end; align-items: center; padding: 0 24px 16px;">
+                            <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px 16px; flex-wrap: wrap; gap: 8px;">
+                                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                    <input type="text" id="pf-search" class="wd-input" placeholder="Search name or SKU..." oninput="applyProductFilters()" style="width: 200px; padding: 7px 12px; font-size: 13px;">
+                                    <select id="pf-category" class="wd-select" onchange="applyProductFilters()" style="width: 150px; padding: 7px 10px; font-size: 13px;">
+                                        <option value="">All Categories</option>
+                                    </select>
+                                    <select id="pf-cert" class="wd-select" onchange="applyProductFilters()" style="width: 160px; padding: 7px 10px; font-size: 13px;">
+                                        <option value="">All Certifications</option>
+                                    </select>
+                                    <select id="pf-status" class="wd-select" onchange="applyProductFilters()" style="width: 140px; padding: 7px 10px; font-size: 13px;">
+                                        <option value="">All Status</option>
+                                        <option value="complete">Complete</option>
+                                        <option value="incomplete">Incomplete</option>
+                                    </select>
+                                </div>
                                 <div class="wd-filter-actions" style="display: flex; gap: 8px;">
                                     <button class="wd-btn wd-btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
                                 </div>
