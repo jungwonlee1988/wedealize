@@ -111,8 +111,8 @@
         }
 
         // Apply i18n if available
-        if (typeof applyI18n === 'function') {
-            applyI18n();
+        if (typeof updateUILanguage === 'function') {
+            updateUILanguage();
         }
     };
 
@@ -160,10 +160,18 @@
     }
 
     /**
-     * Navigate to a section (for detail pages, goes back to portal.html)
+     * Navigate to a section
+     * - For portal.html: use showSection (in-page navigation)
+     * - For detail pages: redirect to portal.html#section
      */
     window.navigateTo = function(section) {
-        window.location.href = `portal.html#${section}`;
+        // If showSection exists (portal.html), use in-page navigation
+        if (typeof showSection === 'function') {
+            showSection(section);
+        } else {
+            // Detail pages: redirect to portal.html
+            window.location.href = `portal.html#${section}`;
+        }
     };
 
     /**

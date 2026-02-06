@@ -657,6 +657,12 @@ function showDashboard() {
     document.getElementById('user-menu').style.display = 'flex';
     document.getElementById('user-name').textContent = localStorage.getItem('supplier_name') || 'Supplier';
     document.body.classList.add('dashboard-mode');
+
+    // Initialize shared sidebar
+    if (typeof initSidebar === 'function') {
+        const hash = window.location.hash.slice(1);
+        initSidebar(hash || 'overview');
+    }
 }
 
 // 초기 로드 시 로그인 상태 확인

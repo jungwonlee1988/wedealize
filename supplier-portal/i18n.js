@@ -81,6 +81,7 @@ const englishTranslations = {
         sales: "Sales",
         poManagement: "Purchase Order",
         piManagement: "Invoice",
+        invManagement: "Invoice",
         creditManagement: "Credit",
         accountManagement: "Account",
         buyerDiscovery: "Buyer Discovery",
