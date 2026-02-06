@@ -1164,23 +1164,6 @@
                             </table>
                             </div>
 
-                            <!-- Pagination -->
-                            <div class="wd-pagination" style="padding: 16px 24px;">
-                                <div class="wd-pagination-info">
-                                    <span>Showing</span>
-                                    <select class="wd-select" style="width: 80px; padding: 6px 10px;">
-                                        <option>20</option>
-                                        <option>50</option>
-                                        <option>100</option>
-                                    </select>
-                                    <span>per page</span>
-                                </div>
-                                <div class="wd-pagination-pages">
-                                    <button class="wd-pagination-btn" disabled>&lt;</button>
-                                    <button class="wd-pagination-btn active">1</button>
-                                    <button class="wd-pagination-btn">&gt;</button>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- PO Detail -->
@@ -2795,73 +2778,85 @@
 
                                 <!-- Company Certifications Section -->
                                 <div class="wd-card">
-                                    <div class="wd-card-header">
+                                    <div class="wd-card-header" style="display:flex; justify-content:space-between; align-items:center;">
                                         <h3 class="wd-card-title" data-i18n="profile.companyCertifications">Company Certifications</h3>
+                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="openCompanyCertModal()">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                            Add Certification
+                                        </button>
                                     </div>
                                     <div class="wd-card-body">
-                                        <p class="wd-form-hint wd-mb-4" data-i18n="profile.companyCertsDesc">Certifications that apply to your entire company. Product-specific certifications can be added when editing each product.</p>
-
-                                        <div class="wd-checkbox-grid">
-                                            <label class="wd-checkbox-card">
-                                                <input type="checkbox" checked>
-                                                <span class="wd-checkbox-label">HACCP</span>
-                                            </label>
-                                            <label class="wd-checkbox-card">
-                                                <input type="checkbox" checked>
-                                                <span class="wd-checkbox-label">ISO 22000</span>
-                                            </label>
-                                            <label class="wd-checkbox-card">
-                                                <input type="checkbox" checked>
-                                                <span class="wd-checkbox-label">Organic (EU)</span>
-                                            </label>
-                                            <label class="wd-checkbox-card">
-                                                <input type="checkbox">
-                                                <span class="wd-checkbox-label">Halal</span>
-                                            </label>
-                                            <label class="wd-checkbox-card">
-                                                <input type="checkbox">
-                                                <span class="wd-checkbox-label">Kosher</span>
-                                            </label>
-                                            <label class="wd-checkbox-card">
-                                                <input type="checkbox">
-                                                <span class="wd-checkbox-label">Non-GMO</span>
-                                            </label>
+                                        <p class="wd-form-hint wd-mb-4" data-i18n="profile.companyCertsDesc">Certifications that apply to your entire company (HACCP, ISO, BRC, etc.). Product-specific certifications can be added when editing each product.</p>
+                                        <div class="wd-table-container">
+                                            <table class="wd-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Issuer</th>
+                                                        <th>Issue Date</th>
+                                                        <th>Expiry Date</th>
+                                                        <th>Status</th>
+                                                        <th style="width:80px;">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="company-certs-table-body">
+                                                    <tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">Loading certifications...</td></tr>
+                                                </tbody>
+                                            </table>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <!-- Certificate File Upload -->
-                                        <div class="wd-upload-section" style="margin-top: 24px;">
-                                            <h4 class="wd-form-label wd-mb-3" data-i18n="profile.uploadCertDocs">Upload Certification Documents</h4>
-                                            <div class="wd-dropzone" id="company-cert-dropzone"
-                                                 ondrop="handleDrop(event, 'company-cert')"
-                                                 ondragover="handleDragOver(event)"
-                                                 ondragleave="handleDragLeave(event)">
-                                                <input type="file" id="company-cert-file" accept=".pdf,.jpg,.png" onchange="handleFileSelect(event, 'company-cert')" hidden multiple>
-                                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                                    <polyline points="17 8 12 3 7 8"/>
-                                                    <line x1="12" y1="3" x2="12" y2="15"/>
-                                                </svg>
-                                                <p><span data-i18n="catalog.dragDrop">Drag & drop or</span> <label for="company-cert-file" class="wd-link" data-i18n="catalog.browse">browse</label></p>
-                                                <span class="wd-dropzone-hint" data-i18n="profile.certFileHint">PDF, JPG, PNG (Max 10MB)</span>
-                                            </div>
-                                            <div class="wd-file-list" id="company-cert-list">
-                                                <div class="wd-file-item">
-                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                                    <span class="wd-file-name">HACCP_Certificate_2024.pdf</span>
-                                                    <span class="wd-badge wd-badge-success" data-i18n="profile.valid">Valid</span>
-                                                    <button type="button" class="wd-btn-icon" onclick="removeCert('haccp')">
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                                    </button>
+                                <!-- Company Certification Modal -->
+                                <div class="wd-modal-overlay" id="company-cert-modal" style="display:none;">
+                                    <div class="wd-modal" style="max-width:520px;">
+                                        <div class="wd-modal-header">
+                                            <h3 class="wd-modal-title" id="company-cert-modal-title">Add Certification</h3>
+                                            <button class="wd-modal-close" onclick="closeCompanyCertModal()">&times;</button>
+                                        </div>
+                                        <div class="wd-modal-body">
+                                            <form id="company-cert-form">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Certification Name *</label>
+                                                    <select class="wd-select" id="cert-name">
+                                                        <option value="">Select certification...</option>
+                                                        <option value="HACCP">HACCP</option>
+                                                        <option value="ISO 22000">ISO 22000</option>
+                                                        <option value="BRC">BRC</option>
+                                                        <option value="IFS">IFS</option>
+                                                        <option value="FSSC 22000">FSSC 22000</option>
+                                                        <option value="GMP">GMP</option>
+                                                        <option value="SQF">SQF</option>
+                                                        <option value="ISO 9001">ISO 9001</option>
+                                                    </select>
                                                 </div>
-                                                <div class="wd-file-item">
-                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                                    <span class="wd-file-name">Organic_EU_Certificate.pdf</span>
-                                                    <span class="wd-badge wd-badge-success" data-i18n="profile.valid">Valid</span>
-                                                    <button type="button" class="wd-btn-icon" onclick="removeCert('organic')">
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                                    </button>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Issuer</label>
+                                                    <input type="text" class="wd-input" id="cert-issuer" placeholder="e.g., SGS, Bureau Veritas">
                                                 </div>
-                                            </div>
+                                                <div class="wd-form-row">
+                                                    <div class="wd-form-group">
+                                                        <label class="wd-form-label">Issue Date</label>
+                                                        <input type="date" class="wd-input" id="cert-issue-date">
+                                                    </div>
+                                                    <div class="wd-form-group">
+                                                        <label class="wd-form-label">Expiry Date</label>
+                                                        <input type="date" class="wd-input" id="cert-expiry-date">
+                                                    </div>
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Status</label>
+                                                    <select class="wd-select" id="cert-status">
+                                                        <option value="valid">Valid</option>
+                                                        <option value="expired">Expired</option>
+                                                        <option value="pending">Pending</option>
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="wd-modal-footer">
+                                            <button class="wd-btn wd-btn-outline" onclick="closeCompanyCertModal()">Cancel</button>
+                                            <button class="wd-btn wd-btn-primary" onclick="saveCompanyCert()">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -3417,15 +3412,16 @@
                         <!-- Certifications -->
                         <div class="wd-form-section">
                             <h4 class="wd-form-section-title">Certifications</h4>
-                            <div class="wd-checkbox-grid" id="product-cert-grid" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="wd-checkbox-grid" id="product-cert-grid" style="grid-template-columns: repeat(3, 1fr);">
                                 <label class="wd-checkbox-card"><input type="checkbox" value="organic"> <span class="wd-checkbox-label">Organic</span></label>
-                                <label class="wd-checkbox-card"><input type="checkbox" value="haccp"> <span class="wd-checkbox-label">HACCP</span></label>
                                 <label class="wd-checkbox-card"><input type="checkbox" value="halal"> <span class="wd-checkbox-label">Halal</span></label>
                                 <label class="wd-checkbox-card"><input type="checkbox" value="kosher"> <span class="wd-checkbox-label">Kosher</span></label>
                                 <label class="wd-checkbox-card"><input type="checkbox" value="vegan"> <span class="wd-checkbox-label">Vegan</span></label>
                                 <label class="wd-checkbox-card"><input type="checkbox" value="non-gmo"> <span class="wd-checkbox-label">Non-GMO</span></label>
                                 <label class="wd-checkbox-card"><input type="checkbox" value="dop"> <span class="wd-checkbox-label">DOP/PDO</span></label>
                                 <label class="wd-checkbox-card"><input type="checkbox" value="igp"> <span class="wd-checkbox-label">IGP/PGI</span></label>
+                                <label class="wd-checkbox-card"><input type="checkbox" value="gluten-free"> <span class="wd-checkbox-label">Gluten-Free</span></label>
+                                <label class="wd-checkbox-card"><input type="checkbox" value="fair-trade"> <span class="wd-checkbox-label">Fair Trade</span></label>
                             </div>
                         </div>
                     </form>
