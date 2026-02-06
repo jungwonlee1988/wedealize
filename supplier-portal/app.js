@@ -2775,6 +2775,26 @@ window.renderCategoryCheckboxGrid = renderCategoryCheckboxGrid;
 window.filterRegCategories = filterRegCategories;
 window.updateRegCategoryCount = updateRegCategoryCount;
 
+// Settings Tab Navigation
+window.switchSettingsTab = function(tabName) {
+    const tabContainer = document.querySelector('#panel-settings .wd-tabs');
+    if (tabContainer) {
+        tabContainer.querySelectorAll('.wd-tab').forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.getAttribute('onclick')?.includes(tabName)) {
+                tab.classList.add('active');
+            }
+        });
+    }
+    const panels = document.querySelectorAll('[id^="settings-"][id$="-panel"]');
+    panels.forEach(panel => {
+        panel.classList.remove('active');
+        if (panel.id === `settings-${tabName}-panel`) {
+            panel.classList.add('active');
+        }
+    });
+};
+
 // 가격표 리셋 - 원래 카탈로그 가격으로 복원
 // (resetPriceList and skipPriceMatching removed — Match Prices step removed)
 
@@ -2834,8 +2854,8 @@ async function loadUploadHistory() {
         const data = await res.json();
         renderUploadHistory(data.uploads || []);
     } catch (error) {
-        console.error('Failed to load upload history:', error);
-        tbody.innerHTML = renderEmptyRow(6, 'No upload history yet.');
+        // Table may not exist yet — fail silently
+        if (tbody) tbody.innerHTML = renderEmptyRow(6, 'No upload history yet.');
     }
 }
 
