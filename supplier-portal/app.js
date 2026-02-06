@@ -653,7 +653,7 @@ function logout() {
 // 대시보드 표시
 function showDashboard() {
     document.getElementById('auth-section').style.display = 'none';
-    document.getElementById('dashboard-section').style.display = 'block';
+    document.getElementById('dashboard-section').style.display = 'flex';
     document.getElementById('user-menu').style.display = 'flex';
     document.getElementById('user-name').textContent = localStorage.getItem('supplier_name') || 'Supplier';
     document.body.classList.add('dashboard-mode');
