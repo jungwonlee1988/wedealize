@@ -30,6 +30,11 @@ export class CreateCertificationDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  certificateNumber?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   documentUrl?: string;
 
   @ApiPropertyOptional({ default: 'valid' })
@@ -63,6 +68,11 @@ export class UpdateCertificationDto {
   @IsOptional()
   @IsString()
   expiryDate?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  certificateNumber?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

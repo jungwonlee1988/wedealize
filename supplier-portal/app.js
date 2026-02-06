@@ -4586,14 +4586,101 @@ function filterAccounts() {
     });
 }
 
-// ---- Company Certifications CRUD (page-based) ----
+// ---- Company Certifications CRUD (API-connected) ----
+
+window._editingCertId = null;
 
 function openCompanyCertModal(certId) {
-    // Redirect to cert-edit page instead of opening modal
+    const modal = document.getElementById('company-cert-modal');
+    const titleEl = document.getElementById('company-cert-modal-title');
+    const form = document.getElementById('company-cert-form');
+    if (form) form.reset();
+    window._editingCertId = null;
+
     if (certId) {
-        window.location.href = `cert-edit.html?id=${certId}`;
+        window._editingCertId = certId;
+        if (titleEl) titleEl.textContent = 'Edit Certification';
+        loadCertIntoForm(certId);
     } else {
-        window.location.href = 'cert-edit.html?id=new';
+        if (titleEl) titleEl.textContent = 'Add Certification';
+    }
+
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeCompanyCertModal() {
+    const modal = document.getElementById('company-cert-modal');
+    if (modal) modal.style.display = 'none';
+    window._editingCertId = null;
+}
+
+async function loadCertIntoForm(certId) {
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/certifications`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed to load certifications');
+        const { certifications } = await res.json();
+        const cert = certifications.find(c => c.id === certId);
+        if (!cert) return;
+
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+        setVal('cert-name', cert.name);
+        setVal('cert-issuer', cert.issuer);
+        setVal('cert-issue-date', cert.issue_date);
+        setVal('cert-expiry-date', cert.expiry_date);
+        setVal('cert-status', cert.status || 'valid');
+    } catch (e) {
+        console.error('Failed to load cert into form:', e);
+    }
+}
+
+async function saveCompanyCert() {
+    const name = document.getElementById('cert-name')?.value?.trim();
+    if (!name) {
+        showToast('Certification name is required', 'error');
+        return;
+    }
+
+    const payload = {
+        name,
+        issuer: document.getElementById('cert-issuer')?.value || '',
+        issueDate: document.getElementById('cert-issue-date')?.value || '',
+        expiryDate: document.getElementById('cert-expiry-date')?.value || '',
+        status: document.getElementById('cert-status')?.value || 'valid',
+    };
+
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const isEdit = !!window._editingCertId;
+        const url = isEdit ? `${baseUrl}/certifications/${window._editingCertId}` : `${baseUrl}/certifications`;
+        const method = isEdit ? 'PATCH' : 'POST';
+
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.status === 401) {
+            handleSessionExpired();
+            return;
+        }
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Failed to save certification');
+        }
+
+        showToast(isEdit ? 'Certification updated!' : 'Certification added!', 'success');
+        closeCompanyCertModal();
+        loadCompanyCerts();
+    } catch (e) {
+        console.error('Failed to save certification:', e);
+        showToast(e.message || 'Failed to save certification', 'error');
     }
 }
 
