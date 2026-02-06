@@ -2549,6 +2549,7 @@ async function extractCatalog() {
                 minPrice: p.minPrice ?? null,
                 maxPrice: p.maxPrice ?? null,
                 priceBasis: p.priceBasis || null,
+                shelfLife: p.shelfLife || null,
                 originalPrice: priceStr,
                 price: priceStr,
                 status: isComplete ? 'complete' : 'incomplete',
@@ -2583,12 +2584,12 @@ async function extractCatalog() {
 async function simulateCatalogExtraction() {
     await delay(2000);
     extractedProducts = [
-        { id: 'e1', name: 'Extra Virgin Olive Oil 500ml', sku: 'OIL-001', category: 'evoo', minPrice: 7.20, maxPrice: 8.50, priceBasis: 'FOB', originalPrice: '$7.20 - $8.50', price: '$7.20 - $8.50', status: 'complete', emoji: '🫒' },
-        { id: 'e2', name: 'Aged Parmesan Cheese 12m', sku: null, category: 'aged-cheese', minPrice: 18.00, maxPrice: 18.00, priceBasis: 'EXW', originalPrice: '$18.00', price: '$18.00', status: 'complete', emoji: '🧀' },
-        { id: 'e3', name: 'Raw Organic Honey 500g', sku: 'HON-003', category: 'honey', minPrice: null, maxPrice: null, priceBasis: null, originalPrice: null, price: null, status: 'incomplete', emoji: '🍯' },
-        { id: 'e4', name: 'Balsamic Vinegar 250ml', sku: 'VIN-004', category: 'balsamic', minPrice: 12.00, maxPrice: 15.00, priceBasis: 'FOB', originalPrice: '$12.00 - $15.00', price: '$12.00 - $15.00', status: 'complete', emoji: '🍷' },
-        { id: 'e5', name: 'Truffle Oil 100ml', sku: null, category: 'truffle-oil', minPrice: 25.00, maxPrice: 25.00, priceBasis: 'CIF', originalPrice: '$25.00', price: '$25.00', status: 'complete', emoji: '🫒' },
-        { id: 'e6', name: 'Artisan Pasta 500g', sku: 'PAS-006', category: 'dried-pasta', minPrice: 4.50, maxPrice: 4.50, priceBasis: 'EXW', originalPrice: '$4.50', price: '$4.50', status: 'complete', emoji: '🍝' }
+        { id: 'e1', name: 'Extra Virgin Olive Oil 500ml', sku: 'OIL-001', category: 'evoo', minPrice: 7.20, maxPrice: 8.50, priceBasis: 'FOB', shelfLife: '18 months', originalPrice: '$7.20 - $8.50', price: '$7.20 - $8.50', status: 'complete', emoji: '🫒' },
+        { id: 'e2', name: 'Aged Parmesan Cheese 12m', sku: null, category: 'aged-cheese', minPrice: 18.00, maxPrice: 18.00, priceBasis: 'EXW', shelfLife: '12 months', originalPrice: '$18.00', price: '$18.00', status: 'complete', emoji: '🧀' },
+        { id: 'e3', name: 'Raw Organic Honey 500g', sku: 'HON-003', category: 'honey', minPrice: null, maxPrice: null, priceBasis: null, shelfLife: '24 months', originalPrice: null, price: null, status: 'incomplete', emoji: '🍯' },
+        { id: 'e4', name: 'Balsamic Vinegar 250ml', sku: 'VIN-004', category: 'balsamic', minPrice: 12.00, maxPrice: 15.00, priceBasis: 'FOB', shelfLife: '3 years', originalPrice: '$12.00 - $15.00', price: '$12.00 - $15.00', status: 'complete', emoji: '🍷' },
+        { id: 'e5', name: 'Truffle Oil 100ml', sku: null, category: 'truffle-oil', minPrice: 25.00, maxPrice: 25.00, priceBasis: 'CIF', shelfLife: null, originalPrice: '$25.00', price: '$25.00', status: 'complete', emoji: '🫒' },
+        { id: 'e6', name: 'Artisan Pasta 500g', sku: 'PAS-006', category: 'dried-pasta', minPrice: 4.50, maxPrice: 4.50, priceBasis: 'EXW', shelfLife: '24M', originalPrice: '$4.50', price: '$4.50', status: 'complete', emoji: '🍝' }
     ];
 }
 
@@ -2658,17 +2659,12 @@ function loadExtractedProducts() {
                 <td>
                     ${product.category
                         ? `<span class="wd-badge wd-badge-outline">${getCategoryLabel(product.category)}</span>`
-                        : `<span class="wd-badge wd-badge-warning">-</span>`
+                        : '<span class="wd-text-muted">-</span>'
                     }
                 </td>
                 <td>${product.price || '<span class="wd-text-muted">-</span>'}</td>
                 <td>${product.priceBasis ? `<span class="wd-badge wd-badge-outline">${product.priceBasis}</span>` : '<span class="wd-text-muted">-</span>'}</td>
-                <td>
-                    <button class="wd-btn wd-btn-sm wd-btn-outline"
-                            onclick="editExtractedProduct('${product.id}')">
-                        ${t('products.edit') || 'Edit'}
-                    </button>
-                </td>
+                <td>${product.shelfLife || '<span class="wd-text-muted">-</span>'}</td>
             </tr>
         `;
     }).join('');

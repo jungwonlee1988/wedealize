@@ -55,6 +55,7 @@ For each product, return a JSON object with these fields:
 - "minPrice": number or null (minimum price, numeric only)
 - "maxPrice": number or null (maximum price, numeric only)
 - "priceBasis": string or null (price basis/incoterm if mentioned: "EXW", "FOB", "CIF", "DDP", "FCA", etc.)
+- "shelfLife": string or null (shelf life/expiry info if mentioned, e.g. "12 months", "2 years", "24M")
 
 Rules:
 - Extract ALL products visible in the images
