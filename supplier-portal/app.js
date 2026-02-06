@@ -2762,59 +2762,9 @@ function sortPOTable(column) {
     // TODO: 정렬 로직 구현
 }
 
-// 발주서 등록 모달
+// 발주서 등록 - 상세 페이지로 이동
 function openAddPOModal(poId) {
-    const modalEl = document.getElementById('add-po-modal');
-    const form = document.getElementById('add-po-form');
-    const titleEl = document.getElementById('add-po-modal-title');
-
-    if (!modalEl) return;
-
-    if (form) form.reset();
-    window._editingPOId = null;
-
-    // Reset items table
-    const tbody = document.getElementById('add-po-items-tbody');
-    if (tbody) {
-        tbody.innerHTML = `
-            <tr data-row="0">
-                <td><input type="text" class="wd-input wd-input-sm po-item-name" required placeholder="Product name"></td>
-                <td><input type="number" class="wd-input wd-input-sm po-item-qty" required min="1" value="1" onchange="calculatePOItemSubtotal(0)"></td>
-                <td>
-                    <select class="wd-select wd-select-sm po-item-unit">
-                        <option value="pcs">pcs</option>
-                        <option value="boxes">boxes</option>
-                        <option value="cases">cases</option>
-                        <option value="pallets">pallets</option>
-                        <option value="kg">kg</option>
-                        <option value="lbs">lbs</option>
-                        <option value="liters">liters</option>
-                    </select>
-                </td>
-                <td><input type="number" class="wd-input wd-input-sm po-item-price" required min="0" step="0.01" value="0" onchange="calculatePOItemSubtotal(0)"></td>
-                <td class="po-item-subtotal wd-text-right wd-text-bold">0.00</td>
-                <td>
-                    <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removePOItemRow(0)" title="Remove">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
-                </td>
-            </tr>
-        `;
-    }
-
-    // Set default date
-    const orderDateInput = document.getElementById('add-po-date');
-    if (orderDateInput) orderDateInput.value = new Date().toISOString().split('T')[0];
-
-    if (poId) {
-        window._editingPOId = poId;
-        if (titleEl) titleEl.textContent = 'Edit Purchase Order';
-        loadPODataForEdit(poId);
-    } else {
-        if (titleEl) titleEl.textContent = 'Add Purchase Order';
-    }
-
-    modalEl.style.display = 'flex';
+    window.location.href = poId ? `po-edit.html?id=${poId}` : 'po-edit.html?id=new';
 }
 
 function closeAddPOModal() {

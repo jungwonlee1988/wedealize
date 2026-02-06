@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proforma Invoice - WeDealize Supplier Portal</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="design-system.css">
+</head>
+<body>
+    <div class="portal-app">
+        <!-- Header -->
+        <header class="portal-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="logo.png" alt="WeDealize" height="32">
+                </div>
+                <nav class="header-nav">
+                    <div class="language-dropdown" id="language-dropdown">
+                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">
+                            🇺🇸 English <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="language-menu" id="language-menu">
+                            <div class="language-search">
+                                <input type="text" id="language-search" placeholder="Search language..." oninput="filterLanguages(this.value)">
+                            </div>
+                            <div class="language-list" id="language-list"></div>
+                        </div>
+                    </div>
+                    <div class="user-menu" id="user-menu">
+                        <span class="user-name" id="user-name"></span>
+                        <button class="btn-logout" onclick="logout()" data-i18n="header.logout">Logout</button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="portal-main">
+            <section class="dashboard-section" id="dashboard-section">
+                <div class="dashboard-container">
+                    <!-- Sidebar -->
+                    <aside class="wd-sidebar">
+                        <div class="wd-sidebar-header">
+                            <span class="wd-sidebar-logo">WeDealize</span>
+                            <button class="wd-sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <nav class="wd-sidebar-nav">
+                            <a class="wd-nav-item" data-section="overview" onclick="navigateTo('overview')">
+                                <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                <span data-i18n="dashboard.overview">Overview</span>
+                            </a>
+
+                            <div class="wd-nav-group">
+                                <a class="wd-nav-item wd-nav-parent" onclick="toggleSubmenu(this)">
+                                    <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                                    <span data-i18n="dashboard.product">Product</span>
+                                    <svg class="wd-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                </a>
+                                <div class="wd-nav-submenu">
+                                    <a class="wd-nav-item wd-nav-child" data-section="catalog" onclick="navigateTo('catalog')">
+                                        <span data-i18n="dashboard.catalogRegistration">Catalog Registration</span>
+                                    </a>
+                                    <a class="wd-nav-item wd-nav-child" data-section="product-list" onclick="navigateTo('product-list')">
+                                        <span data-i18n="dashboard.productList">Product List</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="wd-nav-group expanded">
+                                <a class="wd-nav-item wd-nav-parent" onclick="toggleSubmenu(this)">
+                                    <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                    <span data-i18n="dashboard.sales">Sales</span>
+                                    <svg class="wd-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                </a>
+                                <div class="wd-nav-submenu">
+                                    <a class="wd-nav-item wd-nav-child" data-section="po-management" onclick="navigateTo('po-management')">
+                                        <span data-i18n="dashboard.poManagement">PO Management</span>
+                                    </a>
+                                    <a class="wd-nav-item wd-nav-child active" data-section="pi-management" onclick="navigateTo('pi-management')">
+                                        <span data-i18n="dashboard.piManagement">PI Management</span>
+                                    </a>
+                                    <a class="wd-nav-item wd-nav-child" data-section="credit-management" onclick="navigateTo('credit-management')">
+                                        <span data-i18n="dashboard.creditManagement">Credit Management</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <a class="wd-nav-item" data-section="accounts" onclick="navigateTo('accounts')">
+                                <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                <span data-i18n="dashboard.accountManagement">Account Management</span>
+                            </a>
+                            <a class="wd-nav-item" data-section="buyer-discovery" onclick="navigateTo('buyer-discovery')">
+                                <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                                <span data-i18n="dashboard.buyerDiscovery">Buyer Discovery</span>
+                            </a>
+                            <a class="wd-nav-item" data-section="inquiries" onclick="navigateTo('inquiries')">
+                                <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                <span data-i18n="dashboard.inquiries">Inquiries</span>
+                            </a>
+                            <a class="wd-nav-item" data-section="profile" onclick="navigateTo('profile')">
+                                <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                <span data-i18n="dashboard.companyProfile">Company Profile</span>
+                            </a>
+                            <a class="wd-nav-item" data-section="settings" onclick="navigateTo('settings')">
+                                <svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                <span data-i18n="dashboard.settings">Settings</span>
+                            </a>
+                        </nav>
+
+                        <div class="wd-sidebar-footer">
+                            <div class="wd-user-profile">
+                                <div class="wd-user-avatar">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </div>
+                                <div class="wd-user-info">
+                                    <span class="wd-user-name" id="sidebar-user-name">User</span>
+                                    <span class="wd-user-email" id="sidebar-user-email"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Main Dashboard Content -->
+                    <div class="dashboard-content">
+                        <div class="product-edit-page">
+                            <!-- Page Header -->
+                            <div class="page-header">
+                                <div class="page-header-left">
+                                    <a href="portal.html#pi-management" class="btn-back" title="Back to PI Management">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                                        </svg>
+                                    </a>
+                                    <div>
+                                        <h1 class="page-title" data-i18n="pi.createPI">Create Proforma Invoice</h1>
+                                        <p class="page-subtitle" id="pi-subtitle"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PI Edit Form -->
+                            <form id="pi-edit-form" class="product-edit-form">
+                                <!-- Source Selection -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <h2 class="form-section-title">
+                                            <span class="section-icon">📄</span>
+                                            <span data-i18n="pi.piSource">PI Source</span>
+                                        </h2>
+                                    </div>
+                                    <div class="form-section-body">
+                                        <div class="wd-radio-group" style="display: flex; gap: 24px; margin-bottom: 16px;">
+                                            <label class="wd-radio-label">
+                                                <input type="radio" name="pi-source" value="po" checked onchange="togglePISource('po')">
+                                                <span class="wd-radio-text" data-i18n="pi.fromPO">From Purchase Order</span>
+                                            </label>
+                                            <label class="wd-radio-label">
+                                                <input type="radio" name="pi-source" value="new" onchange="togglePISource('new')">
+                                                <span class="wd-radio-text" data-i18n="pi.newPI">New PI (Manual)</span>
+                                            </label>
+                                        </div>
+                                        <div id="pi-po-selection" class="wd-form-group">
+                                            <label class="wd-form-label" data-i18n="pi.selectPO">Select Purchase Order</label>
+                                            <select class="wd-input wd-select" id="pi-po-select" onchange="loadPOForPI()">
+                                                <option value="">Select a PO to load...</option>
+                                                <option value="PO-2024-0156" data-buyer="ACC-001">PO-2024-0156 - ABC Distribution (Feb 01, 2024)</option>
+                                                <option value="PO-2024-0142" data-buyer="ACC-002">PO-2024-0142 - XYZ Foods Ltd (Jan 25, 2024)</option>
+                                                <option value="PO-2024-0138" data-buyer="ACC-003">PO-2024-0138 - Global Trade Co (Jan 18, 2024)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Buyer Information -->
+                                <div class="form-section" id="pi-buyer-section">
+                                    <div class="form-section-header">
+                                        <h2 class="form-section-title">
+                                            <span class="section-icon">🏢</span>
+                                            <span data-i18n="pi.buyerInfo">Buyer Information</span>
+                                        </h2>
+                                    </div>
+                                    <div class="form-section-body">
+                                        <div class="form-grid form-grid-2">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="pi.selectBuyer">Select Buyer *</label>
+                                                <select class="wd-input wd-select" id="pi-buyer-select" required onchange="loadBuyerForPI()">
+                                                    <option value="">Select a buyer...</option>
+                                                    <option value="ACC-001">ABC Distribution Co.</option>
+                                                    <option value="ACC-002">XYZ Foods Ltd</option>
+                                                    <option value="ACC-003">Global Trade Co</option>
+                                                </select>
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="pi.piDate">PI Date</label>
+                                                <input type="date" class="wd-input" id="pi-date">
+                                            </div>
+                                        </div>
+                                        <div class="wd-buyer-info-card" id="pi-buyer-info-card" style="display: none; padding: 16px; background: var(--wd-gray-50); border-radius: 8px; margin-top: 12px;">
+                                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                                                <div>
+                                                    <span class="wd-text-muted">Company:</span>
+                                                    <span id="pi-buyer-company-display">-</span>
+                                                </div>
+                                                <div>
+                                                    <span class="wd-text-muted">Country:</span>
+                                                    <span id="pi-buyer-country-display">-</span>
+                                                </div>
+                                                <div>
+                                                    <span class="wd-text-muted">Available Credit:</span>
+                                                    <span class="wd-text-success" id="pi-buyer-credit-display">$0.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Order Items -->
+                                <div class="form-section" id="pi-items-section">
+                                    <div class="form-section-header">
+                                        <h2 class="form-section-title">
+                                            <span class="section-icon">📦</span>
+                                            <span data-i18n="pi.orderItems">Order Items</span>
+                                            <span class="wd-badge wd-badge-info" style="margin-left: 8px;">Only completed products</span>
+                                        </h2>
+                                    </div>
+                                    <div class="form-section-body">
+                                        <div class="wd-product-add-row" style="display: flex; gap: 12px; margin-bottom: 16px;">
+                                            <div class="wd-form-group" style="flex: 3; margin-bottom: 0;">
+                                                <select class="wd-input wd-select" id="pi-product-select">
+                                                    <option value="">Select a completed product to add...</option>
+                                                    <option value="PROD-001" data-name="Extra Virgin Olive Oil 500ml" data-price="25.00" data-unit="bottles">Extra Virgin Olive Oil 500ml (PROD-001)</option>
+                                                    <option value="PROD-002" data-name="Aged Parmesan 24 months 1kg" data-price="65.00" data-unit="pcs">Aged Parmesan 24 months 1kg (PROD-002)</option>
+                                                    <option value="PROD-003" data-name="Organic Honey 350g" data-price="18.00" data-unit="jars">Organic Honey 350g (PROD-003)</option>
+                                                </select>
+                                            </div>
+                                            <button type="button" class="wd-btn wd-btn-primary" onclick="addProductToPI()">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                                Add Product
+                                            </button>
+                                        </div>
+
+                                        <div class="wd-table-responsive">
+                                            <table class="wd-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 30%;">Product</th>
+                                                        <th style="width: 12%;">Qty</th>
+                                                        <th style="width: 12%;">Unit</th>
+                                                        <th style="width: 15%;">Unit Price</th>
+                                                        <th style="width: 15%;">Subtotal</th>
+                                                        <th style="width: 10%;"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="pi-items-tbody">
+                                                    <tr class="wd-empty-row">
+                                                        <td colspan="6" style="text-align: center; color: var(--wd-gray-400); padding: 32px;">
+                                                            No items added yet. Select a product and click "Add Product".
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Credits Section -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <h2 class="form-section-title">
+                                            <span class="section-icon">💳</span>
+                                            <span data-i18n="pi.applyCredits">Apply Credits</span>
+                                            <span class="wd-badge wd-badge-success" id="available-credit-badge">$0.00 available</span>
+                                        </h2>
+                                    </div>
+                                    <div class="form-section-body">
+                                        <div id="pi-available-credits">
+                                            <p class="wd-text-muted">Select a buyer to see available credits</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Summary Section -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <h2 class="form-section-title">
+                                            <span class="section-icon">💰</span>
+                                            <span data-i18n="pi.summary">Summary</span>
+                                        </h2>
+                                    </div>
+                                    <div class="form-section-body">
+                                        <div style="max-width: 300px; margin-left: auto;">
+                                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--wd-gray-200);">
+                                                <span>Subtotal:</span>
+                                                <span id="pi-subtotal">$0.00</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--wd-gray-200); color: var(--wd-success);">
+                                                <span>Credit Discount:</span>
+                                                <span id="pi-credit-discount">-$0.00</span>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; padding: 12px 0; font-size: 1.25rem; font-weight: 700;">
+                                                <span>Total:</span>
+                                                <span id="pi-total">$0.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Notes Section -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <h2 class="form-section-title">
+                                            <span class="section-icon">📝</span>
+                                            <span data-i18n="pi.notes">Notes & Terms</span>
+                                        </h2>
+                                    </div>
+                                    <div class="form-section-body">
+                                        <div class="wd-form-group">
+                                            <textarea class="wd-input wd-textarea" id="pi-notes" rows="3" placeholder="Payment terms, delivery instructions, special conditions..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="form-actions">
+                                    <a href="portal.html#pi-management" class="wd-btn wd-btn-outline" data-i18n="modal.cancel">Cancel</a>
+                                    <button type="button" class="wd-btn wd-btn-secondary" onclick="savePIAsDraft()">
+                                        <span data-i18n="pi.saveAsDraft">Save as Draft</span>
+                                    </button>
+                                    <button type="submit" class="wd-btn wd-btn-primary">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                                        </svg>
+                                        <span data-i18n="pi.sendPI">Send Proforma Invoice</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script src="i18n.js"></script>
+    <script src="js/pi-edit.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('supplier_token');
+            if (!token) {
+                window.location.href = 'portal.html';
+                return;
+            }
+
+            if (typeof initI18n === 'function') initI18n();
+            if (typeof renderLanguageList === 'function') renderLanguageList();
+
+            const userName = localStorage.getItem('user_name') || localStorage.getItem('supplier_name') || 'User';
+            const userEmail = localStorage.getItem('user_email') || localStorage.getItem('supplier_email') || '';
+
+            document.getElementById('user-name').textContent = userName;
+            document.getElementById('sidebar-user-name').textContent = userName;
+            document.getElementById('sidebar-user-email').textContent = userEmail;
+            document.getElementById('user-menu').style.display = 'flex';
+        });
+
+        function toggleLanguageDropdown() {
+            const menu = document.getElementById('language-menu');
+            const dropdown = document.getElementById('language-dropdown');
+            menu.classList.toggle('show');
+            dropdown.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('language-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                document.getElementById('language-menu')?.classList.remove('show');
+                dropdown.classList.remove('active');
+            }
+        });
+
+        function filterLanguages(value) {
+            if (typeof renderLanguageList === 'function') renderLanguageList(value);
+        }
+
+        function toggleSidebar() {
+            document.querySelector('.wd-sidebar').classList.toggle('collapsed');
+        }
+
+        function toggleSubmenu(element) {
+            element.closest('.wd-nav-group').classList.toggle('expanded');
+        }
+
+        function navigateTo(section) {
+            window.location.href = `portal.html#${section}`;
+        }
+
+        function logout() {
+            localStorage.removeItem('supplier_token');
+            localStorage.removeItem('user_name');
+            localStorage.removeItem('user_email');
+            localStorage.removeItem('supplier_id');
+            window.location.href = 'portal.html';
+        }
+    </script>
+</body>
+</html>

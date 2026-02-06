@@ -510,28 +510,11 @@ class SalesModule {
     // ==================== Credit Management ====================
 
     /**
-     * Open credit modal for new credit
+     * Open credit page for new/edit credit
      */
     openCreditModal(creditId = null) {
-        const modalEl = $('#credit-modal');
-        const titleEl = $('#credit-modal-title');
-        const form = $('#credit-form');
-
-        if (!modalEl) return;
-
-        // Reset form
-        if (form) form.reset();
-        $('#credit-file-list').innerHTML = '';
-        $('#credit-product-select').innerHTML = '<option value="">Select Invoice first...</option>';
-
-        if (creditId) {
-            titleEl.textContent = 'Edit Credit';
-            this.loadCreditData(creditId);
-        } else {
-            titleEl.textContent = 'New Credit';
-        }
-
-        modalEl.style.display = 'flex';
+        // Navigate to dedicated credit edit page
+        window.location.href = creditId ? `credit-edit.html?id=${creditId}` : 'credit-edit.html?id=new';
     }
 
     /**
@@ -796,11 +779,10 @@ class SalesModule {
     }
 
     /**
-     * Edit credit
+     * Edit credit - navigate to dedicated edit page
      */
     editCredit(creditId) {
-        this.openCreditModal(creditId);
-        toast.info(`Editing credit ${creditId}`);
+        window.location.href = `credit-edit.html?id=${creditId}`;
     }
 
     /**
@@ -969,10 +951,10 @@ class SalesModule {
     }
 
     /**
-     * Edit PI
+     * Edit PI - navigate to dedicated edit page
      */
     editPI(piNumber) {
-        this.openPIModal(piNumber);
+        window.location.href = `pi-edit.html?id=${piNumber}`;
     }
 
     /**
@@ -1210,41 +1192,11 @@ class SalesModule {
     // ==================== PO Manual Registration ====================
 
     /**
-     * Open Add PO modal (or edit if poId provided)
+     * Open Add PO page (or edit if poId provided)
      */
     openAddPOModal(poId = null) {
-        const modalEl = $('#add-po-modal');
-        const form = $('#add-po-form');
-        const titleEl = modalEl?.querySelector('.wd-modal-title, .modal-title, h2, h3');
-
-        if (!modalEl) return;
-
-        // Reset form
-        if (form) form.reset();
-        this.editingPOId = null;
-
-        // Clear uploaded files
-        const uploadedFile = $('#po-uploaded-file');
-        if (uploadedFile) uploadedFile.style.display = 'none';
-        this.poUploadedFiles = [];
-
-        // Reset items table to single empty row
-        this.resetPOItemsTable();
-
-        // Set default date to today
-        const today = new Date().toISOString().split('T')[0];
-        const orderDateInput = $('#add-po-date');
-        if (orderDateInput) orderDateInput.value = today;
-
-        if (poId) {
-            this.editingPOId = poId;
-            if (titleEl) titleEl.textContent = 'Edit Purchase Order';
-            this.loadPOData(poId);
-        } else {
-            if (titleEl) titleEl.textContent = 'Add Purchase Order';
-        }
-
-        modalEl.style.display = 'flex';
+        // Navigate to dedicated PO edit page
+        window.location.href = poId ? `po-edit.html?id=${poId}` : 'po-edit.html?id=new';
     }
 
     /**
@@ -2210,53 +2162,11 @@ class SalesModule {
     }
 
     /**
-     * Enhanced openPIModal
+     * Open PI page for new/edit PI
      */
     openPIModal(piId = null) {
-        const modalEl = $('#pi-modal');
-        const titleEl = $('#pi-modal-title');
-        const form = $('#pi-form');
-
-        if (!modalEl) return;
-
-        // Reset form
-        if (form) form.reset();
-
-        // Reset items table
-        this.clearPIItemsTable();
-
-        // Reset credit section
-        this.clearPICredits();
-
-        // Set default date
-        const today = new Date().toISOString().split('T')[0];
-        const dateInput = $('#pi-date');
-        if (dateInput) dateInput.value = today;
-
-        // Set default validity (30 days)
-        const validDate = new Date();
-        validDate.setDate(validDate.getDate() + 30);
-        const validInput = $('#pi-valid-until');
-        if (validInput) validInput.value = validDate.toISOString().split('T')[0];
-
-        // Reset buyer info card
-        $('#pi-buyer-info-card')?.style && ($('#pi-buyer-info-card').style.display = 'none');
-        $('#pi-credit-section')?.style && ($('#pi-credit-section').style.display = 'none');
-
-        // Reset source to PO
-        const poRadio = document.querySelector('input[name="pi-source"][value="po"]');
-        if (poRadio) poRadio.checked = true;
-        this.togglePISource('po');
-
-        if (piId) {
-            titleEl.textContent = 'Edit Proforma Invoice';
-            this.loadPIData(piId);
-        } else {
-            titleEl.textContent = 'Create Proforma Invoice';
-        }
-
-        this.updatePISummary();
-        modalEl.style.display = 'flex';
+        // Navigate to dedicated PI edit page
+        window.location.href = piId ? `pi-edit.html?id=${piId}` : 'pi-edit.html?id=new';
     }
 
     /**
