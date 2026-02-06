@@ -1037,12 +1037,32 @@
                                     <thead>
                                         <tr>
                                             <th data-i18n="products.product">Product</th>
-                                            <th data-i18n="modal.category">Category</th>
-                                            <th data-i18n="products.sku">SKU</th>
+                                            <th data-i18n="modal.category">
+                                                Category
+                                                <select id="pf-category" class="wd-th-filter" onchange="applyProductFilters()">
+                                                    <option value="">All</option>
+                                                </select>
+                                            </th>
+                                            <th data-i18n="products.sku">
+                                                SKU
+                                                <input type="text" id="pf-sku" class="wd-th-filter" placeholder="Filter..." oninput="applyProductFilters()">
+                                            </th>
                                             <th data-i18n="products.priceFOB">Price (FOB)</th>
                                             <th data-i18n="products.moq">MOQ</th>
-                                            <th data-i18n="modal.certifications">Certifications</th>
-                                            <th data-i18n="catalog.status">Status</th>
+                                            <th data-i18n="modal.certifications">
+                                                Certifications
+                                                <select id="pf-cert" class="wd-th-filter" onchange="applyProductFilters()">
+                                                    <option value="">All</option>
+                                                </select>
+                                            </th>
+                                            <th data-i18n="catalog.status">
+                                                Status
+                                                <select id="pf-status" class="wd-th-filter" onchange="applyProductFilters()">
+                                                    <option value="">All</option>
+                                                    <option value="complete">Complete</option>
+                                                    <option value="incomplete">Incomplete</option>
+                                                </select>
+                                            </th>
                                             <th data-i18n="catalog.actions">Actions</th>
                                         </tr>
                                     </thead>

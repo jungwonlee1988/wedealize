@@ -1687,23 +1687,67 @@ async function loadProducts(filter = null) {
 let _productListPage = 1;
 let _productListPageSize = 20;
 let _productListAll = [];
+let _productFilteredList = null;
 
 function renderProductList(products) {
     _productListAll = products;
+    _productFilteredList = null;
     _productListPage = 1;
+    populateProductFilterOptions(products);
     renderProductListPage();
     updateProductStats(products);
+}
+
+function populateProductFilterOptions(products) {
+    const catSelect = document.getElementById('pf-category');
+    if (catSelect) {
+        const cats = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
+        const cur = catSelect.value;
+        catSelect.innerHTML = '<option value="">All</option>' +
+            cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+        catSelect.value = cur;
+    }
+    const certSelect = document.getElementById('pf-cert');
+    if (certSelect) {
+        const certs = [...new Set(products.flatMap(p => p.certifications || []))].sort();
+        const cur = certSelect.value;
+        certSelect.innerHTML = '<option value="">All</option>' +
+            certs.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+        certSelect.value = cur;
+    }
+}
+
+function applyProductFilters() {
+    const sku = (document.getElementById('pf-sku')?.value || '').toLowerCase().trim();
+    const category = document.getElementById('pf-category')?.value || '';
+    const cert = document.getElementById('pf-cert')?.value || '';
+    const status = document.getElementById('pf-status')?.value || '';
+
+    _productFilteredList = _productListAll.filter(p => {
+        if (sku && !(p.sku || '').toLowerCase().includes(sku)) return false;
+        if (category && p.category !== category) return false;
+        if (cert && !(p.certifications || []).includes(cert)) return false;
+        if (status === 'complete' && (p.completeness || 0) < 70) return false;
+        if (status === 'incomplete' && (p.completeness || 0) >= 70) return false;
+        return true;
+    });
+
+    _productListPage = 1;
+    renderProductListPage();
 }
 
 function renderProductListPage() {
     const tbody = document.getElementById('product-list-tbody');
     if (!tbody) return;
 
-    const products = _productListAll;
+    const products = _productFilteredList || _productListAll;
     const paginationEl = document.getElementById('product-list-pagination');
 
     if (!products.length) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:#999;">No products yet. Click "Add Product" to create one.</td></tr>`;
+        const msg = _productFilteredList !== null
+            ? 'No products match the current filters.'
+            : 'No products yet. Click "Add Product" to create one.';
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:#999;">${msg}</td></tr>`;
         if (paginationEl) paginationEl.style.display = 'none';
         return;
     }
