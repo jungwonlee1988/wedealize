@@ -871,12 +871,29 @@ function showSection(sectionName) {
         }
     });
 
-    // Section-specific data loading
-    if (sectionName === 'accounts') {
-        loadAccountListFromAPI();
-    }
-    if (sectionName === 'buyer-discovery') {
-        loadInquiredBuyers();
+    // Section-specific data loading (서버 API 우선)
+    switch (sectionName) {
+        case 'product-list':
+            loadProducts();
+            break;
+        case 'po-management':
+            if (typeof loadPOListFromAPI === 'function') loadPOListFromAPI();
+            break;
+        case 'inv-management':
+            if (typeof loadInvoiceListFromAPI === 'function') loadInvoiceListFromAPI();
+            break;
+        case 'credit-management':
+            if (typeof loadCreditsFromAPI === 'function') loadCreditsFromAPI();
+            break;
+        case 'accounts':
+            loadAccountListFromAPI();
+            break;
+        case 'buyer-discovery':
+            loadInquiredBuyers();
+            break;
+        case 'inquiries':
+            if (typeof loadInquiriesFromAPI === 'function') loadInquiriesFromAPI();
+            break;
     }
 }
 
@@ -911,6 +928,31 @@ function showSectionFromHash(sectionName) {
             }
         }
     });
+
+    // Section-specific data loading (서버 API 우선)
+    switch (sectionName) {
+        case 'product-list':
+            loadProducts();
+            break;
+        case 'po-management':
+            if (typeof loadPOListFromAPI === 'function') loadPOListFromAPI();
+            break;
+        case 'inv-management':
+            if (typeof loadInvoiceListFromAPI === 'function') loadInvoiceListFromAPI();
+            break;
+        case 'credit-management':
+            if (typeof loadCreditsFromAPI === 'function') loadCreditsFromAPI();
+            break;
+        case 'accounts':
+            loadAccountListFromAPI();
+            break;
+        case 'buyer-discovery':
+            loadInquiredBuyers();
+            break;
+        case 'inquiries':
+            if (typeof loadInquiriesFromAPI === 'function') loadInquiriesFromAPI();
+            break;
+    }
 }
 
 // 페이지 로드 시 해시에서 섹션 초기화
@@ -1699,9 +1741,8 @@ function parsePriceRange(priceStr) {
     return { minPrice: '', maxPrice: '' };
 }
 
-// 전체 상품 목록 가져오기 (status, 페이지네이션 관계없이)
+// 전체 상품 목록 가져오기 (서버 API만 사용)
 async function getAllProducts() {
-    // 1. API에서 전체 상품 가져오기 시도
     try {
         const token = localStorage.getItem('supplier_token');
         const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
@@ -1710,35 +1751,12 @@ async function getAllProducts() {
         });
         if (res.ok) {
             const data = await res.json();
-            if (data.products && data.products.length > 0) {
-                return data.products;
-            }
+            return data.products || [];
         }
     } catch (error) {
-        console.log('API unavailable, using local data');
+        console.error('Failed to fetch products from API:', error);
     }
-
-    // 2. extractedProducts 배열 사용 (카탈로그 등록 후)
-    if (extractedProducts && extractedProducts.length > 0) {
-        return extractedProducts.map(p => ({
-            name: p.name,
-            category: p.category ? getCategoryLabel(p.category) : '',
-            sku: p.sku || '',
-            price: p.price || '',
-            moq: p.moq || '',
-            certifications: p.certifications || [],
-            status: p.status || ''
-        }));
-    }
-
-    // 3. 테이블에서 직접 데이터 추출 (DOM 파싱)
-    const tableProducts = extractProductsFromTable();
-    if (tableProducts.length > 0) {
-        return tableProducts;
-    }
-
-    // 4. 데모 데이터 반환
-    return getDemoProducts();
+    return [];
 }
 
 // 테이블에서 상품 데이터 추출
@@ -3132,6 +3150,67 @@ function editPO(poId) {
 
 // ==================== INV Management ====================
 
+// Load Invoices from API (서버 데이터만 사용)
+async function loadInvoiceListFromAPI() {
+    const tbody = document.getElementById('inv-table-body');
+    if (!tbody) return;
+
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/invoices`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!res.ok) throw new Error('Failed to load invoices');
+        const invoices = await res.json();
+        renderInvoiceListFromAPI(Array.isArray(invoices) ? invoices : []);
+    } catch (e) {
+        console.error('Failed to load invoices from API:', e);
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:#888;">No invoices found</td></tr>';
+    }
+}
+
+function renderInvoiceListFromAPI(invoices) {
+    const tbody = document.getElementById('inv-table-body');
+    if (!tbody) return;
+
+    if (invoices.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:#888;">No invoices yet. Click "New Invoice" to create one.</td></tr>';
+        return;
+    }
+
+    const statusBadgeClass = {
+        draft: 'wd-badge-outline',
+        sent: 'wd-badge-primary',
+        paid: 'wd-badge-success',
+        overdue: 'wd-badge-danger',
+        cancelled: 'wd-badge-muted'
+    };
+
+    tbody.innerHTML = invoices.map(inv => {
+        const createdDate = inv.created_at ? new Date(inv.created_at).toLocaleDateString() : '-';
+        const badgeClass = statusBadgeClass[inv.status] || 'wd-badge-outline';
+        const totalAmount = inv.total_amount ?? 0;
+        const currency = inv.currency || 'USD';
+
+        return `
+            <tr data-status="${inv.status}" data-id="${inv.id}">
+                <td><a href="inv-edit.html?id=${inv.id}" class="wd-link">${inv.pi_number || '-'}</a></td>
+                <td>${inv.po_number || '-'}</td>
+                <td>${inv.buyer_name || '-'}</td>
+                <td>${currency} ${parseFloat(totalAmount).toLocaleString('en-US', {minimumFractionDigits:2})}</td>
+                <td><span class="wd-badge ${badgeClass}">${inv.status || 'draft'}</span></td>
+                <td>${inv.payment_status || '-'}</td>
+                <td>${createdDate}</td>
+                <td>
+                    <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="window.location.href='inv-edit.html?id=${inv.id}'">View</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
 function openINVModal(invId) {
     // Redirect to INV edit page instead of modal
     window.location.href = invId ? `inv-edit.html?id=${invId}` : 'inv-edit.html?id=new';
@@ -3628,6 +3707,73 @@ function sortPITable(column) {
 }
 
 // ==================== Credit Management ====================
+
+// Load Credits from API (서버 데이터만 사용)
+async function loadCreditsFromAPI() {
+    const tbody = document.getElementById('credit-table-body');
+    if (!tbody) return;
+
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/credits`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!res.ok) throw new Error('Failed to load credits');
+        const credits = await res.json();
+        renderCreditsFromAPI(Array.isArray(credits) ? credits : []);
+    } catch (e) {
+        console.error('Failed to load credits from API:', e);
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#888;">No credits found</td></tr>';
+    }
+}
+
+function renderCreditsFromAPI(credits) {
+    const tbody = document.getElementById('credit-table-body');
+    if (!tbody) return;
+
+    if (credits.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#888;">No credits yet. Click "New Credit" to create one.</td></tr>';
+        return;
+    }
+
+    const statusBadgeClass = {
+        draft: 'wd-badge-outline',
+        pending: 'wd-badge-warning',
+        approved: 'wd-badge-success',
+        used: 'wd-badge-primary',
+        cancelled: 'wd-badge-danger'
+    };
+
+    const reasonLabels = {
+        damaged: 'Damaged',
+        quality: 'Quality Issue',
+        short: 'Short Shipment',
+        wrong: 'Wrong Item',
+        expired: 'Expired',
+        other: 'Other'
+    };
+
+    tbody.innerHTML = credits.map(credit => {
+        const createdDate = credit.created_at ? new Date(credit.created_at).toLocaleDateString() : '-';
+        const badgeClass = statusBadgeClass[credit.status] || 'wd-badge-outline';
+        const reasonLabel = reasonLabels[credit.reason] || credit.reason || '-';
+
+        return `
+            <tr data-status="${credit.status}" data-tab="${credit.status === 'cancelled' ? 'cancelled' : 'active'}" data-id="${credit.id}">
+                <td><a href="#" class="wd-link" onclick="viewCreditDetail('${credit.id}')">${credit.credit_number || '-'}</a></td>
+                <td>${credit.buyer_name || '-'}</td>
+                <td>${credit.invoice_number || '-'}</td>
+                <td>${credit.product_name || '-'}</td>
+                <td>${reasonLabel}</td>
+                <td>$${parseFloat(credit.amount || 0).toFixed(2)}</td>
+                <td><span class="wd-badge ${badgeClass}">${credit.status || 'draft'}</span></td>
+                <td>${createdDate}</td>
+            </tr>
+        `;
+    }).join('');
+}
 
 // Credit 탭 전환 (Active / Cancelled)
 function filterCreditByTab(tabType) {
