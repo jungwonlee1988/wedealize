@@ -1699,32 +1699,69 @@ function renderProductList(products) {
 }
 
 function populateProductFilterOptions(products) {
-    const catSelect = document.getElementById('pf-category');
-    if (catSelect) {
+    // Category filter options
+    const catDropdown = document.getElementById('pf-category-dropdown');
+    if (catDropdown) {
         const cats = [...new Set(products.map(p => p.category).filter(Boolean))].sort();
-        const cur = catSelect.value;
-        catSelect.innerHTML = '<option value="">All</option>' +
-            cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
-        catSelect.value = cur;
+        const cur = document.getElementById('pf-category-value')?.value || '';
+        catDropdown.innerHTML =
+            `<label class="wd-filter-option"><input type="radio" name="pf-category" value="" ${!cur ? 'checked' : ''} onchange="applyProductFilter('category','')"><span>All</span></label>` +
+            cats.map(c => `<label class="wd-filter-option"><input type="radio" name="pf-category" value="${escapeHtml(c)}" ${cur === c ? 'checked' : ''} onchange="applyProductFilter('category','${escapeHtml(c)}')"><span>${escapeHtml(c)}</span></label>`).join('');
     }
-    const certSelect = document.getElementById('pf-cert');
-    if (certSelect) {
+    // Certification filter options
+    const certDropdown = document.getElementById('pf-cert-dropdown');
+    if (certDropdown) {
         const certs = [...new Set(products.flatMap(p => p.certifications || []))].sort();
-        const cur = certSelect.value;
-        certSelect.innerHTML = '<option value="">All</option>' +
-            certs.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
-        certSelect.value = cur;
+        const cur = document.getElementById('pf-cert-value')?.value || '';
+        certDropdown.innerHTML =
+            `<label class="wd-filter-option"><input type="radio" name="pf-cert" value="" ${!cur ? 'checked' : ''} onchange="applyProductFilter('cert','')"><span>All</span></label>` +
+            certs.map(c => `<label class="wd-filter-option"><input type="radio" name="pf-cert" value="${escapeHtml(c)}" ${cur === c ? 'checked' : ''} onchange="applyProductFilter('cert','${escapeHtml(c)}')"><span>${escapeHtml(c)}</span></label>`).join('');
     }
 }
 
+function toggleProductFilter(event, dropdownId) {
+    event.stopPropagation();
+    // Close all other product filter dropdowns first
+    document.querySelectorAll('#pf-category-dropdown, #pf-cert-dropdown, #pf-status-dropdown').forEach(d => {
+        if (d.id !== dropdownId) d.classList.remove('show');
+    });
+    const dropdown = document.getElementById(dropdownId);
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+    const closeDropdown = (e) => {
+        if (!e.target.closest('.wd-column-filter')) {
+            dropdown?.classList.remove('show');
+            document.removeEventListener('click', closeDropdown);
+        }
+    };
+    setTimeout(() => document.addEventListener('click', closeDropdown), 0);
+}
+
+function applyProductFilter(type, value) {
+    const hiddenInput = document.getElementById(`pf-${type}-value`);
+    if (hiddenInput) hiddenInput.value = value;
+
+    // Update filter button active state
+    const dropdownId = `pf-${type}-dropdown`;
+    const dropdown = document.getElementById(dropdownId);
+    if (dropdown) {
+        dropdown.classList.remove('show');
+        const btn = dropdown.parentElement?.querySelector('.wd-filter-btn');
+        if (btn) {
+            btn.classList.toggle('active', value !== '');
+        }
+    }
+
+    applyProductFilters();
+}
+
 function applyProductFilters() {
-    const sku = (document.getElementById('pf-sku')?.value || '').toLowerCase().trim();
-    const category = document.getElementById('pf-category')?.value || '';
-    const cert = document.getElementById('pf-cert')?.value || '';
-    const status = document.getElementById('pf-status')?.value || '';
+    const category = document.getElementById('pf-category-value')?.value || '';
+    const cert = document.getElementById('pf-cert-value')?.value || '';
+    const status = document.getElementById('pf-status-value')?.value || '';
 
     _productFilteredList = _productListAll.filter(p => {
-        if (sku && !(p.sku || '').toLowerCase().includes(sku)) return false;
         if (category && p.category !== category) return false;
         if (cert && !(p.certifications || []).includes(cert)) return false;
         if (status === 'complete' && (p.completeness || 0) < 70) return false;
@@ -4588,100 +4625,9 @@ function filterAccounts() {
 
 // ---- Company Certifications CRUD (API-connected) ----
 
-window._editingCertId = null;
-
 function openCompanyCertModal(certId) {
-    const modal = document.getElementById('company-cert-modal');
-    const titleEl = document.getElementById('company-cert-modal-title');
-    const form = document.getElementById('company-cert-form');
-    if (form) form.reset();
-    window._editingCertId = null;
-
-    if (certId) {
-        window._editingCertId = certId;
-        if (titleEl) titleEl.textContent = 'Edit Certification';
-        loadCertIntoForm(certId);
-    } else {
-        if (titleEl) titleEl.textContent = 'Add Certification';
-    }
-
-    if (modal) modal.style.display = 'flex';
-}
-
-function closeCompanyCertModal() {
-    const modal = document.getElementById('company-cert-modal');
-    if (modal) modal.style.display = 'none';
-    window._editingCertId = null;
-}
-
-async function loadCertIntoForm(certId) {
-    try {
-        const token = localStorage.getItem('supplier_token');
-        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
-        const res = await fetch(`${baseUrl}/certifications`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!res.ok) throw new Error('Failed to load certifications');
-        const { certifications } = await res.json();
-        const cert = certifications.find(c => c.id === certId);
-        if (!cert) return;
-
-        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-        setVal('cert-name', cert.name);
-        setVal('cert-issuer', cert.issuer);
-        setVal('cert-issue-date', cert.issue_date);
-        setVal('cert-expiry-date', cert.expiry_date);
-        setVal('cert-status', cert.status || 'valid');
-    } catch (e) {
-        console.error('Failed to load cert into form:', e);
-    }
-}
-
-async function saveCompanyCert() {
-    const name = document.getElementById('cert-name')?.value?.trim();
-    if (!name) {
-        showToast('Certification name is required', 'error');
-        return;
-    }
-
-    const payload = {
-        name,
-        issuer: document.getElementById('cert-issuer')?.value || '',
-        issueDate: document.getElementById('cert-issue-date')?.value || '',
-        expiryDate: document.getElementById('cert-expiry-date')?.value || '',
-        status: document.getElementById('cert-status')?.value || 'valid',
-    };
-
-    try {
-        const token = localStorage.getItem('supplier_token');
-        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
-        const isEdit = !!window._editingCertId;
-        const url = isEdit ? `${baseUrl}/certifications/${window._editingCertId}` : `${baseUrl}/certifications`;
-        const method = isEdit ? 'PATCH' : 'POST';
-
-        const res = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify(payload)
-        });
-
-        if (res.status === 401) {
-            handleSessionExpired();
-            return;
-        }
-
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.message || 'Failed to save certification');
-        }
-
-        showToast(isEdit ? 'Certification updated!' : 'Certification added!', 'success');
-        closeCompanyCertModal();
-        loadCompanyCerts();
-    } catch (e) {
-        console.error('Failed to save certification:', e);
-        showToast(e.message || 'Failed to save certification', 'error');
-    }
+    // Redirect to cert-edit page instead of modal
+    window.location.href = certId ? `cert-edit.html?id=${certId}` : 'cert-edit.html?id=new';
 }
 
 async function loadCompanyCerts() {

@@ -1031,37 +1031,77 @@
                                 </div>
                             </div>
 
+                            <!-- Hidden filter value holders -->
+                            <input type="hidden" id="pf-category-value" value="">
+                            <input type="hidden" id="pf-cert-value" value="">
+                            <input type="hidden" id="pf-status-value" value="">
+
                             <!-- Products Table -->
                             <div class="wd-section-x">
                                 <table class="wd-table">
                                     <thead>
                                         <tr>
                                             <th data-i18n="products.product">Product</th>
-                                            <th>
+                                            <th class="th-filter">
                                                 <span data-i18n="modal.category">Category</span>
-                                                <select id="pf-category" class="wd-th-filter" onchange="applyProductFilters()">
-                                                    <option value="">All</option>
-                                                </select>
+                                                <div class="wd-column-filter">
+                                                    <button class="wd-filter-btn" onclick="toggleProductFilter(event, 'pf-category-dropdown')">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="wd-filter-dropdown" id="pf-category-dropdown">
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pf-category" value="" checked onchange="applyProductFilter('category','')">
+                                                            <span>All</span>
+                                                        </label>
+                                                        <!-- dynamic options populated by JS -->
+                                                    </div>
+                                                </div>
                                             </th>
-                                            <th>
-                                                <span data-i18n="products.sku">SKU</span>
-                                                <input type="text" id="pf-sku" class="wd-th-filter" placeholder="Filter..." oninput="applyProductFilters()">
-                                            </th>
+                                            <th data-i18n="products.sku">SKU</th>
                                             <th data-i18n="products.priceFOB">Price (FOB)</th>
                                             <th data-i18n="products.moq">MOQ</th>
-                                            <th>
+                                            <th class="th-filter">
                                                 <span data-i18n="modal.certifications">Certifications</span>
-                                                <select id="pf-cert" class="wd-th-filter" onchange="applyProductFilters()">
-                                                    <option value="">All</option>
-                                                </select>
+                                                <div class="wd-column-filter">
+                                                    <button class="wd-filter-btn" onclick="toggleProductFilter(event, 'pf-cert-dropdown')">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="wd-filter-dropdown" id="pf-cert-dropdown">
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pf-cert" value="" checked onchange="applyProductFilter('cert','')">
+                                                            <span>All</span>
+                                                        </label>
+                                                        <!-- dynamic options populated by JS -->
+                                                    </div>
+                                                </div>
                                             </th>
-                                            <th>
+                                            <th class="th-filter">
                                                 <span data-i18n="catalog.status">Status</span>
-                                                <select id="pf-status" class="wd-th-filter" onchange="applyProductFilters()">
-                                                    <option value="">All</option>
-                                                    <option value="complete">Complete</option>
-                                                    <option value="incomplete">Incomplete</option>
-                                                </select>
+                                                <div class="wd-column-filter">
+                                                    <button class="wd-filter-btn" onclick="toggleProductFilter(event, 'pf-status-dropdown')">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="wd-filter-dropdown" id="pf-status-dropdown">
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pf-status" value="" checked onchange="applyProductFilter('status','')">
+                                                            <span>All</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pf-status" value="complete" onchange="applyProductFilter('status','complete')">
+                                                            <span>Complete</span>
+                                                        </label>
+                                                        <label class="wd-filter-option">
+                                                            <input type="radio" name="pf-status" value="incomplete" onchange="applyProductFilter('status','incomplete')">
+                                                            <span>Incomplete</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </th>
                                             <th data-i18n="catalog.actions">Actions</th>
                                         </tr>

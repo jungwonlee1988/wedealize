@@ -87,10 +87,23 @@ CREATE TABLE IF NOT EXISTS supplier_certifications (
     name VARCHAR(255) NOT NULL,
     type VARCHAR(100),
     issuer VARCHAR(255),
+    certificate_number VARCHAR(100),
     issue_date DATE,
     expiry_date DATE,
     document_url VARCHAR(500),
     status VARCHAR(50) DEFAULT 'valid',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Certification Renewals table
+CREATE TABLE IF NOT EXISTS certification_renewals (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    certification_id UUID REFERENCES supplier_certifications(id) ON DELETE CASCADE,
+    previous_expiry_date DATE,
+    new_expiry_date DATE NOT NULL,
+    renewed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    notes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -274,6 +287,7 @@ CREATE INDEX IF NOT EXISTS idx_buyer_inquiries_supplier ON buyer_inquiries(suppl
 CREATE INDEX IF NOT EXISTS idx_buyer_inquiries_status ON buyer_inquiries(status);
 CREATE INDEX IF NOT EXISTS idx_buyer_inquiry_products_inquiry ON buyer_inquiry_products(inquiry_id);
 CREATE INDEX IF NOT EXISTS idx_buyer_inquiry_products_product ON buyer_inquiry_products(product_id);
+CREATE INDEX IF NOT EXISTS idx_cert_renewals_cert ON certification_renewals(certification_id);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE suppliers ENABLE ROW LEVEL SECURITY;
@@ -291,6 +305,7 @@ ALTER TABLE credit_applications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE accounts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE buyer_inquiries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE buyer_inquiry_products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE certification_renewals ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies (suppliers can only access their own data)
 -- Note: Service role key bypasses RLS, so backend API can access all data
@@ -348,5 +363,10 @@ CREATE TRIGGER update_accounts_updated_at
 
 CREATE TRIGGER update_buyer_inquiries_updated_at
     BEFORE UPDATE ON buyer_inquiries
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_supplier_certifications_updated_at
+    BEFORE UPDATE ON supplier_certifications
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();

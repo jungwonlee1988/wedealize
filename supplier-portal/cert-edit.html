@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certification - WeDealize Supplier Portal</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="compact-form.css">
+    <style>
+        /* Detail view styles */
+        .cert-status-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding: 12px 16px; background: var(--wd-gray-50); border-radius: 8px; }
+        .cert-status-bar .cert-number { font-size: 1.1rem; font-weight: 700; color: var(--wd-gray-900); }
+        .cert-status-bar .cert-date { font-size: 0.85rem; color: var(--wd-gray-500); }
+        .edit-toggle { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--wd-gray-500); }
+        .edit-toggle input { cursor: pointer; }
+        .view-mode .edit-input { display: none !important; }
+        .view-mode .view-value { display: block; }
+        .edit-mode .edit-input { display: block !important; }
+        .edit-mode .view-value { display: none !important; }
+        /* Hide elements based on mode */
+        .new-mode-only { display: none; }
+        .detail-mode-only { display: none; }
+        body.new-mode .new-mode-only { display: block; }
+        body.new-mode .detail-mode-only { display: none !important; }
+        body.detail-mode .detail-mode-only { display: block; }
+        body.detail-mode .new-mode-only { display: none !important; }
+        /* Renewal history table */
+        .renewal-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        .renewal-table th, .renewal-table td { padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--wd-gray-200); }
+        .renewal-table th { font-weight: 600; color: var(--wd-gray-600); font-size: 0.75rem; text-transform: uppercase; }
+        .renewal-table td { color: var(--wd-gray-700); }
+        .renewal-empty { text-align: center; padding: 20px; color: var(--wd-gray-400); font-size: 0.85rem; }
+        /* File upload area */
+        .file-upload-area { border: 2px dashed var(--wd-gray-300); border-radius: 8px; padding: 16px; text-align: center; cursor: pointer; transition: border-color 0.2s; }
+        .file-upload-area:hover { border-color: var(--wd-primary); }
+        .file-upload-area svg { color: var(--wd-gray-400); margin-bottom: 4px; }
+        .file-upload-area p { font-size: 0.75rem; color: var(--wd-gray-500); margin: 0; }
+        .file-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--wd-gray-50); border-radius: 6px; margin-top: 8px; }
+        .file-item-name { font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        /* Renewal modal */
+        .renewal-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .renewal-modal { background: white; border-radius: 12px; padding: 24px; width: 100%; max-width: 440px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        .renewal-modal h3 { margin: 0 0 16px; font-size: 1.1rem; }
+        .renewal-modal .wd-form-group { margin-bottom: 12px; }
+        .renewal-modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+    </style>
+</head>
+<body class="new-mode">
+    <div class="portal-app">
+        <header class="portal-header">
+            <div class="header-content">
+                <div class="logo"><img src="logo.png" alt="WeDealize" height="32"></div>
+                <nav class="header-nav">
+                    <div class="language-dropdown" id="language-dropdown">
+                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">EN</button>
+                        <div class="language-menu" id="language-menu"><div class="language-list" id="language-list"></div></div>
+                    </div>
+                    <div class="user-menu" id="user-menu">
+                        <span class="user-name" id="user-name"></span>
+                        <button class="btn-logout" onclick="logout()">Logout</button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main class="portal-main">
+            <section class="dashboard-section" id="dashboard-section">
+                <div class="dashboard-container">
+                    <aside class="wd-sidebar"></aside>
+
+                    <div class="dashboard-content">
+                        <div class="compact-form" id="cert-form-container">
+                            <div class="page-header">
+                                <div class="page-header-left">
+                                    <a href="portal.html#profile" class="btn-back">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                                    </a>
+                                    <h1 class="page-title" id="page-title">Add Certification</h1>
+                                </div>
+                                <div class="page-header-actions">
+                                    <!-- Detail mode actions -->
+                                    <label class="edit-toggle detail-mode-only">
+                                        <input type="checkbox" id="edit-mode-toggle" onchange="toggleEditMode()">
+                                        <span>Edit Mode</span>
+                                    </label>
+                                    <button type="button" id="save-btn" onclick="saveCertChanges()" class="wd-btn wd-btn-primary detail-mode-only" style="display: none;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                        Save Changes
+                                    </button>
+                                    <button type="button" id="delete-btn" onclick="deleteCert()" class="wd-btn wd-btn-outline detail-mode-only" style="color:#ef4444;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        Delete
+                                    </button>
+                                    <!-- New mode actions -->
+                                    <a href="portal.html#profile" class="wd-btn wd-btn-outline new-mode-only">Cancel</a>
+                                    <button type="submit" form="cert-edit-form" class="wd-btn wd-btn-primary new-mode-only">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                                        Save Certification
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Detail Mode: Status Bar -->
+                            <div class="cert-status-bar detail-mode-only">
+                                <span class="cert-number" id="cert-number-display">-</span>
+                                <span class="wd-badge wd-badge-success" id="cert-status-badge">Valid</span>
+                                <span class="cert-date" id="cert-date-display"></span>
+                            </div>
+
+                            <form id="cert-edit-form">
+                                <div class="compact-grid">
+                                    <!-- Left Column: Certification Info -->
+                                    <div class="compact-column">
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">📜</span> Certification Information</h3>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Certification Name <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <select class="wd-input wd-select" id="cert-name" required>
+                                                        <option value="">Select certification...</option>
+                                                        <option value="HACCP">HACCP</option>
+                                                        <option value="ISO 22000">ISO 22000</option>
+                                                        <option value="BRC">BRC</option>
+                                                        <option value="IFS">IFS</option>
+                                                        <option value="FSSC 22000">FSSC 22000</option>
+                                                        <option value="GMP">GMP</option>
+                                                        <option value="SQF">SQF</option>
+                                                        <option value="ISO 9001">ISO 9001</option>
+                                                        <option value="Organic">Organic</option>
+                                                        <option value="Halal">Halal</option>
+                                                        <option value="Kosher">Kosher</option>
+                                                    </select>
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Certificate Number</label>
+                                                    <input type="text" class="wd-input" id="cert-number" placeholder="e.g., CERT-2026-001">
+                                                </div>
+                                            </div>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Issuer</label>
+                                                    <input type="text" class="wd-input" id="cert-issuer" placeholder="e.g., SGS, Bureau Veritas">
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Status</label>
+                                                    <select class="wd-input wd-select" id="cert-status">
+                                                        <option value="valid">Valid</option>
+                                                        <option value="expired">Expired</option>
+                                                        <option value="pending">Pending</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Issue Date</label>
+                                                    <input type="date" class="wd-input" id="cert-issue-date">
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Expiry Date</label>
+                                                    <input type="date" class="wd-input" id="cert-expiry-date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Right Column: Document + Renewal History -->
+                                    <div class="compact-column">
+                                        <!-- Certificate Document -->
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">📎</span> Certificate Document</h3>
+                                            <div class="file-upload-area" id="file-upload-area" onclick="document.getElementById('cert-file-input').click()">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                                <p>Click to upload certificate PDF</p>
+                                                <p style="font-size:0.7rem; color:var(--wd-gray-400);">PDF, JPG, PNG up to 10MB</p>
+                                            </div>
+                                            <input type="file" id="cert-file-input" accept=".pdf,.jpg,.jpeg,.png" hidden>
+                                            <div id="file-list"></div>
+                                            <div class="wd-form-group" style="margin-top:8px;">
+                                                <label class="wd-form-label">Or paste document URL</label>
+                                                <input type="text" class="wd-input" id="cert-document-url" placeholder="https://...">
+                                            </div>
+                                        </div>
+
+                                        <!-- Renewal History (detail mode only) -->
+                                        <div class="compact-section detail-mode-only">
+                                            <h3 class="compact-section-title" style="justify-content:space-between;">
+                                                <span><span class="section-icon">🔄</span> Renewal History</span>
+                                                <button type="button" class="wd-btn wd-btn-primary wd-btn-sm" onclick="openRenewalModal()" style="font-size:0.75rem; padding:4px 10px;">
+                                                    Renew
+                                                </button>
+                                            </h3>
+                                            <div id="renewal-history">
+                                                <div class="renewal-empty">No renewal history</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Renewal Modal -->
+    <div class="renewal-modal-overlay" id="renewal-modal" style="display:none;">
+        <div class="renewal-modal">
+            <h3>Renew Certification</h3>
+            <div class="wd-form-group">
+                <label class="wd-form-label">Current Expiry Date</label>
+                <input type="date" class="wd-input" id="renewal-current-expiry" disabled>
+            </div>
+            <div class="wd-form-group">
+                <label class="wd-form-label">New Expiry Date <span class="wd-badge wd-badge-warning">Required</span></label>
+                <input type="date" class="wd-input" id="renewal-new-expiry" required>
+            </div>
+            <div class="wd-form-group">
+                <label class="wd-form-label">Notes</label>
+                <textarea class="wd-input wd-textarea" id="renewal-notes" rows="2" placeholder="Optional renewal notes..."></textarea>
+            </div>
+            <div class="renewal-modal-actions">
+                <button type="button" class="wd-btn wd-btn-outline" onclick="closeRenewalModal()">Cancel</button>
+                <button type="button" class="wd-btn wd-btn-primary" onclick="saveRenewal()">Save Renewal</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="i18n.js"></script>
+    <script src="js/sidebar.js?v=1.1"></script>
+    <script src="js/cert-edit.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('supplier_token');
+            if (!token) { window.location.href = 'portal.html'; return; }
+            const userName = localStorage.getItem('user_name') || 'User';
+            document.getElementById('user-name').textContent = userName;
+            document.getElementById('user-menu').style.display = 'flex';
+            initSidebar('profile');
+        });
+        function toggleLanguageDropdown() { document.getElementById('language-menu').classList.toggle('show'); }
+        function logout() { localStorage.clear(); window.location.href = 'portal.html'; }
+    </script>
+</body>
+</html>
