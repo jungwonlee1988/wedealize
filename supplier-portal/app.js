@@ -2518,41 +2518,29 @@ async function extractCatalog() {
         const seen = new Set();
         const unique = [];
         for (const p of allProducts) {
-            const key = (p.name || '').toLowerCase().trim();
+            const key = (p.product_name || p.name || '').toLowerCase().trim();
             if (key && !seen.has(key)) {
                 seen.add(key);
                 unique.push(p);
             }
         }
 
-        // Transform to frontend format
+        // Transform to frontend format — keep full extracted data
         extractedProducts = unique.map((p, idx) => {
-            const hasName = !!p.name;
-            const hasCat = !!p.category;
-            const hasPrice = p.minPrice != null || p.maxPrice != null;
-            const isComplete = hasName && hasCat && hasPrice;
-
+            const cur = p.currency || 'USD';
+            const sym = cur === 'EUR' ? '€' : cur === 'KRW' ? '₩' : '$';
             let priceStr = null;
-            if (p.minPrice != null && p.maxPrice != null && p.minPrice !== p.maxPrice) {
-                priceStr = `$${p.minPrice.toFixed(2)} - $${p.maxPrice.toFixed(2)}`;
-            } else if (p.minPrice != null) {
-                priceStr = `$${p.minPrice.toFixed(2)}`;
-            } else if (p.maxPrice != null) {
-                priceStr = `$${p.maxPrice.toFixed(2)}`;
+            if (p.unit_price != null) {
+                priceStr = `${sym}${Number(p.unit_price).toFixed(2)}`;
+            } else if (p.case_price != null) {
+                priceStr = `${sym}${Number(p.case_price).toFixed(2)}/cs`;
             }
 
             return {
                 id: 'e' + (idx + 1),
-                name: p.name || 'Unknown Product',
-                sku: p.sku || null,
-                category: p.category || null,
-                minPrice: p.minPrice ?? null,
-                maxPrice: p.maxPrice ?? null,
-                priceBasis: p.priceBasis || null,
-                shelfLife: p.shelfLife || null,
-                originalPrice: priceStr,
+                ...p,  // keep all raw fields from Claude
+                // computed display fields
                 price: priceStr,
-                status: isComplete ? 'complete' : 'incomplete',
                 emoji: getCategoryEmoji(p.category),
             };
         });
@@ -2584,12 +2572,12 @@ async function extractCatalog() {
 async function simulateCatalogExtraction() {
     await delay(2000);
     extractedProducts = [
-        { id: 'e1', name: 'Extra Virgin Olive Oil 500ml', sku: 'OIL-001', category: 'evoo', minPrice: 7.20, maxPrice: 8.50, priceBasis: 'FOB', shelfLife: '18 months', originalPrice: '$7.20 - $8.50', price: '$7.20 - $8.50', status: 'complete', emoji: '🫒' },
-        { id: 'e2', name: 'Aged Parmesan Cheese 12m', sku: null, category: 'aged-cheese', minPrice: 18.00, maxPrice: 18.00, priceBasis: 'EXW', shelfLife: '12 months', originalPrice: '$18.00', price: '$18.00', status: 'complete', emoji: '🧀' },
-        { id: 'e3', name: 'Raw Organic Honey 500g', sku: 'HON-003', category: 'honey', minPrice: null, maxPrice: null, priceBasis: null, shelfLife: '24 months', originalPrice: null, price: null, status: 'incomplete', emoji: '🍯' },
-        { id: 'e4', name: 'Balsamic Vinegar 250ml', sku: 'VIN-004', category: 'balsamic', minPrice: 12.00, maxPrice: 15.00, priceBasis: 'FOB', shelfLife: '3 years', originalPrice: '$12.00 - $15.00', price: '$12.00 - $15.00', status: 'complete', emoji: '🍷' },
-        { id: 'e5', name: 'Truffle Oil 100ml', sku: null, category: 'truffle-oil', minPrice: 25.00, maxPrice: 25.00, priceBasis: 'CIF', shelfLife: null, originalPrice: '$25.00', price: '$25.00', status: 'complete', emoji: '🫒' },
-        { id: 'e6', name: 'Artisan Pasta 500g', sku: 'PAS-006', category: 'dried-pasta', minPrice: 4.50, maxPrice: 4.50, priceBasis: 'EXW', shelfLife: '24M', originalPrice: '$4.50', price: '$4.50', status: 'complete', emoji: '🍝' }
+        { id: 'e1', brand: 'Frantoio', product_name: 'Extra Virgin Olive Oil', unit_spec: '500ml', category: 'evoo', unit_price: 7.20, currency: 'USD', price_basis: 'FOB', shelf_life: '18 months', price: '$7.20', emoji: '🫒' },
+        { id: 'e2', brand: 'Parmigiano', product_name: 'Aged Parmesan Cheese 12m', unit_spec: '1kg', category: 'aged-cheese', unit_price: 18.00, currency: 'EUR', price_basis: 'EXW', shelf_life: '12 months', price: '€18.00', emoji: '🧀' },
+        { id: 'e3', brand: null, product_name: 'Raw Organic Honey', unit_spec: '500g', category: 'honey', unit_price: null, currency: null, price_basis: null, shelf_life: '24 months', price: null, emoji: '🍯' },
+        { id: 'e4', brand: 'Acetaia', product_name: 'Balsamic Vinegar', unit_spec: '250ml', category: 'balsamic', unit_price: 12.00, currency: 'USD', price_basis: 'FOB', shelf_life: '3 years', price: '$12.00', emoji: '🍷' },
+        { id: 'e5', brand: 'Tartufi', product_name: 'Truffle Oil', unit_spec: '100ml', category: 'truffle-oil', unit_price: 25.00, currency: 'USD', price_basis: 'CIF', shelf_life: null, price: '$25.00', emoji: '🫒' },
+        { id: 'e6', brand: 'Pastificio', product_name: 'Artisan Pasta Penne', unit_spec: '500g', category: 'dried-pasta', case_price: 27.00, packing_qty: 12, currency: 'USD', price_basis: 'EXW', shelf_life: '24 months', price: '$27.00/cs', emoji: '🍝' }
     ];
 }
 
@@ -2606,16 +2594,14 @@ async function registerExtractedProducts() {
         return 0;
     }
 
-    // CreateProductDto 형식으로 변환
+    // CreateProductDto 형식으로 변환 (새 스키마 → products 테이블 매핑)
     const dtos = toRegister.map(p => ({
-        name: p.name,
-        sku: p.sku || undefined,
+        name: p.product_name || p.name || 'Unknown',
+        sku: p.barcode || undefined,
         category: p.category || undefined,
         description: p.description || undefined,
-        minPrice: p.minPrice ?? undefined,
-        maxPrice: p.maxPrice ?? undefined,
-        moq: p.moq ?? undefined,
-        moqUnit: p.moqUnit || undefined,
+        minPrice: p.unit_price ?? undefined,
+        maxPrice: p.unit_price ?? undefined,
         certifications: (p.certifications && p.certifications.length) ? p.certifications : undefined,
         status: 'active',
     }));
@@ -2639,32 +2625,35 @@ function loadExtractedProducts() {
     const totalEl = document.getElementById('extracted-total');
 
     if (!extractedProducts.length) {
-        if (tbody) tbody.innerHTML = renderEmptyRow(7, 'No products extracted yet.');
+        if (tbody) tbody.innerHTML = renderEmptyRow(8, 'No products extracted yet.');
         return;
     }
 
     totalEl.textContent = extractedProducts.length;
 
+    const m = '<span class="wd-text-muted">-</span>';
     tbody.innerHTML = extractedProducts.map(product => {
+        const name = product.product_name || product.name || 'Unknown';
         return `
             <tr>
                 <td class="col-checkbox"><input type="checkbox" class="extract-checkbox" data-id="${product.id}" onchange="updateSelectedCount()" checked></td>
+                <td>${product.brand || m}</td>
                 <td>
                     <div class="wd-product-cell">
                         <span class="wd-product-thumb">${product.emoji}</span>
-                        <span class="wd-product-name">${product.name}</span>
+                        <span class="wd-product-name">${escapeHtml(name)}</span>
                     </div>
                 </td>
-                <td>${product.sku || '<span class="wd-text-muted">-</span>'}</td>
+                <td>${product.unit_spec || m}</td>
                 <td>
                     ${product.category
                         ? `<span class="wd-badge wd-badge-outline">${getCategoryLabel(product.category)}</span>`
-                        : '<span class="wd-text-muted">-</span>'
+                        : m
                     }
                 </td>
-                <td>${product.price || '<span class="wd-text-muted">-</span>'}</td>
-                <td>${product.priceBasis ? `<span class="wd-badge wd-badge-outline">${product.priceBasis}</span>` : '<span class="wd-text-muted">-</span>'}</td>
-                <td>${product.shelfLife || '<span class="wd-text-muted">-</span>'}</td>
+                <td>${product.price || m}</td>
+                <td>${product.price_basis ? `<span class="wd-badge wd-badge-outline">${product.price_basis}</span>` : m}</td>
+                <td>${product.shelf_life || m}</td>
             </tr>
         `;
     }).join('');
