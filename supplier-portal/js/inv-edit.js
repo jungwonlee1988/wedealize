@@ -9,42 +9,50 @@
     let isNewMode = false;
     let invItemRowIndex = 0;
 
-    // Demo INV data for detail view
+    // Demo INV data for detail view (matches portal.html INV list)
     const demoINVData = {
-        'INV-2026-0042': {
-            inv_number: 'INV-2026-0042', status: 'Sent', statusClass: 'wd-badge-info', date: '2026.02.04 14:30',
-            po_number: 'PO-2026-0051',
+        'INV-2026-0089': {
+            inv_number: 'INV-2026-0089', status: 'Draft', statusClass: 'wd-badge-gray', date: '2026.02.04 10:30',
+            po_number: 'PO-2026-0156',
             exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
-            importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
-            incoterms: 'FCA', paymentTerms: 'TT', currency: 'EUR', dueDate: '2026-03-04', deliveryDate: '2026-02-20', notes: '',
-            items: [{ name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }]
+            importer: { name: 'ABC Distribution', contact: 'John Smith', email: 'john@abcdist.com', phone: '+1 234 567 8901' },
+            incoterms: 'FOB', paymentTerms: 'NET30', currency: 'USD', dueDate: '2026-03-04', deliveryDate: '2026-02-20', notes: '',
+            items: [{ name: 'Premium Organic Coffee Beans 1kg', quantity: 50, unit: 'bags', price: 62.50 }]
         },
-        'INV-2026-0041': {
-            inv_number: 'INV-2026-0041', status: 'Paid', statusClass: 'wd-badge-success', date: '2026.02.02 10:15',
-            po_number: '20260202171',
+        'INV-2026-0088': {
+            inv_number: 'INV-2026-0088', status: 'Sent', statusClass: 'wd-badge-primary', date: '2026.02.01 14:15',
+            po_number: 'PO-2026-0142',
             exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
-            importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
-            incoterms: 'FCA', paymentTerms: 'TT', currency: 'EUR', dueDate: '2026-03-02', deliveryDate: '2026-02-15', notes: 'Payment received on 2026.02.28',
-            items: [{ name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }]
+            importer: { name: 'XYZ Foods Ltd', contact: 'Jane Doe', email: 'jane@xyzfoods.com', phone: '+44 20 1234 5678' },
+            incoterms: 'CIF', paymentTerms: 'TT', currency: 'USD', dueDate: '2026-03-01', deliveryDate: '2026-02-15', notes: 'Awaiting payment confirmation',
+            items: [{ name: 'Artisan Dark Chocolate 500g', quantity: 200, unit: 'boxes', price: 40.65 }]
         },
-        'INV-2026-0039': {
-            inv_number: 'INV-2026-0039', status: 'Overdue', statusClass: 'wd-badge-danger', date: '2026.01.15 09:00',
-            po_number: 'PO2026012800A2C',
+        'INV-2026-0087': {
+            inv_number: 'INV-2026-0087', status: 'Sent', statusClass: 'wd-badge-primary', date: '2026.01.28 09:00',
+            po_number: 'PO-2026-0138',
             exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
-            importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
-            incoterms: 'FOB', paymentTerms: 'NET30', currency: 'USD', dueDate: '2026-02-14', deliveryDate: '2026-01-30', notes: 'Payment reminder sent.',
+            importer: { name: 'Global Trade Co', contact: 'Mike Chen', email: 'mike@globaltrade.com', phone: '+86 21 5555 6666' },
+            incoterms: 'FCA', paymentTerms: 'NET30', currency: 'USD', dueDate: '2026-02-28', deliveryDate: '2026-02-10', notes: 'Payment received',
             items: [
-                { name: 'Premium Organic Coffee Beans 1kg', quantity: 100, unit: 'bags', price: 45.00 },
-                { name: 'Artisan Dark Chocolate 500g', quantity: 50, unit: 'boxes', price: 28.50 }
+                { name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 100, unit: 'boxes', price: 20.16 },
+                { name: 'Premium Baguette Mix', quantity: 50, unit: 'bags', price: 35.00 }
             ]
         },
-        'INV-2026-0038': {
-            inv_number: 'INV-2026-0038', status: 'Draft', statusClass: 'wd-badge-gray', date: '2026.01.28 16:45',
-            po_number: 'PO20260203048953',
+        'INV-2026-0086': {
+            inv_number: 'INV-2026-0086', status: 'Sent', statusClass: 'wd-badge-primary', date: '2026.01.25 11:30',
+            po_number: 'PO-2026-0135',
             exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
-            importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
-            incoterms: 'FCA', paymentTerms: 'TT', currency: 'EUR', dueDate: '2026-02-28', deliveryDate: '2026-02-10', notes: '',
-            items: [{ name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }]
+            importer: { name: 'Euro Imports LLC', contact: 'Sarah Kim', email: 'sarah@euroimports.com', phone: '+1 555 123 4567' },
+            incoterms: 'FOB', paymentTerms: 'TT', currency: 'EUR', dueDate: '2026-02-25', deliveryDate: '2026-02-05', notes: 'Paid in full',
+            items: [{ name: 'French Butter Cookies', quantity: 300, unit: 'cases', price: 18.50 }]
+        },
+        'INV-2026-0085': {
+            inv_number: 'INV-2026-0085', status: 'Sent', statusClass: 'wd-badge-primary', date: '2026.01.20 16:45',
+            po_number: 'PO-2026-0130',
+            exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
+            importer: { name: 'Fresh Foods Inc', contact: 'Tom Wilson', email: 'tom@freshfoods.com', phone: '+1 800 555 0199' },
+            incoterms: 'DDP', paymentTerms: 'NET60', currency: 'USD', dueDate: '2026-03-20', deliveryDate: '2026-02-01', notes: 'Payment pending',
+            items: [{ name: 'Organic Whole Wheat Flour', quantity: 500, unit: 'bags', price: 12.00 }]
         }
     };
 
