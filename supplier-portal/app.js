@@ -31,9 +31,10 @@ async function apiCall(endpoint, options = {}) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    // 타임아웃 컨트롤러
+    // 타임아웃 컨트롤러 (options.timeout으로 커스텀 가능)
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
+    const timeoutMs = options.timeout || API_TIMEOUT;
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
     try {
         const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -2423,6 +2424,7 @@ async function sendExtractionBatch(images, fileName, batchIndex, totalBatches) {
     return await apiCall('/catalog/extract', {
         method: 'POST',
         body: JSON.stringify({ images, fileName, batchIndex, totalBatches }),
+        timeout: 120000, // 2분 (AI 추출은 시간이 오래 걸림)
     });
 }
 
