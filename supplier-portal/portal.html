@@ -1037,26 +1037,26 @@
                                     <thead>
                                         <tr>
                                             <th data-i18n="products.product">Product</th>
-                                            <th data-i18n="modal.category">
-                                                Category
+                                            <th>
+                                                <span data-i18n="modal.category">Category</span>
                                                 <select id="pf-category" class="wd-th-filter" onchange="applyProductFilters()">
                                                     <option value="">All</option>
                                                 </select>
                                             </th>
-                                            <th data-i18n="products.sku">
-                                                SKU
+                                            <th>
+                                                <span data-i18n="products.sku">SKU</span>
                                                 <input type="text" id="pf-sku" class="wd-th-filter" placeholder="Filter..." oninput="applyProductFilters()">
                                             </th>
                                             <th data-i18n="products.priceFOB">Price (FOB)</th>
                                             <th data-i18n="products.moq">MOQ</th>
-                                            <th data-i18n="modal.certifications">
-                                                Certifications
+                                            <th>
+                                                <span data-i18n="modal.certifications">Certifications</span>
                                                 <select id="pf-cert" class="wd-th-filter" onchange="applyProductFilters()">
                                                     <option value="">All</option>
                                                 </select>
                                             </th>
-                                            <th data-i18n="catalog.status">
-                                                Status
+                                            <th>
+                                                <span data-i18n="catalog.status">Status</span>
                                                 <select id="pf-status" class="wd-th-filter" onchange="applyProductFilters()">
                                                     <option value="">All</option>
                                                     <option value="complete">Complete</option>
@@ -2799,10 +2799,10 @@
                                 <div class="wd-card">
                                     <div class="wd-card-header" style="display:flex; justify-content:space-between; align-items:center;">
                                         <h3 class="wd-card-title" data-i18n="profile.companyCertifications">Company Certifications</h3>
-                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="openCompanyCertModal()">
+                                        <a href="cert-edit.html?id=new" class="wd-btn wd-btn-primary wd-btn-sm" style="text-decoration:none;">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                             Add Certification
-                                        </button>
+                                        </a>
                                     </div>
                                     <div class="wd-card-body">
                                         <p class="wd-form-hint wd-mb-4" data-i18n="profile.companyCertsDesc">Certifications that apply to your entire company (HACCP, ISO, BRC, etc.). Product-specific certifications can be added when editing each product.</p>
@@ -3217,60 +3217,6 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         <span data-i18n="settings.sendInvite">Send Invite</span>
                     </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Company Certification Modal -->
-        <div class="wd-modal-overlay" id="company-cert-modal" style="display:none;">
-            <div class="wd-modal" style="max-width:520px;">
-                <div class="wd-modal-header">
-                    <h3 class="wd-modal-title" id="company-cert-modal-title">Add Certification</h3>
-                    <button class="wd-modal-close" onclick="closeCompanyCertModal()">&times;</button>
-                </div>
-                <div class="wd-modal-body">
-                    <form id="company-cert-form">
-                        <div class="wd-form-group">
-                            <label class="wd-form-label">Certification Name *</label>
-                            <select class="wd-select" id="cert-name">
-                                <option value="">Select certification...</option>
-                                <option value="HACCP">HACCP</option>
-                                <option value="ISO 22000">ISO 22000</option>
-                                <option value="BRC">BRC</option>
-                                <option value="IFS">IFS</option>
-                                <option value="FSSC 22000">FSSC 22000</option>
-                                <option value="GMP">GMP</option>
-                                <option value="SQF">SQF</option>
-                                <option value="ISO 9001">ISO 9001</option>
-                            </select>
-                        </div>
-                        <div class="wd-form-group">
-                            <label class="wd-form-label">Issuer</label>
-                            <input type="text" class="wd-input" id="cert-issuer" placeholder="e.g., SGS, Bureau Veritas">
-                        </div>
-                        <div class="wd-form-row">
-                            <div class="wd-form-group">
-                                <label class="wd-form-label">Issue Date</label>
-                                <input type="date" class="wd-input" id="cert-issue-date">
-                            </div>
-                            <div class="wd-form-group">
-                                <label class="wd-form-label">Expiry Date</label>
-                                <input type="date" class="wd-input" id="cert-expiry-date">
-                            </div>
-                        </div>
-                        <div class="wd-form-group">
-                            <label class="wd-form-label">Status</label>
-                            <select class="wd-select" id="cert-status">
-                                <option value="valid">Valid</option>
-                                <option value="expired">Expired</option>
-                                <option value="pending">Pending</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="wd-modal-footer">
-                    <button class="wd-btn wd-btn-outline" onclick="closeCompanyCertModal()">Cancel</button>
-                    <button class="wd-btn wd-btn-primary" onclick="saveCompanyCert()">Save</button>
                 </div>
             </div>
         </div>
