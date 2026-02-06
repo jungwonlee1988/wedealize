@@ -711,6 +711,7 @@ body.dashboard-mode .portal-badge {
 
 .dashboard-container {
     display: flex;
+    flex-direction: row !important;
     align-items: stretch;
     width: 100%;
     height: 100%;
@@ -2509,7 +2510,7 @@ body.dashboard-mode .portal-badge {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 600px) {
     .dashboard-container {
         flex-direction: column;
     }
