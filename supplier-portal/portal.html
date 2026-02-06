@@ -957,36 +957,6 @@
                                             </tr>
                                         </thead>
                                         <tbody id="upload-history-tbody">
-                                            <tr>
-                                                <td>
-                                                    <div style="display: flex; align-items: center; gap: 8px;">
-                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                                        product_catalog_2024.pdf
-                                                    </div>
-                                                </td>
-                                                <td><span class="wd-badge wd-badge-info" data-i18n="catalog.productCatalog">Product Catalog</span></td>
-                                                <td>2025.02.02</td>
-                                                <td><span class="wd-badge wd-badge-success" data-i18n="status.processed">Processed</span></td>
-                                                <td>24 extracted</td>
-                                                <td>
-                                                    <button class="wd-btn wd-btn-outline wd-btn-sm" data-i18n="inquiry.viewDetails">View Details</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div style="display: flex; align-items: center; gap: 8px;">
-                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                                        price_list_Q1_2025.xlsx
-                                                    </div>
-                                                </td>
-                                                <td><span class="wd-badge wd-badge-success" data-i18n="catalog.priceList">Price List</span></td>
-                                                <td>2025.02.01</td>
-                                                <td><span class="wd-badge wd-badge-success" data-i18n="status.matched">Matched</span></td>
-                                                <td>18 matched</td>
-                                                <td>
-                                                    <button class="wd-btn wd-btn-outline wd-btn-sm" data-i18n="inquiry.viewDetails">View Details</button>
-                                                </td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1083,23 +1053,8 @@
                                 </table>
                             </div>
 
-                            <!-- Pagination -->
-                            <div class="wd-pagination" style="padding: 16px 24px;">
-                                <div class="wd-pagination-info">
-                                    <span>Showing</span>
-                                    <select class="wd-select" style="width: 80px; padding: 6px 10px;">
-                                        <option>20</option>
-                                        <option>50</option>
-                                        <option>100</option>
-                                    </select>
-                                    <span>per page</span>
-                                </div>
-                                <div class="wd-pagination-pages">
-                                    <button class="wd-pagination-btn" disabled>&lt;</button>
-                                    <button class="wd-pagination-btn active">1</button>
-                                    <button class="wd-pagination-btn">2</button>
-                                    <button class="wd-pagination-btn">&gt;</button>
-                                </div>
+                            <!-- Pagination (dynamic) -->
+                            <div id="product-list-pagination" class="wd-pagination" style="padding: 16px 24px; display: none;">
                             </div>
                         </div>
 

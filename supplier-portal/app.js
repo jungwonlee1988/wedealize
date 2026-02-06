@@ -895,6 +895,9 @@ function showSection(sectionName) {
             if (typeof loadInquiriesFromAPI === 'function') loadInquiriesFromAPI();
             break;
     }
+    if (sectionName === 'catalog') {
+        loadUploadHistory();
+    }
 }
 
 // 브라우저 뒤로/앞으로 버튼 처리
@@ -1582,18 +1585,37 @@ async function loadProducts(filter = null) {
     }
 }
 
+let _productListPage = 1;
+let _productListPageSize = 20;
+let _productListAll = [];
+
 function renderProductList(products) {
+    _productListAll = products;
+    _productListPage = 1;
+    renderProductListPage();
+}
+
+function renderProductListPage() {
     const tbody = document.getElementById('product-list-tbody');
     if (!tbody) return;
 
+    const products = _productListAll;
+    const paginationEl = document.getElementById('product-list-pagination');
+
     if (!products.length) {
         tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:#999;">No products yet. Click "Add Product" to create one.</td></tr>`;
+        if (paginationEl) paginationEl.style.display = 'none';
         return;
     }
 
+    const totalPages = Math.ceil(products.length / _productListPageSize);
+    if (_productListPage > totalPages) _productListPage = totalPages;
+    const start = (_productListPage - 1) * _productListPageSize;
+    const pageProducts = products.slice(start, start + _productListPageSize);
+
     const isIncomplete = (p) => (p.completeness || 0) < 70;
 
-    tbody.innerHTML = products.map(product => {
+    tbody.innerHTML = pageProducts.map(product => {
         const priceDisplay = product.min_price
             ? (product.max_price ? `$${product.min_price} - $${product.max_price}` : `$${product.min_price}`)
             : '<span class="wd-text-muted">-</span>';
@@ -1635,6 +1657,48 @@ function renderProductList(products) {
             </td>
         </tr>`;
     }).join('');
+
+    // Render pagination
+    if (paginationEl) {
+        if (totalPages <= 1) {
+            paginationEl.style.display = 'none';
+        } else {
+            paginationEl.style.display = 'flex';
+            const end = Math.min(start + _productListPageSize, products.length);
+            let pagesHtml = '';
+            for (let i = 1; i <= totalPages; i++) {
+                pagesHtml += `<button class="wd-pagination-btn${i === _productListPage ? ' active' : ''}" onclick="goProductListPage(${i})">${i}</button>`;
+            }
+            paginationEl.innerHTML = `
+                <div class="wd-pagination-info">
+                    <span>Showing ${start + 1}-${end} of ${products.length}</span>
+                    <select class="wd-select" style="width: 80px; padding: 6px 10px;" onchange="changeProductListPageSize(this.value)">
+                        <option value="20"${_productListPageSize === 20 ? ' selected' : ''}>20</option>
+                        <option value="50"${_productListPageSize === 50 ? ' selected' : ''}>50</option>
+                        <option value="100"${_productListPageSize === 100 ? ' selected' : ''}>100</option>
+                    </select>
+                    <span>per page</span>
+                </div>
+                <div class="wd-pagination-pages">
+                    <button class="wd-pagination-btn" onclick="goProductListPage(${_productListPage - 1})" ${_productListPage === 1 ? 'disabled' : ''}>&lt;</button>
+                    ${pagesHtml}
+                    <button class="wd-pagination-btn" onclick="goProductListPage(${_productListPage + 1})" ${_productListPage === totalPages ? 'disabled' : ''}>&gt;</button>
+                </div>`;
+        }
+    }
+}
+
+function goProductListPage(page) {
+    const totalPages = Math.ceil(_productListAll.length / _productListPageSize);
+    if (page < 1 || page > totalPages) return;
+    _productListPage = page;
+    renderProductListPage();
+}
+
+function changeProductListPageSize(size) {
+    _productListPageSize = parseInt(size, 10);
+    _productListPage = 1;
+    renderProductListPage();
 }
 
 function addMOQ(productId) {
@@ -2060,14 +2124,17 @@ async function extractCatalog() {
     extractBtn.disabled = true;
     extractBtn.innerHTML = `<span class="spinner"></span> ${t('catalog.extracting') || 'Extracting...'}`;
 
+    const file = uploadedFiles.catalog;
+
     try {
         // 파일 업로드 및 추출 API 호출
-        const result = await uploadFile('/upload/catalog', uploadedFiles.catalog);
+        const result = await uploadFile('/upload/catalog', file);
         currentJobId = result.job_id;
 
         // 처리 상태 폴링
         await pollCatalogExtraction();
 
+        await recordCatalogUpload(file.name, 'product_catalog', file.size, 'processed', extractedProducts.length);
         showToast(t('catalog.extractSuccess') || 'Products extracted successfully!', 'success');
         goToCatalogStep(2);
 
@@ -2076,6 +2143,7 @@ async function extractCatalog() {
 
         // 데모 모드: 시뮬레이션 데이터 생성
         await simulateCatalogExtraction();
+        await recordCatalogUpload(file.name, 'product_catalog', file.size, 'processed', extractedProducts.length);
         showToast(t('catalog.extractSuccess') || 'Products extracted successfully!', 'success');
         goToCatalogStep(2);
     }
@@ -2345,6 +2413,117 @@ function startNewCatalog() {
     document.getElementById('extract-btn').disabled = true;
 }
 
+// ── Upload History (catalog_uploads API) ──
+
+async function loadUploadHistory() {
+    const tbody = document.getElementById('upload-history-tbody');
+    if (!tbody) return;
+
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/catalog-uploads`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.status === 401) { handleSessionExpired(); return; }
+        if (!res.ok) throw new Error('Failed to load upload history');
+        const data = await res.json();
+        renderUploadHistory(data.uploads || []);
+    } catch (error) {
+        console.error('Failed to load upload history:', error);
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">No upload history yet.</td></tr>`;
+    }
+}
+
+function renderUploadHistory(uploads) {
+    const tbody = document.getElementById('upload-history-tbody');
+    if (!tbody) return;
+
+    if (!uploads.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">No upload history yet.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = uploads.map(upload => {
+        const date = new Date(upload.created_at);
+        const dateStr = `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+
+        const typeBadge = upload.file_type === 'price_list'
+            ? '<span class="wd-badge wd-badge-success">Price List</span>'
+            : '<span class="wd-badge wd-badge-info">Product Catalog</span>';
+
+        const statusMap = {
+            pending: '<span class="wd-badge wd-badge-warning">Pending</span>',
+            processing: '<span class="wd-badge wd-badge-info">Processing</span>',
+            processed: '<span class="wd-badge wd-badge-success">Processed</span>',
+            matched: '<span class="wd-badge wd-badge-success">Matched</span>',
+            failed: '<span class="wd-badge wd-badge-danger">Failed</span>',
+        };
+        const statusBadge = statusMap[upload.status] || `<span class="wd-badge wd-badge-gray">${escapeHtml(upload.status)}</span>`;
+
+        const productsText = upload.products_extracted > 0
+            ? `${upload.products_extracted} extracted`
+            : '-';
+
+        return `
+        <tr>
+            <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    ${escapeHtml(upload.file_name)}
+                </div>
+            </td>
+            <td>${typeBadge}</td>
+            <td>${dateStr}</td>
+            <td>${statusBadge}</td>
+            <td>${productsText}</td>
+            <td>
+                <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="deleteUploadHistory('${upload.id}')" title="Delete" style="color:#ef4444;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+async function recordCatalogUpload(fileName, fileType, fileSize, status, productsExtracted) {
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        await fetch(`${baseUrl}/catalog-uploads`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fileName, fileType, fileSize, status, productsExtracted })
+        });
+    } catch (error) {
+        console.error('Failed to record catalog upload:', error);
+    }
+}
+
+async function deleteUploadHistory(id) {
+    if (!confirm('Delete this upload record?')) return;
+
+    try {
+        const token = localStorage.getItem('supplier_token');
+        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
+        const res = await fetch(`${baseUrl}/catalog-uploads/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!res.ok) throw new Error('Failed to delete');
+        showToast('Upload record deleted', 'success');
+        loadUploadHistory();
+    } catch (error) {
+        console.error('Failed to delete upload record:', error);
+        showToast('Failed to delete upload record', 'error');
+    }
+}
+
 // 카탈로그 추출 상태 폴링
 async function pollCatalogExtraction() {
     if (!currentJobId) return;
@@ -2448,6 +2627,12 @@ async function processPriceListMatching() {
 
     // 매칭 테이블 렌더링
     renderPriceMatchTable();
+
+    // Upload history에 price list 기록
+    const plFile = uploadedFiles.pricelist;
+    if (plFile) {
+        await recordCatalogUpload(plFile.name, 'price_list', plFile.size, 'matched', priceMatchedProducts.length);
+    }
 
     showToast(t('catalog.pricesMatched') || 'Prices matched and updated!', 'success');
 }
