@@ -44,72 +44,72 @@ class SalesModule {
     }
 
     /**
-     * Load PI list from API
+     * Load INV list from API
      */
-    async loadPIList() {
+    async loadINVList() {
         try {
-            const piList = await api.get('/pi');
-            this.renderPITableRows(piList);
-            return piList;
+            const invList = await api.get('/invoices');
+            this.renderINVTableRows(invList);
+            return invList;
         } catch (error) {
-            console.error('Failed to load PI list:', error);
+            console.error('Failed to load INV list:', error);
             // Silently fail - keep existing demo data in HTML
             return [];
         }
     }
 
     /**
-     * Render PI list into table
+     * Render INV list into table
      */
-    renderPITableRows(piList) {
-        const tbody = $('#pi-table-body');
-        if (!tbody || !piList) return;
+    renderINVTableRows(invList) {
+        const tbody = $('#inv-table-body');
+        if (!tbody || !invList) return;
 
-        if (piList.length === 0) {
+        if (invList.length === 0) {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="8" class="wd-text-center wd-text-muted" style="padding: 40px;">
-                        No proforma invoices yet. Click "Create PI" to get started.
+                        No invoices yet. Click "Add INV" to get started.
                     </td>
                 </tr>
             `;
             return;
         }
 
-        tbody.innerHTML = piList.map(pi => {
+        tbody.innerHTML = invList.map(inv => {
             const statusBadgeClass = {
                 draft: 'wd-badge-outline',
                 sent: 'wd-badge-primary',
                 cancelled: 'wd-badge-danger'
-            }[pi.status] || 'wd-badge-outline';
+            }[inv.status] || 'wd-badge-outline';
 
-            const paymentBadgeClass = pi.payment_status === 'paid' ? 'wd-badge-success' : 'wd-badge-warning';
-            const itemCount = pi.proforma_invoice_items?.length || 0;
-            const piDate = pi.pi_date ? new Date(pi.pi_date).toLocaleDateString() : '-';
+            const paymentBadgeClass = inv.payment_status === 'paid' ? 'wd-badge-success' : 'wd-badge-warning';
+            const itemCount = inv.invoice_items?.length || 0;
+            const invDate = inv.inv_date ? new Date(inv.inv_date).toLocaleDateString() : '-';
 
             return `
-                <tr data-status="${pi.status}" data-payment="${pi.payment_status}" data-id="${pi.id}">
+                <tr data-status="${inv.status}" data-payment="${inv.payment_status}" data-id="${inv.id}">
                     <td>
-                        <a href="#" class="wd-link pi-number" onclick="viewPIDetail('${pi.id}')">${pi.pi_number}</a>
+                        <a href="#" class="wd-link inv-number" onclick="viewINVDetail('${inv.id}')">${inv.inv_number}</a>
                     </td>
                     <td>
-                        ${pi.po_number ? `<a href="#" class="wd-link po-ref" onclick="viewPOFromPI('${pi.po_number}')">${pi.po_number}</a>` : '<span class="wd-text-muted">-</span>'}
+                        ${inv.po_number ? `<a href="#" class="wd-link po-ref" onclick="viewPOFromINV('${inv.po_number}')">${inv.po_number}</a>` : '<span class="wd-text-muted">-</span>'}
                     </td>
                     <td>
                         <div class="wd-buyer-cell">
-                            <span class="buyer-name">${pi.buyer_name}</span>
-                            ${pi.buyer_country ? `<span class="wd-text-muted">${pi.buyer_country}</span>` : ''}
+                            <span class="buyer-name">${inv.buyer_name}</span>
+                            ${inv.buyer_country ? `<span class="wd-text-muted">${inv.buyer_country}</span>` : ''}
                         </div>
                     </td>
-                    <td>${piDate}</td>
-                    <td class="wd-text-right">$${parseFloat(pi.subtotal).toFixed(2)}</td>
-                    <td class="wd-text-right wd-text-success">${parseFloat(pi.credit_discount) > 0 ? `-$${parseFloat(pi.credit_discount).toFixed(2)}` : '-'}</td>
-                    <td class="wd-text-right wd-text-bold">$${parseFloat(pi.total_amount).toFixed(2)}</td>
-                    <td><span class="wd-badge ${statusBadgeClass}">${pi.status.charAt(0).toUpperCase() + pi.status.slice(1)}</span></td>
+                    <td>${invDate}</td>
+                    <td class="wd-text-right">$${parseFloat(inv.subtotal).toFixed(2)}</td>
+                    <td class="wd-text-right wd-text-success">${parseFloat(inv.credit_discount) > 0 ? `-$${parseFloat(inv.credit_discount).toFixed(2)}` : '-'}</td>
+                    <td class="wd-text-right wd-text-bold">$${parseFloat(inv.total_amount).toFixed(2)}</td>
+                    <td><span class="wd-badge ${statusBadgeClass}">${inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}</span></td>
                     <td>
                         <div class="wd-action-btns">
-                            ${pi.status === 'draft' ? `<button class="wd-btn-text wd-btn-sm" onclick="sendPI('${pi.id}')">Send</button>` : ''}
-                            <button class="wd-btn-icon" onclick="editPI('${pi.id}')" title="Edit">
+                            ${inv.status === 'draft' ? `<button class="wd-btn-text wd-btn-sm" onclick="sendINV('${inv.id}')">Send</button>` : ''}
+                            <button class="wd-btn-icon" onclick="editINV('${inv.id}')" title="Edit">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             </button>
                         </div>
@@ -119,7 +119,7 @@ class SalesModule {
         }).join('');
 
         // Apply current filter
-        this.filterPIList();
+        this.filterINVList();
     }
 
     /**
@@ -789,10 +789,10 @@ class SalesModule {
      * View Invoice from credit
      */
     viewInvoiceFromCredit(invoiceNumber) {
-        // Navigate to PI Management and show detail
-        window.showSection('pi-management');
+        // Navigate to INV Management and show detail
+        window.showSection('inv-management');
         setTimeout(() => {
-            this.viewPI(invoiceNumber);
+            this.viewINV(invoiceNumber);
         }, 300);
     }
 
@@ -819,23 +819,23 @@ class SalesModule {
         toast.success('Credits exported successfully!');
     }
 
-    // ==================== PI (Proforma Invoice) Management ====================
+    // ==================== INV (Invoice) Management ====================
 
     /**
-     * Close PI modal
+     * Close INV modal
      */
-    closePIModal() {
-        const modalEl = $('#pi-modal');
+    closeINVModal() {
+        const modalEl = $('#inv-modal');
         if (modalEl) {
             modalEl.style.display = 'none';
         }
     }
 
     /**
-     * Clear PI credits
+     * Clear INV credits
      */
-    clearPICredits() {
-        const container = $('#pi-available-credits');
+    clearINVCredits() {
+        const container = $('#inv-available-credits');
         const badge = $('#available-credit-badge');
         if (container) {
             container.innerHTML = '<p class="wd-text-muted">Select a PO to see available credits from this buyer</p>';
@@ -846,27 +846,27 @@ class SalesModule {
     }
 
     /**
-     * Update PI summary (subtotal, credits, total)
+     * Update INV summary (subtotal, credits, total)
      */
-    updatePISummary() {
+    updateINVSummary() {
         // Calculate subtotal from items
         let subtotal = 0;
-        $$('#pi-items-tbody tr:not(.wd-empty-row)').forEach(row => {
-            const qty = parseFloat(row.querySelector('.pi-item-qty')?.value || row.querySelector('.pi-qty')?.value) || 0;
-            const price = parseFloat(row.querySelector('.pi-item-price')?.value || row.querySelector('.pi-price')?.value) || 0;
+        $$('#inv-items-tbody tr:not(.wd-empty-row)').forEach(row => {
+            const qty = parseFloat(row.querySelector('.inv-item-qty')?.value || row.querySelector('.inv-qty')?.value) || 0;
+            const price = parseFloat(row.querySelector('.inv-item-price')?.value || row.querySelector('.inv-price')?.value) || 0;
             subtotal += qty * price;
         });
 
         // Calculate applied credits (from buyer's available credits)
         let creditTotal = 0;
-        $$('.pi-credit-check:checked').forEach(checkbox => {
+        $$('.inv-credit-check:checked').forEach(checkbox => {
             creditTotal += parseFloat(checkbox.dataset.amount) || 0;
         });
 
         // Update display
-        const subtotalEl = $('#pi-subtotal');
-        const creditEl = $('#pi-credit-discount');
-        const totalEl = $('#pi-total');
+        const subtotalEl = $('#inv-subtotal');
+        const creditEl = $('#inv-credit-discount');
+        const totalEl = $('#inv-total');
 
         if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
         if (creditEl) creditEl.textContent = `-$${creditTotal.toFixed(2)}`;
@@ -874,22 +874,22 @@ class SalesModule {
     }
 
     /**
-     * Filter PI list
+     * Filter INV list
      */
-    filterPIList() {
-        const statusFilter = $('#pi-status-filter')?.value || 'all';
-        const searchTerm = $('#pi-search')?.value.toLowerCase() || '';
-        const rows = $$('#pi-table-body tr');
+    filterINVList() {
+        const statusFilter = $('#inv-status-filter')?.value || 'all';
+        const searchTerm = $('#inv-search')?.value.toLowerCase() || '';
+        const rows = $$('#inv-table-body tr');
 
         rows.forEach(row => {
             const status = row.dataset.status || '';
-            const piNumber = row.querySelector('.pi-number')?.textContent.toLowerCase() || '';
+            const invNumber = row.querySelector('.inv-number')?.textContent.toLowerCase() || '';
             const poNumber = row.querySelector('.po-ref')?.textContent.toLowerCase() || '';
             const buyer = row.querySelector('.buyer-name')?.textContent.toLowerCase() || '';
 
             const matchesStatus = statusFilter === 'all' || status === statusFilter;
             const matchesSearch = !searchTerm ||
-                piNumber.includes(searchTerm) ||
+                invNumber.includes(searchTerm) ||
                 poNumber.includes(searchTerm) ||
                 buyer.includes(searchTerm);
 
@@ -898,11 +898,11 @@ class SalesModule {
     }
 
     /**
-     * Toggle PI status filter dropdown
+     * Toggle INV status filter dropdown
      */
-    togglePIStatusFilter(event) {
+    toggleINVStatusFilter(event) {
         event.stopPropagation();
-        const dropdown = $('#pi-status-filter-dropdown');
+        const dropdown = $('#inv-status-filter-dropdown');
         if (dropdown) {
             dropdown.classList.toggle('show');
         }
@@ -916,131 +916,131 @@ class SalesModule {
     }
 
     /**
-     * Apply PI status filter
+     * Apply INV status filter
      */
-    applyPIStatusFilter(status) {
-        const filterInput = $('#pi-status-filter');
+    applyINVStatusFilter(status) {
+        const filterInput = $('#inv-status-filter');
         if (filterInput) filterInput.value = status;
-        this.filterPIList();
-        const dropdown = $('#pi-status-filter-dropdown');
+        this.filterINVList();
+        const dropdown = $('#inv-status-filter-dropdown');
         dropdown?.classList.remove('show');
     }
 
     /**
-     * Sort PI table
+     * Sort INV table
      */
-    sortPITable(column) {
+    sortINVTable(column) {
         toast.info(`Sorting by ${column}`);
-        // TODO: Implement PI table sorting
+        // TODO: Implement INV table sorting
     }
 
     /**
-     * View PI detail (click row)
+     * View INV detail (click row)
      */
-    viewPIDetail(piNumber) {
-        toast.info(`Viewing details for ${piNumber}`);
-        // TODO: Show PI detail drawer/modal
+    viewINVDetail(invNumber) {
+        toast.info(`Viewing details for ${invNumber}`);
+        // TODO: Show INV detail drawer/modal
     }
 
     /**
-     * View PI
+     * View INV
      */
-    viewPI(piNumber) {
-        toast.info(`Viewing PI ${piNumber}`);
-        // TODO: Show PI detail view/print preview
+    viewINV(invNumber) {
+        toast.info(`Viewing INV ${invNumber}`);
+        // TODO: Show INV detail view/print preview
     }
 
     /**
-     * Edit PI - navigate to dedicated edit page
+     * Edit INV - navigate to dedicated edit page
      */
-    editPI(piNumber) {
-        window.location.href = `pi-edit.html?id=${piNumber}`;
+    editINV(invNumber) {
+        window.location.href = `inv-edit.html?id=${invNumber}`;
     }
 
     /**
-     * Send PI to buyer
+     * Send INV to buyer
      */
-    async sendPI(piId) {
+    async sendINV(invId) {
         const confirmed = await modal.confirm({
-            title: 'Send Proforma Invoice',
-            message: `Send this PI to the buyer?`,
+            title: 'Send Invoice',
+            message: `Send this INV to the buyer?`,
             confirmText: 'Send',
             type: 'primary'
         });
 
         if (confirmed) {
             try {
-                await api.post(`/pi/${piId}/send`);
-                toast.success('PI sent to buyer!');
-                this.loadPIList();
+                await api.post(`/invoices/${invId}/send`);
+                toast.success('INV sent to buyer!');
+                this.loadINVList();
             } catch (error) {
-                toast.error(error.message || 'Failed to send PI');
+                toast.error(error.message || 'Failed to send INV');
             }
         }
     }
 
     /**
-     * Download PI as PDF
+     * Download INV as PDF
      */
-    downloadPI(piNumber) {
-        toast.info(`Downloading ${piNumber} as PDF...`);
+    downloadINV(invNumber) {
+        toast.info(`Downloading ${invNumber} as PDF...`);
         // TODO: Generate and download PDF
         setTimeout(() => {
-            toast.success(`${piNumber} downloaded!`);
+            toast.success(`${invNumber} downloaded!`);
         }, 1000);
     }
 
     /**
-     * Save PI as draft
+     * Save INV as draft
      */
     async saveAsDraft() {
-        const piData = this.collectPIFormData();
+        const invData = this.collectINVFormData();
 
-        if (!piData.items || piData.items.length === 0) {
+        if (!invData.items || invData.items.length === 0) {
             toast.error('Please add at least one item');
             return;
         }
 
-        if (!piData.buyerName) {
+        if (!invData.buyerName) {
             toast.error('Please select a buyer');
             return;
         }
 
         try {
-            const result = await api.post('/pi', { ...piData, status: 'draft' });
-            toast.success('PI saved as draft!');
-            this.closePIModal();
+            const result = await api.post('/invoices', { ...invData, status: 'draft' });
+            toast.success('INV saved as draft!');
+            this.closeINVModal();
 
-            this.logActivity('created', 'pi', result.pi_number, `${result.pi_number} (Draft)`, {
-                poNumber: piData.poNumber,
+            this.logActivity('created', 'inv', result.inv_number, `${result.inv_number} (Draft)`, {
+                poNumber: invData.poNumber,
                 status: 'draft'
             });
 
-            // Refresh PI list
-            this.loadPIList();
+            // Refresh INV list
+            this.loadINVList();
         } catch (error) {
-            toast.error(error.message || 'Failed to save PI as draft');
+            toast.error(error.message || 'Failed to save INV as draft');
         }
     }
 
     /**
-     * Create and send PI
+     * Create and send INV
      */
-    async createAndSendPI() {
-        const piData = this.collectPIFormData();
+    async createAndSendINV() {
+        const invData = this.collectINVFormData();
 
-        if (!piData.items || piData.items.length === 0) {
+        if (!invData.items || invData.items.length === 0) {
             toast.error('Please add at least one item');
             return;
         }
 
-        if (!piData.buyerName) {
+        if (!invData.buyerName) {
             toast.error('Please select a buyer');
             return;
         }
 
         const confirmed = await modal.confirm({
-            title: 'Create & Send PI',
+            title: 'Create & Send INV',
             message: 'Create this Proforma Invoice and send it to the buyer?',
             confirmText: 'Create & Send',
             type: 'primary'
@@ -1048,55 +1048,55 @@ class SalesModule {
 
         if (confirmed) {
             try {
-                const result = await api.post('/pi', { ...piData, status: 'sent' });
-                toast.success('PI created and sent to buyer!');
-                this.closePIModal();
+                const result = await api.post('/invoices', { ...invData, status: 'sent' });
+                toast.success('INV created and sent to buyer!');
+                this.closeINVModal();
 
-                this.logActivity('sent', 'pi', result.pi_number, result.pi_number, {
-                    poNumber: piData.poNumber,
-                    buyer: piData.buyerName
+                this.logActivity('sent', 'pi', result.inv_number, result.inv_number, {
+                    poNumber: invData.poNumber,
+                    buyer: invData.buyerName
                 });
 
-                // Refresh PI list
-                this.loadPIList();
+                // Refresh INV list
+                this.loadINVList();
             } catch (error) {
-                toast.error(error.message || 'Failed to create and send PI');
+                toast.error(error.message || 'Failed to create and send INV');
             }
         }
     }
 
     /**
-     * Generate PI number
+     * Generate INV number
      */
-    generatePINumber() {
+    generateINVNumber() {
         const date = new Date();
         const year = date.getFullYear();
         const seq = String(Math.floor(Math.random() * 9999) + 1).padStart(4, '0');
-        return `PI-${year}-${seq}`;
+        return `INV-${year}-${seq}`;
     }
 
     /**
-     * Collect PI form data
+     * Collect INV form data
      */
-    collectPIFormData() {
-        const poSelect = $('#pi-po-select');
+    collectINVFormData() {
+        const poSelect = $('#inv-po-select');
         const selectedOption = poSelect?.options[poSelect.selectedIndex];
         const poText = selectedOption?.text || '';
         // Extract buyer name from option text (e.g., "PO-2024-0156 - ABC Distribution (Feb 01, 2024)")
         const buyerMatch = poText.match(/- (.+?) \(/);
 
         // Try buyer select first (enhanced modal), fall back to PO-based buyer
-        const buyerSelect = $('#pi-buyer-select');
+        const buyerSelect = $('#inv-buyer-select');
         const buyerOption = buyerSelect?.options[buyerSelect?.selectedIndex];
         const buyerName = buyerOption?.dataset?.name || (buyerMatch ? buyerMatch[1] : '');
 
         const items = [];
-        $$('#pi-items-tbody tr:not(.wd-empty-row)').forEach(row => {
-            const name = row.querySelector('.pi-item-name')?.value || row.querySelector('.wd-product-name')?.textContent || '';
-            const sku = row.querySelector('.pi-item-sku')?.value || row.dataset.sku || '';
-            const qty = parseInt(row.querySelector('.pi-item-qty')?.value || row.querySelector('.pi-qty')?.value) || 0;
-            const unit = row.querySelector('.pi-item-unit')?.value || 'pcs';
-            const price = parseFloat(row.querySelector('.pi-item-price')?.value || row.querySelector('.pi-price')?.value) || 0;
+        $$('#inv-items-tbody tr:not(.wd-empty-row)').forEach(row => {
+            const name = row.querySelector('.inv-item-name')?.value || row.querySelector('.wd-product-name')?.textContent || '';
+            const sku = row.querySelector('.inv-item-sku')?.value || row.dataset.sku || '';
+            const qty = parseInt(row.querySelector('.inv-item-qty')?.value || row.querySelector('.inv-qty')?.value) || 0;
+            const unit = row.querySelector('.inv-item-unit')?.value || 'pcs';
+            const price = parseFloat(row.querySelector('.inv-item-price')?.value || row.querySelector('.inv-price')?.value) || 0;
 
             if (name && qty > 0) {
                 items.push({
@@ -1110,7 +1110,7 @@ class SalesModule {
         });
 
         const appliedCredits = [];
-        $$('.pi-credit-check:checked').forEach(checkbox => {
+        $$('.inv-credit-check:checked').forEach(checkbox => {
             appliedCredits.push({
                 creditId: checkbox.value,
                 amount: parseFloat(checkbox.dataset.amount) || 0
@@ -1122,67 +1122,67 @@ class SalesModule {
             buyerName: buyerName,
             buyerEmail: buyerOption?.dataset?.email || null,
             buyerCountry: buyerOption?.dataset?.country || null,
-            piDate: $('#pi-date')?.value || new Date().toISOString().split('T')[0],
-            validUntil: $('#pi-valid-until')?.value || null,
+            invDate: $('#inv-date')?.value || new Date().toISOString().split('T')[0],
+            validUntil: $('#inv-valid-until')?.value || null,
             items: items,
             appliedCredits: appliedCredits,
-            currency: $('#pi-currency')?.value || 'USD',
-            incoterms: $('#pi-incoterms')?.value || null,
-            paymentMethod: $('#pi-payment-method')?.value || null,
-            remarks: $('#pi-remarks')?.value || null
+            currency: $('#inv-currency')?.value || 'USD',
+            incoterms: $('#inv-incoterms')?.value || null,
+            paymentMethod: $('#inv-payment-method')?.value || null,
+            remarks: $('#inv-remarks')?.value || null
         };
     }
 
     /**
-     * Load PI data for editing
+     * Load INV data for editing
      */
-    async loadPIData(piId) {
+    async loadINVData(invId) {
         try {
-            const pi = await api.get(`/pi/${piId}`);
+            const pi = await api.get(`/pi/${invId}`);
             // Populate form fields
-            const dateInput = $('#pi-date');
-            if (dateInput && pi.pi_date) dateInput.value = pi.pi_date;
+            const dateInput = $('#inv-date');
+            if (dateInput && inv.inv_date) dateInput.value = inv.inv_date;
 
-            const validInput = $('#pi-valid-until');
+            const validInput = $('#inv-valid-until');
             if (validInput && pi.valid_until) validInput.value = pi.valid_until;
 
-            const currencyInput = $('#pi-currency');
+            const currencyInput = $('#inv-currency');
             if (currencyInput && pi.currency) currencyInput.value = pi.currency;
 
-            const incotermsInput = $('#pi-incoterms');
+            const incotermsInput = $('#inv-incoterms');
             if (incotermsInput && pi.incoterms) incotermsInput.value = pi.incoterms;
 
-            const paymentInput = $('#pi-payment-method');
+            const paymentInput = $('#inv-payment-method');
             if (paymentInput && pi.payment_method) paymentInput.value = pi.payment_method;
 
-            const remarksInput = $('#pi-remarks');
+            const remarksInput = $('#inv-remarks');
             if (remarksInput && pi.remarks) remarksInput.value = pi.remarks;
 
             // Load items
-            if (pi.proforma_invoice_items && pi.proforma_invoice_items.length > 0) {
-                const tbody = $('#pi-items-tbody');
+            if (inv.invoice_items && inv.invoice_items.length > 0) {
+                const tbody = $('#inv-items-tbody');
                 if (tbody) {
                     tbody.innerHTML = '';
                     this.piItemCounter = 0;
-                    pi.proforma_invoice_items.forEach(item => {
-                        this.addItemRowToPI(item.product_sku, item.product_name, item.quantity, item.unit, parseFloat(item.unit_price));
+                    inv.invoice_items.forEach(item => {
+                        this.addItemRowToINV(item.product_sku, item.product_name, item.quantity, item.unit, parseFloat(item.unit_price));
                     });
                 }
             }
 
-            this.updatePISummary();
+            this.updateINVSummary();
 
-            // Store editing PI id
-            this._editingPIId = piId;
+            // Store editing INV id
+            this._editingINVId = invId;
         } catch (error) {
-            toast.error(error.message || 'Failed to load PI data');
+            toast.error(error.message || 'Failed to load INV data');
         }
     }
 
     /**
-     * View PO from PI
+     * View PO from INV
      */
-    viewPOFromPI(poNumber) {
+    viewPOFromINV(poNumber) {
         window.showSection('po-management');
         setTimeout(() => {
             this.viewPODetail(poNumber);
@@ -1909,11 +1909,11 @@ class SalesModule {
     }
 
     /**
-     * Toggle Account PI filter dropdown
+     * Toggle Account INV filter dropdown
      */
-    toggleAccountPIFilter(event) {
+    toggleAccountINVFilter(event) {
         event.stopPropagation();
-        const dropdown = $('#account-pi-filter-dropdown');
+        const dropdown = $('#account-inv-filter-dropdown');
         if (dropdown) {
             dropdown.classList.toggle('show');
         }
@@ -1927,10 +1927,10 @@ class SalesModule {
     }
 
     /**
-     * Apply Account PI status filter
+     * Apply Account INV status filter
      */
-    applyAccountPIFilter(status) {
-        const filterInput = $('#account-pi-status-filter');
+    applyAccountINVFilter(status) {
+        const filterInput = $('#account-inv-status-filter');
         if (filterInput) filterInput.value = status;
 
         const rows = $$('#accounts-table-body tr');
@@ -1940,7 +1940,7 @@ class SalesModule {
             row.style.display = matchesFilter ? '' : 'none';
         });
 
-        const dropdown = $('#account-pi-filter-dropdown');
+        const dropdown = $('#account-inv-filter-dropdown');
         dropdown?.classList.remove('show');
     }
 
@@ -2073,10 +2073,10 @@ class SalesModule {
     }
 
     /**
-     * Toggle PI products detail view
+     * Toggle INV products detail view
      */
-    togglePIProducts(element) {
-        const detail = element.querySelector('.wd-pi-products-detail');
+    toggleINVProducts(element) {
+        const detail = element.querySelector('.wd-inv-products-detail');
         if (!detail) return;
 
         const isExpanded = element.classList.contains('expanded');
@@ -2122,58 +2122,58 @@ class SalesModule {
     }
 
     /**
-     * Create PI for specific account
+     * Create INV for specific account
      */
-    createPIForAccount(accountId) {
-        this.openPIModal();
+    createINVForAccount(accountId) {
+        this.openINVModal();
 
         // Wait for modal to open then select buyer
         setTimeout(() => {
-            const buyerSelect = $('#pi-buyer-select');
+            const buyerSelect = $('#inv-buyer-select');
             if (buyerSelect) {
                 buyerSelect.value = accountId;
-                this.loadBuyerForPI();
+                this.loadBuyerForINV();
             }
             // Switch to manual mode
-            const newRadio = document.querySelector('input[name="pi-source"][value="new"]');
+            const newRadio = document.querySelector('input[name="inv-source"][value="new"]');
             if (newRadio) {
                 newRadio.checked = true;
-                this.togglePISource('new');
+                this.toggleINVSource('new');
             }
         }, 100);
     }
 
-    // ==================== Enhanced PI Modal ====================
+    // ==================== Enhanced INV Modal ====================
 
     /**
-     * Toggle PI source between PO and New
+     * Toggle INV source between PO and New
      */
-    togglePISource(source) {
-        const poSelection = $('#pi-po-selection');
+    toggleINVSource(source) {
+        const poSelection = $('#inv-po-selection');
 
         if (source === 'po') {
             if (poSelection) poSelection.style.display = 'block';
         } else {
             if (poSelection) poSelection.style.display = 'none';
             // Clear PO selection
-            const poSelect = $('#pi-po-select');
+            const poSelect = $('#inv-po-select');
             if (poSelect) poSelect.value = '';
         }
     }
 
     /**
-     * Open PI page for new/edit PI
+     * Open INV page for new/edit INV
      */
-    openPIModal(piId = null) {
-        // Navigate to dedicated PI edit page
-        window.location.href = piId ? `pi-edit.html?id=${piId}` : 'pi-edit.html?id=new';
+    openINVModal(invId = null) {
+        // Navigate to dedicated INV edit page
+        window.location.href = invId ? `inv-edit.html?id=${invId}` : 'inv-edit.html?id=new';
     }
 
     /**
-     * Clear PI items table
+     * Clear INV items table
      */
-    clearPIItemsTable() {
-        const tbody = $('#pi-items-tbody');
+    clearINVItemsTable() {
+        const tbody = $('#inv-items-tbody');
         if (!tbody) return;
 
         tbody.innerHTML = `
@@ -2188,28 +2188,28 @@ class SalesModule {
     }
 
     /**
-     * Load buyer info for PI
+     * Load buyer info for INV
      */
-    loadBuyerForPI() {
-        const buyerSelect = $('#pi-buyer-select');
+    loadBuyerForINV() {
+        const buyerSelect = $('#inv-buyer-select');
         if (!buyerSelect) return;
 
         const selectedOption = buyerSelect.options[buyerSelect.selectedIndex];
         const buyerId = buyerSelect.value;
 
         if (!buyerId) {
-            $('#pi-buyer-info-card')?.style && ($('#pi-buyer-info-card').style.display = 'none');
-            $('#pi-credit-section')?.style && ($('#pi-credit-section').style.display = 'none');
+            $('#inv-buyer-info-card')?.style && ($('#inv-buyer-info-card').style.display = 'none');
+            $('#inv-credit-section')?.style && ($('#inv-credit-section').style.display = 'none');
             return;
         }
 
         // Show buyer info card
-        const infoCard = $('#pi-buyer-info-card');
+        const infoCard = $('#inv-buyer-info-card');
         if (infoCard) {
             infoCard.style.display = 'block';
-            $('#pi-buyer-company-display').textContent = selectedOption.dataset.name || '-';
-            $('#pi-buyer-country-display').textContent = selectedOption.dataset.country || '-';
-            $('#pi-buyer-credit-display').textContent = `$${selectedOption.dataset.credit || '0.00'}`;
+            $('#inv-buyer-company-display').textContent = selectedOption.dataset.name || '-';
+            $('#inv-buyer-country-display').textContent = selectedOption.dataset.country || '-';
+            $('#inv-buyer-credit-display').textContent = `$${selectedOption.dataset.credit || '0.00'}`;
         }
 
         // Load credits for this buyer
@@ -2220,14 +2220,14 @@ class SalesModule {
      * Load credits for buyer
      */
     async loadCreditsForBuyer(buyerNameOrId) {
-        const creditSection = $('#pi-credit-section');
-        const creditsContainer = $('#pi-available-credits');
+        const creditSection = $('#inv-credit-section');
+        const creditsContainer = $('#inv-available-credits');
         const creditBadge = $('#available-credit-badge');
 
         if (!creditSection || !creditsContainer) return;
 
         // Get buyer name from the buyer select option
-        const buyerSelect = $('#pi-buyer-select');
+        const buyerSelect = $('#inv-buyer-select');
         const buyerOption = buyerSelect?.options[buyerSelect?.selectedIndex];
         const buyerName = buyerOption?.dataset?.name || buyerNameOrId || '';
 
@@ -2250,7 +2250,7 @@ class SalesModule {
                     <div class="wd-credit-item">
                         <label class="wd-checkbox-label">
                             <input type="checkbox" class="pi-credit-check" value="${credit.id}"
-                                   data-amount="${credit.amount}" onchange="updatePISummary()">
+                                   data-amount="${credit.amount}" onchange="updateINVSummary()">
                             <div class="credit-info">
                                 <span class="credit-id">${credit.credit_number}</span>
                                 <span class="credit-ref">from ${credit.invoice_number || 'N/A'}</span>
@@ -2271,15 +2271,15 @@ class SalesModule {
             creditsContainer.innerHTML = '<p class="wd-text-muted">No available credits for this buyer</p>';
         }
 
-        this.updatePISummary();
+        this.updateINVSummary();
     }
 
     /**
-     * Enhanced loadPOForPI
+     * Load PO for INV
      */
-    loadPOForPI() {
-        const poSelect = $('#pi-po-select');
-        const buyerSelect = $('#pi-buyer-select');
+    loadPOForINV() {
+        const poSelect = $('#inv-po-select');
+        const buyerSelect = $('#inv-buyer-select');
 
         if (!poSelect) return;
 
@@ -2288,14 +2288,14 @@ class SalesModule {
         const buyerId = selectedOption?.dataset.buyer;
 
         if (!poNumber) {
-            this.clearPIItemsTable();
+            this.clearINVItemsTable();
             return;
         }
 
         // Auto-select buyer from PO
         if (buyerId && buyerSelect) {
             buyerSelect.value = buyerId;
-            this.loadBuyerForPI();
+            this.loadBuyerForINV();
         }
 
         // Demo PO data
@@ -2318,24 +2318,24 @@ class SalesModule {
         if (!items) return;
 
         // Clear and add items
-        const tbody = $('#pi-items-tbody');
+        const tbody = $('#inv-items-tbody');
         if (!tbody) return;
 
         tbody.innerHTML = '';
         this.piItemCounter = 0;
 
         items.forEach((item, idx) => {
-            this.addItemRowToPI(item.sku, item.name, item.qty, item.unit, item.price);
+            this.addItemRowToINV(item.sku, item.name, item.qty, item.unit, item.price);
         });
 
-        this.updatePISummary();
+        this.updateINVSummary();
     }
 
     /**
-     * Add product to PI from dropdown
+     * Add product to INV from dropdown
      */
-    addProductToPI() {
-        const productSelect = $('#pi-product-select');
+    addProductToINV() {
+        const productSelect = $('#inv-product-select');
         if (!productSelect || !productSelect.value) {
             toast.warning('Please select a product first');
             return;
@@ -2347,26 +2347,26 @@ class SalesModule {
         const price = parseFloat(selectedOption.dataset.price) || 0;
         const unit = selectedOption.dataset.unit || 'pcs';
 
-        this.addItemRowToPI(sku, name, 1, unit, price);
+        this.addItemRowToINV(sku, name, 1, unit, price);
 
         // Reset dropdown
         productSelect.value = '';
-        this.updatePISummary();
+        this.updateINVSummary();
     }
 
     /**
-     * Add manual item to PI
+     * Add manual item to INV
      */
-    addManualItemToPI() {
-        this.addItemRowToPI('', '', 1, 'pcs', 0, true);
-        this.updatePISummary();
+    addManualItemToINV() {
+        this.addItemRowToINV('', '', 1, 'pcs', 0, true);
+        this.updateINVSummary();
     }
 
     /**
-     * Add item row to PI table
+     * Add item row to INV table
      */
-    addItemRowToPI(sku, name, qty, unit, price, isEditable = false) {
-        const tbody = $('#pi-items-tbody');
+    addItemRowToINV(sku, name, qty, unit, price, isEditable = false) {
+        const tbody = $('#inv-items-tbody');
         if (!tbody) return;
 
         // Remove empty row if exists
@@ -2387,9 +2387,9 @@ class SalesModule {
                     <input type="text" class="wd-input wd-input-sm pi-item-name" value="${name}" placeholder="Product name" required>
                     <input type="hidden" class="pi-item-sku" value="${sku}">
                 </td>
-                <td><input type="number" class="wd-input wd-input-sm pi-item-qty" value="${qty}" min="1" onchange="updatePIItemRow(${rowIndex})"></td>
+                <td><input type="number" class="wd-input wd-input-sm pi-item-qty" value="${qty}" min="1" onchange="updateINVItemRow(${rowIndex})"></td>
                 <td>
-                    <select class="wd-select wd-select-sm pi-item-unit" onchange="updatePIItemRow(${rowIndex})">
+                    <select class="wd-select wd-select-sm pi-item-unit" onchange="updateINVItemRow(${rowIndex})">
                         <option value="pcs" ${unit === 'pcs' ? 'selected' : ''}>pcs</option>
                         <option value="bottles" ${unit === 'bottles' ? 'selected' : ''}>bottles</option>
                         <option value="jars" ${unit === 'jars' ? 'selected' : ''}>jars</option>
@@ -2398,10 +2398,10 @@ class SalesModule {
                         <option value="kg" ${unit === 'kg' ? 'selected' : ''}>kg</option>
                     </select>
                 </td>
-                <td><input type="number" class="wd-input wd-input-sm pi-item-price" value="${price}" min="0" step="0.01" onchange="updatePIItemRow(${rowIndex})"></td>
+                <td><input type="number" class="wd-input wd-input-sm pi-item-price" value="${price}" min="0" step="0.01" onchange="updateINVItemRow(${rowIndex})"></td>
                 <td class="pi-item-subtotal wd-text-right wd-text-bold">$${subtotal.toFixed(2)}</td>
                 <td>
-                    <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removePIItemRow(${rowIndex})" title="Remove">
+                    <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removeINVItemRow(${rowIndex})" title="Remove">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                 </td>
@@ -2416,7 +2416,7 @@ class SalesModule {
                     <input type="hidden" class="pi-item-name" value="${name}">
                     <input type="hidden" class="pi-item-sku" value="${sku}">
                 </td>
-                <td><input type="number" class="wd-input wd-input-sm pi-item-qty" value="${qty}" min="1" onchange="updatePIItemRow(${rowIndex})"></td>
+                <td><input type="number" class="wd-input wd-input-sm pi-item-qty" value="${qty}" min="1" onchange="updateINVItemRow(${rowIndex})"></td>
                 <td>
                     <select class="wd-select wd-select-sm pi-item-unit">
                         <option value="pcs" ${unit === 'pcs' ? 'selected' : ''}>pcs</option>
@@ -2427,10 +2427,10 @@ class SalesModule {
                         <option value="kg" ${unit === 'kg' ? 'selected' : ''}>kg</option>
                     </select>
                 </td>
-                <td><input type="number" class="wd-input wd-input-sm pi-item-price" value="${price}" min="0" step="0.01" onchange="updatePIItemRow(${rowIndex})"></td>
+                <td><input type="number" class="wd-input wd-input-sm pi-item-price" value="${price}" min="0" step="0.01" onchange="updateINVItemRow(${rowIndex})"></td>
                 <td class="pi-item-subtotal wd-text-right wd-text-bold">$${subtotal.toFixed(2)}</td>
                 <td>
-                    <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removePIItemRow(${rowIndex})" title="Remove">
+                    <button type="button" class="wd-btn-icon wd-btn-icon-danger" onclick="removeINVItemRow(${rowIndex})" title="Remove">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                 </td>
@@ -2441,31 +2441,31 @@ class SalesModule {
     }
 
     /**
-     * Update PI item row
+     * Update INV item row
      */
-    updatePIItemRow(rowIndex) {
-        const tbody = $('#pi-items-tbody');
+    updateINVItemRow(rowIndex) {
+        const tbody = $('#inv-items-tbody');
         if (!tbody) return;
 
         const row = tbody.querySelector(`tr[data-row="${rowIndex}"]`);
         if (!row) return;
 
-        const qty = parseFloat(row.querySelector('.pi-item-qty')?.value) || 0;
-        const price = parseFloat(row.querySelector('.pi-item-price')?.value) || 0;
+        const qty = parseFloat(row.querySelector('.inv-item-qty')?.value) || 0;
+        const price = parseFloat(row.querySelector('.inv-item-price')?.value) || 0;
         const subtotalCell = row.querySelector('.pi-item-subtotal');
 
         if (subtotalCell) {
             subtotalCell.textContent = `$${(qty * price).toFixed(2)}`;
         }
 
-        this.updatePISummary();
+        this.updateINVSummary();
     }
 
     /**
-     * Remove PI item row
+     * Remove INV item row
      */
-    removePIItemRow(rowIndex) {
-        const tbody = $('#pi-items-tbody');
+    removeINVItemRow(rowIndex) {
+        const tbody = $('#inv-items-tbody');
         if (!tbody) return;
 
         const row = tbody.querySelector(`tr[data-row="${rowIndex}"]`);
@@ -2475,17 +2475,17 @@ class SalesModule {
 
         // If no items left, show empty message
         if (tbody.querySelectorAll('tr:not(.wd-empty-row)').length === 0) {
-            this.clearPIItemsTable();
+            this.clearINVItemsTable();
         }
 
-        this.updatePISummary();
+        this.updateINVSummary();
     }
 
     /**
-     * Update PI currency display
+     * Update INV currency display
      */
-    updatePICurrency() {
-        this.updatePISummary();
+    updateINVCurrency() {
+        this.updateINVSummary();
     }
 
     /**
@@ -2493,7 +2493,7 @@ class SalesModule {
      */
     previewProductToAdd() {
         // Could show a preview - for now just log
-        const productSelect = $('#pi-product-select');
+        const productSelect = $('#inv-product-select');
         if (productSelect?.value) {
             const opt = productSelect.options[productSelect.selectedIndex];
             console.log('Selected product:', opt.dataset);
@@ -2501,25 +2501,25 @@ class SalesModule {
     }
 
     /**
-     * Export PI list to CSV
+     * Export INV list to CSV
      */
-    exportPIList() {
-        toast.info('Exporting PI list to CSV...');
+    exportINVList() {
+        toast.info('Exporting INV list to CSV...');
 
-        const csvContent = 'PI Number,PO Reference,Buyer,Issue Date,Subtotal,Credit,Total,Status\n' +
-            'PI-2024-0089,PO-2024-0156,Gourmet Foods Inc.,2024-02-01,$3400.00,$125.00,$3275.00,Sent\n' +
-            'PI-2024-0088,PO-2024-0142,European Delights,2024-01-30,$5760.00,$320.00,$5440.00,Draft\n' +
-            'PI-2024-0087,PO-2024-0138,Health Foods Co.,2024-01-28,$6900.00,$0.00,$6900.00,Paid';
+        const csvContent = 'INV Number,PO Reference,Buyer,Issue Date,Subtotal,Credit,Total,Status\n' +
+            'INV-2024-0089,PO-2024-0156,Gourmet Foods Inc.,2024-02-01,$3400.00,$125.00,$3275.00,Sent\n' +
+            'INV-2024-0088,PO-2024-0142,European Delights,2024-01-30,$5760.00,$320.00,$5440.00,Draft\n' +
+            'INV-2024-0087,PO-2024-0138,Health Foods Co.,2024-01-28,$6900.00,$0.00,$6900.00,Paid';
 
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'proforma_invoices_export.csv';
+        a.download = 'invoices_export.csv';
         a.click();
         URL.revokeObjectURL(url);
 
-        toast.success('PI list exported successfully!');
+        toast.success('INV list exported successfully!');
     }
 
     // ==================== Buyer Discovery ====================
@@ -3182,7 +3182,7 @@ class SalesModule {
         const typeLabels = {
             product: 'product',
             po: 'PO',
-            pi: 'PI',
+            inv: 'INV',
             account: 'account',
             credit: 'credit'
         };
@@ -3253,8 +3253,8 @@ class SalesModule {
                 setTimeout(() => this.viewPODetail(targetId), 300);
                 break;
             case 'pi':
-                window.showSection('pi-management');
-                setTimeout(() => this.viewPI(targetId), 300);
+                window.showSection('inv-management');
+                setTimeout(() => this.viewINV(targetId), 300);
                 break;
             case 'product':
                 window.showSection('product-list');
@@ -3320,37 +3320,37 @@ window.toggleCreditStatusFilter = (event) => salesModule.toggleCreditStatusFilte
 window.applyCreditStatusFilter = (status) => salesModule.applyCreditStatusFilter(status);
 window.sortCreditTable = (column) => salesModule.sortCreditTable(column);
 window.approveCredit = (creditId) => salesModule.approveCredit(creditId);
-window.loadPIList = () => salesModule.loadPIList();
+window.loadINVList = () => salesModule.loadINVList();
 window.loadCreditList = () => salesModule.loadCreditList();
 
-// PI (Proforma Invoice) Management global functions
-window.openPIModal = (piId) => salesModule.openPIModal(piId);
-window.closePIModal = () => salesModule.closePIModal();
-window.loadPOForPI = () => salesModule.loadPOForPI();
-window.updatePIItemTotal = (index) => salesModule.updatePIItemRow(index);
-window.updatePISummary = () => salesModule.updatePISummary();
-window.filterPIList = () => salesModule.filterPIList();
-window.viewPI = (piNumber) => salesModule.viewPI(piNumber);
-window.viewPIDetail = (piNumber) => salesModule.viewPIDetail(piNumber);
-window.editPI = (piNumber) => salesModule.editPI(piNumber);
-window.sendPI = (piNumber) => salesModule.sendPI(piNumber);
-window.downloadPI = (piNumber) => salesModule.downloadPI(piNumber);
+// INV (Invoice) Management global functions
+window.openINVModal = (invId) => salesModule.openINVModal(invId);
+window.closeINVModal = () => salesModule.closeINVModal();
+window.loadPOForINV = () => salesModule.loadPOForINV();
+window.updatePIItemTotal = (index) => salesModule.updateINVItemRow(index);
+window.updateINVSummary = () => salesModule.updateINVSummary();
+window.filterINVList = () => salesModule.filterINVList();
+window.viewINV = (invNumber) => salesModule.viewINV(invNumber);
+window.viewINVDetail = (invNumber) => salesModule.viewINVDetail(invNumber);
+window.editINV = (invNumber) => salesModule.editINV(invNumber);
+window.sendINV = (invNumber) => salesModule.sendINV(invNumber);
+window.downloadINV = (invNumber) => salesModule.downloadINV(invNumber);
 window.saveAsDraft = () => salesModule.saveAsDraft();
-window.createAndSendPI = () => salesModule.createAndSendPI();
-window.viewPOFromPI = (poNumber) => salesModule.viewPOFromPI(poNumber);
-window.exportPIList = () => salesModule.exportPIList();
-window.togglePIStatusFilter = (event) => salesModule.togglePIStatusFilter(event);
-window.applyPIStatusFilter = (status) => salesModule.applyPIStatusFilter(status);
-window.sortPITable = (column) => salesModule.sortPITable(column);
+window.createAndSendINV = () => salesModule.createAndSendINV();
+window.viewPOFromINV = (poNumber) => salesModule.viewPOFromINV(poNumber);
+window.exportINVList = () => salesModule.exportINVList();
+window.toggleINVStatusFilter = (event) => salesModule.toggleINVStatusFilter(event);
+window.applyINVStatusFilter = (status) => salesModule.applyINVStatusFilter(status);
+window.sortINVTable = (column) => salesModule.sortINVTable(column);
 
-// Enhanced PI functions
-window.togglePISource = (source) => salesModule.togglePISource(source);
-window.loadBuyerForPI = () => salesModule.loadBuyerForPI();
-window.addProductToPI = () => salesModule.addProductToPI();
-window.addManualItemToPI = () => salesModule.addManualItemToPI();
-window.updatePIItemRow = (index) => salesModule.updatePIItemRow(index);
-window.removePIItemRow = (index) => salesModule.removePIItemRow(index);
-window.updatePICurrency = () => salesModule.updatePICurrency();
+// Enhanced INV functions
+window.toggleINVSource = (source) => salesModule.toggleINVSource(source);
+window.loadBuyerForINV = () => salesModule.loadBuyerForINV();
+window.addProductToINV = () => salesModule.addProductToINV();
+window.addManualItemToINV = () => salesModule.addManualItemToINV();
+window.updateINVItemRow = (index) => salesModule.updateINVItemRow(index);
+window.removeINVItemRow = (index) => salesModule.removeINVItemRow(index);
+window.updateINVCurrency = () => salesModule.updateINVCurrency();
 window.previewProductToAdd = () => salesModule.previewProductToAdd();
 
 // Account Management global functions
@@ -3361,13 +3361,13 @@ window.viewAccount = (accountId) => salesModule.viewAccount(accountId);
 window.editAccount = (accountId) => salesModule.editAccount(accountId);
 window.filterAccounts = () => salesModule.filterAccounts();
 window.exportAccounts = () => salesModule.exportAccounts();
-window.createPIForAccount = (accountId) => salesModule.createPIForAccount(accountId);
+window.createINVForAccount = (accountId) => salesModule.createINVForAccount(accountId);
 window.viewAccountDetail = (accountId) => salesModule.viewAccountDetail(accountId);
 window.viewAccountProducts = (accountId) => salesModule.viewAccountProducts(accountId);
 window.closeAccountDrawer = () => salesModule.closeAccountDrawer();
 window.filterAccountsByMonth = () => salesModule.filterAccountsByMonth();
-window.toggleAccountPIFilter = (event) => salesModule.toggleAccountPIFilter(event);
-window.applyAccountPIFilter = (status) => salesModule.applyAccountPIFilter(status);
+window.toggleAccountINVFilter = (event) => salesModule.toggleAccountINVFilter(event);
+window.applyAccountINVFilter = (status) => salesModule.applyAccountINVFilter(status);
 window.sortAccountTable = (column) => salesModule.sortAccountTable(column);
 
 // PO Manual Registration global functions

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proforma Invoice - WeDealize Supplier Portal</title>
+    <title>Invoice - WeDealize Supplier Portal</title>
     <link rel="icon" type="image/png" href="./favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="design-system.css">
@@ -55,7 +55,7 @@
                                 <a class="wd-nav-item wd-nav-parent" onclick="toggleSubmenu(this)"><svg class="wd-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Sales</span><svg class="wd-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></a>
                                 <div class="wd-nav-submenu">
                                     <a class="wd-nav-item wd-nav-child" onclick="navigateTo('po-management')"><span>PO Management</span></a>
-                                    <a class="wd-nav-item wd-nav-child active" onclick="navigateTo('pi-management')"><span>PI Management</span></a>
+                                    <a class="wd-nav-item wd-nav-child active" onclick="navigateTo('inv-management')"><span>INV Management</span></a>
                                     <a class="wd-nav-item wd-nav-child" onclick="navigateTo('credit-management')"><span>Credit Management</span></a>
                                 </div>
                             </div>
@@ -73,20 +73,20 @@
                         <div class="compact-form">
                             <div class="page-header">
                                 <div class="page-header-left">
-                                    <a href="portal.html#pi-management" class="btn-back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
-                                    <h1 class="page-title">Create Proforma Invoice</h1>
+                                    <a href="portal.html#inv-management" class="btn-back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+                                    <h1 class="page-title">Add Invoice</h1>
                                 </div>
                                 <div class="page-header-actions">
-                                    <a href="portal.html#pi-management" class="wd-btn wd-btn-outline">Cancel</a>
-                                    <button type="button" onclick="savePIAsDraft()" class="wd-btn wd-btn-secondary">Save Draft</button>
-                                    <button type="submit" form="pi-edit-form" class="wd-btn wd-btn-primary">
+                                    <a href="portal.html#inv-management" class="wd-btn wd-btn-outline">Cancel</a>
+                                    <button type="button" onclick="saveINVAsDraft()" class="wd-btn wd-btn-secondary">Save Draft</button>
+                                    <button type="submit" form="inv-edit-form" class="wd-btn wd-btn-primary">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                                        Send PI
+                                        Send INV
                                     </button>
                                 </div>
                             </div>
 
-                            <form id="pi-edit-form">
+                            <form id="inv-edit-form">
                                 <div class="compact-grid">
                                     <!-- Left Column -->
                                     <div class="compact-column">
@@ -95,24 +95,24 @@
                                             <h3 class="compact-section-title"><span class="section-icon">📋</span> Basic Info</h3>
                                             <div class="compact-row">
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label">PI Number <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <input type="text" class="wd-input" id="pi-number" required placeholder="PI-2026-0001">
+                                                    <label class="wd-form-label">INV Number <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <input type="text" class="wd-input" id="inv-number" required placeholder="INV-2026-0001">
                                                 </div>
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label">PI Date <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <input type="date" class="wd-input" id="pi-date" required>
+                                                    <label class="wd-form-label">INV Date <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <input type="date" class="wd-input" id="inv-date" required>
                                                 </div>
                                             </div>
                                             <div class="wd-form-group" style="margin-top: 10px;">
                                                 <label class="wd-form-label">Source</label>
                                                 <div style="display: flex; gap: 16px; font-size: 0.8rem;">
-                                                    <label style="display: flex; align-items: center; gap: 4px;"><input type="radio" name="pi-source" value="po" checked onchange="togglePISource('po')"> From PO</label>
-                                                    <label style="display: flex; align-items: center; gap: 4px;"><input type="radio" name="pi-source" value="new" onchange="togglePISource('new')"> Manual</label>
+                                                    <label style="display: flex; align-items: center; gap: 4px;"><input type="radio" name="inv-source" value="po" checked onchange="toggleINVSource('po')"> From PO</label>
+                                                    <label style="display: flex; align-items: center; gap: 4px;"><input type="radio" name="inv-source" value="new" onchange="toggleINVSource('new')"> Manual</label>
                                                 </div>
                                             </div>
-                                            <div class="wd-form-group" id="pi-po-selection" style="margin-top: 10px;">
+                                            <div class="wd-form-group" id="inv-po-selection" style="margin-top: 10px;">
                                                 <label class="wd-form-label">Select PO</label>
-                                                <select class="wd-input wd-select" id="pi-po-select" onchange="loadPOForPI()">
+                                                <select class="wd-input wd-select" id="inv-po-select" onchange="loadPOForINV()">
                                                     <option value="">Select PO...</option>
                                                     <option value="PO-2024-0156">PO-2024-0156 - ABC Distribution</option>
                                                     <option value="PO-2024-0142">PO-2024-0142 - XYZ Foods</option>
@@ -126,7 +126,7 @@
                                             <div class="compact-row">
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Company <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <select class="wd-input wd-select" id="pi-buyer-select" required onchange="loadBuyerForPI()">
+                                                    <select class="wd-input wd-select" id="inv-buyer-select" required onchange="loadBuyerForINV()">
                                                         <option value="">Select buyer...</option>
                                                         <option value="ACC-001">ABC Distribution</option>
                                                         <option value="ACC-002">XYZ Foods Ltd</option>
@@ -134,17 +134,17 @@
                                                 </div>
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Contact</label>
-                                                    <input type="text" class="wd-input" id="pi-buyer-contact" placeholder="Contact name">
+                                                    <input type="text" class="wd-input" id="inv-buyer-contact" placeholder="Contact name">
                                                 </div>
                                             </div>
                                             <div class="compact-row">
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Email</label>
-                                                    <input type="email" class="wd-input" id="pi-buyer-email" placeholder="email@company.com">
+                                                    <input type="email" class="wd-input" id="inv-buyer-email" placeholder="email@company.com">
                                                 </div>
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Phone</label>
-                                                    <input type="tel" class="wd-input" id="pi-buyer-phone" placeholder="+1 234 567 8900">
+                                                    <input type="tel" class="wd-input" id="inv-buyer-phone" placeholder="+1 234 567 8900">
                                                 </div>
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@
                                             <div class="compact-row-3">
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Currency</label>
-                                                    <select class="wd-input wd-select" id="pi-currency">
+                                                    <select class="wd-input wd-select" id="inv-currency">
                                                         <option value="USD">USD</option>
                                                         <option value="EUR">EUR</option>
                                                         <option value="KRW">KRW</option>
@@ -166,7 +166,7 @@
                                                 </div>
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Incoterms</label>
-                                                    <select class="wd-input wd-select" id="pi-incoterms">
+                                                    <select class="wd-input wd-select" id="inv-incoterms">
                                                         <option value="FOB">FOB</option>
                                                         <option value="CIF">CIF</option>
                                                         <option value="EXW">EXW</option>
@@ -175,7 +175,7 @@
                                                 </div>
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Payment</label>
-                                                    <select class="wd-input wd-select" id="pi-payment-terms">
+                                                    <select class="wd-input wd-select" id="inv-payment-terms">
                                                         <option value="NET30">Net 30</option>
                                                         <option value="NET60">Net 60</option>
                                                         <option value="TT">T/T</option>
@@ -185,12 +185,12 @@
                                             </div>
                                             <div class="compact-row">
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label">Validity</label>
-                                                    <input type="date" class="wd-input" id="pi-validity">
+                                                    <label class="wd-form-label">Due Date</label>
+                                                    <input type="date" class="wd-input" id="inv-due-date">
                                                 </div>
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Delivery Date</label>
-                                                    <input type="date" class="wd-input" id="pi-delivery-date">
+                                                    <input type="date" class="wd-input" id="inv-delivery-date">
                                                 </div>
                                             </div>
                                         </div>
@@ -198,7 +198,7 @@
                                         <!-- Available Credits -->
                                         <div class="compact-section">
                                             <h3 class="compact-section-title"><span class="section-icon">💳</span> Available Credits</h3>
-                                            <div id="pi-available-credits" style="max-height: 100px; overflow-y: auto;">
+                                            <div id="inv-available-credits" style="max-height: 100px; overflow-y: auto;">
                                                 <p style="font-size: 0.75rem; color: var(--wd-gray-400); text-align: center; padding: 12px;">Select buyer to see available credits</p>
                                             </div>
                                         </div>
@@ -207,7 +207,7 @@
                                         <div class="compact-section">
                                             <h3 class="compact-section-title"><span class="section-icon">📝</span> Notes</h3>
                                             <div class="wd-form-group">
-                                                <textarea class="wd-input wd-textarea" id="pi-notes" rows="2" placeholder="Payment terms, delivery instructions..."></textarea>
+                                                <textarea class="wd-input wd-textarea" id="inv-notes" rows="2" placeholder="Payment terms, delivery instructions..."></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -216,7 +216,7 @@
                                     <div class="compact-section items-section">
                                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                             <h3 class="compact-section-title" style="margin-bottom: 0;"><span class="section-icon">📦</span> Invoice Items</h3>
-                                            <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="addPIItemRow()" style="padding: 4px 8px; font-size: 0.75rem;">+ Add Item</button>
+                                            <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="addINVItemRow()" style="padding: 4px 8px; font-size: 0.75rem;">+ Add Item</button>
                                         </div>
                                         <table class="wd-table compact-table">
                                             <thead>
@@ -229,21 +229,21 @@
                                                     <th style="width:8%"></th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="pi-items-tbody">
+                                            <tbody id="inv-items-tbody">
                                                 <tr data-row="0">
-                                                    <td><input type="text" class="wd-input pi-item-name" placeholder="Product name"></td>
-                                                    <td><input type="number" class="wd-input pi-item-qty" min="1" value="1" onchange="calculatePIItemSubtotal(0)"></td>
-                                                    <td><select class="wd-select pi-item-unit"><option>pcs</option><option>boxes</option><option>cases</option><option>kg</option></select></td>
-                                                    <td><input type="number" class="wd-input pi-item-price" min="0" step="0.01" value="0" onchange="calculatePIItemSubtotal(0)"></td>
-                                                    <td class="pi-item-subtotal" style="text-align:right;font-weight:600;">0.00</td>
-                                                    <td><button type="button" class="wd-btn-icon" onclick="removePIItemRow(0)" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
+                                                    <td><input type="text" class="wd-input inv-item-name" placeholder="Product name"></td>
+                                                    <td><input type="number" class="wd-input inv-item-qty" min="1" value="1" onchange="calculateINVItemSubtotal(0)"></td>
+                                                    <td><select class="wd-select inv-item-unit"><option>pcs</option><option>boxes</option><option>cases</option><option>kg</option></select></td>
+                                                    <td><input type="number" class="wd-input inv-item-price" min="0" step="0.01" value="0" onchange="calculateINVItemSubtotal(0)"></td>
+                                                    <td class="inv-item-subtotal" style="text-align:right;font-weight:600;">0.00</td>
+                                                    <td><button type="button" class="wd-btn-icon" onclick="removeINVItemRow(0)" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                         <div class="total-box">
-                                            <div class="summary-row"><span>Subtotal:</span><span id="pi-subtotal">$0.00</span></div>
-                                            <div class="summary-row" style="color: var(--wd-success);"><span>Credit Applied:</span><span id="pi-credit-discount">-$0.00</span></div>
-                                            <div class="summary-row total"><span>Total:</span><span id="pi-total">$0.00</span></div>
+                                            <div class="summary-row"><span>Subtotal:</span><span id="inv-subtotal">$0.00</span></div>
+                                            <div class="summary-row" style="color: var(--wd-success);"><span>Credit Applied:</span><span id="inv-credit-discount">-$0.00</span></div>
+                                            <div class="summary-row total"><span>Total:</span><span id="inv-total">$0.00</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -257,7 +257,7 @@
 
     <div id="toast-container"></div>
     <script src="i18n.js"></script>
-    <script src="js/pi-edit.js"></script>
+    <script src="js/inv-edit.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('supplier_token');
@@ -266,7 +266,7 @@
             document.getElementById('sidebar-user-name').textContent = localStorage.getItem('user_name') || 'User';
             document.getElementById('sidebar-user-email').textContent = localStorage.getItem('user_email') || '';
             document.getElementById('user-menu').style.display = 'flex';
-            document.getElementById('pi-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('inv-date').value = new Date().toISOString().split('T')[0];
         });
         function toggleLanguageDropdown() { document.getElementById('language-menu').classList.toggle('show'); }
         function toggleSidebar() { document.querySelector('.wd-sidebar').classList.toggle('collapsed'); }

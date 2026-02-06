@@ -499,8 +499,8 @@
                                     <a class="wd-nav-item wd-nav-child" data-section="po-management" onclick="showSection('po-management')">
                                         <span data-i18n="dashboard.poManagement">PO Management</span>
                                     </a>
-                                    <a class="wd-nav-item wd-nav-child" data-section="pi-management" onclick="showSection('pi-management')">
-                                        <span data-i18n="dashboard.piManagement">PI Management</span>
+                                    <a class="wd-nav-item wd-nav-child" data-section="inv-management" onclick="showSection('inv-management')">
+                                        <span data-i18n="dashboard.invManagement">INV Management</span>
                                     </a>
                                     <a class="wd-nav-item wd-nav-child" data-section="credit-management" onclick="showSection('credit-management')">
                                         <span data-i18n="dashboard.creditManagement">Credit Management</span>
@@ -619,12 +619,12 @@
                                                     </div>
                                                     <span class="wd-action-badge wd-action-badge-urgent">3</span>
                                                 </a>
-                                                <a href="#" class="wd-action-item" onclick="showSection('pi-management'); return false;">
+                                                <a href="#" class="wd-action-item" onclick="showSection('inv-management'); return false;">
                                                     <div class="wd-action-icon wd-action-icon-info">
                                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                                                     </div>
                                                     <div class="wd-action-content">
-                                                        <span class="wd-action-title" data-i18n="dashboard.draftPI">Draft PI</span>
+                                                        <span class="wd-action-title" data-i18n="dashboard.draftINV">Draft INV</span>
                                                         <span class="wd-action-desc">2 invoices pending to send</span>
                                                     </div>
                                                     <span class="wd-action-badge">2</span>
@@ -657,9 +657,9 @@
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
                                                     <span data-i18n="dashboard.registerPO">Register PO</span>
                                                 </button>
-                                                <button class="wd-quick-action-btn" onclick="openPIModal()">
+                                                <button class="wd-quick-action-btn" onclick="openINVModal()">
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                                                    <span data-i18n="dashboard.createPI">Create PI</span>
+                                                    <span data-i18n="dashboard.addINV">Add INV</span>
                                                 </button>
                                                 <button class="wd-quick-action-btn" onclick="showSection('catalog-registration')">
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -685,7 +685,7 @@
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
                                                     </div>
                                                     <div class="wd-activity-content">
-                                                        <span class="wd-activity-title">PI #PI-2024-0089 sent</span>
+                                                        <span class="wd-activity-title">INV #INV-2024-0089 sent</span>
                                                         <span class="wd-activity-meta">ABC Distribution · 2 hours ago</span>
                                                     </div>
                                                 </div>
@@ -743,11 +743,11 @@
                                                 </div>
                                                 <div class="wd-performance-item">
                                                     <span class="wd-performance-value">8</span>
-                                                    <span class="wd-performance-label" data-i18n="dashboard.piIssued">PI Issued</span>
+                                                    <span class="wd-performance-label" data-i18n="dashboard.invIssued">INV Issued</span>
                                                 </div>
                                                 <div class="wd-performance-item">
                                                     <span class="wd-performance-value">$38,200</span>
-                                                    <span class="wd-performance-label" data-i18n="dashboard.piAmount">PI Amount</span>
+                                                    <span class="wd-performance-label" data-i18n="dashboard.invAmount">INV Amount</span>
                                                 </div>
                                             </div>
                                             <!-- Top Buyers inline -->
@@ -785,7 +785,7 @@
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                                                 <span data-i18n="dashboard.paymentCollection">Payment Collection</span>
                                             </h3>
-                                            <a href="#" class="wd-card-link" onclick="showSection('pi-management'); return false;" data-i18n="common.viewAll">View All</a>
+                                            <a href="#" class="wd-card-link" onclick="showSection('inv-management'); return false;" data-i18n="common.viewAll">View All</a>
                                         </div>
                                         <div class="wd-card-body">
                                             <div class="wd-progress-section">
@@ -1867,26 +1867,26 @@
                             </div>
                         </div>
 
-                        <!-- PI Management -->
-                        <div class="dashboard-panel" id="panel-pi-management">
+                        <!-- INV Management -->
+                        <div class="dashboard-panel" id="panel-inv-management">
                             <!-- Page Header -->
                             <div class="wd-page-header">
                                 <div class="wd-page-header-content">
-                                    <h2 class="wd-page-title" data-i18n="pi.title">PI Management</h2>
-                                    <p class="wd-page-subtitle" data-i18n="pi.subtitle">Create and manage Proforma Invoices based on Purchase Orders</p>
+                                    <h2 class="wd-page-title" data-i18n="inv.title">INV Management</h2>
+                                    <p class="wd-page-subtitle" data-i18n="inv.subtitle">Create and manage Invoices based on Purchase Orders</p>
                                 </div>
                                 <div class="wd-page-actions">
-                                    <button class="wd-btn wd-btn-primary" onclick="openPIModal()">
+                                    <button class="wd-btn wd-btn-primary" onclick="openINVModal()">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                                        <span data-i18n="pi.createPI">Create PI</span>
+                                        <span data-i18n="inv.addINV">Add INV</span>
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Tabs -->
                             <div class="wd-tabs" style="padding: 0 24px;">
-                                <button class="wd-tab active" onclick="filterPIByTab('active')" data-i18n="pi.activePI">Active PIs</button>
-                                <button class="wd-tab" onclick="filterPIByTab('cancelled')" data-i18n="pi.cancelledPI">Cancelled PIs</button>
+                                <button class="wd-tab active" onclick="filterINVByTab('active')" data-i18n="inv.activeINV">Active INVs</button>
+                                <button class="wd-tab" onclick="filterINVByTab('cancelled')" data-i18n="inv.cancelledINV">Cancelled INVs</button>
                             </div>
 
                             <!-- Filter Bar -->
@@ -1897,93 +1897,93 @@
                                         <circle cx="11" cy="11" r="8"></circle>
                                         <path d="m21 21-4.3-4.3"></path>
                                     </svg>
-                                    <input type="text" id="pi-search" class="wd-input" placeholder="Search PI#, PO#, Buyer..." style="width: 280px;" oninput="filterPIList()">
+                                    <input type="text" id="inv-search" class="wd-input" placeholder="Search INV#, PO#, Buyer..." style="width: 280px;" oninput="filterINVList()">
                                 </div>
                             </div>
 
                             <!-- Hidden filter value holder -->
-                            <input type="hidden" id="pi-status-filter" value="all">
-                            <input type="hidden" id="pi-tab-filter" value="active">
+                            <input type="hidden" id="inv-status-filter" value="all">
+                            <input type="hidden" id="inv-tab-filter" value="active">
 
-                            <!-- PI Table -->
+                            <!-- INV Table -->
                             <div class="wd-section-x">
                                 <table class="wd-table">
                                     <thead>
                                         <tr>
-                                            <th class="sortable" onclick="sortPITable('piNumber')">
-                                                <span data-i18n="pi.piNumber">PI Number</span>
+                                            <th class="sortable" onclick="sortINVTable('invNumber')">
+                                                <span data-i18n="inv.invNumber">INV Number</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
                                             <th class="th-filter">
-                                                <span data-i18n="pi.status">Status</span>
+                                                <span data-i18n="inv.status">Status</span>
                                                 <div class="wd-column-filter">
-                                                    <button class="wd-filter-btn" onclick="togglePIStatusFilter(event)">
+                                                    <button class="wd-filter-btn" onclick="toggleINVStatusFilter(event)">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                                                         </svg>
                                                     </button>
-                                                    <div class="wd-filter-dropdown" id="pi-status-filter-dropdown">
+                                                    <div class="wd-filter-dropdown" id="inv-status-filter-dropdown">
                                                         <label class="wd-filter-option">
-                                                            <input type="radio" name="pi-status-filter" value="all" checked onchange="applyPIStatusFilter('all')">
+                                                            <input type="radio" name="inv-status-filter" value="all" checked onchange="applyINVStatusFilter('all')">
                                                             <span>All</span>
                                                         </label>
                                                         <label class="wd-filter-option">
-                                                            <input type="radio" name="pi-status-filter" value="draft" onchange="applyPIStatusFilter('draft')">
+                                                            <input type="radio" name="inv-status-filter" value="draft" onchange="applyINVStatusFilter('draft')">
                                                             <span>Draft</span>
                                                         </label>
                                                         <label class="wd-filter-option">
-                                                            <input type="radio" name="pi-status-filter" value="sent" onchange="applyPIStatusFilter('sent')">
+                                                            <input type="radio" name="inv-status-filter" value="sent" onchange="applyINVStatusFilter('sent')">
                                                             <span>Sent</span>
                                                         </label>
                                                     </div>
                                                 </div>
                                             </th>
                                             <th class="th-filter">
-                                                <span data-i18n="pi.payment">Payment</span>
+                                                <span data-i18n="inv.payment">Payment</span>
                                                 <div class="wd-column-filter">
-                                                    <button class="wd-filter-btn" onclick="togglePIPaymentFilter(event)">
+                                                    <button class="wd-filter-btn" onclick="toggleINVPaymentFilter(event)">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                                                         </svg>
                                                     </button>
-                                                    <div class="wd-filter-dropdown" id="pi-payment-filter-dropdown">
+                                                    <div class="wd-filter-dropdown" id="inv-payment-filter-dropdown">
                                                         <label class="wd-filter-option">
-                                                            <input type="radio" name="pi-payment-filter" value="all" checked onchange="applyPIPaymentFilter('all')">
+                                                            <input type="radio" name="inv-payment-filter" value="all" checked onchange="applyINVPaymentFilter('all')">
                                                             <span>All</span>
                                                         </label>
                                                         <label class="wd-filter-option">
-                                                            <input type="radio" name="pi-payment-filter" value="paid" onchange="applyPIPaymentFilter('paid')">
+                                                            <input type="radio" name="inv-payment-filter" value="paid" onchange="applyINVPaymentFilter('paid')">
                                                             <span>Paid</span>
                                                         </label>
                                                         <label class="wd-filter-option">
-                                                            <input type="radio" name="pi-payment-filter" value="unpaid" onchange="applyPIPaymentFilter('unpaid')">
+                                                            <input type="radio" name="inv-payment-filter" value="unpaid" onchange="applyINVPaymentFilter('unpaid')">
                                                             <span>Unpaid</span>
                                                         </label>
                                                     </div>
                                                 </div>
                                             </th>
-                                            <th data-i18n="pi.poReference">PO Reference</th>
-                                            <th class="sortable" onclick="sortPITable('buyer')">
-                                                <span data-i18n="pi.buyer">Buyer</span>
+                                            <th data-i18n="inv.poReference">PO Reference</th>
+                                            <th class="sortable" onclick="sortINVTable('buyer')">
+                                                <span data-i18n="inv.buyer">Buyer</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
-                                            <th class="sortable" onclick="sortPITable('totalAmount')">
-                                                <span data-i18n="pi.totalAmount">Total Amount</span>
+                                            <th class="sortable" onclick="sortINVTable('totalAmount')">
+                                                <span data-i18n="inv.totalAmount">Total Amount</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
-                                            <th class="sortable" onclick="sortPITable('issueDate')">
-                                                <span data-i18n="pi.issueDate">Issue Date</span>
+                                            <th class="sortable" onclick="sortINVTable('issueDate')">
+                                                <span data-i18n="inv.issueDate">Issue Date</span>
                                                 <span class="sort-icon">↕</span>
                                             </th>
                                             <th data-i18n="sales.createdBy">Created By</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="pi-table-body">
-                                        <tr data-status="draft" data-payment="unpaid" data-tab="active" data-pi="PI-2026-0089" onclick="viewPIDetail('PI-2026-0089')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">PI-2026-0089</span></td>
+                                    <tbody id="inv-table-body">
+                                        <tr data-status="draft" data-payment="unpaid" data-tab="active" data-inv="INV-2026-0089" onclick="viewINVDetail('INV-2026-0089')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">INV-2026-0089</span></td>
                                             <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
                                             <td><span class="wd-badge wd-badge-outline">-</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0156')">PO-2026-0156</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0156')">PO-2026-0156</a></td>
                                             <td>ABC Distribution</td>
                                             <td>$3,125.00</td>
                                             <td>2026-02-04</td>
@@ -1994,8 +1994,8 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr data-status="sent" data-payment="unpaid" data-tab="active" data-pi="PI-2026-0088" onclick="viewPIDetail('PI-2026-0088')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">PI-2026-0088</span></td>
+                                        <tr data-status="sent" data-payment="unpaid" data-tab="active" data-inv="INV-2026-0088" onclick="viewINVDetail('INV-2026-0088')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">INV-2026-0088</span></td>
                                             <td><span class="wd-badge wd-badge-primary">Sent</span></td>
                                             <td>
                                                 <span class="wd-badge wd-badge-warning-light">
@@ -2003,7 +2003,7 @@
                                                     Unpaid
                                                 </span>
                                             </td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0142')">PO-2026-0142</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0142')">PO-2026-0142</a></td>
                                             <td>XYZ Foods Ltd</td>
                                             <td>$8,130.00</td>
                                             <td>2026-02-01</td>
@@ -2014,8 +2014,8 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr data-status="sent" data-payment="paid" data-tab="active" data-pi="PI-2026-0087" onclick="viewPIDetail('PI-2026-0087')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">PI-2026-0087</span></td>
+                                        <tr data-status="sent" data-payment="paid" data-tab="active" data-inv="INV-2026-0087" onclick="viewINVDetail('INV-2026-0087')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">INV-2026-0087</span></td>
                                             <td><span class="wd-badge wd-badge-primary">Sent</span></td>
                                             <td>
                                                 <span class="wd-badge wd-badge-success-light">
@@ -2023,7 +2023,7 @@
                                                     Paid
                                                 </span>
                                             </td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0138')">PO-2026-0138</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0138')">PO-2026-0138</a></td>
                                             <td>Global Trade Co</td>
                                             <td>$12,800.00</td>
                                             <td>2026-01-28</td>
@@ -2034,8 +2034,8 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr data-status="sent" data-payment="paid" data-tab="active" data-pi="PI-2026-0086" onclick="viewPIDetail('PI-2026-0086')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">PI-2026-0086</span></td>
+                                        <tr data-status="sent" data-payment="paid" data-tab="active" data-inv="INV-2026-0086" onclick="viewINVDetail('INV-2026-0086')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">INV-2026-0086</span></td>
                                             <td><span class="wd-badge wd-badge-primary">Sent</span></td>
                                             <td>
                                                 <span class="wd-badge wd-badge-success-light">
@@ -2043,7 +2043,7 @@
                                                     Paid
                                                 </span>
                                             </td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0130')">PO-2026-0130</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0130')">PO-2026-0130</a></td>
                                             <td>ABC Distribution</td>
                                             <td>$5,420.00</td>
                                             <td>2026-01-20</td>
@@ -2054,8 +2054,8 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr data-status="sent" data-payment="unpaid" data-tab="active" data-pi="PI-2026-0085" onclick="viewPIDetail('PI-2026-0085')" class="wd-cursor-pointer">
-                                            <td><span class="wd-text-mono">PI-2026-0085</span></td>
+                                        <tr data-status="sent" data-payment="unpaid" data-tab="active" data-inv="INV-2026-0085" onclick="viewINVDetail('INV-2026-0085')" class="wd-cursor-pointer">
+                                            <td><span class="wd-text-mono">INV-2026-0085</span></td>
                                             <td><span class="wd-badge wd-badge-primary">Sent</span></td>
                                             <td>
                                                 <span class="wd-badge wd-badge-warning-light">
@@ -2063,7 +2063,7 @@
                                                     Unpaid
                                                 </span>
                                             </td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0125')">PO-2026-0125</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0125')">PO-2026-0125</a></td>
                                             <td>Fresh Foods Inc</td>
                                             <td>$1,302.00</td>
                                             <td>2026-01-15</td>
@@ -2074,12 +2074,12 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <!-- Cancelled PIs (hidden by default) -->
-                                        <tr data-status="cancelled" data-payment="unpaid" data-tab="cancelled" data-pi="PI-2026-0082" onclick="viewPIDetail('PI-2026-0082')" class="wd-cursor-pointer" style="display: none;">
-                                            <td><span class="wd-text-mono">PI-2026-0082</span></td>
+                                        <!-- Cancelled INVs (hidden by default) -->
+                                        <tr data-status="cancelled" data-payment="unpaid" data-tab="cancelled" data-inv="INV-2026-0082" onclick="viewINVDetail('INV-2026-0082')" class="wd-cursor-pointer" style="display: none;">
+                                            <td><span class="wd-text-mono">INV-2026-0082</span></td>
                                             <td><span class="wd-badge wd-badge-danger">Cancelled</span></td>
                                             <td><span class="wd-badge wd-badge-outline">-</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromPI('PO-2026-0118')">PO-2026-0118</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewPOFromINV('PO-2026-0118')">PO-2026-0118</a></td>
                                             <td>Metro Imports</td>
                                             <td>$4,500.00</td>
                                             <td>2026-01-10</td>
@@ -2095,38 +2095,38 @@
                             </div>
                         </div>
 
-                        <!-- PI Create/Edit Modal -->
-                        <div class="wd-modal-overlay" id="pi-modal" style="display: none;">
+                        <!-- INV Create/Edit Modal (Legacy - now using dedicated page) -->
+                        <div class="wd-modal-overlay" id="inv-modal" style="display: none;">
                             <div class="wd-modal wd-modal-xl">
                                 <div class="wd-modal-header">
-                                    <h3 class="wd-modal-title" id="pi-modal-title" data-i18n="pi.createPI">Create Proforma Invoice</h3>
-                                    <button class="wd-modal-close" onclick="closePIModal()">
+                                    <h3 class="wd-modal-title" id="inv-modal-title" data-i18n="inv.addINV">Add Invoice</h3>
+                                    <button class="wd-modal-close" onclick="closeINVModal()">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                                     </button>
                                 </div>
                                 <div class="wd-modal-body" style="max-height: 70vh; overflow-y: auto;">
-                                    <form id="pi-form">
+                                    <form id="inv-form">
                                         <!-- Source Selection: PO or New -->
                                         <div class="wd-form-section">
                                             <h4 class="wd-form-section-title">
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                                <span data-i18n="pi.piSource">PI Source</span>
+                                                <span data-i18n="inv.invSource">INV Source</span>
                                             </h4>
                                             <div class="wd-radio-group" style="display: flex; gap: 24px; margin-bottom: 16px;">
                                                 <label class="wd-radio-label">
-                                                    <input type="radio" name="pi-source" value="po" checked onchange="togglePISource('po')">
-                                                    <span class="wd-radio-text" data-i18n="pi.fromPO">From Purchase Order</span>
+                                                    <input type="radio" name="inv-source" value="po" checked onchange="toggleINVSource('po')">
+                                                    <span class="wd-radio-text" data-i18n="inv.fromPO">From Purchase Order</span>
                                                 </label>
                                                 <label class="wd-radio-label">
-                                                    <input type="radio" name="pi-source" value="new" onchange="togglePISource('new')">
-                                                    <span class="wd-radio-text" data-i18n="pi.newPI">New PI (Manual)</span>
+                                                    <input type="radio" name="inv-source" value="new" onchange="toggleINVSource('new')">
+                                                    <span class="wd-radio-text" data-i18n="inv.newINV">New INV (Manual)</span>
                                                 </label>
                                             </div>
 
                                             <!-- PO Selection (when source=po) -->
-                                            <div id="pi-po-selection" class="wd-form-group">
-                                                <label class="wd-form-label" data-i18n="pi.selectPO">Select Purchase Order</label>
-                                                <select class="wd-select" id="pi-po-select" onchange="loadPOForPI()">
+                                            <div id="inv-po-selection" class="wd-form-group">
+                                                <label class="wd-form-label" data-i18n="inv.selectPO">Select Purchase Order</label>
+                                                <select class="wd-select" id="inv-po-select" onchange="loadPOForINV()">
                                                     <option value="">Select a PO to load...</option>
                                                     <option value="PO-2024-0156" data-buyer="ACC-001">PO-2024-0156 - ABC Distribution (Feb 01, 2024)</option>
                                                     <option value="PO-2024-0142" data-buyer="ACC-002">PO-2024-0142 - XYZ Foods Ltd (Jan 25, 2024)</option>
@@ -2136,51 +2136,51 @@
                                         </div>
 
                                         <!-- Buyer Selection -->
-                                        <div class="wd-form-section" id="pi-buyer-section">
+                                        <div class="wd-form-section" id="inv-buyer-section">
                                             <h4 class="wd-form-section-title">
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                                <span data-i18n="pi.buyerInfo">Buyer Information</span>
+                                                <span data-i18n="inv.buyerInfo">Buyer Information</span>
                                             </h4>
                                             <div class="wd-form-row">
                                                 <div class="wd-form-group wd-flex-2">
-                                                    <label class="wd-form-label" data-i18n="pi.selectBuyer">Select Buyer *</label>
-                                                    <select class="wd-select" id="pi-buyer-select" required onchange="loadBuyerForPI()">
+                                                    <label class="wd-form-label" data-i18n="inv.selectBuyer">Select Buyer *</label>
+                                                    <select class="wd-select" id="inv-buyer-select" required onchange="loadBuyerForINV()">
                                                         <option value="">Select a buyer...</option>
                                                     </select>
                                                 </div>
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label" data-i18n="pi.piDate">PI Date</label>
-                                                    <input type="date" class="wd-input" id="pi-date">
+                                                    <label class="wd-form-label" data-i18n="inv.invDate">INV Date</label>
+                                                    <input type="date" class="wd-input" id="inv-date">
                                                 </div>
                                             </div>
-                                            <div class="wd-buyer-info-card" id="pi-buyer-info-card" style="display: none;">
+                                            <div class="wd-buyer-info-card" id="inv-buyer-info-card" style="display: none;">
                                                 <div class="wd-info-row">
                                                     <span class="wd-info-label">Company:</span>
-                                                    <span class="wd-info-value" id="pi-buyer-company-display">-</span>
+                                                    <span class="wd-info-value" id="inv-buyer-company-display">-</span>
                                                 </div>
                                                 <div class="wd-info-row">
                                                     <span class="wd-info-label">Country:</span>
-                                                    <span class="wd-info-value" id="pi-buyer-country-display">-</span>
+                                                    <span class="wd-info-value" id="inv-buyer-country-display">-</span>
                                                 </div>
                                                 <div class="wd-info-row">
                                                     <span class="wd-info-label">Available Credit:</span>
-                                                    <span class="wd-info-value wd-text-success" id="pi-buyer-credit-display">$0.00</span>
+                                                    <span class="wd-info-value wd-text-success" id="inv-buyer-credit-display">$0.00</span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Order Items -->
-                                        <div class="wd-form-section" id="pi-items-section">
+                                        <div class="wd-form-section" id="inv-items-section">
                                             <h4 class="wd-form-section-title">
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                                                <span data-i18n="pi.orderItems">Order Items</span>
+                                                <span data-i18n="inv.orderItems">Order Items</span>
                                                 <span class="wd-badge wd-badge-info" style="margin-left: 8px; font-weight: normal;">Only completed products</span>
                                             </h4>
 
                                             <!-- Product Search/Add (Only Completed Products) -->
                                             <div class="wd-product-add-row" style="display: flex; gap: 12px; margin-bottom: 16px;">
                                                 <div class="wd-form-group" style="flex: 3; margin-bottom: 0;">
-                                                    <select class="wd-select" id="pi-product-select" onchange="previewProductToAdd()">
+                                                    <select class="wd-select" id="inv-product-select" onchange="previewProductToAdd()">
                                                         <option value="">Select a completed product to add...</option>
                                                         <!-- Only COMPLETED status products are shown -->
                                                         <option value="PROD-001" data-name="Extra Virgin Olive Oil 500ml" data-price="25.00" data-unit="bottles">Extra Virgin Olive Oil 500ml (PROD-001)</option>
@@ -2191,34 +2191,34 @@
                                                         <option value="PROD-006" data-name="Dried Pasta 500g" data-price="12.00" data-unit="boxes">Dried Pasta 500g (PROD-006)</option>
                                                     </select>
                                                 </div>
-                                                <button type="button" class="wd-btn wd-btn-primary" onclick="addProductToPI()" style="white-space: nowrap;">
+                                                <button type="button" class="wd-btn wd-btn-primary" onclick="addProductToINV()" style="white-space: nowrap;">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                                                    <span data-i18n="pi.addProduct">Add Product</span>
+                                                    <span data-i18n="inv.addProduct">Add Product</span>
                                                 </button>
                                             </div>
                                             <p class="wd-text-muted wd-text-sm" style="margin-bottom: 16px;">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                                                Only products with "Completed" status can be added. <a href="#" class="wd-link" onclick="showSection('product-list'); closePIModal(); return false;">Manage products →</a>
+                                                Only products with "Completed" status can be added. <a href="#" class="wd-link" onclick="showSection('product-list'); closeINVModal(); return false;">Manage products →</a>
                                             </p>
 
                                             <!-- Items Table -->
                                             <div class="wd-table-container">
-                                                <table class="wd-table wd-table-sm" id="pi-items-table">
+                                                <table class="wd-table wd-table-sm" id="inv-items-table">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width: 35%;" data-i18n="pi.product">Product</th>
-                                                            <th style="width: 12%;" data-i18n="pi.quantity">Qty</th>
-                                                            <th style="width: 12%;" data-i18n="pi.unit">Unit</th>
-                                                            <th style="width: 15%;" data-i18n="pi.unitPrice">Unit Price</th>
-                                                            <th style="width: 15%;" data-i18n="pi.amount">Amount</th>
+                                                            <th style="width: 35%;" data-i18n="inv.product">Product</th>
+                                                            <th style="width: 12%;" data-i18n="inv.quantity">Qty</th>
+                                                            <th style="width: 12%;" data-i18n="inv.unit">Unit</th>
+                                                            <th style="width: 15%;" data-i18n="inv.unitPrice">Unit Price</th>
+                                                            <th style="width: 15%;" data-i18n="inv.amount">Amount</th>
                                                             <th style="width: 50px;"></th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="pi-items-tbody">
+                                                    <tbody id="inv-items-tbody">
                                                         <tr class="wd-empty-row">
                                                             <td colspan="6" class="wd-text-center wd-text-muted" style="padding: 24px;">
                                                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 8px; opacity: 0.5;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
-                                                                <div data-i18n="pi.noItemsYet">No items added yet. Select a PO or add products above.</div>
+                                                                <div data-i18n="inv.noItemsYet">No items added yet. Select a PO or add products above.</div>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -2227,47 +2227,47 @@
                                         </div>
 
                                         <!-- Credit Application (Buyer-based) -->
-                                        <div class="wd-form-section" id="pi-credit-section" style="display: none;">
+                                        <div class="wd-form-section" id="inv-credit-section" style="display: none;">
                                             <h4 class="wd-form-section-title">
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                                                <span data-i18n="pi.applyCredit">Apply Credit</span>
+                                                <span data-i18n="inv.applyCredit">Apply Credit</span>
                                                 <span class="wd-badge wd-badge-info" id="available-credit-badge">$0.00 available</span>
                                             </h4>
-                                            <p class="wd-text-muted wd-text-sm wd-mb-3" data-i18n="pi.creditBuyerNote">Available credits from this buyer's previous invoices</p>
-                                            <div class="wd-credit-list" id="pi-available-credits">
+                                            <p class="wd-text-muted wd-text-sm wd-mb-3" data-i18n="inv.creditBuyerNote">Available credits from this buyer's previous invoices</p>
+                                            <div class="wd-credit-list" id="inv-available-credits">
                                                 <!-- Credits will be loaded based on Buyer -->
                                             </div>
                                         </div>
 
-                                        <!-- PI Summary -->
-                                        <div class="wd-form-section" id="pi-summary-section">
-                                            <h4 class="wd-form-section-title" data-i18n="pi.summary">Summary</h4>
+                                        <!-- INV Summary -->
+                                        <div class="wd-form-section" id="inv-summary-section">
+                                            <h4 class="wd-form-section-title" data-i18n="inv.summary">Summary</h4>
                                             <div class="wd-summary-box">
                                                 <div class="wd-summary-row">
-                                                    <span data-i18n="pi.subtotal">Subtotal</span>
-                                                    <span id="pi-subtotal">$0.00</span>
+                                                    <span data-i18n="inv.subtotal">Subtotal</span>
+                                                    <span id="inv-subtotal">$0.00</span>
                                                 </div>
                                                 <div class="wd-summary-row wd-text-success">
-                                                    <span data-i18n="pi.creditDiscount">Credit Discount</span>
-                                                    <span id="pi-credit-discount">-$0.00</span>
+                                                    <span data-i18n="inv.creditDiscount">Credit Discount</span>
+                                                    <span id="inv-credit-discount">-$0.00</span>
                                                 </div>
                                                 <div class="wd-summary-row wd-summary-total">
-                                                    <span data-i18n="pi.totalAmount">Total Amount</span>
-                                                    <span id="pi-total">$0.00</span>
+                                                    <span data-i18n="inv.totalAmount">Total Amount</span>
+                                                    <span id="inv-total">$0.00</span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Trade Terms -->
-                                        <div class="wd-form-section" id="pi-terms-section">
+                                        <div class="wd-form-section" id="inv-terms-section">
                                             <h4 class="wd-form-section-title">
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                                                <span data-i18n="pi.tradeTerms">Trade Terms</span>
+                                                <span data-i18n="inv.tradeTerms">Trade Terms</span>
                                             </h4>
                                             <div class="wd-form-row">
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label" data-i18n="pi.currency">Currency</label>
-                                                    <select class="wd-select" id="pi-currency" onchange="updatePICurrency()">
+                                                    <label class="wd-form-label" data-i18n="inv.currency">Currency</label>
+                                                    <select class="wd-select" id="inv-currency" onchange="updateINVCurrency()">
                                                         <option value="USD">USD - US Dollar</option>
                                                         <option value="EUR">EUR - Euro</option>
                                                         <option value="KRW">KRW - Korean Won</option>
@@ -2275,8 +2275,8 @@
                                                     </select>
                                                 </div>
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label" data-i18n="pi.incoterms">Incoterms</label>
-                                                    <select class="wd-select" id="pi-incoterms">
+                                                    <label class="wd-form-label" data-i18n="inv.incoterms">Incoterms</label>
+                                                    <select class="wd-select" id="inv-incoterms">
                                                         <option value="FOB">FOB - Free on Board</option>
                                                         <option value="CIF">CIF - Cost, Insurance, Freight</option>
                                                         <option value="EXW">EXW - Ex Works</option>
@@ -2284,8 +2284,8 @@
                                                     </select>
                                                 </div>
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label" data-i18n="pi.paymentMethod">Payment Terms</label>
-                                                    <select class="wd-select" id="pi-payment-method">
+                                                    <label class="wd-form-label" data-i18n="inv.paymentMethod">Payment Terms</label>
+                                                    <select class="wd-select" id="inv-payment-method">
                                                         <option value="tt30">T/T 30% Advance, 70% Before Shipment</option>
                                                         <option value="tt50">T/T 50% Advance, 50% Before Shipment</option>
                                                         <option value="tt100">T/T 100% Advance</option>
@@ -2296,21 +2296,21 @@
                                             </div>
                                             <div class="wd-form-row">
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label" data-i18n="pi.validUntil">Valid Until</label>
-                                                    <input type="date" class="wd-input" id="pi-valid-until">
+                                                    <label class="wd-form-label" data-i18n="inv.validUntil">Valid Until</label>
+                                                    <input type="date" class="wd-input" id="inv-valid-until">
                                                 </div>
                                                 <div class="wd-form-group wd-flex-2">
-                                                    <label class="wd-form-label" data-i18n="pi.remarks">Remarks</label>
-                                                    <input type="text" class="wd-input" id="pi-remarks" placeholder="Additional notes for the buyer...">
+                                                    <label class="wd-form-label" data-i18n="inv.remarks">Remarks</label>
+                                                    <input type="text" class="wd-input" id="inv-remarks" placeholder="Additional notes for the buyer...">
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="wd-modal-footer">
-                                    <button class="wd-btn wd-btn-outline" onclick="closePIModal()" data-i18n="common.cancel">Cancel</button>
-                                    <button class="wd-btn wd-btn-secondary" onclick="saveAsDraft()" data-i18n="pi.saveAsDraft">Save as Draft</button>
-                                    <button class="wd-btn wd-btn-primary" onclick="createAndSendPI()" data-i18n="pi.createAndSend">Create & Send PI</button>
+                                    <button class="wd-btn wd-btn-outline" onclick="closeINVModal()" data-i18n="common.cancel">Cancel</button>
+                                    <button class="wd-btn wd-btn-secondary" onclick="saveAsDraft()" data-i18n="inv.saveAsDraft">Save as Draft</button>
+                                    <button class="wd-btn wd-btn-primary" onclick="createAndSendINV()" data-i18n="inv.createAndSend">Create & Send INV</button>
                                 </div>
                             </div>
                         </div>
@@ -2390,7 +2390,7 @@
                                                     </div>
                                                 </div>
                                             </th>
-                                            <th data-i18n="credit.invoiceNumber">Invoice/PI</th>
+                                            <th data-i18n="credit.invoiceNumber">Invoice/INV</th>
                                             <th class="sortable" onclick="sortCreditTable('buyer')">
                                                 <span data-i18n="credit.buyer">Buyer</span>
                                                 <span class="sort-icon">↕</span>
@@ -2411,7 +2411,7 @@
                                         <tr data-status="draft" data-tab="active" data-credit="CR-2024-005" onclick="viewCreditDetail('CR-2024-005')" class="wd-cursor-pointer">
                                             <td><span class="wd-text-mono">CR-2024-005</span></td>
                                             <td><span class="wd-badge wd-badge-secondary">Draft</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0090')">PI-2024-0090</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0090')">INV-2024-0090</a></td>
                                             <td>Pacific Foods Corp</td>
                                             <td>Coconut Milk Powder 1KG</td>
                                             <td>Short shipment (8 units)</td>
@@ -2421,7 +2421,7 @@
                                         <tr data-status="approved" data-tab="active" data-credit="CR-2024-001" onclick="viewCreditDetail('CR-2024-001')" class="wd-cursor-pointer">
                                             <td><span class="wd-text-mono">CR-2024-001</span></td>
                                             <td><span class="wd-badge wd-badge-success">Approved</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0089')">PI-2024-0089</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0089')">INV-2024-0089</a></td>
                                             <td>ABC Distribution</td>
                                             <td>Extra Virgin Olive Oil 500ml</td>
                                             <td>Damaged packaging (5 units)</td>
@@ -2431,7 +2431,7 @@
                                         <tr data-status="approved" data-tab="active" data-credit="CR-2024-002" onclick="viewCreditDetail('CR-2024-002')" class="wd-cursor-pointer">
                                             <td><span class="wd-text-mono">CR-2024-002</span></td>
                                             <td><span class="wd-badge wd-badge-success">Approved</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0088')">PI-2024-0088</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0088')">INV-2024-0088</a></td>
                                             <td>XYZ Foods Ltd</td>
                                             <td>Aged Parmesan 24 months</td>
                                             <td>Quality issue - mold (2 units)</td>
@@ -2441,7 +2441,7 @@
                                         <tr data-status="used" data-tab="active" data-credit="CR-2024-003" onclick="viewCreditDetail('CR-2024-003')" class="wd-cursor-pointer">
                                             <td><span class="wd-text-mono">CR-2024-003</span></td>
                                             <td><span class="wd-badge wd-badge-info">Used</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0087')">PI-2024-0087</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0087')">INV-2024-0087</a></td>
                                             <td>Global Trade Co</td>
                                             <td>Organic Honey 350g</td>
                                             <td>Short shipment (10 units)</td>
@@ -2451,7 +2451,7 @@
                                         <tr data-status="cancelled" data-tab="cancelled" data-credit="CR-2024-004" onclick="viewCreditDetail('CR-2024-004')" class="wd-cursor-pointer" style="display:none;">
                                             <td><span class="wd-text-mono">CR-2024-004</span></td>
                                             <td><span class="wd-badge wd-badge-danger">Cancelled</span></td>
-                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('PI-2024-0086')">PI-2024-0086</a></td>
+                                            <td><a href="#" class="wd-link" onclick="event.stopPropagation(); viewInvoiceFromCredit('INV-2024-0086')">INV-2024-0086</a></td>
                                             <td>Fresh Goods Inc</td>
                                             <td>Truffle Oil 250ml</td>
                                             <td>Wrong product (3 units)</td>
@@ -2629,7 +2629,7 @@
                                             </td>
                                             <td>Kim Min-jun</td>
                                             <td>
-                                                <div class="wd-pi-status-cell">
+                                                <div class="wd-inv-status-cell">
                                                     <span class="wd-badge wd-badge-primary">2 In Progress</span>
                                                     <span class="wd-badge wd-badge-success">5 Completed</span>
                                                 </div>
@@ -2654,7 +2654,7 @@
                                             </td>
                                             <td>Tanaka Yuki</td>
                                             <td>
-                                                <div class="wd-pi-status-cell">
+                                                <div class="wd-inv-status-cell">
                                                     <span class="wd-badge wd-badge-primary">1 In Progress</span>
                                                     <span class="wd-badge wd-badge-success">8 Completed</span>
                                                 </div>
@@ -2679,7 +2679,7 @@
                                             </td>
                                             <td>John Smith</td>
                                             <td>
-                                                <div class="wd-pi-status-cell">
+                                                <div class="wd-inv-status-cell">
                                                     <span class="wd-badge wd-badge-success">12 Completed</span>
                                                 </div>
                                             </td>
@@ -2703,7 +2703,7 @@
                                             </td>
                                             <td>Hans Mueller</td>
                                             <td>
-                                                <div class="wd-pi-status-cell">
+                                                <div class="wd-inv-status-cell">
                                                     <span class="wd-badge wd-badge-success">6 Completed</span>
                                                 </div>
                                             </td>
@@ -2764,7 +2764,7 @@
                                         <div class="wd-section-header">
                                             <h4 class="wd-drawer-section-title">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                                Monthly Sales (Completed PI)
+                                                Monthly Sales (Completed INV)
                                             </h4>
                                             <select class="wd-select wd-select-sm" id="account-sales-year" onchange="changeAccountSalesYear()" style="width: 100px;">
                                                 <option value="2026" selected>2026</option>
@@ -2781,12 +2781,12 @@
                                             <div class="wd-sales-cell wd-sales-cell-hoverable" data-month="2026-01" onmouseenter="showProductTooltip(event, '2026-01')" onmouseleave="hideProductTooltip()">
                                                 <span class="wd-sales-month">Jan</span>
                                                 <span class="wd-sales-amount">$9,700</span>
-                                                <span class="wd-sales-count">3 PI</span>
+                                                <span class="wd-sales-count">3 INV</span>
                                             </div>
                                             <div class="wd-sales-cell wd-sales-cell-hoverable wd-sales-cell-current" data-month="2026-02" onmouseenter="showProductTooltip(event, '2026-02')" onmouseleave="hideProductTooltip()">
                                                 <span class="wd-sales-month">Feb</span>
                                                 <span class="wd-sales-amount">$5,420</span>
-                                                <span class="wd-sales-count">2 PI</span>
+                                                <span class="wd-sales-count">2 INV</span>
                                             </div>
                                             <div class="wd-sales-cell wd-sales-cell-empty" data-month="2026-03">
                                                 <span class="wd-sales-month">Mar</span>
@@ -2843,90 +2843,90 @@
                                     <!-- Recent Completed PI List -->
                                     <div class="wd-drawer-section">
                                         <h4 class="wd-drawer-section-title">Recent Completed Invoices</h4>
-                                        <div class="wd-pi-history" id="account-pi-history">
-                                            <div class="wd-pi-history-item wd-pi-expandable" onclick="togglePIProducts(this)">
-                                                <div class="wd-pi-history-main">
-                                                    <div class="wd-pi-history-info">
-                                                        <span class="wd-pi-number">PI-2024-0086</span>
-                                                        <span class="wd-pi-date">Jan 20, 2024</span>
+                                        <div class="wd-inv-history" id="account-inv-history">
+                                            <div class="wd-inv-history-item wd-inv-expandable" onclick="toggleINVProducts(this)">
+                                                <div class="wd-inv-history-main">
+                                                    <div class="wd-inv-history-info">
+                                                        <span class="wd-inv-number">INV-2024-0086</span>
+                                                        <span class="wd-inv-date">Jan 20, 2024</span>
                                                     </div>
-                                                    <span class="wd-pi-amount">$5,420</span>
-                                                    <svg class="wd-pi-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                                    <span class="wd-inv-amount">$5,420</span>
+                                                    <svg class="wd-inv-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                                                 </div>
-                                                <div class="wd-pi-products-detail" style="display: none;">
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Extra Virgin Olive Oil 500ml</span>
-                                                        <span class="wd-pi-product-qty">80 pcs</span>
-                                                        <span class="wd-pi-product-amount">$2,000</span>
+                                                <div class="wd-inv-products-detail" style="display: none;">
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Extra Virgin Olive Oil 500ml</span>
+                                                        <span class="wd-inv-product-qty">80 pcs</span>
+                                                        <span class="wd-inv-product-amount">$2,000</span>
                                                     </div>
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Aged Parmesan 24 months</span>
-                                                        <span class="wd-pi-product-qty">30 pcs</span>
-                                                        <span class="wd-pi-product-amount">$1,950</span>
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Aged Parmesan 24 months</span>
+                                                        <span class="wd-inv-product-qty">30 pcs</span>
+                                                        <span class="wd-inv-product-amount">$1,950</span>
                                                     </div>
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Organic Honey 350g</span>
-                                                        <span class="wd-pi-product-qty">50 pcs</span>
-                                                        <span class="wd-pi-product-amount">$900</span>
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Organic Honey 350g</span>
+                                                        <span class="wd-inv-product-qty">50 pcs</span>
+                                                        <span class="wd-inv-product-amount">$900</span>
                                                     </div>
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Balsamic Vinegar 250ml</span>
-                                                        <span class="wd-pi-product-qty">18 pcs</span>
-                                                        <span class="wd-pi-product-amount">$570</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="wd-pi-history-item wd-pi-expandable" onclick="togglePIProducts(this)">
-                                                <div class="wd-pi-history-main">
-                                                    <div class="wd-pi-history-info">
-                                                        <span class="wd-pi-number">PI-2024-0078</span>
-                                                        <span class="wd-pi-date">Jan 08, 2024</span>
-                                                    </div>
-                                                    <span class="wd-pi-amount">$4,280</span>
-                                                    <svg class="wd-pi-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                                                </div>
-                                                <div class="wd-pi-products-detail" style="display: none;">
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Extra Virgin Olive Oil 500ml</span>
-                                                        <span class="wd-pi-product-qty">60 pcs</span>
-                                                        <span class="wd-pi-product-amount">$1,500</span>
-                                                    </div>
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Truffle Oil 100ml</span>
-                                                        <span class="wd-pi-product-qty">40 pcs</span>
-                                                        <span class="wd-pi-product-amount">$1,800</span>
-                                                    </div>
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Dried Pasta 500g</span>
-                                                        <span class="wd-pi-product-qty">80 boxes</span>
-                                                        <span class="wd-pi-product-amount">$980</span>
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Balsamic Vinegar 250ml</span>
+                                                        <span class="wd-inv-product-qty">18 pcs</span>
+                                                        <span class="wd-inv-product-amount">$570</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="wd-pi-history-item wd-pi-expandable" onclick="togglePIProducts(this)">
-                                                <div class="wd-pi-history-main">
-                                                    <div class="wd-pi-history-info">
-                                                        <span class="wd-pi-number">PI-2023-0412</span>
-                                                        <span class="wd-pi-date">Dec 15, 2023</span>
+                                            <div class="wd-inv-history-item wd-inv-expandable" onclick="toggleINVProducts(this)">
+                                                <div class="wd-inv-history-main">
+                                                    <div class="wd-inv-history-info">
+                                                        <span class="wd-inv-number">INV-2024-0078</span>
+                                                        <span class="wd-inv-date">Jan 08, 2024</span>
                                                     </div>
-                                                    <span class="wd-pi-amount">$8,000</span>
-                                                    <svg class="wd-pi-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                                    <span class="wd-inv-amount">$4,280</span>
+                                                    <svg class="wd-inv-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                                                 </div>
-                                                <div class="wd-pi-products-detail" style="display: none;">
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Aged Parmesan 24 months</span>
-                                                        <span class="wd-pi-product-qty">60 pcs</span>
-                                                        <span class="wd-pi-product-amount">$3,900</span>
+                                                <div class="wd-inv-products-detail" style="display: none;">
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Extra Virgin Olive Oil 500ml</span>
+                                                        <span class="wd-inv-product-qty">60 pcs</span>
+                                                        <span class="wd-inv-product-amount">$1,500</span>
                                                     </div>
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Extra Virgin Olive Oil 500ml</span>
-                                                        <span class="wd-pi-product-qty">100 pcs</span>
-                                                        <span class="wd-pi-product-amount">$2,500</span>
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Truffle Oil 100ml</span>
+                                                        <span class="wd-inv-product-qty">40 pcs</span>
+                                                        <span class="wd-inv-product-amount">$1,800</span>
                                                     </div>
-                                                    <div class="wd-pi-product-row">
-                                                        <span class="wd-pi-product-name">Organic Honey 350g</span>
-                                                        <span class="wd-pi-product-qty">90 pcs</span>
-                                                        <span class="wd-pi-product-amount">$1,600</span>
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Dried Pasta 500g</span>
+                                                        <span class="wd-inv-product-qty">80 boxes</span>
+                                                        <span class="wd-inv-product-amount">$980</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wd-inv-history-item wd-inv-expandable" onclick="toggleINVProducts(this)">
+                                                <div class="wd-inv-history-main">
+                                                    <div class="wd-inv-history-info">
+                                                        <span class="wd-inv-number">INV-2023-0412</span>
+                                                        <span class="wd-inv-date">Dec 15, 2023</span>
+                                                    </div>
+                                                    <span class="wd-inv-amount">$8,000</span>
+                                                    <svg class="wd-inv-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                                </div>
+                                                <div class="wd-inv-products-detail" style="display: none;">
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Aged Parmesan 24 months</span>
+                                                        <span class="wd-inv-product-qty">60 pcs</span>
+                                                        <span class="wd-inv-product-amount">$3,900</span>
+                                                    </div>
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Extra Virgin Olive Oil 500ml</span>
+                                                        <span class="wd-inv-product-qty">100 pcs</span>
+                                                        <span class="wd-inv-product-amount">$2,500</span>
+                                                    </div>
+                                                    <div class="wd-inv-product-row">
+                                                        <span class="wd-inv-product-name">Organic Honey 350g</span>
+                                                        <span class="wd-inv-product-qty">90 pcs</span>
+                                                        <span class="wd-inv-product-amount">$1,600</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2938,9 +2938,9 @@
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                         Edit Account
                                     </button>
-                                    <button class="wd-btn wd-btn-primary" onclick="createPIForAccount(currentAccountId)">
+                                    <button class="wd-btn wd-btn-primary" onclick="createINVForAccount(currentAccountId)">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-                                        Create PI
+                                        Add INV
                                     </button>
                                 </div>
 
@@ -3676,7 +3676,7 @@
                                                     </li>
                                                     <li class="wd-flex wd-items-center wd-gap-2 wd-mb-2">
                                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--wd-success)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                                                        <span>PO/PI management</span>
+                                                        <span>PO/INV management</span>
                                                     </li>
                                                     <li class="wd-flex wd-items-center wd-gap-2 wd-mb-2">
                                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--wd-success)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -3755,7 +3755,7 @@
                                                 <option value="all">All Actions</option>
                                                 <option value="product">Product</option>
                                                 <option value="po">PO</option>
-                                                <option value="pi">PI</option>
+                                                <option value="inv">INV</option>
                                                 <option value="account">Account</option>
                                             </select>
                                         </div>
@@ -3767,10 +3767,10 @@
                                                 <div class="wd-activity-avatar">JL</div>
                                                 <div class="wd-activity-content">
                                                     <div class="wd-activity-text">
-                                                        <strong>Jungwon Lee</strong> created PI <a href="#" onclick="viewPI('PI-2024-0089')">PI-2024-0089</a>
+                                                        <strong>Jungwon Lee</strong> created INV <a href="#" onclick="viewPI('INV-2024-0089')">INV-2024-0089</a>
                                                     </div>
                                                     <div class="wd-activity-meta">
-                                                        <span class="wd-activity-type">PI</span>
+                                                        <span class="wd-activity-type">INV</span>
                                                         <span class="wd-activity-time">10 minutes ago</span>
                                                     </div>
                                                 </div>

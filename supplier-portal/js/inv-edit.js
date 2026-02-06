@@ -1,13 +1,13 @@
-// WeDealize Supplier Portal - PI Edit Page Script
-// Handles proforma invoice editing on dedicated page
+// WeDealize Supplier Portal - Invoice Edit Page Script
+// Handles invoice editing on dedicated page
 
 (function() {
     'use strict';
 
     const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
-    let currentPIId = null;
-    let isNewPI = false;
-    let piItemRowIndex = 0;
+    let currentINVId = null;
+    let isNewINV = false;
+    let invItemRowIndex = 0;
 
     document.addEventListener('DOMContentLoaded', init);
 
@@ -19,20 +19,20 @@
         }
 
         const urlParams = new URLSearchParams(window.location.search);
-        currentPIId = urlParams.get('id');
-        isNewPI = !currentPIId || currentPIId === 'new';
+        currentINVId = urlParams.get('id');
+        isNewINV = !currentINVId || currentINVId === 'new';
 
-        if (!isNewPI) {
+        if (!isNewINV) {
             const titleEl = document.querySelector('.page-title');
             if (titleEl) {
-                titleEl.textContent = 'Edit Proforma Invoice';
-                titleEl.setAttribute('data-i18n', 'pi.editPI');
+                titleEl.textContent = 'Edit Invoice';
+                titleEl.setAttribute('data-i18n', 'inv.editINV');
             }
-            loadPIData(currentPIId);
+            loadINVData(currentINVId);
         }
 
         // Set default date
-        const dateInput = document.getElementById('pi-date');
+        const dateInput = document.getElementById('inv-date');
         if (dateInput && !dateInput.value) {
             dateInput.value = new Date().toISOString().split('T')[0];
         }
@@ -41,16 +41,16 @@
     }
 
     function bindFormEvents() {
-        const form = document.getElementById('pi-edit-form');
+        const form = document.getElementById('inv-edit-form');
         if (form) {
             form.addEventListener('submit', handleFormSubmit);
         }
     }
 
-    async function loadPIData(piId) {
+    async function loadINVData(invId) {
         try {
             const token = localStorage.getItem('supplier_token');
-            const response = await fetch(`${API_BASE_URL}/proforma-invoices/${piId}`, {
+            const response = await fetch(`${API_BASE_URL}/invoices/${invId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -59,43 +59,43 @@
                 return;
             }
 
-            if (!response.ok) throw new Error('Failed to load PI');
+            if (!response.ok) throw new Error('Failed to load invoice');
 
-            const pi = await response.json();
-            populateForm(pi);
+            const inv = await response.json();
+            populateForm(inv);
         } catch (error) {
-            console.error('Load PI error:', error);
-            showToast('Failed to load proforma invoice data', 'error');
+            console.error('Load invoice error:', error);
+            showToast('Failed to load invoice data', 'error');
             setTimeout(() => {
-                window.location.href = 'portal.html#pi-management';
+                window.location.href = 'portal.html#inv-management';
             }, 1500);
         }
     }
 
-    function populateForm(pi) {
-        setInputValue('pi-number', pi.pi_number);
-        setInputValue('pi-date', pi.pi_date);
-        setSelectValue('pi-po-select', pi.po_number);
-        setSelectValue('pi-buyer-select', pi.buyer_id);
-        setInputValue('pi-buyer-contact', pi.buyer_contact);
-        setInputValue('pi-buyer-email', pi.buyer_email);
-        setInputValue('pi-buyer-phone', pi.buyer_phone);
-        setSelectValue('pi-currency', pi.currency);
-        setSelectValue('pi-incoterms', pi.incoterms);
-        setSelectValue('pi-payment-terms', pi.payment_terms);
-        setInputValue('pi-validity', pi.validity_date);
-        setInputValue('pi-delivery-date', pi.delivery_date);
-        setInputValue('pi-notes', pi.notes);
+    function populateForm(inv) {
+        setInputValue('inv-number', inv.inv_number);
+        setInputValue('inv-date', inv.inv_date);
+        setSelectValue('inv-po-select', inv.po_number);
+        setSelectValue('inv-buyer-select', inv.buyer_id);
+        setInputValue('inv-buyer-contact', inv.buyer_contact);
+        setInputValue('inv-buyer-email', inv.buyer_email);
+        setInputValue('inv-buyer-phone', inv.buyer_phone);
+        setSelectValue('inv-currency', inv.currency);
+        setSelectValue('inv-incoterms', inv.incoterms);
+        setSelectValue('inv-payment-terms', inv.payment_terms);
+        setInputValue('inv-due-date', inv.due_date);
+        setInputValue('inv-delivery-date', inv.delivery_date);
+        setInputValue('inv-notes', inv.notes);
 
-        if (pi.items && pi.items.length > 0) {
-            const tbody = document.getElementById('pi-items-tbody');
+        if (inv.items && inv.items.length > 0) {
+            const tbody = document.getElementById('inv-items-tbody');
             tbody.innerHTML = '';
-            pi.items.forEach(item => {
-                addPIItemRow(item);
+            inv.items.forEach(item => {
+                addINVItemRow(item);
             });
         }
 
-        updatePISummary();
+        updateINVSummary();
     }
 
     function setInputValue(id, value) {
@@ -115,11 +115,11 @@
     async function handleFormSubmit(e) {
         e.preventDefault();
 
-        const piNumber = document.getElementById('pi-number').value.trim();
-        const buyerSelect = document.getElementById('pi-buyer-select');
+        const invNumber = document.getElementById('inv-number').value.trim();
+        const buyerSelect = document.getElementById('inv-buyer-select');
 
-        if (!piNumber) {
-            showToast('PI Number is required', 'warning');
+        if (!invNumber) {
+            showToast('INV Number is required', 'warning');
             return;
         }
 
@@ -136,14 +136,14 @@
         submitBtn.disabled = true;
 
         try {
-            await savePI(formData);
-            showToast('Proforma Invoice sent successfully!', 'success');
+            await saveINV(formData);
+            showToast('Invoice sent successfully!', 'success');
             setTimeout(() => {
-                window.location.href = 'portal.html#pi-management';
+                window.location.href = 'portal.html#inv-management';
             }, 1000);
         } catch (error) {
             console.error('Save error:', error);
-            showToast(error.message || 'Failed to send proforma invoice', 'error');
+            showToast(error.message || 'Failed to send invoice', 'error');
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
         }
@@ -151,11 +151,11 @@
 
     function collectFormData() {
         const items = [];
-        document.querySelectorAll('#pi-items-tbody tr[data-row]').forEach(row => {
-            const name = row.querySelector('.pi-item-name')?.value || row.querySelector('.pi-item-name')?.textContent;
-            const qty = row.querySelector('.pi-item-qty')?.value;
-            const unit = row.querySelector('.pi-item-unit')?.value || row.querySelector('.pi-item-unit')?.textContent;
-            const price = row.querySelector('.pi-item-price')?.value;
+        document.querySelectorAll('#inv-items-tbody tr[data-row]').forEach(row => {
+            const name = row.querySelector('.inv-item-name')?.value || row.querySelector('.inv-item-name')?.textContent;
+            const qty = row.querySelector('.inv-item-qty')?.value;
+            const unit = row.querySelector('.inv-item-unit')?.value || row.querySelector('.inv-item-unit')?.textContent;
+            const price = row.querySelector('.inv-item-price')?.value;
 
             if (name && qty && price) {
                 items.push({
@@ -168,7 +168,7 @@
         });
 
         const appliedCredits = [];
-        document.querySelectorAll('.pi-credit-check:checked').forEach(checkbox => {
+        document.querySelectorAll('.inv-credit-check:checked').forEach(checkbox => {
             appliedCredits.push({
                 credit_id: checkbox.value,
                 amount: parseFloat(checkbox.dataset.amount)
@@ -176,31 +176,31 @@
         });
 
         return {
-            pi_number: document.getElementById('pi-number').value.trim(),
-            pi_date: document.getElementById('pi-date').value,
-            po_number: document.getElementById('pi-po-select').value,
-            buyer_id: document.getElementById('pi-buyer-select').value,
-            buyer_contact: document.getElementById('pi-buyer-contact').value.trim(),
-            buyer_email: document.getElementById('pi-buyer-email').value.trim(),
-            buyer_phone: document.getElementById('pi-buyer-phone').value.trim(),
-            currency: document.getElementById('pi-currency').value,
-            incoterms: document.getElementById('pi-incoterms').value,
-            payment_terms: document.getElementById('pi-payment-terms').value,
-            validity_date: document.getElementById('pi-validity').value,
-            delivery_date: document.getElementById('pi-delivery-date').value,
-            notes: document.getElementById('pi-notes').value.trim(),
+            inv_number: document.getElementById('inv-number').value.trim(),
+            inv_date: document.getElementById('inv-date').value,
+            po_number: document.getElementById('inv-po-select').value,
+            buyer_id: document.getElementById('inv-buyer-select').value,
+            buyer_contact: document.getElementById('inv-buyer-contact').value.trim(),
+            buyer_email: document.getElementById('inv-buyer-email').value.trim(),
+            buyer_phone: document.getElementById('inv-buyer-phone').value.trim(),
+            currency: document.getElementById('inv-currency').value,
+            incoterms: document.getElementById('inv-incoterms').value,
+            payment_terms: document.getElementById('inv-payment-terms').value,
+            due_date: document.getElementById('inv-due-date').value,
+            delivery_date: document.getElementById('inv-delivery-date').value,
+            notes: document.getElementById('inv-notes').value.trim(),
             items: items,
             applied_credits: appliedCredits,
             status: 'sent'
         };
     }
 
-    async function savePI(formData) {
+    async function saveINV(formData) {
         const token = localStorage.getItem('supplier_token');
-        const isUpdate = currentPIId && currentPIId !== 'new';
+        const isUpdate = currentINVId && currentINVId !== 'new';
         const endpoint = isUpdate
-            ? `${API_BASE_URL}/proforma-invoices/${currentPIId}`
-            : `${API_BASE_URL}/proforma-invoices`;
+            ? `${API_BASE_URL}/invoices/${currentINVId}`
+            : `${API_BASE_URL}/invoices`;
         const method = isUpdate ? 'PATCH' : 'POST';
 
         const response = await fetch(endpoint, {
@@ -219,7 +219,7 @@
 
         if (!response.ok) {
             const err = await response.json().catch(() => ({}));
-            throw new Error(err.message || 'Failed to save proforma invoice');
+            throw new Error(err.message || 'Failed to save invoice');
         }
 
         return await response.json();
@@ -234,31 +234,31 @@
     }
 
     // Global functions
-    window.togglePISource = function(source) {
-        const poSelection = document.getElementById('pi-po-selection');
+    window.toggleINVSource = function(source) {
+        const poSelection = document.getElementById('inv-po-selection');
         if (poSelection) {
             poSelection.style.display = source === 'po' ? 'block' : 'none';
         }
     };
 
-    window.loadPOForPI = function() {
-        const select = document.getElementById('pi-po-select');
+    window.loadPOForINV = function() {
+        const select = document.getElementById('inv-po-select');
         if (!select || !select.value) return;
 
         const option = select.selectedOptions[0];
         const buyerId = option?.dataset.buyer;
 
         if (buyerId) {
-            const buyerSelect = document.getElementById('pi-buyer-select');
+            const buyerSelect = document.getElementById('inv-buyer-select');
             if (buyerSelect) buyerSelect.value = buyerId;
-            loadBuyerForPI();
+            loadBuyerForINV();
         }
 
         showToast('PO data loaded', 'info');
     };
 
-    window.loadBuyerForPI = function() {
-        const select = document.getElementById('pi-buyer-select');
+    window.loadBuyerForINV = function() {
+        const select = document.getElementById('inv-buyer-select');
         if (!select || !select.value) return;
 
         // Demo buyer data
@@ -269,16 +269,16 @@
 
         const buyer = buyers[select.value];
         if (buyer) {
-            document.getElementById('pi-buyer-contact').value = buyer.contact;
-            document.getElementById('pi-buyer-email').value = buyer.email;
-            document.getElementById('pi-buyer-phone').value = buyer.phone;
+            document.getElementById('inv-buyer-contact').value = buyer.contact;
+            document.getElementById('inv-buyer-email').value = buyer.email;
+            document.getElementById('inv-buyer-phone').value = buyer.phone;
         }
 
         loadAvailableCredits(select.value);
     };
 
     function loadAvailableCredits(buyerId) {
-        const container = document.getElementById('pi-available-credits');
+        const container = document.getElementById('inv-available-credits');
 
         // Demo credits
         const credits = {
@@ -300,7 +300,7 @@
 
         container.innerHTML = buyerCredits.map(credit => `
             <div class="credit-item">
-                <input type="checkbox" class="pi-credit-check" value="${credit.id}" data-amount="${credit.amount}" onchange="updatePISummary()">
+                <input type="checkbox" class="inv-credit-check" value="${credit.id}" data-amount="${credit.amount}" onchange="updateINVSummary()">
                 <div style="flex: 1;">
                     <div style="font-weight: 500;">${credit.id} - $${credit.amount.toFixed(2)}</div>
                     <div style="font-size: 0.7rem; color: var(--wd-gray-500);">${credit.reason}</div>
@@ -309,9 +309,9 @@
         `).join('');
     }
 
-    window.addPIItemRow = function(item = null) {
-        const tbody = document.getElementById('pi-items-tbody');
-        const index = piItemRowIndex++;
+    window.addINVItemRow = function(item = null) {
+        const tbody = document.getElementById('inv-items-tbody');
+        const index = invItemRowIndex++;
 
         const row = document.createElement('tr');
         row.setAttribute('data-row', index);
@@ -323,78 +323,78 @@
         const subtotal = qty * price;
 
         row.innerHTML = `
-            <td><input type="text" class="wd-input pi-item-name" placeholder="Product name" value="${name}"></td>
-            <td><input type="number" class="wd-input pi-item-qty" min="1" value="${qty}" onchange="calculatePIItemSubtotal(${index})"></td>
-            <td><select class="wd-select pi-item-unit">
+            <td><input type="text" class="wd-input inv-item-name" placeholder="Product name" value="${name}"></td>
+            <td><input type="number" class="wd-input inv-item-qty" min="1" value="${qty}" onchange="calculateINVItemSubtotal(${index})"></td>
+            <td><select class="wd-select inv-item-unit">
                 <option ${unit === 'pcs' ? 'selected' : ''}>pcs</option>
                 <option ${unit === 'boxes' ? 'selected' : ''}>boxes</option>
                 <option ${unit === 'cases' ? 'selected' : ''}>cases</option>
                 <option ${unit === 'kg' ? 'selected' : ''}>kg</option>
             </select></td>
-            <td><input type="number" class="wd-input pi-item-price" min="0" step="0.01" value="${price}" onchange="calculatePIItemSubtotal(${index})"></td>
-            <td class="pi-item-subtotal" style="text-align:right;font-weight:600;">${subtotal.toFixed(2)}</td>
-            <td><button type="button" class="wd-btn-icon" onclick="removePIItemRow(${index})" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
+            <td><input type="number" class="wd-input inv-item-price" min="0" step="0.01" value="${price}" onchange="calculateINVItemSubtotal(${index})"></td>
+            <td class="inv-item-subtotal" style="text-align:right;font-weight:600;">${subtotal.toFixed(2)}</td>
+            <td><button type="button" class="wd-btn-icon" onclick="removeINVItemRow(${index})" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
         `;
         tbody.appendChild(row);
-        updatePISummary();
+        updateINVSummary();
     };
 
-    window.calculatePIItemSubtotal = function(index) {
-        const row = document.querySelector(`#pi-items-tbody tr[data-row="${index}"]`);
+    window.calculateINVItemSubtotal = function(index) {
+        const row = document.querySelector(`#inv-items-tbody tr[data-row="${index}"]`);
         if (!row) return;
 
-        const qty = parseFloat(row.querySelector('.pi-item-qty')?.value) || 0;
-        const price = parseFloat(row.querySelector('.pi-item-price')?.value) || 0;
+        const qty = parseFloat(row.querySelector('.inv-item-qty')?.value) || 0;
+        const price = parseFloat(row.querySelector('.inv-item-price')?.value) || 0;
         const subtotal = qty * price;
 
-        const subtotalEl = row.querySelector('.pi-item-subtotal');
+        const subtotalEl = row.querySelector('.inv-item-subtotal');
         if (subtotalEl) subtotalEl.textContent = subtotal.toFixed(2);
 
-        updatePISummary();
+        updateINVSummary();
     };
 
-    window.removePIItemRow = function(index) {
-        const row = document.querySelector(`#pi-items-tbody tr[data-row="${index}"]`);
+    window.removeINVItemRow = function(index) {
+        const row = document.querySelector(`#inv-items-tbody tr[data-row="${index}"]`);
         if (row) {
             row.remove();
-            updatePISummary();
+            updateINVSummary();
         }
     };
 
-    window.updatePISummary = function() {
+    window.updateINVSummary = function() {
         let subtotal = 0;
-        document.querySelectorAll('#pi-items-tbody tr[data-row]').forEach(row => {
-            const qty = parseFloat(row.querySelector('.pi-item-qty')?.value) || 0;
-            const price = parseFloat(row.querySelector('.pi-item-price')?.value) || 0;
+        document.querySelectorAll('#inv-items-tbody tr[data-row]').forEach(row => {
+            const qty = parseFloat(row.querySelector('.inv-item-qty')?.value) || 0;
+            const price = parseFloat(row.querySelector('.inv-item-price')?.value) || 0;
             subtotal += qty * price;
         });
 
         let creditTotal = 0;
-        document.querySelectorAll('.pi-credit-check:checked').forEach(checkbox => {
+        document.querySelectorAll('.inv-credit-check:checked').forEach(checkbox => {
             creditTotal += parseFloat(checkbox.dataset.amount) || 0;
         });
 
-        const currency = document.getElementById('pi-currency')?.value || 'USD';
+        const currency = document.getElementById('inv-currency')?.value || 'USD';
         const symbol = currency === 'EUR' ? '€' : currency === 'KRW' ? '₩' : '$';
 
-        const subtotalEl = document.getElementById('pi-subtotal');
-        const creditEl = document.getElementById('pi-credit-discount');
-        const totalEl = document.getElementById('pi-total');
+        const subtotalEl = document.getElementById('inv-subtotal');
+        const creditEl = document.getElementById('inv-credit-discount');
+        const totalEl = document.getElementById('inv-total');
 
         if (subtotalEl) subtotalEl.textContent = `${symbol}${subtotal.toFixed(2)}`;
         if (creditEl) creditEl.textContent = `-${symbol}${creditTotal.toFixed(2)}`;
         if (totalEl) totalEl.textContent = `${symbol}${Math.max(0, subtotal - creditTotal).toFixed(2)}`;
     };
 
-    window.savePIAsDraft = async function() {
+    window.saveINVAsDraft = async function() {
         const formData = collectFormData();
         formData.status = 'draft';
 
         try {
-            await savePI(formData);
-            showToast('Proforma Invoice saved as draft', 'success');
+            await saveINV(formData);
+            showToast('Invoice saved as draft', 'success');
             setTimeout(() => {
-                window.location.href = 'portal.html#pi-management';
+                window.location.href = 'portal.html#inv-management';
             }, 1000);
         } catch (error) {
             showToast(error.message || 'Failed to save draft', 'error');
