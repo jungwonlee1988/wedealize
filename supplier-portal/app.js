@@ -1692,7 +1692,7 @@ async function saveProduct() {
         name,
         sku: document.getElementById('edit-product-sku')?.value || '',
         category: document.getElementById('edit-product-category')?.value || '',
-        status: document.getElementById('edit-product-status')?.value || 'active',
+        // status is auto-calculated from completeness, not manually set
         description: document.getElementById('edit-product-description')?.value || '',
         minPrice: parseFloat(document.getElementById('edit-price-min')?.value) || null,
         maxPrice: parseFloat(document.getElementById('edit-price-max')?.value) || null,
@@ -2602,7 +2602,6 @@ async function registerExtractedProducts() {
         minPrice: p.unit_price ?? undefined,
         maxPrice: p.unit_price ?? undefined,
         certifications: (p.certifications && p.certifications.length) ? p.certifications : undefined,
-        status: 'active',
     }));
 
     try {

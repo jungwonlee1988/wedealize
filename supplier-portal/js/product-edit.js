@@ -17,9 +17,7 @@
             sku: 'OIL-001',
             category: 'oils',
             categoryName: 'Oils & Vinegars',
-            status: 'active',
-            statusLabel: 'Complete',
-            statusClass: 'wd-badge-success',
+            completeness: 89,
             description: 'Premium cold-pressed extra virgin olive oil from Andalusia, Spain. Rich flavor with fruity notes.',
             minPrice: 7.20,
             maxPrice: 8.50,
@@ -36,9 +34,7 @@
             sku: 'VIN-002',
             category: 'oils',
             categoryName: 'Oils & Vinegars',
-            status: 'active',
-            statusLabel: 'Complete',
-            statusClass: 'wd-badge-success',
+            completeness: 78,
             description: 'Authentic balsamic vinegar from Modena, Italy. Aged 12 years in oak barrels.',
             minPrice: 12.00,
             maxPrice: 15.00,
@@ -55,9 +51,7 @@
             sku: 'CHE-003',
             category: 'dairy',
             categoryName: 'Dairy & Cheese',
-            status: 'active',
-            statusLabel: 'Incomplete',
-            statusClass: 'wd-badge-warning',
+            completeness: 56,
             description: 'Parmigiano-Reggiano DOP aged for 24 months. Produced in Emilia-Romagna region.',
             minPrice: 18.00,
             maxPrice: 22.00,
@@ -74,9 +68,7 @@
             sku: 'HON-004',
             category: 'honey',
             categoryName: 'Honey & Spreads',
-            status: 'active',
-            statusLabel: 'Complete',
-            statusClass: 'wd-badge-success',
+            completeness: 89,
             description: 'Pure raw honey from wildflower meadows. Unpasteurized and unfiltered.',
             minPrice: 8.50,
             maxPrice: 10.00,
@@ -93,9 +85,7 @@
             sku: 'PAS-005',
             category: 'pasta',
             categoryName: 'Pasta & Grains',
-            status: 'draft',
-            statusLabel: 'Draft',
-            statusClass: 'wd-badge-gray',
+            completeness: 78,
             description: 'Hand-crafted bronze die pasta made with 100% durum wheat semolina.',
             minPrice: 3.50,
             maxPrice: 4.50,
@@ -225,9 +215,7 @@
             sku: `SKU-${productId}`,
             category: 'oils',
             categoryName: 'Oils & Vinegars',
-            status: 'active',
-            statusLabel: 'Complete',
-            statusClass: 'wd-badge-success',
+            completeness: 0,
             description: '',
             minPrice: 0,
             maxPrice: 0,
@@ -253,8 +241,9 @@
 
         const statusBadge = document.getElementById('product-status-badge');
         if (statusBadge) {
-            statusBadge.textContent = product.statusLabel || 'Active';
-            statusBadge.className = `wd-badge ${product.statusClass || 'wd-badge-success'}`;
+            const isComplete = (product.completeness || 0) >= 70;
+            statusBadge.textContent = isComplete ? 'Complete' : 'Incomplete';
+            statusBadge.className = `wd-badge ${isComplete ? 'wd-badge-success' : 'wd-badge-warning'}`;
         }
 
         const dateDisplay = document.getElementById('product-date-display');
@@ -266,7 +255,9 @@
         setInputValue('product-name', product.name);
         setInputValue('product-sku', product.sku);
         setSelectValue('product-category', product.category);
-        setSelectValue('product-status', product.status || 'active');
+        // Status is auto-calculated from completeness
+        const isProductComplete = (product.completeness || 0) >= 70;
+        setSelectValue('product-status', isProductComplete ? 'complete' : 'incomplete');
         setInputValue('product-description', product.description);
 
         // Price info
@@ -426,7 +417,7 @@
             name: document.getElementById('product-name')?.value?.trim() || '',
             sku: document.getElementById('product-sku')?.value?.trim() || null,
             category: document.getElementById('product-category')?.value || null,
-            status: document.getElementById('product-status')?.value || 'active',
+            // status is auto-calculated from completeness, not sent
             description: document.getElementById('product-description')?.value?.trim() || null,
             minPrice: parseFloat(document.getElementById('price-min')?.value) || null,
             maxPrice: parseFloat(document.getElementById('price-max')?.value) || null,
