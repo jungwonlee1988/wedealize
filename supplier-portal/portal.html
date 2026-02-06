@@ -1025,17 +1025,7 @@
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 0 24px 16px;">
-                                <div class="wd-filter-group" style="display: flex; gap: 12px; align-items: center;">
-                                    <select id="product-list-filter" class="wd-select" style="width: 180px;" onchange="filterProductList()">
-                                        <option value="all" data-i18n="products.allProducts">All Products</option>
-                                        <option value="complete" data-i18n="products.complete">Complete</option>
-                                        <option value="incomplete" data-i18n="products.incompleteData">Incomplete</option>
-                                        <option value="no-moq" data-i18n="products.missingMOQ">Missing MOQ</option>
-                                        <option value="no-image" data-i18n="products.missingImages">Missing Images</option>
-                                        <option value="no-cert" data-i18n="products.missingCerts">Missing Certifications</option>
-                                    </select>
-                                </div>
+                            <div class="wd-filter-bar" style="display: flex; justify-content: flex-end; align-items: center; padding: 0 24px 16px;">
                                 <div class="wd-filter-actions" style="display: flex; gap: 8px;">
                                     <button class="wd-btn wd-btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
                                 </div>
