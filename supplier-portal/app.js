@@ -2421,11 +2421,22 @@ async function renderAllPdfPages(file) {
 }
 
 async function sendExtractionBatch(images, fileName, batchIndex, totalBatches) {
-    return await apiCall('/catalog/extract', {
+    const token = localStorage.getItem('supplier_token');
+    const response = await fetch(`${API_BASE_URL}/catalog/extract`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
         body: JSON.stringify({ images, fileName, batchIndex, totalBatches }),
-        timeout: 120000, // 2분 (AI 추출은 시간이 오래 걸림)
     });
+
+    if (response.status === 401) { handleSessionExpired(); throw new Error('Session expired'); }
+    if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.message || 'Extraction API failed');
+    }
+    return await response.json();
 }
 
 function updateExtractionProgress(phase, current, total) {
