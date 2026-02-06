@@ -3107,6 +3107,16 @@ function openPIModal(invId) {
     openINVModal(invId);
 }
 
+// View INV detail - navigate to inv-edit.html
+function viewINVDetail(invNumber) {
+    window.location.href = `inv-edit.html?id=${encodeURIComponent(invNumber)}`;
+}
+
+// View PO from INV list
+function viewPOFromINV(poNumber) {
+    window.location.href = `po-edit.html?id=${encodeURIComponent(poNumber)}`;
+}
+
 async function populateINVBuyerDropdown() {
     const buyerSelect = document.getElementById('inv-buyer-select');
     if (!buyerSelect) return;
