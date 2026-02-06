@@ -7,6 +7,7 @@ const API_TIMEOUT = 15000; // 15초 타임아웃
 
 // 401 응답 시 세션 만료 처리
 function handleSessionExpired() {
+    removeFlashGuard();
     showToast('Session expired. Please log in again.', 'error');
     localStorage.removeItem('supplier_logged_in');
     localStorage.removeItem('supplier_token');
@@ -640,6 +641,7 @@ function backToLogin() {
 
 // 로그아웃
 function logout() {
+    removeFlashGuard();
     localStorage.removeItem('supplier_logged_in');
     localStorage.removeItem('supplier_token');
     localStorage.removeItem('supplier_id');
@@ -651,10 +653,16 @@ function logout() {
 }
 
 // 대시보드 표시
+function removeFlashGuard() {
+    var g = document.getElementById('flash-guard');
+    if (g) g.remove();
+}
+
 function showDashboard() {
     document.getElementById('auth-section').style.display = 'none';
     document.getElementById('dashboard-section').style.display = 'flex';
     document.getElementById('user-menu').style.display = 'flex';
+    removeFlashGuard(); // inline styles set → guard no longer needed
     document.getElementById('user-name').textContent = localStorage.getItem('supplier_name') || 'Supplier';
     document.body.classList.add('dashboard-mode');
 
@@ -708,6 +716,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         showDashboard();
+    } else {
+        removeFlashGuard();
     }
 
     // Custom Country Select 초기화

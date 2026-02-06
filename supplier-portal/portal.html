@@ -14,24 +14,29 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script>
-        // Prevent auth/dashboard flash: check login + token expiry before first paint
-        try {
-            if (localStorage.getItem('supplier_logged_in') === 'true') {
-                var t = localStorage.getItem('supplier_token');
-                if (t) {
-                    var p = JSON.parse(atob(t.split('.')[1]));
-                    if (!p.exp || p.exp * 1000 > Date.now()) {
-                        document.documentElement.classList.add('logged-in');
+        // Prevent auth/dashboard flash: inject guard style before first paint
+        // JS removes this style tag when it takes over control
+        (function() {
+            var loggedIn = false;
+            try {
+                if (localStorage.getItem('supplier_logged_in') === 'true') {
+                    var t = localStorage.getItem('supplier_token');
+                    if (t) {
+                        var p = JSON.parse(atob(t.split('.')[1]));
+                        if (!p.exp || p.exp * 1000 > Date.now()) {
+                            loggedIn = true;
+                        }
                     }
                 }
-            }
-        } catch(e) {}
+            } catch(e) {}
+            var s = document.createElement('style');
+            s.id = 'flash-guard';
+            s.textContent = loggedIn
+                ? '#auth-section{display:none!important}'
+                : '#dashboard-section{display:none!important}';
+            document.head.appendChild(s);
+        })();
     </script>
-    <style>
-        html.logged-in #auth-section { display: none !important; }
-        html.logged-in #dashboard-section { display: flex !important; }
-        html.logged-in #user-menu { display: flex !important; }
-    </style>
 </head>
 <body>
     <div class="portal-app">
@@ -2780,10 +2785,10 @@
                                 <div class="wd-card">
                                     <div class="wd-card-header" style="display:flex; justify-content:space-between; align-items:center;">
                                         <h3 class="wd-card-title" data-i18n="profile.companyCertifications">Company Certifications</h3>
-                                        <button class="wd-btn wd-btn-primary wd-btn-sm" onclick="openCompanyCertModal()">
+                                        <a href="cert-edit.html?id=new" class="wd-btn wd-btn-primary wd-btn-sm">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                             Add Certification
-                                        </button>
+                                        </a>
                                     </div>
                                     <div class="wd-card-body">
                                         <p class="wd-form-hint wd-mb-4" data-i18n="profile.companyCertsDesc">Certifications that apply to your entire company (HACCP, ISO, BRC, etc.). Product-specific certifications can be added when editing each product.</p>
@@ -3202,59 +3207,7 @@
             </div>
         </div>
 
-        <!-- Company Certification Modal -->
-        <div class="wd-modal-overlay" id="company-cert-modal" style="display:none;">
-            <div class="wd-modal" style="max-width:520px;">
-                <div class="wd-modal-header">
-                    <h3 class="wd-modal-title" id="company-cert-modal-title">Add Certification</h3>
-                    <button class="wd-modal-close" onclick="closeCompanyCertModal()">&times;</button>
-                </div>
-                <div class="wd-modal-body">
-                    <form id="company-cert-form">
-                        <div class="wd-form-group">
-                            <label class="wd-form-label">Certification Name *</label>
-                            <select class="wd-select" id="cert-name">
-                                <option value="">Select certification...</option>
-                                <option value="HACCP">HACCP</option>
-                                <option value="ISO 22000">ISO 22000</option>
-                                <option value="BRC">BRC</option>
-                                <option value="IFS">IFS</option>
-                                <option value="FSSC 22000">FSSC 22000</option>
-                                <option value="GMP">GMP</option>
-                                <option value="SQF">SQF</option>
-                                <option value="ISO 9001">ISO 9001</option>
-                            </select>
-                        </div>
-                        <div class="wd-form-group">
-                            <label class="wd-form-label">Issuer</label>
-                            <input type="text" class="wd-input" id="cert-issuer" placeholder="e.g., SGS, Bureau Veritas">
-                        </div>
-                        <div class="wd-form-row">
-                            <div class="wd-form-group">
-                                <label class="wd-form-label">Issue Date</label>
-                                <input type="date" class="wd-input" id="cert-issue-date">
-                            </div>
-                            <div class="wd-form-group">
-                                <label class="wd-form-label">Expiry Date</label>
-                                <input type="date" class="wd-input" id="cert-expiry-date">
-                            </div>
-                        </div>
-                        <div class="wd-form-group">
-                            <label class="wd-form-label">Status</label>
-                            <select class="wd-select" id="cert-status">
-                                <option value="valid">Valid</option>
-                                <option value="expired">Expired</option>
-                                <option value="pending">Pending</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="wd-modal-footer">
-                    <button class="wd-btn wd-btn-outline" onclick="closeCompanyCertModal()">Cancel</button>
-                    <button class="wd-btn wd-btn-primary" onclick="saveCompanyCert()">Save</button>
-                </div>
-            </div>
-        </div>
+        <!-- Company Certification Modal removed - now uses cert-edit.html -->
 
         <!-- Product Add/Edit Modal -->
         <div class="wd-modal-overlay" id="product-modal" style="display: none;">
