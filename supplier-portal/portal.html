@@ -1025,10 +1025,15 @@
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="display: flex; justify-content: flex-end; align-items: center; padding: 0 24px 16px;">
-                                <div class="wd-filter-actions" style="display: flex; gap: 8px;">
-                                    <button class="wd-btn wd-btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
+                            <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                                <div class="wd-search">
+                                    <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <path d="m21 21-4.3-4.3"></path>
+                                    </svg>
+                                    <input type="text" id="product-search" class="wd-input" placeholder="Search product, SKU..." style="width: 280px;" oninput="searchProducts()">
                                 </div>
+                                <button class="wd-btn wd-btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
                             </div>
 
                             <!-- Hidden filter value holders -->

@@ -1756,12 +1756,18 @@ function applyProductFilter(type, value) {
     applyProductFilters();
 }
 
+function searchProducts() {
+    applyProductFilters();
+}
+
 function applyProductFilters() {
+    const search = (document.getElementById('product-search')?.value || '').toLowerCase().trim();
     const category = document.getElementById('pf-category-value')?.value || '';
     const cert = document.getElementById('pf-cert-value')?.value || '';
     const status = document.getElementById('pf-status-value')?.value || '';
 
     _productFilteredList = _productListAll.filter(p => {
+        if (search && !(p.name || '').toLowerCase().includes(search) && !(p.sku || '').toLowerCase().includes(search)) return false;
         if (category && p.category !== category) return false;
         if (cert && !(p.certifications || []).includes(cert)) return false;
         if (status === 'complete' && (p.completeness || 0) < 70) return false;
