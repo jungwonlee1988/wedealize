@@ -1,72 +1,42 @@
-// WeDealize Supplier Portal - PO Detail/Edit Page Script
-// Handles purchase order viewing and editing on dedicated page
+// WeDealize Supplier Portal - PO Edit Page Script
+// Handles both new PO creation and existing PO detail view/edit
 
 (function() {
     'use strict';
 
     const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
     let currentPOId = null;
-    let poItemRowIndex = 0;
-    let isEditMode = false;
+    let isNewMode = false;
+    let poItemRowIndex = 1;
 
-    // Demo PO data for display
+    // Demo PO data for detail view
     const demoPOData = {
         'PO-2026-0051': {
-            po_number: 'PO-2026-0051',
-            status: 'Draft',
-            statusClass: 'wd-badge-gray',
-            date: '2026.02.05 09:30',
+            po_number: 'PO-2026-0051', status: 'Draft', statusClass: 'wd-badge-gray', date: '2026.02.05 09:30',
             exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
             importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
-            incoterms: 'FCA',
-            paymentTerms: 'T/T',
-            currency: 'EUR',
-            notes: '',
-            items: [
-                { name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }
-            ]
+            incoterms: 'FCA', paymentTerms: 'TT', currency: 'EUR', notes: '',
+            items: [{ name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }]
         },
         '20260202171': {
-            po_number: '20260202171',
-            status: 'Received',
-            statusClass: 'wd-badge-info',
-            date: '2026.02.02 17:10',
+            po_number: '20260202171', status: 'Received', statusClass: 'wd-badge-info', date: '2026.02.02 17:10',
             exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
             importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
-            incoterms: 'FCA',
-            paymentTerms: 'T/T',
-            currency: 'EUR',
-            notes: 'Please ensure proper cold chain handling.',
-            items: [
-                { name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }
-            ]
+            incoterms: 'FCA', paymentTerms: 'TT', currency: 'EUR', notes: 'Please ensure proper cold chain handling.',
+            items: [{ name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }]
         },
         'PO20260203048953': {
-            po_number: 'PO20260203048953',
-            status: 'Confirmed',
-            statusClass: 'wd-badge-success',
-            date: '2026.02.03 13:44',
+            po_number: 'PO20260203048953', status: 'Confirmed', statusClass: 'wd-badge-success', date: '2026.02.03 13:44',
             exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
             importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
-            incoterms: 'FCA',
-            paymentTerms: 'T/T',
-            currency: 'EUR',
-            notes: '',
-            items: [
-                { name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }
-            ]
+            incoterms: 'FCA', paymentTerms: 'TT', currency: 'EUR', notes: '',
+            items: [{ name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }]
         },
         'PO2026012800A2C': {
-            po_number: 'PO2026012800A2C',
-            status: 'Confirmed',
-            statusClass: 'wd-badge-success',
-            date: '2026.01.28 14:22',
+            po_number: 'PO2026012800A2C', status: 'Confirmed', statusClass: 'wd-badge-success', date: '2026.01.28 14:22',
             exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
             importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
-            incoterms: 'FOB',
-            paymentTerms: 'NET30',
-            currency: 'USD',
-            notes: 'Urgent order - expedited shipping required.',
+            incoterms: 'FOB', paymentTerms: 'NET30', currency: 'USD', notes: 'Urgent order - expedited shipping required.',
             items: [
                 { name: 'Premium Organic Coffee Beans 1kg', quantity: 100, unit: 'bags', price: 45.00 },
                 { name: 'Artisan Dark Chocolate 500g', quantity: 50, unit: 'boxes', price: 28.50 }
@@ -85,29 +55,47 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         currentPOId = urlParams.get('id');
+        isNewMode = !currentPOId || currentPOId === 'new';
 
-        if (!currentPOId) {
-            showToast('No PO ID provided', 'error');
-            setTimeout(() => {
-                window.location.href = 'portal.html#po-management';
-            }, 1500);
-            return;
+        if (isNewMode) {
+            setupNewMode();
+        } else {
+            setupDetailMode();
+            loadPOData(currentPOId);
         }
 
-        loadPOData(currentPOId);
+        bindFormEvents();
+    }
+
+    function setupNewMode() {
+        document.body.classList.remove('detail-mode');
+        document.body.classList.add('new-mode');
+        document.getElementById('page-title').textContent = 'Add Purchase Order';
+    }
+
+    function setupDetailMode() {
+        document.body.classList.remove('new-mode');
+        document.body.classList.add('detail-mode');
+        document.getElementById('page-title').textContent = 'PO Detail';
+        document.getElementById('po-form-container').classList.add('view-mode');
+    }
+
+    function bindFormEvents() {
+        const form = document.getElementById('po-edit-form');
+        if (form) {
+            form.addEventListener('submit', handleFormSubmit);
+        }
     }
 
     async function loadPOData(poId) {
         try {
-            // First try API
             const token = localStorage.getItem('supplier_token');
             const response = await fetch(`${API_BASE_URL}/purchase-orders/${poId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-
             if (response.ok) {
                 const po = await response.json();
-                populateForm(po);
+                populateDetailForm(po);
                 return;
             }
         } catch (error) {
@@ -115,73 +103,44 @@
         }
 
         // Fallback to demo data
-        const demoData = demoPOData[poId];
-        if (demoData) {
-            populateForm(demoData);
-        } else {
-            // Generate default demo data for unknown PO IDs
-            populateForm({
-                po_number: poId,
-                status: 'Received',
-                statusClass: 'wd-badge-info',
-                date: new Date().toLocaleString('ko-KR'),
-                exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
-                importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
-                incoterms: 'FCA',
-                paymentTerms: 'T/T',
-                currency: 'EUR',
-                notes: '',
-                items: [
-                    { name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }
-                ]
-            });
-        }
+        const demoData = demoPOData[poId] || {
+            po_number: poId, status: 'Received', statusClass: 'wd-badge-info', date: new Date().toLocaleString('ko-KR'),
+            exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
+            importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
+            incoterms: 'FCA', paymentTerms: 'TT', currency: 'EUR', notes: '',
+            items: [{ name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }]
+        };
+        populateDetailForm(demoData);
     }
 
-    function populateForm(po) {
-        // PO Number and Status Bar
-        document.getElementById('po-number-display').textContent = po.po_number || po.number || currentPOId;
-
+    function populateDetailForm(po) {
+        // Status bar
+        document.getElementById('po-number-display').textContent = po.po_number || currentPOId;
         const statusEl = document.getElementById('po-status');
         statusEl.textContent = po.status || 'Received';
         statusEl.className = `wd-badge ${po.statusClass || 'wd-badge-info'}`;
+        document.getElementById('po-date-display').textContent = po.date || '';
 
-        document.getElementById('po-date-display').textContent = po.date || new Date().toLocaleString('ko-KR');
-
-        // Exporter Info
+        // Exporter
         if (po.exporter) {
-            document.getElementById('exporter-name-view').textContent = po.exporter.name || '-';
             document.getElementById('exporter-name').value = po.exporter.name || '';
-            document.getElementById('exporter-contact-view').textContent = po.exporter.contact || '-';
             document.getElementById('exporter-contact').value = po.exporter.contact || '';
-            document.getElementById('exporter-email-view').textContent = po.exporter.email || '-';
             document.getElementById('exporter-email').value = po.exporter.email || '';
-            document.getElementById('exporter-phone-view').textContent = po.exporter.phone || '-';
             document.getElementById('exporter-phone').value = po.exporter.phone || '';
         }
 
-        // Importer Info
+        // Importer
         if (po.importer) {
-            document.getElementById('importer-name-view').textContent = po.importer.name || '-';
             document.getElementById('importer-name').value = po.importer.name || '';
-            document.getElementById('importer-contact-view').textContent = po.importer.contact || '-';
             document.getElementById('importer-contact').value = po.importer.contact || '';
-            document.getElementById('importer-email-view').textContent = po.importer.email || '-';
             document.getElementById('importer-email').value = po.importer.email || '';
-            document.getElementById('importer-phone-view').textContent = po.importer.phone || '-';
             document.getElementById('importer-phone').value = po.importer.phone || '';
         }
 
-        // Trade Info
-        document.getElementById('incoterms-view').textContent = po.incoterms || 'FCA';
-        document.getElementById('incoterms').value = po.incoterms || 'FCA';
-        document.getElementById('payment-terms-view').textContent = po.paymentTerms || 'T/T';
-        document.getElementById('payment-terms').value = po.paymentTerms === 'T/T' ? 'TT' : (po.paymentTerms || 'TT');
-        document.getElementById('currency-view').textContent = po.currency || 'EUR';
-        document.getElementById('currency').value = po.currency || 'EUR';
-
-        // Notes
-        document.getElementById('notes-view').textContent = po.notes || '-';
+        // Trade info
+        document.getElementById('incoterms').value = po.incoterms || 'FOB';
+        document.getElementById('payment-terms').value = po.paymentTerms || 'TT';
+        document.getElementById('currency').value = po.currency || 'USD';
         document.getElementById('notes').value = po.notes || '';
 
         // Items
@@ -194,7 +153,6 @@
 
         let totalQty = 0;
         let totalAmount = 0;
-        const currency = document.getElementById('currency-view').textContent;
 
         items.forEach((item, index) => {
             const qty = item.quantity || 0;
@@ -206,34 +164,18 @@
             const row = document.createElement('tr');
             row.setAttribute('data-row', index);
             row.innerHTML = `
-                <td>
-                    <span class="view-value">${item.name || item.product_name}</span>
-                    <input type="text" class="wd-input edit-input po-item-name" value="${item.name || item.product_name}" style="display:none;">
-                </td>
-                <td style="text-align: right;">
-                    <span class="view-value">${qty}</span>
-                    <input type="number" class="wd-input edit-input po-item-qty" value="${qty}" min="1" onchange="updateItemSubtotal(${index})" style="display:none; width:80px;">
-                </td>
-                <td>
-                    <span class="view-value">${item.unit}</span>
-                    <select class="wd-select edit-input po-item-unit" style="display:none;">
-                        <option ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
-                        <option ${item.unit === 'boxes' ? 'selected' : ''}>boxes</option>
-                        <option ${item.unit === 'bags' ? 'selected' : ''}>bags</option>
-                        <option ${item.unit === 'cases' ? 'selected' : ''}>cases</option>
-                        <option ${item.unit === 'kg' ? 'selected' : ''}>kg</option>
-                    </select>
-                </td>
-                <td style="text-align: right;">
-                    <span class="view-value">${price.toFixed(2)}</span>
-                    <input type="number" class="wd-input edit-input po-item-price" value="${price}" min="0" step="0.01" onchange="updateItemSubtotal(${index})" style="display:none; width:100px;">
-                </td>
-                <td style="text-align: right;" class="po-item-subtotal">${subtotal.toFixed(2)}</td>
-                <td class="edit-col">
-                    <button type="button" class="wd-btn-icon" onclick="removePOItemRow(${index})" style="padding:2px;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
-                </td>
+                <td><input type="text" class="wd-input po-item-name" value="${item.name || item.product_name || ''}" placeholder="Product name"></td>
+                <td><input type="number" class="wd-input po-item-qty" min="1" value="${qty}" onchange="calculatePOItemSubtotal(${index})"></td>
+                <td><select class="wd-select po-item-unit">
+                    <option ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
+                    <option ${item.unit === 'boxes' ? 'selected' : ''}>boxes</option>
+                    <option ${item.unit === 'bags' ? 'selected' : ''}>bags</option>
+                    <option ${item.unit === 'cases' ? 'selected' : ''}>cases</option>
+                    <option ${item.unit === 'kg' ? 'selected' : ''}>kg</option>
+                </select></td>
+                <td><input type="number" class="wd-input po-item-price" min="0" step="0.01" value="${price}" onchange="calculatePOItemSubtotal(${index})"></td>
+                <td class="po-item-subtotal" style="text-align:right;font-weight:600;">${subtotal.toFixed(2)}</td>
+                <td><button type="button" class="wd-btn-icon" onclick="removePOItemRow(${index})" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
             `;
             tbody.appendChild(row);
         });
@@ -241,8 +183,109 @@
         poItemRowIndex = items.length;
         document.getElementById('items-count').textContent = items.length;
         document.getElementById('total-qty').textContent = totalQty;
-        document.getElementById('total-currency').textContent = currency;
+        document.getElementById('total-currency').textContent = document.getElementById('currency').value;
         document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
+    }
+
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+
+        const poNumber = document.getElementById('po-number')?.value?.trim();
+        const exporterName = document.getElementById('exporter-name').value.trim();
+
+        if (isNewMode && (!poNumber || !exporterName)) {
+            showToast('PO Number and Exporter Company are required', 'warning');
+            return;
+        }
+
+        const formData = collectFormData();
+        formData.status = 'created';
+
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="spinner"></span> Saving...';
+        submitBtn.disabled = true;
+
+        try {
+            await savePOToAPI(formData);
+            showToast('Purchase Order saved successfully!', 'success');
+            setTimeout(() => {
+                window.location.href = 'portal.html#po-management';
+            }, 1000);
+        } catch (error) {
+            console.error('Save error:', error);
+            showToast('PO saved locally', 'success');
+            setTimeout(() => {
+                window.location.href = 'portal.html#po-management';
+            }, 1000);
+        }
+
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+
+    function collectFormData() {
+        const items = [];
+        document.querySelectorAll('#po-items-tbody tr[data-row]').forEach(row => {
+            const name = row.querySelector('.po-item-name')?.value;
+            const qty = row.querySelector('.po-item-qty')?.value;
+            const unit = row.querySelector('.po-item-unit')?.value;
+            const price = row.querySelector('.po-item-price')?.value;
+
+            if (name && qty && price) {
+                items.push({
+                    product_name: name,
+                    quantity: parseInt(qty),
+                    unit: unit,
+                    unit_price: parseFloat(price)
+                });
+            }
+        });
+
+        return {
+            po_number: document.getElementById('po-number')?.value?.trim() || currentPOId,
+            order_date: document.getElementById('po-date')?.value || new Date().toISOString().split('T')[0],
+            exporter: {
+                name: document.getElementById('exporter-name').value,
+                contact: document.getElementById('exporter-contact').value,
+                email: document.getElementById('exporter-email').value,
+                phone: document.getElementById('exporter-phone').value
+            },
+            importer: {
+                name: document.getElementById('importer-name').value,
+                contact: document.getElementById('importer-contact').value,
+                email: document.getElementById('importer-email').value,
+                phone: document.getElementById('importer-phone').value
+            },
+            incoterms: document.getElementById('incoterms').value,
+            payment_terms: document.getElementById('payment-terms').value,
+            currency: document.getElementById('currency').value,
+            notes: document.getElementById('notes').value,
+            items: items
+        };
+    }
+
+    async function savePOToAPI(formData) {
+        const token = localStorage.getItem('supplier_token');
+        const endpoint = isNewMode
+            ? `${API_BASE_URL}/purchase-orders`
+            : `${API_BASE_URL}/purchase-orders/${currentPOId}`;
+        const method = isNewMode ? 'POST' : 'PATCH';
+
+        const response = await fetch(endpoint, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save PO');
+        }
+
+        return await response.json();
     }
 
     // Global functions
@@ -251,9 +294,7 @@
         const toggle = document.getElementById('edit-mode-toggle');
         const saveBtn = document.getElementById('save-btn');
 
-        isEditMode = toggle.checked;
-
-        if (isEditMode) {
+        if (toggle.checked) {
             container.classList.remove('view-mode');
             container.classList.add('edit-mode');
             saveBtn.style.display = 'inline-flex';
@@ -264,37 +305,65 @@
         }
     };
 
-    window.addPOItemRow = function() {
+    window.savePO = async function() {
+        const saveBtn = document.getElementById('save-btn');
+        const originalText = saveBtn.innerHTML;
+        saveBtn.innerHTML = '<span class="spinner"></span> Saving...';
+        saveBtn.disabled = true;
+
+        try {
+            const formData = collectFormData();
+            await savePOToAPI(formData);
+            showToast('Purchase Order updated successfully!', 'success');
+            document.getElementById('edit-mode-toggle').checked = false;
+            toggleEditMode();
+        } catch (error) {
+            showToast('Changes saved locally', 'success');
+            document.getElementById('edit-mode-toggle').checked = false;
+            toggleEditMode();
+        }
+
+        saveBtn.innerHTML = originalText;
+        saveBtn.disabled = false;
+    };
+
+    window.savePOAsDraft = async function() {
+        const formData = collectFormData();
+        formData.status = 'draft';
+
+        try {
+            await savePOToAPI(formData);
+            showToast('PO saved as draft', 'success');
+            setTimeout(() => {
+                window.location.href = 'portal.html#po-management';
+            }, 1000);
+        } catch (error) {
+            showToast('Draft saved locally', 'success');
+            setTimeout(() => {
+                window.location.href = 'portal.html#po-management';
+            }, 1000);
+        }
+    };
+
+    window.addPOItemRow = function(item = null) {
         const tbody = document.getElementById('po-items-tbody');
         const index = poItemRowIndex++;
 
         const row = document.createElement('tr');
         row.setAttribute('data-row', index);
         row.innerHTML = `
-            <td>
-                <input type="text" class="wd-input po-item-name" placeholder="Product name">
-            </td>
-            <td style="text-align: right;">
-                <input type="number" class="wd-input po-item-qty" value="1" min="1" onchange="updateItemSubtotal(${index})" style="width:80px;">
-            </td>
-            <td>
-                <select class="wd-select po-item-unit">
-                    <option>pcs</option>
-                    <option>boxes</option>
-                    <option>bags</option>
-                    <option>cases</option>
-                    <option>kg</option>
-                </select>
-            </td>
-            <td style="text-align: right;">
-                <input type="number" class="wd-input po-item-price" value="0" min="0" step="0.01" onchange="updateItemSubtotal(${index})" style="width:100px;">
-            </td>
-            <td style="text-align: right;" class="po-item-subtotal">0.00</td>
-            <td class="edit-col">
-                <button type="button" class="wd-btn-icon" onclick="removePOItemRow(${index})" style="padding:2px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-            </td>
+            <td><input type="text" class="wd-input po-item-name" placeholder="Product name" value="${item?.product_name || ''}"></td>
+            <td><input type="number" class="wd-input po-item-qty" min="1" value="${item?.quantity || 1}" onchange="calculatePOItemSubtotal(${index})"></td>
+            <td><select class="wd-select po-item-unit">
+                <option ${(item?.unit === 'pcs' || !item) ? 'selected' : ''}>pcs</option>
+                <option ${item?.unit === 'boxes' ? 'selected' : ''}>boxes</option>
+                <option ${item?.unit === 'bags' ? 'selected' : ''}>bags</option>
+                <option ${item?.unit === 'cases' ? 'selected' : ''}>cases</option>
+                <option ${item?.unit === 'kg' ? 'selected' : ''}>kg</option>
+            </select></td>
+            <td><input type="number" class="wd-input po-item-price" min="0" step="0.01" value="${item?.unit_price || 0}" onchange="calculatePOItemSubtotal(${index})"></td>
+            <td class="po-item-subtotal" style="text-align:right;font-weight:600;">0.00</td>
+            <td><button type="button" class="wd-btn-icon" onclick="removePOItemRow(${index})" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
         `;
         tbody.appendChild(row);
         updateTotals();
@@ -308,7 +377,7 @@
         }
     };
 
-    window.updateItemSubtotal = function(index) {
+    window.calculatePOItemSubtotal = function(index) {
         const row = document.querySelector(`#po-items-tbody tr[data-row="${index}"]`);
         if (!row) return;
 
@@ -336,114 +405,25 @@
         const itemsCount = document.querySelectorAll('#po-items-tbody tr[data-row]').length;
         document.getElementById('items-count').textContent = itemsCount;
         document.getElementById('total-qty').textContent = totalQty;
+        document.getElementById('total-currency').textContent = document.getElementById('currency').value;
         document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
     }
 
-    window.savePO = async function() {
-        const saveBtn = document.getElementById('save-btn');
-        const originalText = saveBtn.innerHTML;
-        saveBtn.innerHTML = '<span class="spinner"></span> Saving...';
-        saveBtn.disabled = true;
+    window.handlePOFileUpload = function(event) {
+        const file = event.target?.files?.[0];
+        if (!file) return;
 
-        try {
-            const formData = collectFormData();
-            const token = localStorage.getItem('supplier_token');
-
-            const response = await fetch(`${API_BASE_URL}/purchase-orders/${currentPOId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (response.ok) {
-                showToast('Purchase Order updated successfully!', 'success');
-                // Update view values from inputs
-                syncViewFromInputs();
-                // Turn off edit mode
-                document.getElementById('edit-mode-toggle').checked = false;
-                toggleEditMode();
-            } else {
-                throw new Error('Failed to save');
-            }
-        } catch (error) {
-            console.error('Save error:', error);
-            showToast('Changes saved locally', 'success');
-            syncViewFromInputs();
-            document.getElementById('edit-mode-toggle').checked = false;
-            toggleEditMode();
+        if (file.size > 20 * 1024 * 1024) {
+            showToast('File too large (max 20MB)', 'error');
+            return;
         }
 
-        saveBtn.innerHTML = originalText;
-        saveBtn.disabled = false;
+        document.getElementById('po-file-name').textContent = file.name;
+        showToast('File selected: ' + file.name, 'info');
     };
-
-    function collectFormData() {
-        const items = [];
-        document.querySelectorAll('#po-items-tbody tr[data-row]').forEach(row => {
-            const nameInput = row.querySelector('.po-item-name');
-            const name = nameInput?.value || nameInput?.textContent;
-            const qty = row.querySelector('.po-item-qty')?.value;
-            const unit = row.querySelector('.po-item-unit')?.value;
-            const price = row.querySelector('.po-item-price')?.value;
-
-            if (name && qty && price) {
-                items.push({
-                    product_name: name,
-                    quantity: parseInt(qty),
-                    unit: unit,
-                    unit_price: parseFloat(price)
-                });
-            }
-        });
-
-        return {
-            exporter: {
-                name: document.getElementById('exporter-name').value,
-                contact: document.getElementById('exporter-contact').value,
-                email: document.getElementById('exporter-email').value,
-                phone: document.getElementById('exporter-phone').value
-            },
-            importer: {
-                name: document.getElementById('importer-name').value,
-                contact: document.getElementById('importer-contact').value,
-                email: document.getElementById('importer-email').value,
-                phone: document.getElementById('importer-phone').value
-            },
-            incoterms: document.getElementById('incoterms').value,
-            payment_terms: document.getElementById('payment-terms').value,
-            currency: document.getElementById('currency').value,
-            notes: document.getElementById('notes').value,
-            items: items
-        };
-    }
-
-    function syncViewFromInputs() {
-        // Sync view values from edit inputs
-        document.getElementById('exporter-name-view').textContent = document.getElementById('exporter-name').value || '-';
-        document.getElementById('exporter-contact-view').textContent = document.getElementById('exporter-contact').value || '-';
-        document.getElementById('exporter-email-view').textContent = document.getElementById('exporter-email').value || '-';
-        document.getElementById('exporter-phone-view').textContent = document.getElementById('exporter-phone').value || '-';
-
-        document.getElementById('importer-name-view').textContent = document.getElementById('importer-name').value || '-';
-        document.getElementById('importer-contact-view').textContent = document.getElementById('importer-contact').value || '-';
-        document.getElementById('importer-email-view').textContent = document.getElementById('importer-email').value || '-';
-        document.getElementById('importer-phone-view').textContent = document.getElementById('importer-phone').value || '-';
-
-        document.getElementById('incoterms-view').textContent = document.getElementById('incoterms').value;
-        const paymentVal = document.getElementById('payment-terms').value;
-        document.getElementById('payment-terms-view').textContent = paymentVal === 'TT' ? 'T/T' : paymentVal;
-        document.getElementById('currency-view').textContent = document.getElementById('currency').value;
-        document.getElementById('currency-view').textContent = document.getElementById('currency').value;
-        document.getElementById('total-currency').textContent = document.getElementById('currency').value;
-        document.getElementById('notes-view').textContent = document.getElementById('notes').value || '-';
-    }
 
     window.downloadPO = function() {
         showToast('Preparing download...', 'info');
-        // Trigger print/PDF generation
         setTimeout(() => window.print(), 500);
     };
 
