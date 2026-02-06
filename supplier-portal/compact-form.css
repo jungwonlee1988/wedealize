@@ -1,0 +1,302 @@
+/* WeDealize Compact Form Design System
+ * Standard layout for all ADD/EDIT pages
+ * Optimized for minimal scrolling with dense, organized inputs
+ */
+
+/* Main Container */
+.compact-form {
+    padding: 16px 24px;
+}
+
+.compact-form .page-header {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--wd-gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.compact-form .page-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.compact-form .page-title {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.compact-form .page-header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.compact-form .page-header-actions .wd-btn {
+    padding: 6px 14px;
+    font-size: 0.875rem;
+}
+
+/* Grid Layouts */
+.compact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.compact-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+/* Section Cards */
+.compact-section {
+    background: var(--wd-white);
+    border: 1px solid var(--wd-gray-200);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.compact-section-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--wd-gray-700);
+}
+
+.compact-section-title .section-icon {
+    font-size: 1rem;
+}
+
+/* Row Layouts inside Sections */
+.compact-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.compact-row-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.compact-row-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.compact-row:last-child,
+.compact-row-3:last-child,
+.compact-row-4:last-child {
+    margin-bottom: 0;
+}
+
+/* Form Elements - Compact Sizing */
+.compact-form .wd-form-group {
+    margin-bottom: 0;
+}
+
+.compact-form .wd-form-label {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+}
+
+.compact-form .wd-input,
+.compact-form .wd-select,
+.compact-form .wd-textarea {
+    padding: 6px 10px;
+    font-size: 0.875rem;
+}
+
+.compact-form .wd-textarea {
+    min-height: 60px;
+}
+
+.compact-form .wd-badge {
+    font-size: 0.625rem;
+    padding: 1px 4px;
+}
+
+/* Upload Area */
+.compact-upload {
+    padding: 12px;
+    text-align: center;
+    border: 2px dashed var(--wd-gray-300);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.compact-upload:hover {
+    border-color: var(--wd-primary);
+    background-color: var(--wd-gray-50);
+}
+
+.compact-upload.dragover {
+    border-color: var(--wd-primary);
+    background-color: rgba(var(--wd-primary-rgb), 0.05);
+}
+
+.compact-upload svg {
+    width: 24px;
+    height: 24px;
+    color: var(--wd-gray-400);
+}
+
+.compact-upload p {
+    font-size: 0.75rem;
+    margin: 4px 0 0;
+    color: var(--wd-gray-500);
+}
+
+/* Full-width Items Section */
+.items-section {
+    grid-column: 1 / -1;
+}
+
+/* Compact Table */
+.compact-table {
+    font-size: 0.8rem;
+}
+
+.compact-table th,
+.compact-table td {
+    padding: 6px 8px;
+}
+
+.compact-table .wd-input,
+.compact-table .wd-select {
+    padding: 4px 6px;
+    font-size: 0.8rem;
+}
+
+/* Total Box */
+.total-box {
+    background: var(--wd-gray-50);
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-align: right;
+    margin-top: 8px;
+}
+
+/* File List */
+.file-list {
+    margin-top: 8px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: var(--wd-gray-50);
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-size: 0.8rem;
+}
+
+.file-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Checkbox Grid - Compact */
+.compact-form .wd-checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.compact-form .wd-checkbox-card {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+}
+
+/* Image Upload - Compact */
+.compact-image-upload {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.compact-image-preview {
+    width: 80px;
+    height: 80px;
+    border: 1px solid var(--wd-gray-200);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--wd-gray-50);
+}
+
+.compact-image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.compact-image-preview svg {
+    width: 32px;
+    height: 32px;
+    color: var(--wd-gray-300);
+}
+
+/* Column Layout Helper */
+.compact-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Read-only/Detail View Mode */
+.compact-form.view-mode .wd-input,
+.compact-form.view-mode .wd-select,
+.compact-form.view-mode .wd-textarea {
+    background-color: var(--wd-gray-50);
+    border-color: var(--wd-gray-200);
+    cursor: default;
+}
+
+.compact-form.view-mode .compact-upload {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Status Badge in Header */
+.page-status-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.page-status-badge.status-draft {
+    background-color: var(--wd-gray-100);
+    color: var(--wd-gray-600);
+}
+
+.page-status-badge.status-pending {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+.page-status-badge.status-approved {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.page-status-badge.status-rejected {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}

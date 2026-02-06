@@ -7,32 +7,7 @@
     <link rel="icon" type="image/png" href="./favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="design-system.css">
-    <style>
-        .compact-form { padding: 16px 24px; }
-        .compact-form .page-header { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--wd-gray-200); }
-        .compact-form .page-title { font-size: 1.25rem; }
-        .compact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .compact-section { background: var(--wd-white); border: 1px solid var(--wd-gray-200); border-radius: 8px; padding: 12px; }
-        .compact-section-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; color: var(--wd-gray-700); }
-        .compact-section-title .section-icon { font-size: 1rem; }
-        .compact-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px; }
-        .compact-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
-        .compact-form .wd-form-group { margin-bottom: 0; }
-        .compact-form .wd-form-label { font-size: 0.75rem; margin-bottom: 4px; }
-        .compact-form .wd-input, .compact-form .wd-select, .compact-form .wd-textarea { padding: 6px 10px; font-size: 0.875rem; }
-        .compact-form .wd-textarea { min-height: 60px; }
-        .compact-form .wd-badge { font-size: 0.625rem; padding: 1px 4px; }
-        .compact-upload { padding: 12px; text-align: center; border: 2px dashed var(--wd-gray-300); border-radius: 6px; cursor: pointer; }
-        .compact-upload svg { width: 24px; height: 24px; }
-        .compact-upload p { font-size: 0.75rem; margin: 4px 0 0; }
-        .items-section { grid-column: 1 / -1; }
-        .compact-table { font-size: 0.8rem; }
-        .compact-table th, .compact-table td { padding: 6px 8px; }
-        .compact-table .wd-input, .compact-table .wd-select { padding: 4px 6px; font-size: 0.8rem; }
-        .compact-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 0; border-top: 1px solid var(--wd-gray-200); margin-top: 12px; }
-        .compact-actions .wd-btn { padding: 8px 16px; font-size: 0.875rem; }
-        .total-box { background: var(--wd-gray-50); padding: 8px 12px; border-radius: 6px; text-align: right; margin-top: 8px; }
-    </style>
+    <link rel="stylesheet" href="compact-form.css">
 </head>
 <body>
     <div class="portal-app">
@@ -110,16 +85,16 @@
 
                     <div class="dashboard-content">
                         <div class="compact-form">
-                            <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
-                                <div class="page-header-left" style="display: flex; align-items: center; gap: 12px;">
+                            <div class="page-header">
+                                <div class="page-header-left">
                                     <a href="portal.html#po-management" class="btn-back">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                                     </a>
                                     <h1 class="page-title">Add Purchase Order</h1>
                                 </div>
-                                <div class="page-header-actions" style="display: flex; gap: 8px;">
-                                    <a href="portal.html#po-management" class="wd-btn wd-btn-outline" style="padding: 6px 14px; font-size: 0.875rem;">Cancel</a>
-                                    <button type="submit" form="po-edit-form" class="wd-btn wd-btn-primary" style="padding: 6px 14px; font-size: 0.875rem;">
+                                <div class="page-header-actions">
+                                    <a href="portal.html#po-management" class="wd-btn wd-btn-outline">Cancel</a>
+                                    <button type="submit" form="po-edit-form" class="wd-btn wd-btn-primary">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
                                         Save PO
                                     </button>
@@ -129,7 +104,7 @@
                             <form id="po-edit-form">
                                 <div class="compact-grid">
                                     <!-- Left Column -->
-                                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                                    <div class="compact-column">
                                         <!-- Basic Info -->
                                         <div class="compact-section">
                                             <h3 class="compact-section-title"><span class="section-icon">📋</span> Basic Info</h3>
@@ -176,7 +151,7 @@
                                     </div>
 
                                     <!-- Right Column -->
-                                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                                    <div class="compact-column">
                                         <!-- Trade Terms -->
                                         <div class="compact-section">
                                             <h3 class="compact-section-title"><span class="section-icon">🌍</span> Trade Terms</h3>
