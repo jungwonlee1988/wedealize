@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="./favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="components.css">
     <!-- Cropper.js for image cropping -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
     <!-- Google Sign-In -->
@@ -827,18 +828,8 @@
                                         <span class="wd-badge wd-badge-info"><span id="extracted-total">0</span> products extracted</span>
                                     </div>
                                     <div class="wd-card-body">
-                                        <div class="wd-filter-tabs wd-mb-5">
-                                            <button class="wd-filter-tab active" data-filter="all" onclick="filterExtractedProducts('all')">
-                                                <span data-i18n="common.all">All</span> <span id="extracted-all-count">0</span>
-                                            </button>
-                                            <button class="wd-filter-tab" data-filter="complete" onclick="filterExtractedProducts('complete')">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                                                <span data-i18n="products.complete">Complete</span> <span id="complete-count">0</span>
-                                            </button>
-                                            <button class="wd-filter-tab" data-filter="incomplete" onclick="filterExtractedProducts('incomplete')">
-                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                                <span data-i18n="products.incomplete">Incomplete</span> <span id="incomplete-count">0</span>
-                                            </button>
+                                        <div class="wd-mb-3" style="color: var(--text-secondary); font-size: 14px;">
+                                            Select the products you want to register. You can edit details before proceeding.
                                         </div>
 
                                         <table class="wd-table">
@@ -848,7 +839,6 @@
                                                     <th data-i18n="products.product">Product</th>
                                                     <th data-i18n="modal.category">Category</th>
                                                     <th data-i18n="catalog.price">Price</th>
-                                                    <th data-i18n="catalog.status">Status</th>
                                                     <th data-i18n="catalog.actions">Actions</th>
                                                 </tr>
                                             </thead>
@@ -1039,13 +1029,13 @@
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                            <div class="wd-filter-bar">
                                 <div class="wd-search">
                                     <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="11" cy="11" r="8"></circle>
                                         <path d="m21 21-4.3-4.3"></path>
                                     </svg>
-                                    <input type="text" id="product-search" class="wd-input" placeholder="Search product, SKU..." style="width: 280px;" oninput="searchProducts()">
+                                    <input type="text" id="product-search" class="wd-input" placeholder="Search product, SKU..." oninput="searchProducts()">
                                 </div>
                                 <button class="wd-btn wd-btn-outline" onclick="exportProducts()" data-i18n="products.exportCSV">Export CSV</button>
                             </div>
@@ -1154,19 +1144,19 @@
                             </div>
 
                             <!-- Tabs -->
-                            <div class="wd-tabs" style="padding: 0 24px;">
+                            <div class="wd-tabs wd-px-6">
                                 <button class="wd-tab active" onclick="filterPOByTab('active')" data-i18n="sales.activePO">Active POs</button>
                                 <button class="wd-tab" onclick="filterPOByTab('cancelled')" data-i18n="sales.cancelledPO">Cancelled POs</button>
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                            <div class="wd-filter-bar">
                                 <div class="wd-search">
                                     <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="11" cy="11" r="8"></circle>
                                         <path d="m21 21-4.3-4.3"></path>
                                     </svg>
-                                    <input type="text" id="po-search" class="wd-input" placeholder="Search PO#, Buyer..." style="width: 280px;" oninput="searchPO()">
+                                    <input type="text" id="po-search" class="wd-input" placeholder="Search PO#, Buyer..." oninput="searchPO()">
                                 </div>
                                 <div></div>
                             </div>
@@ -1630,19 +1620,19 @@
                             </div>
 
                             <!-- Tabs -->
-                            <div class="wd-tabs" style="padding: 0 24px;">
+                            <div class="wd-tabs wd-px-6">
                                 <button class="wd-tab active" onclick="filterINVByTab('active')" data-i18n="inv.activeINV">Active INVs</button>
                                 <button class="wd-tab" onclick="filterINVByTab('cancelled')" data-i18n="inv.cancelledINV">Cancelled INVs</button>
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                            <div class="wd-filter-bar">
                                 <div class="wd-search">
                                     <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="11" cy="11" r="8"></circle>
                                         <path d="m21 21-4.3-4.3"></path>
                                     </svg>
-                                    <input type="text" id="inv-search" class="wd-input" placeholder="Search INV#, PO#, Buyer..." style="width: 280px;" oninput="filterINVList()">
+                                    <input type="text" id="inv-search" class="wd-input" placeholder="Search INV#, PO#, Buyer..." oninput="filterINVList()">
                                 </div>
                                 <div></div>
                             </div>
@@ -1968,19 +1958,19 @@
                             </div>
 
                             <!-- Tabs -->
-                            <div class="wd-tabs" style="padding: 0 24px;">
+                            <div class="wd-tabs wd-px-6">
                                 <button class="wd-tab active" onclick="filterCreditByTab('active')" data-i18n="credit.activeCredits">Active Credits</button>
                                 <button class="wd-tab" onclick="filterCreditByTab('cancelled')" data-i18n="credit.cancelledCredits">Cancelled Credits</button>
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                            <div class="wd-filter-bar">
                                 <div class="wd-search">
                                     <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="11" cy="11" r="8"></circle>
                                         <path d="m21 21-4.3-4.3"></path>
                                     </svg>
-                                    <input type="text" id="credit-search" class="wd-input" placeholder="Search Credit#, Invoice, Buyer..." style="width: 280px;" oninput="filterCredits()">
+                                    <input type="text" id="credit-search" class="wd-input" placeholder="Search Credit#, Invoice, Buyer..." oninput="filterCredits()">
                                 </div>
                                 <div></div>
                             </div>
@@ -2138,13 +2128,13 @@
                             </div>
 
                             <!-- Filter Bar -->
-                            <div class="wd-filter-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+                            <div class="wd-filter-bar">
                                 <div class="wd-search">
                                     <svg class="wd-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="11" cy="11" r="8"></circle>
                                         <path d="m21 21-4.3-4.3"></path>
                                     </svg>
-                                    <input type="text" id="account-search" class="wd-input" placeholder="Search company, contact..." style="width: 280px;" oninput="filterAccounts()">
+                                    <input type="text" id="account-search" class="wd-input" placeholder="Search company, contact..." oninput="filterAccounts()">
                                 </div>
                                 <div></div>
                             </div>
@@ -2568,7 +2558,7 @@
                             </div>
 
                             <!-- Tabs -->
-                            <div class="wd-tabs" style="padding: 0 24px;">
+                            <div class="wd-tabs wd-px-6">
                                 <button class="wd-tab active" onclick="switchBuyerTab('inquired')" id="tab-inquired" data-i18n="buyerDiscovery.inquiredBuyers">Inquired Buyers</button>
                                 <button class="wd-tab" onclick="switchBuyerTab('potential')" id="tab-potential">
                                     <span data-i18n="buyerDiscovery.potentialBuyers">Potential Buyers</span>
@@ -2715,7 +2705,7 @@
                             </div>
 
                             <!-- Tabs -->
-                            <div class="wd-tabs" style="padding: 0 24px;">
+                            <div class="wd-tabs wd-px-6">
                                 <button class="wd-tab active" data-i18n="inquiry.allInquiries">All Inquiries</button>
                                 <button class="wd-tab" data-i18n="inquiry.quotationRequest">Quotation Request</button>
                                 <button class="wd-tab" data-i18n="inquiry.sampleRequest">Sample Request</button>
@@ -2920,7 +2910,7 @@
                             </div>
 
                             <!-- Settings Tabs -->
-                            <div class="wd-tabs" style="padding: 0 24px;">
+                            <div class="wd-tabs wd-px-6">
                                 <button class="wd-tab active" onclick="switchSettingsTab('subscription')" data-i18n="settings.subscriptionTab">Subscription</button>
                                 <button class="wd-tab" onclick="switchSettingsTab('team')" data-i18n="settings.teamTab">Team</button>
                                 <button class="wd-tab" onclick="switchSettingsTab('logs')" data-i18n="settings.logsTab">Activity Log</button>

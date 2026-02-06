@@ -1777,7 +1777,7 @@ async function loadProducts(filter = null) {
     } catch (error) {
         console.error('Failed to load products:', error);
         if (tbody) {
-            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:#999;">No products yet. Click "Add Product" to create one.</td></tr>`;
+            tbody.innerHTML = renderEmptyRow(8, 'No products yet. Click "Add Product" to create one.');
         }
     }
 }
@@ -1888,7 +1888,7 @@ function renderProductListPage() {
         const msg = _productFilteredList !== null
             ? 'No products match the current filters.'
             : 'No products yet. Click "Add Product" to create one.';
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px; color:#999;">${msg}</td></tr>`;
+        tbody.innerHTML = renderEmptyRow(8, msg);
         if (paginationEl) paginationEl.style.display = 'none';
         return;
     }
@@ -1899,6 +1899,7 @@ function renderProductListPage() {
     const pageProducts = products.slice(start, start + _productListPageSize);
 
     const isIncomplete = (p) => (p.completeness || 0) < 70;
+    const productThumbSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>';
 
     tbody.innerHTML = pageProducts.map(product => {
         const priceDisplay = product.min_price
@@ -1907,32 +1908,22 @@ function renderProductListPage() {
 
         const moqDisplay = product.moq
             ? `${product.moq}${product.moq_unit ? ' ' + product.moq_unit : ''}`
-            : '<span class="wd-badge wd-badge-warning">Missing</span>';
+            : renderBadge('Missing', 'warning');
 
         return `
-        <tr class="${isIncomplete(product) ? 'wd-row-warning' : ''}" style="cursor:pointer;" onclick="editProduct('${product.id}')">
-            <td>
-                <div class="wd-product-cell">
-                    <div class="wd-product-thumb">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
-                    </div>
-                    <div>
-                        <span class="wd-product-name">${escapeHtml(product.name)}</span>
-                        <div class="wd-product-sub">${escapeHtml(product.sku || '')}</div>
-                    </div>
-                </div>
-            </td>
-            <td>${product.category ? `<span class="wd-badge wd-badge-outline">${escapeHtml(product.category)}</span>` : '<span class="wd-badge wd-badge-warning">Missing</span>'}</td>
+        <tr class="${isIncomplete(product) ? 'wd-row-warning' : ''} wd-table-row-clickable" onclick="editProduct('${product.id}')">
+            <td>${renderCellGroup(product.name, product.sku || '', productThumbSvg)}</td>
+            <td>${product.category ? renderBadge(product.category, 'outline') : renderBadge('Missing', 'warning')}</td>
             <td>${escapeHtml(product.sku || '-')}</td>
             <td>${priceDisplay}</td>
             <td>${moqDisplay}</td>
             <td>
                 ${product.certifications?.length > 0
-                    ? product.certifications.map(c => `<span class="wd-badge wd-badge-success">${escapeHtml(c)}</span>`).join(' ')
+                    ? product.certifications.map(c => renderBadge(c, 'success')).join(' ')
                     : '<span class="wd-text-muted">None</span>'}
             </td>
-            <td><span class="wd-badge ${isIncomplete(product) ? 'wd-badge-warning' : 'wd-badge-success'}">${isIncomplete(product) ? 'Incomplete' : 'Complete'}</span></td>
-            <td><span class="wd-text-muted" style="font-size:0.8rem;">${product.created_at ? new Date(product.created_at).toLocaleDateString() : '-'}</span></td>
+            <td>${renderBadge(isIncomplete(product) ? 'Incomplete' : 'Complete', isIncomplete(product) ? 'warning' : 'success')}</td>
+            <td><span class="wd-cell-secondary">${wdFormatDate(product.created_at)}</span></td>
         </tr>`;
     }).join('');
 
@@ -2653,7 +2644,7 @@ function loadExtractedProducts() {
     const incompleteEl = document.getElementById('incomplete-count');
 
     if (!extractedProducts.length) {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-secondary);">No products extracted yet.</td></tr>';
+        if (tbody) tbody.innerHTML = renderEmptyRow(5, 'No products extracted yet.');
         return;
     }
 
@@ -2662,14 +2653,13 @@ function loadExtractedProducts() {
     const incompleteCount = extractedProducts.length - completeCount;
 
     totalEl.textContent = extractedProducts.length;
-    completeEl.textContent = completeCount;
-    incompleteEl.textContent = incompleteCount;
+    if (completeEl) completeEl.textContent = completeCount;
+    if (incompleteEl) incompleteEl.textContent = incompleteCount;
 
-    // 테이블 렌더링
+    // 테이블 렌더링 (status 컬럼 제거)
     tbody.innerHTML = extractedProducts.map(product => {
-        const isIncomplete = product.status === 'incomplete';
         return `
-            <tr class="${isIncomplete ? 'wd-row-warning' : ''}">
+            <tr>
                 <td class="col-checkbox"><input type="checkbox" class="extract-checkbox" data-id="${product.id}" onchange="updateSelectedCount()" checked></td>
                 <td>
                     <div class="wd-product-cell">
@@ -2684,11 +2674,10 @@ function loadExtractedProducts() {
                     }
                 </td>
                 <td>${product.price || '<span class="wd-text-muted">-</span>'}</td>
-                <td><span class="wd-badge ${isIncomplete ? 'wd-badge-warning' : 'wd-badge-success'}">${t('products.' + product.status) || product.status}</span></td>
                 <td>
-                    <button class="wd-btn wd-btn-sm ${isIncomplete ? 'wd-btn-warning' : 'wd-btn-outline'}"
+                    <button class="wd-btn wd-btn-sm wd-btn-outline"
                             onclick="editExtractedProduct('${product.id}')">
-                        ${isIncomplete ? t('products.fillIn') || 'Fill in' : t('products.edit') || 'Edit'}
+                        ${t('products.edit') || 'Edit'}
                     </button>
                 </td>
             </tr>
@@ -2913,7 +2902,7 @@ async function loadUploadHistory() {
         renderUploadHistory(data.uploads || []);
     } catch (error) {
         console.error('Failed to load upload history:', error);
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">No upload history yet.</td></tr>`;
+        tbody.innerHTML = renderEmptyRow(6, 'No upload history yet.');
     }
 }
 
@@ -2922,7 +2911,7 @@ function renderUploadHistory(uploads) {
     if (!tbody) return;
 
     if (!uploads.length) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">No upload history yet.</td></tr>`;
+        tbody.innerHTML = renderEmptyRow(6, 'No upload history yet.');
         return;
     }
 
@@ -3744,7 +3733,7 @@ function renderPOListFromAPI(orders) {
     if (!tbody) return;
 
     if (orders.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:#888;">No purchase orders found</td></tr>';
+        tbody.innerHTML = renderEmptyRow(9, 'No purchase orders found');
         return;
     }
 
@@ -3759,35 +3748,27 @@ function renderPOListFromAPI(orders) {
         const items = order.order_items || [];
         const productName = items.length > 0 ? (items[0].product_name || '-') : '-';
         const itemExtra = items.length > 1 ? ` (+${items.length - 1})` : '';
-        const formattedAmount = typeof totalAmount === 'number'
-            ? `${currency} ${totalAmount.toLocaleString('en-US', {minimumFractionDigits:2})}`
-            : totalAmount;
         const updatedAt = order.updated_at || order.created_at || '';
-        const formattedDate = updatedAt ? new Date(updatedAt).toLocaleDateString() : '-';
         const orderId = order.id || '';
 
-        const statusBadgeClass = {
-            draft: 'wd-badge-secondary', pending: 'wd-badge-warning', confirmed: 'wd-badge-success',
-            shipping: 'wd-badge-info', delivered: 'wd-badge-success', cancelled: 'wd-badge-danger'
-        }[status] || 'wd-badge-secondary';
         const statusLabel = {draft:'Draft',pending:'Pending',confirmed:'Confirmed',shipping:'Shipping',delivered:'Delivered',cancelled:'Cancelled'}[status] || status;
 
         let actions = '';
         if (status === 'draft' || status === 'pending') {
-            actions += `<button class="wd-btn wd-btn-sm wd-btn-outline" onclick="event.stopPropagation();openAddPOModal('${orderId}')">Edit</button> `;
-            actions += `<button class="wd-btn wd-btn-sm wd-btn-danger-outline" onclick="event.stopPropagation();deletePO('${orderId}')">Delete</button>`;
+            actions += `<div class="wd-table-actions"><button class="wd-btn wd-btn-sm wd-btn-outline" onclick="event.stopPropagation();openAddPOModal('${orderId}')">Edit</button>`;
+            actions += `<button class="wd-btn wd-btn-sm wd-btn-danger-outline" onclick="event.stopPropagation();deletePO('${orderId}')">Delete</button></div>`;
         }
 
         return `
-        <tr data-status="${status}" data-po="${poNumber}" onclick="viewPODetail('${orderId}')" class="wd-cursor-pointer">
+        <tr data-status="${status}" data-po="${poNumber}" onclick="viewPODetail('${orderId}')" class="wd-table-row-clickable">
             <td>${poNumber}</td>
-            <td><span class="wd-badge ${statusBadgeClass}">${statusLabel}</span></td>
+            <td><span class="wd-badge ${getStatusBadgeClass(status)}">${statusLabel}</span></td>
             <td>${productName}${itemExtra}</td>
-            <td>${formattedAmount}</td>
+            <td>${wdFormatCurrency(totalAmount, currency)}</td>
             <td>${buyerName}</td>
             <td>${paymentTerms}</td>
             <td>${incoterms}</td>
-            <td>${formattedDate}</td>
+            <td>${wdFormatDate(updatedAt)}</td>
             <td>${actions || '-'}</td>
         </tr>`;
     }).join('');
@@ -3833,7 +3814,7 @@ async function loadInvoiceListFromAPI() {
         renderInvoiceListFromAPI(Array.isArray(invoices) ? invoices : []);
     } catch (e) {
         console.error('Failed to load invoices from API:', e);
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:#888;">No invoices found</td></tr>';
+        tbody.innerHTML = renderEmptyRow(9, 'No invoices found');
     }
 }
 
@@ -3842,21 +3823,11 @@ function renderInvoiceListFromAPI(invoices) {
     if (!tbody) return;
 
     if (invoices.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:#888;">No invoices yet. Click "New Invoice" to create one.</td></tr>';
+        tbody.innerHTML = renderEmptyRow(9, 'No invoices yet. Click "New Invoice" to create one.');
         return;
     }
 
-    const statusBadgeClass = {
-        draft: 'wd-badge-outline',
-        sent: 'wd-badge-primary',
-        paid: 'wd-badge-success',
-        overdue: 'wd-badge-danger',
-        cancelled: 'wd-badge-muted'
-    };
-
     tbody.innerHTML = invoices.map(inv => {
-        const createdDate = inv.created_at ? new Date(inv.created_at).toLocaleDateString() : '-';
-        const badgeClass = statusBadgeClass[inv.status] || 'wd-badge-outline';
         const totalAmount = inv.total_amount ?? 0;
         const currency = inv.currency || 'USD';
 
@@ -3865,10 +3836,10 @@ function renderInvoiceListFromAPI(invoices) {
                 <td><a href="inv-edit.html?id=${inv.id}" class="wd-link">${inv.pi_number || '-'}</a></td>
                 <td>${inv.po_number || '-'}</td>
                 <td>${inv.buyer_name || '-'}</td>
-                <td>${currency} ${parseFloat(totalAmount).toLocaleString('en-US', {minimumFractionDigits:2})}</td>
-                <td><span class="wd-badge ${badgeClass}">${inv.status || 'draft'}</span></td>
+                <td>${wdFormatCurrency(totalAmount, currency)}</td>
+                <td><span class="wd-badge ${getStatusBadgeClass(inv.status)}">${inv.status || 'draft'}</span></td>
                 <td>${inv.payment_status || '-'}</td>
-                <td>${createdDate}</td>
+                <td>${wdFormatDate(inv.created_at)}</td>
                 <td>
                     <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="window.location.href='inv-edit.html?id=${inv.id}'">View</button>
                 </td>
@@ -4391,7 +4362,7 @@ async function loadCreditsFromAPI() {
         renderCreditsFromAPI(Array.isArray(credits) ? credits : []);
     } catch (e) {
         console.error('Failed to load credits from API:', e);
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#888;">No credits found</td></tr>';
+        tbody.innerHTML = renderEmptyRow(8, 'No credits found');
     }
 }
 
@@ -4400,17 +4371,9 @@ function renderCreditsFromAPI(credits) {
     if (!tbody) return;
 
     if (credits.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#888;">No credits yet. Click "New Credit" to create one.</td></tr>';
+        tbody.innerHTML = renderEmptyRow(8, 'No credits yet. Click "New Credit" to create one.');
         return;
     }
-
-    const statusBadgeClass = {
-        draft: 'wd-badge-outline',
-        pending: 'wd-badge-warning',
-        approved: 'wd-badge-success',
-        used: 'wd-badge-primary',
-        cancelled: 'wd-badge-danger'
-    };
 
     const reasonLabels = {
         damaged: 'Damaged',
@@ -4422,8 +4385,6 @@ function renderCreditsFromAPI(credits) {
     };
 
     tbody.innerHTML = credits.map(credit => {
-        const createdDate = credit.created_at ? new Date(credit.created_at).toLocaleDateString() : '-';
-        const badgeClass = statusBadgeClass[credit.status] || 'wd-badge-outline';
         const reasonLabel = reasonLabels[credit.reason] || credit.reason || '-';
 
         return `
@@ -4433,9 +4394,9 @@ function renderCreditsFromAPI(credits) {
                 <td>${credit.invoice_number || '-'}</td>
                 <td>${credit.product_name || '-'}</td>
                 <td>${reasonLabel}</td>
-                <td>$${parseFloat(credit.amount || 0).toFixed(2)}</td>
-                <td><span class="wd-badge ${badgeClass}">${credit.status || 'draft'}</span></td>
-                <td>${createdDate}</td>
+                <td>${wdFormatCurrency(credit.amount || 0)}</td>
+                <td><span class="wd-badge ${getStatusBadgeClass(credit.status)}">${credit.status || 'draft'}</span></td>
+                <td>${wdFormatDate(credit.created_at)}</td>
             </tr>
         `;
     }).join('');
@@ -4855,25 +4816,20 @@ async function loadAccountListFromAPI() {
         const accounts = await res.json();
 
         if (!accounts.length) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:#999;">No accounts yet. Click "Add Account" to create one.</td></tr>`;
+            tbody.innerHTML = renderEmptyRow(7, 'No accounts yet. Click "Add Account" to create one.');
             return;
         }
 
         tbody.innerHTML = accounts.map(acc => `
-            <tr data-account-id="${acc.id}" onclick="viewAccountDetail('${acc.id}')" class="wd-cursor-pointer">
-                <td>
-                    <div class="wd-company-cell">
-                        <span class="wd-company-name">${escapeHtml(acc.company_name)}</span>
-                        <span class="wd-company-code">${escapeHtml(acc.country || '')}</span>
-                    </div>
-                </td>
+            <tr data-account-id="${acc.id}" onclick="viewAccountDetail('${acc.id}')" class="wd-table-row-clickable">
+                <td>${renderCellGroup(acc.company_name, acc.country || '')}</td>
                 <td>${escapeHtml(acc.contact_name || '-')}</td>
                 <td>-</td>
                 <td>-</td>
                 <td>-</td>
                 <td>${escapeHtml(acc.email || '-')}</td>
                 <td>
-                    <div style="display:flex; gap:4px;">
+                    <div class="wd-table-actions">
                         <button class="wd-btn wd-btn-sm wd-btn-outline" onclick="event.stopPropagation(); openAccountModal('${acc.id}')" title="Edit">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                         </button>
@@ -4886,7 +4842,7 @@ async function loadAccountListFromAPI() {
         `).join('');
     } catch (e) {
         console.error('Failed to load accounts:', e);
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:#999;">No accounts yet. Click "Add Account" to create one.</td></tr>`;
+        tbody.innerHTML = renderEmptyRow(7, 'No accounts yet. Click "Add Account" to create one.');
     }
 }
 
@@ -4950,24 +4906,19 @@ async function loadCompanyCerts() {
         const { certifications } = await res.json();
 
         if (!certifications.length) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">No certifications yet. Click "Add Certification" to add one.</td></tr>`;
+            tbody.innerHTML = renderEmptyRow(6, 'No certifications yet. Click "Add Certification" to add one.');
             return;
         }
 
-        const statusBadge = (s) => {
-            const map = { valid: 'wd-badge-success', expired: 'wd-badge-danger', pending: 'wd-badge-warning' };
-            return `<span class="wd-badge ${map[s] || 'wd-badge-secondary'}">${escapeHtml(s || 'valid')}</span>`;
-        };
-
         tbody.innerHTML = certifications.map(cert => `
             <tr>
-                <td><a href="cert-edit.html?id=${cert.id}" style="color:var(--wd-primary); text-decoration:none; font-weight:600;">${escapeHtml(cert.name)}</a></td>
+                <td><a href="cert-edit.html?id=${cert.id}" class="wd-link" style="font-weight:600;">${escapeHtml(cert.name)}</a></td>
                 <td>${escapeHtml(cert.issuer || '-')}</td>
-                <td>${cert.issue_date || '-'}</td>
-                <td>${cert.expiry_date || '-'}</td>
-                <td>${statusBadge(cert.status)}</td>
+                <td>${wdFormatDate(cert.issue_date)}</td>
+                <td>${wdFormatDate(cert.expiry_date)}</td>
+                <td><span class="wd-badge ${getStatusBadgeClass(cert.status)}">${escapeHtml(cert.status || 'valid')}</span></td>
                 <td>
-                    <div style="display:flex; gap:4px;">
+                    <div class="wd-table-actions">
                         <a href="cert-edit.html?id=${cert.id}" class="wd-btn wd-btn-sm wd-btn-outline" title="Edit">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                         </a>
@@ -4980,7 +4931,7 @@ async function loadCompanyCerts() {
         `).join('');
     } catch (e) {
         console.error('Failed to load certifications:', e);
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:40px; color:#999;">No certifications yet. Click "Add Certification" to add one.</td></tr>`;
+        tbody.innerHTML = renderEmptyRow(6, 'No certifications yet. Click "Add Certification" to add one.');
     }
 }
 
@@ -5197,6 +5148,49 @@ function escapeHtml(str) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+}
+
+// ==================== Design System Utilities ====================
+
+function wdFormatDate(dateStr, format = 'short') {
+    if (!dateStr) return '-';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '-';
+    if (format === 'iso') return d.toISOString().slice(0, 10);
+    if (format === 'long') return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function wdFormatCurrency(amount, currency = 'USD') {
+    const num = parseFloat(amount);
+    if (isNaN(num)) return '-';
+    return `${currency} ${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function renderBadge(text, type = 'outline') {
+    if (!text) return '';
+    return `<span class="wd-badge wd-badge-${escapeHtml(type)}">${escapeHtml(text)}</span>`;
+}
+
+function renderEmptyRow(colspan, message) {
+    return `<tr><td colspan="${colspan}" class="wd-table-empty">${message}</td></tr>`;
+}
+
+function renderCellGroup(primary, secondary, thumbHtml) {
+    return `<div class="wd-cell-group">${thumbHtml ? `<div class="wd-cell-thumb">${thumbHtml}</div>` : ''}<div><span class="wd-cell-primary">${escapeHtml(primary)}</span>${secondary ? `<div class="wd-cell-secondary">${escapeHtml(secondary)}</div>` : ''}</div></div>`;
+}
+
+function getStatusBadgeClass(status) {
+    const map = {
+        draft: 'wd-badge-secondary', pending: 'wd-badge-warning', confirmed: 'wd-badge-success',
+        shipping: 'wd-badge-info', delivered: 'wd-badge-success', cancelled: 'wd-badge-danger',
+        sent: 'wd-badge-primary', paid: 'wd-badge-success', overdue: 'wd-badge-danger',
+        approved: 'wd-badge-success', used: 'wd-badge-primary',
+        active: 'wd-badge-success', inactive: 'wd-badge-secondary',
+        complete: 'wd-badge-success', incomplete: 'wd-badge-warning',
+        valid: 'wd-badge-success', expired: 'wd-badge-danger',
+    };
+    return map[status] || 'wd-badge-outline';
 }
 
 async function updateInquiryStatus(inquiryId, status) {
