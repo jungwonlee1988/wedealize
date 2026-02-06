@@ -711,6 +711,7 @@ body.dashboard-mode .portal-badge {
 
 .dashboard-container {
     display: flex;
+    align-items: stretch;
     width: 100%;
     height: 100%;
     min-height: 0;
@@ -829,6 +830,7 @@ body.dashboard-mode .portal-badge {
 /* Dashboard Content */
 .dashboard-content {
     flex: 1;
+    height: 100%;
     min-height: 0;
     padding: 30px;
     overflow-y: auto;
