@@ -1233,14 +1233,14 @@
                                         </tr>
                                     </thead>
                                     <tbody id="product-list-tbody">
-                                        <tr>
+                                        <tr onclick="editProduct(1)" style="cursor: pointer;">
                                             <td>
                                                 <div class="wd-product-cell">
                                                     <div class="wd-product-thumb">
                                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
                                                     </div>
                                                     <div>
-                                                        <span class="wd-product-name">Extra Virgin Olive Oil 500ml</span>
+                                                        <a href="#" class="wd-product-name wd-link" onclick="editProduct(1); return false;">Extra Virgin Olive Oil 500ml</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -1254,17 +1254,17 @@
                                             </td>
                                             <td><span class="wd-badge wd-badge-success">Complete</span></td>
                                             <td>
-                                                <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editProduct(1)" data-i18n="products.edit">Edit</button>
+                                                <button class="wd-btn wd-btn-outline wd-btn-sm" onclick="editProduct(1); event.stopPropagation();" data-i18n="products.edit">Edit</button>
                                             </td>
                                         </tr>
-                                        <tr class="wd-row-warning">
+                                        <tr class="wd-row-warning" onclick="editProduct(3)" style="cursor: pointer;">
                                             <td>
                                                 <div class="wd-product-cell">
                                                     <div class="wd-product-thumb">
                                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
                                                     </div>
                                                     <div>
-                                                        <span class="wd-product-name">Aged Parmesan 24 months</span>
+                                                        <a href="#" class="wd-product-name wd-link" onclick="editProduct(3); return false;">Aged Parmesan 24 months</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -1273,14 +1273,14 @@
                                             <td>$18.00 - $22.00</td>
                                             <td class="wd-missing-data">
                                                 <span class="wd-badge wd-badge-warning">Missing</span>
-                                                <button class="wd-btn-link" onclick="addMOQ(3)">+ Add</button>
+                                                <button class="wd-btn-link" onclick="addMOQ(3); event.stopPropagation();">+ Add</button>
                                             </td>
                                             <td>
                                                 <span class="wd-badge wd-badge-info">DOP</span>
                                             </td>
                                             <td><span class="wd-badge wd-badge-warning">Incomplete</span></td>
                                             <td>
-                                                <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="editProduct(3)" data-i18n="products.fillIn">Fill in</button>
+                                                <button class="wd-btn wd-btn-warning wd-btn-sm" onclick="editProduct(3); event.stopPropagation();" data-i18n="products.fillIn">Fill in</button>
                                             </td>
                                         </tr>
                                     </tbody>
