@@ -8,15 +8,44 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="compact-form.css">
+    <style>
+        /* Detail view styles */
+        .product-status-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding: 12px 16px; background: var(--wd-gray-50); border-radius: 8px; }
+        .product-status-bar .product-sku { font-size: 1.1rem; font-weight: 700; color: var(--wd-gray-900); }
+        .product-status-bar .product-date { font-size: 0.85rem; color: var(--wd-gray-500); }
+        .edit-toggle { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--wd-gray-500); }
+        .edit-toggle input { cursor: pointer; }
+        .view-mode .edit-input { display: none !important; }
+        .view-mode .view-value { display: block; }
+        .edit-mode .edit-input { display: block !important; }
+        .edit-mode .view-value { display: none !important; }
+        /* Hide elements based on mode */
+        .new-mode-only { display: none; }
+        .detail-mode-only { display: none; }
+        body.new-mode .new-mode-only { display: block; }
+        body.new-mode .detail-mode-only { display: none !important; }
+        body.detail-mode .detail-mode-only { display: block; }
+        body.detail-mode .new-mode-only { display: none !important; }
+        /* Product image in detail mode */
+        .product-image-display { width: 120px; height: 120px; background: var(--wd-gray-100); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .product-image-display img { width: 100%; height: 100%; object-fit: cover; }
+        .product-image-display svg { color: var(--wd-gray-400); }
+        /* Info display for view mode */
+        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .info-item { display: flex; flex-direction: column; gap: 4px; }
+        .info-label { font-size: 0.75rem; color: var(--wd-gray-500); text-transform: uppercase; }
+        .info-value { font-size: 0.9rem; font-weight: 500; }
+        .cert-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+    </style>
 </head>
-<body>
+<body class="new-mode">
     <div class="portal-app">
         <header class="portal-header">
             <div class="header-content">
                 <div class="logo"><img src="logo.png" alt="WeDealize" height="32"></div>
                 <nav class="header-nav">
                     <div class="language-dropdown" id="language-dropdown">
-                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">🇺🇸 EN ▼</button>
+                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">EN</button>
                         <div class="language-menu" id="language-menu"><div class="language-list" id="language-list"></div></div>
                     </div>
                     <div class="user-menu" id="user-menu">
@@ -82,21 +111,38 @@
                     </aside>
 
                     <div class="dashboard-content">
-                        <div class="compact-form">
+                        <div class="compact-form" id="product-form-container">
                             <div class="page-header">
                                 <div class="page-header-left">
                                     <a href="portal.html#product-list" class="btn-back">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                                     </a>
-                                    <h1 class="page-title">Add Product</h1>
+                                    <h1 class="page-title" id="page-title">Add Product</h1>
                                 </div>
                                 <div class="page-header-actions">
-                                    <a href="portal.html#product-list" class="wd-btn wd-btn-outline">Cancel</a>
-                                    <button type="submit" form="product-edit-form" class="wd-btn wd-btn-primary">
+                                    <!-- Detail mode actions -->
+                                    <label class="edit-toggle detail-mode-only">
+                                        <input type="checkbox" id="edit-mode-toggle" onchange="toggleEditMode()">
+                                        <span>Edit Mode</span>
+                                    </label>
+                                    <button type="button" id="save-btn" onclick="saveProductChanges()" class="wd-btn wd-btn-primary detail-mode-only" style="display: none;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                        Save Changes
+                                    </button>
+                                    <!-- New mode actions -->
+                                    <a href="portal.html#product-list" class="wd-btn wd-btn-outline new-mode-only">Cancel</a>
+                                    <button type="submit" form="product-edit-form" class="wd-btn wd-btn-primary new-mode-only">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
                                         Save Product
                                     </button>
                                 </div>
+                            </div>
+
+                            <!-- Detail Mode: Status Bar -->
+                            <div class="product-status-bar detail-mode-only">
+                                <span class="product-sku" id="product-sku-display">SKU-001</span>
+                                <span class="wd-badge wd-badge-success" id="product-status-badge">Complete</span>
+                                <span class="product-date" id="product-date-display">Updated: 2026.02.05</span>
                             </div>
 
                             <form id="product-edit-form">

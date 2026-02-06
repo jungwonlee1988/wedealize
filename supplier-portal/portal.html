@@ -14,8 +14,8 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 </head>
-<body style="margin: 0; padding: 0; height: 100vh; overflow: hidden;">
-    <div class="portal-app" style="height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
+<body>
+    <div class="portal-app">
         <!-- Header -->
         <header class="portal-header">
             <div class="header-content">
@@ -46,7 +46,7 @@
         </header>
 
         <!-- Main Content -->
-        <main class="portal-main" style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+        <main class="portal-main">
             <!-- Login/Register Section (Initial Screen) -->
             <section class="wd-auth-section" id="auth-section">
                 <div class="wd-auth-card">
@@ -453,10 +453,10 @@
             </section>
 
             <!-- Dashboard Section (after login) -->
-            <section class="dashboard-section" id="dashboard-section" style="display: none; flex: 1; overflow: hidden;">
-                <div class="dashboard-container" style="display: flex; width: 100%; height: 100%; overflow: hidden;">
+            <section class="dashboard-section" id="dashboard-section" style="display: none;">
+                <div class="dashboard-container">
                     <!-- Sidebar -->
-                    <aside class="wd-sidebar" style="height: 100%; overflow-y: auto;">
+                    <aside class="wd-sidebar">
                         <div class="wd-sidebar-header">
                             <span class="wd-sidebar-logo">WeDealize</span>
                             <button class="wd-sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">
@@ -545,7 +545,7 @@
                     </aside>
 
                     <!-- Main Dashboard Content -->
-                    <div class="dashboard-content" style="flex: 1; height: 100%; overflow-y: auto;">
+                    <div class="dashboard-content">
                         <!-- Overview -->
                         <div class="dashboard-panel active" id="panel-overview">
                             <div class="wd-page-header">
