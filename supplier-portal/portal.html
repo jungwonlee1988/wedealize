@@ -753,11 +753,6 @@
                                 <div class="wd-step-connector" id="connector-2"></div>
                                 <div class="wd-step" id="step-indicator-3">
                                     <div class="wd-step-number"><span>3</span></div>
-                                    <div class="wd-step-label" data-i18n="catalog.step3">Match Prices</div>
-                                </div>
-                                <div class="wd-step-connector" id="connector-3"></div>
-                                <div class="wd-step" id="step-indicator-4">
-                                    <div class="wd-step-number"><span>4</span></div>
                                     <div class="wd-step-label" data-i18n="catalog.step4">Complete</div>
                                 </div>
                             </div>
@@ -836,10 +831,12 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 40px;"><input type="checkbox" id="select-all-extracted" onchange="toggleSelectAllExtracted()"></th>
-                                                    <th data-i18n="products.product">Product</th>
-                                                    <th data-i18n="modal.category">Category</th>
-                                                    <th data-i18n="catalog.price">Price</th>
-                                                    <th data-i18n="catalog.actions">Actions</th>
+                                                    <th>Product</th>
+                                                    <th>SKU</th>
+                                                    <th>Category</th>
+                                                    <th>Price</th>
+                                                    <th>Basis</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="extracted-products-tbody">
@@ -853,7 +850,7 @@
                                                 <span data-i18n="catalog.uploadDifferent">Upload Different File</span>
                                             </button>
                                             <button class="wd-btn wd-btn-primary wd-btn-lg" onclick="goToCatalogStep(3)">
-                                                <span data-i18n="catalog.nextMatchPrices">Next: Match Prices</span>
+                                                <span>Register Products</span>
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                             </button>
                                         </div>
@@ -861,76 +858,8 @@
                                 </div>
                             </div>
 
-                            <!-- Step 3: Match Prices -->
+                            <!-- Step 3: Complete -->
                             <div id="catalog-step-3" style="display: none; padding: 0 24px 24px;">
-                                <div class="wd-card">
-                                    <div class="wd-card-header wd-flex wd-items-center wd-gap-3">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                                        <h3 class="wd-card-title" data-i18n="catalog.matchPrices">Match Prices</h3>
-                                        <span class="wd-badge wd-badge-gray" data-i18n="catalog.optional">Optional</span>
-                                    </div>
-                                    <div class="wd-card-body">
-                                        <!-- Price List Upload Section -->
-                                        <div id="pricelist-upload-area" class="wd-mb-5">
-                                            <p class="wd-form-hint wd-mb-4" data-i18n="catalog.priceMatchDescription">Upload a price list to automatically match prices with your extracted products.</p>
-                                            <div class="wd-dropzone" id="pricelist-dropzone" style="padding: 24px;"
-                                                 ondrop="handleDrop(event, 'pricelist')"
-                                                 ondragover="handleDragOver(event)"
-                                                 ondragleave="handleDragLeave(event)">
-                                                <input type="file" id="pricelist-file" accept=".pdf,.xlsx,.xls,.csv" onchange="handleFileSelect(event, 'pricelist')" hidden>
-                                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                                    <polyline points="17 8 12 3 7 8"/>
-                                                    <line x1="12" y1="3" x2="12" y2="15"/>
-                                                </svg>
-                                                <p><span data-i18n="catalog.dragDrop">Drag & drop or</span> <label for="pricelist-file" class="wd-link" data-i18n="catalog.browse">browse</label></p>
-                                                <span class="wd-dropzone-hint">PDF, Excel, CSV</span>
-                                            </div>
-                                        </div>
-
-                                        <!-- Uploaded file info -->
-                                        <div id="pricelist-uploaded-area" style="display: none; margin-bottom: 20px;">
-                                            <div class="wd-file-item">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                                <span class="wd-file-name" id="pricelist-filename"></span>
-                                                <span class="wd-badge wd-badge-success"><span id="price-matched-count">0</span>/<span id="price-total-count">0</span> matched</span>
-                                                <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="resetPriceList()">Reset</button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Products Table with Price Columns -->
-                                        <table class="wd-table">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 40px;"></th>
-                                                    <th data-i18n="products.product">Product</th>
-                                                    <th data-i18n="modal.category">Category</th>
-                                                    <th data-i18n="catalog.price">Current Price</th>
-                                                    <th data-i18n="catalog.newPrice">New Price</th>
-                                                    <th data-i18n="catalog.actions">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="price-match-tbody">
-                                                <!-- Dynamic content -->
-                                            </tbody>
-                                        </table>
-
-                                        <div style="display: flex; justify-content: space-between; margin-top: 24px;">
-                                            <button class="wd-btn wd-btn-outline" onclick="goToCatalogStep(2)">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                                                <span data-i18n="catalog.backToReview">Back to Review</span>
-                                            </button>
-                                            <button class="wd-btn wd-btn-primary wd-btn-lg" onclick="goToCatalogStep(4)">
-                                                <span data-i18n="catalog.finishRegistration">Finish Registration</span>
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 4: Complete -->
-                            <div id="catalog-step-4" style="display: none; padding: 0 24px 24px;">
                                 <div class="wd-card" style="text-align: center; padding: 48px;">
                                     <div class="wd-complete-icon" style="width: 64px; height: 64px; margin: 0 auto 24px; background: var(--wd-success-light); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -940,20 +869,7 @@
                                         <span id="registered-count">0</span> <span data-i18n="catalog.productsRegistered">products have been registered.</span>
                                     </p>
 
-                                    <div style="display: inline-flex; gap: 24px; background: var(--wd-gray-50); padding: 16px 32px; border-radius: 8px; margin-bottom: 24px;">
-                                        <div>
-                                            <div style="font-size: 12px; color: var(--wd-gray-500);">Complete</div>
-                                            <div style="font-size: 18px; font-weight: 600;" id="final-complete-count">0</div>
-                                        </div>
-                                        <div>
-                                            <div style="font-size: 12px; color: var(--wd-gray-500);">Incomplete</div>
-                                            <div style="font-size: 18px; font-weight: 600;" id="final-incomplete-count">0</div>
-                                        </div>
-                                        <div>
-                                            <div style="font-size: 12px; color: var(--wd-gray-500);">Price Matched</div>
-                                            <div style="font-size: 18px; font-weight: 600;" id="final-price-count">0</div>
-                                        </div>
-                                    </div>
+                                    <p style="color: var(--wd-gray-500); margin-bottom: 24px;">You can view and manage your products in the Product List.</p>
 
                                     <div style="display: flex; gap: 12px; justify-content: center;">
                                         <button class="wd-btn wd-btn-outline" onclick="startNewCatalog()">

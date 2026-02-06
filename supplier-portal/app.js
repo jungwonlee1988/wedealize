@@ -2344,9 +2344,10 @@ function goToCatalogStep(stepNum) {
     // 현재 스텝 숨기기
     document.getElementById(`catalog-step-${currentCatalogStep}`).style.display = 'none';
 
-    // 스텝 인디케이터 업데이트
-    for (let i = 1; i <= 4; i++) {
+    // 스텝 인디케이터 업데이트 (3 steps)
+    for (let i = 1; i <= 3; i++) {
         const indicator = document.getElementById(`step-indicator-${i}`);
+        if (!indicator) continue;
         indicator.classList.remove('active', 'completed');
 
         if (i < stepNum) {
@@ -2357,7 +2358,7 @@ function goToCatalogStep(stepNum) {
     }
 
     // 커넥터 업데이트
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 2; i++) {
         const connector = document.getElementById(`connector-${i}`);
         if (connector) {
             if (i < stepNum) {
@@ -2376,8 +2377,7 @@ function goToCatalogStep(stepNum) {
     if (stepNum === 2) {
         loadExtractedProducts();
     } else if (stepNum === 3) {
-        renderPriceMatchTable();
-    } else if (stepNum === 4) {
+        // Complete — register products to DB
         registerExtractedProducts().then(count => {
             showCompleteSummary(count);
         });
@@ -2546,13 +2546,9 @@ async function extractCatalog() {
                 name: p.name || 'Unknown Product',
                 sku: p.sku || null,
                 category: p.category || null,
-                description: p.description || null,
                 minPrice: p.minPrice ?? null,
                 maxPrice: p.maxPrice ?? null,
-                moq: p.moq ?? null,
-                moqUnit: p.moqUnit || null,
-                certifications: p.certifications || [],
-                specifications: p.specifications || null,
+                priceBasis: p.priceBasis || null,
                 originalPrice: priceStr,
                 price: priceStr,
                 status: isComplete ? 'complete' : 'incomplete',
@@ -2587,12 +2583,12 @@ async function extractCatalog() {
 async function simulateCatalogExtraction() {
     await delay(2000);
     extractedProducts = [
-        { id: 'e1', name: 'Extra Virgin Olive Oil 500ml', sku: null, category: 'evoo', description: 'Premium EVOO', minPrice: 7.20, maxPrice: 8.50, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$7.20 - $8.50', price: '$7.20 - $8.50', status: 'complete', emoji: '🫒' },
-        { id: 'e2', name: 'Aged Parmesan Cheese 12m', sku: null, category: null, description: null, minPrice: 18.00, maxPrice: 18.00, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$18.00', price: '$18.00', status: 'incomplete', emoji: '🧀' },
-        { id: 'e3', name: 'Raw Organic Honey 500g', sku: null, category: 'honey', description: null, minPrice: null, maxPrice: null, moq: null, moqUnit: null, certifications: ['Organic'], specifications: null, originalPrice: null, price: null, status: 'incomplete', emoji: '🍯' },
-        { id: 'e4', name: 'Balsamic Vinegar 250ml', sku: null, category: 'balsamic', description: 'Traditional balsamic', minPrice: 12.00, maxPrice: 15.00, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$12.00 - $15.00', price: '$12.00 - $15.00', status: 'complete', emoji: '🍷' },
-        { id: 'e5', name: 'Truffle Oil 100ml', sku: null, category: 'truffle-oil', description: null, minPrice: 25.00, maxPrice: 25.00, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$25.00', price: '$25.00', status: 'complete', emoji: '🫒' },
-        { id: 'e6', name: 'Artisan Pasta 500g', sku: null, category: null, description: null, minPrice: 4.50, maxPrice: 4.50, moq: null, moqUnit: null, certifications: [], specifications: null, originalPrice: '$4.50', price: '$4.50', status: 'incomplete', emoji: '🍝' }
+        { id: 'e1', name: 'Extra Virgin Olive Oil 500ml', sku: 'OIL-001', category: 'evoo', minPrice: 7.20, maxPrice: 8.50, priceBasis: 'FOB', originalPrice: '$7.20 - $8.50', price: '$7.20 - $8.50', status: 'complete', emoji: '🫒' },
+        { id: 'e2', name: 'Aged Parmesan Cheese 12m', sku: null, category: 'aged-cheese', minPrice: 18.00, maxPrice: 18.00, priceBasis: 'EXW', originalPrice: '$18.00', price: '$18.00', status: 'complete', emoji: '🧀' },
+        { id: 'e3', name: 'Raw Organic Honey 500g', sku: 'HON-003', category: 'honey', minPrice: null, maxPrice: null, priceBasis: null, originalPrice: null, price: null, status: 'incomplete', emoji: '🍯' },
+        { id: 'e4', name: 'Balsamic Vinegar 250ml', sku: 'VIN-004', category: 'balsamic', minPrice: 12.00, maxPrice: 15.00, priceBasis: 'FOB', originalPrice: '$12.00 - $15.00', price: '$12.00 - $15.00', status: 'complete', emoji: '🍷' },
+        { id: 'e5', name: 'Truffle Oil 100ml', sku: null, category: 'truffle-oil', minPrice: 25.00, maxPrice: 25.00, priceBasis: 'CIF', originalPrice: '$25.00', price: '$25.00', status: 'complete', emoji: '🫒' },
+        { id: 'e6', name: 'Artisan Pasta 500g', sku: 'PAS-006', category: 'dried-pasta', minPrice: 4.50, maxPrice: 4.50, priceBasis: 'EXW', originalPrice: '$4.50', price: '$4.50', status: 'complete', emoji: '🍝' }
     ];
 }
 
@@ -2640,23 +2636,14 @@ async function registerExtractedProducts() {
 function loadExtractedProducts() {
     const tbody = document.getElementById('extracted-products-tbody');
     const totalEl = document.getElementById('extracted-total');
-    const completeEl = document.getElementById('complete-count');
-    const incompleteEl = document.getElementById('incomplete-count');
 
     if (!extractedProducts.length) {
-        if (tbody) tbody.innerHTML = renderEmptyRow(5, 'No products extracted yet.');
+        if (tbody) tbody.innerHTML = renderEmptyRow(7, 'No products extracted yet.');
         return;
     }
 
-    // 카운트 업데이트
-    const completeCount = extractedProducts.filter(p => p.status === 'complete').length;
-    const incompleteCount = extractedProducts.length - completeCount;
-
     totalEl.textContent = extractedProducts.length;
-    if (completeEl) completeEl.textContent = completeCount;
-    if (incompleteEl) incompleteEl.textContent = incompleteCount;
 
-    // 테이블 렌더링 (status 컬럼 제거)
     tbody.innerHTML = extractedProducts.map(product => {
         return `
             <tr>
@@ -2667,13 +2654,15 @@ function loadExtractedProducts() {
                         <span class="wd-product-name">${product.name}</span>
                     </div>
                 </td>
+                <td>${product.sku || '<span class="wd-text-muted">-</span>'}</td>
                 <td>
                     ${product.category
                         ? `<span class="wd-badge wd-badge-outline">${getCategoryLabel(product.category)}</span>`
-                        : `<span class="wd-badge wd-badge-warning">${t('products.missing') || 'Missing'}</span>`
+                        : `<span class="wd-badge wd-badge-warning">-</span>`
                     }
                 </td>
                 <td>${product.price || '<span class="wd-text-muted">-</span>'}</td>
+                <td>${product.priceBasis ? `<span class="wd-badge wd-badge-outline">${product.priceBasis}</span>` : '<span class="wd-text-muted">-</span>'}</td>
                 <td>
                     <button class="wd-btn wd-btn-sm wd-btn-outline"
                             onclick="editExtractedProduct('${product.id}')">
@@ -2800,47 +2789,12 @@ window.filterRegCategories = filterRegCategories;
 window.updateRegCategoryCount = updateRegCategoryCount;
 
 // 가격표 리셋 - 원래 카탈로그 가격으로 복원
-function resetPriceList() {
-    // 원본 가격으로 복원
-    extractedProducts.forEach(product => {
-        product.price = product.originalPrice;
-    });
-
-    // 매칭 데이터 초기화
-    priceMatchedProducts = [];
-    uploadedFiles.pricelist = null;
-
-    // UI 초기화 - 업로드 영역 표시, 업로드 완료 정보 숨기기
-    document.getElementById('pricelist-upload-area').style.display = 'flex';
-    document.getElementById('pricelist-uploaded-area').style.display = 'none';
-
-    // 파일 입력 초기화
-    const pricelistFile = document.getElementById('pricelist-file');
-    if (pricelistFile) pricelistFile.value = '';
-
-    // 테이블 다시 렌더링
-    renderPriceMatchTable();
-
-    showToast(t('catalog.priceListReset') || 'Price list has been reset. Original prices restored.', 'success');
-}
-
-// 가격 매칭 스킵
-function skipPriceMatching() {
-    showToast(t('catalog.priceSkipped') || 'Price matching skipped. You can add prices later.', 'info');
-    goToCatalogStep(4);
-}
+// (resetPriceList and skipPriceMatching removed — Match Prices step removed)
 
 // 완료 서머리 표시
 function showCompleteSummary(registeredCount) {
     const total = registeredCount ?? extractedProducts.length;
-    const completeCount = extractedProducts.filter(p => p.status === 'complete').length;
-    const incompleteCount = extractedProducts.length - completeCount;
-    const priceCount = priceMatchedProducts.length || extractedProducts.filter(p => p.price).length;
-
     document.getElementById('registered-count').textContent = total;
-    document.getElementById('final-complete-count').textContent = completeCount;
-    document.getElementById('final-incomplete-count').textContent = incompleteCount;
-    document.getElementById('final-price-count').textContent = priceCount;
 
     if (registeredCount > 0) {
         showToast(`${registeredCount} products registered to your catalog!`, 'success');
@@ -2849,37 +2803,29 @@ function showCompleteSummary(registeredCount) {
 
 // 새 카탈로그 등록 시작
 function startNewCatalog() {
-    // 데이터 초기화
     extractedProducts = [];
-    priceMatchedProducts = [];
     uploadedFiles.catalog = null;
-    uploadedFiles.pricelist = null;
 
-    // UI 초기화
     removeFile('catalog');
-
-    // Price list UI 초기화
-    const pricelistUploadArea = document.getElementById('pricelist-upload-area');
-    const pricelistUploadedArea = document.getElementById('pricelist-uploaded-area');
-    if (pricelistUploadArea) pricelistUploadArea.style.display = 'flex';
-    if (pricelistUploadedArea) pricelistUploadedArea.style.display = 'none';
 
     // Step 1로 이동
     currentCatalogStep = 1;
-    for (let i = 1; i <= 4; i++) {
-        document.getElementById(`catalog-step-${i}`).style.display = i === 1 ? 'block' : 'none';
+    for (let i = 1; i <= 3; i++) {
+        const stepEl = document.getElementById(`catalog-step-${i}`);
+        if (stepEl) stepEl.style.display = i === 1 ? 'block' : 'none';
         const indicator = document.getElementById(`step-indicator-${i}`);
-        indicator.classList.remove('active', 'completed');
-        if (i === 1) indicator.classList.add('active');
+        if (indicator) {
+            indicator.classList.remove('active', 'completed');
+            if (i === 1) indicator.classList.add('active');
+        }
     }
 
     // 커넥터 초기화
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 2; i++) {
         const connector = document.getElementById(`connector-${i}`);
         if (connector) connector.classList.remove('completed');
     }
 
-    // 버튼 상태 초기화
     document.getElementById('extract-btn').disabled = true;
 }
 

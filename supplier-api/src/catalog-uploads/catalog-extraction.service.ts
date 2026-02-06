@@ -52,13 +52,9 @@ For each product, return a JSON object with these fields:
 - "name": string (product name, required)
 - "sku": string or null (product code/SKU if visible)
 - "category": one of these slugs or null: ${JSON.stringify(CATEGORY_SLUGS)}
-- "description": string or null (brief product description)
-- "minPrice": number or null (minimum price in USD, numeric only)
-- "maxPrice": number or null (maximum price in USD, numeric only)
-- "moq": number or null (minimum order quantity if mentioned)
-- "moqUnit": string or null (unit for MOQ: "pcs", "kg", "cases", "pallets", etc.)
-- "certifications": string[] (e.g. ["USDA Organic", "Non-GMO", "Kosher"])
-- "specifications": object or null (key-value pairs like {"weight": "500g", "origin": "Italy"})
+- "minPrice": number or null (minimum price, numeric only)
+- "maxPrice": number or null (maximum price, numeric only)
+- "priceBasis": string or null (price basis/incoterm if mentioned: "EXW", "FOB", "CIF", "DDP", "FCA", etc.)
 
 Rules:
 - Extract ALL products visible in the images
