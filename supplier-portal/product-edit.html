@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product - WeDealize Supplier Portal</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="design-system.css">
+</head>
+<body class="dashboard-mode">
+    <div class="portal-app">
+        <!-- Header -->
+        <header class="portal-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="logo.png" alt="WeDealize" height="32">
+                </div>
+                <nav class="header-nav">
+                    <!-- Language Selector Dropdown -->
+                    <div class="language-dropdown" id="language-dropdown">
+                        <button class="language-btn" id="language-btn" onclick="toggleLanguageDropdown()">
+                            <span id="current-lang-flag"></span> <span id="current-lang-name">English</span> <span class="dropdown-arrow">&#9660;</span>
+                        </button>
+                        <div class="language-menu" id="language-menu">
+                            <div class="language-search">
+                                <input type="text" id="language-search" placeholder="Search language..." oninput="filterLanguages(this.value)">
+                            </div>
+                            <div class="language-list" id="language-list">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-menu" id="user-menu">
+                        <span class="user-name" id="user-name"></span>
+                        <button class="btn-logout" onclick="logout()" data-i18n="header.logout">Logout</button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="portal-main">
+            <section class="dashboard-section" id="dashboard-section">
+                <div class="dashboard-container">
+                    <!-- Sidebar -->
+                    <aside class="dashboard-sidebar">
+                        <div class="sidebar-label" data-i18n="sidebar.supplierPortal">SUPPLIER PORTAL</div>
+                        <nav class="sidebar-nav">
+                            <a href="portal.html#dashboard" class="nav-btn">
+                                <span class="nav-icon">&#128200;</span>
+                                <span data-i18n="sidebar.dashboard">Dashboard</span>
+                            </a>
+                            <a href="portal.html#products" class="nav-btn active">
+                                <span class="nav-icon">&#128230;</span>
+                                <span data-i18n="sidebar.products">Products</span>
+                            </a>
+                            <a href="portal.html#catalog" class="nav-btn">
+                                <span class="nav-icon">&#128196;</span>
+                                <span data-i18n="sidebar.catalogUpload">Catalog Upload</span>
+                            </a>
+                            <a href="portal.html#po" class="nav-btn">
+                                <span class="nav-icon">&#128203;</span>
+                                <span data-i18n="sidebar.poManagement">PO Management</span>
+                            </a>
+                            <a href="portal.html#inquiries" class="nav-btn">
+                                <span class="nav-icon">&#128172;</span>
+                                <span data-i18n="sidebar.inquiries">Inquiries</span>
+                            </a>
+                            <a href="portal.html#profile" class="nav-btn">
+                                <span class="nav-icon">&#128100;</span>
+                                <span data-i18n="sidebar.companyProfile">Company Profile</span>
+                            </a>
+                        </nav>
+                    </aside>
+
+                    <!-- Content Area -->
+                    <div class="dashboard-content">
+                        <div class="product-edit-page">
+                            <!-- Page Header -->
+                            <div class="page-header">
+                                <div class="page-header-left">
+                                    <a href="portal.html#products" class="btn-back" title="Back to Products">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                                        </svg>
+                                    </a>
+                                    <div>
+                                        <h1 class="page-title" data-i18n="productEdit.title">Edit Product</h1>
+                                        <p class="page-subtitle" id="product-subtitle"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product Edit Form -->
+                            <form id="product-edit-form" class="product-edit-form">
+                                <!-- Basic Information Section -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <h2 class="form-section-title">
+                                            <span class="section-icon">&#128230;</span>
+                                            <span data-i18n="productEdit.basicInfo">Basic Information</span>
+                                        </h2>
+                                    </div>
+                                    <div class="form-section-body">
+                                        <div class="form-grid form-grid-2">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" for="product-name">
+                                                    <span data-i18n="modal.productName">Product Name</span>
+                                                    <span class="wd-badge wd-badge-warning" data-i18n="modal.required">Required</span>
+                                                </label>
+                                                <input type="text" class="wd-input" id="product-name" required>
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" for="product-sku">
+                                                    <span data-i18n="products.sku">SKU</span>
+                                                    <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                                </label>
+                                                <input type="text" class="wd-input" id="product-sku">
+                                            </div>
+                                        </div>
+                                        <div class="form-grid form-grid-2">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" for="product-category">
+                                                    <span data-i18n="modal.category">Category</span>
+                                                    <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                                </label>
+                                                <select class="wd-input wd-select" id="product-category">
+                                                    <option value="" data-i18n="common.selectOption">Select...</option>
+                                                    <option value="oils" data-i18n="categories.oils">Oils & Vinegars</option>
+                                                    <option value="dairy" data-i18n="categories.dairy">Dairy & Cheese</option>
+                                                    <option value="beverages" data-i18n="categories.beverages">Beverages</option>
+                                                    <option value="honey" data-i18n="categories.honey">Honey & Spreads</option>
+                                                    <option value="pasta" data-i18n="categories.pasta">Pasta & Grains</option>
+                                                    <option value="snacks" data-i18n="categories.snacks">Snacks & Confectionery</option>
+                                                </select>
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" for="product-status">
+                                                    <span data-i18n="productEdit.status">Status</span>
+                                                </label>
+                                                <select class="wd-input wd-select" id="product-status">
+                                                    <option value="active">Active</option>
+                                                    <option value="inactive">Inactive</option>
+                                                    <option value="draft">Draft</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label" for="product-description">
+                                                <span data-i18n="productEdit.description">Description</span>
+                                                <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                            </label>
+                                            <textarea class="wd-input wd-textarea" id="product-description" rows="3"
+                                                placeholder="Enter product description..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Price Information Section -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <h2 class="form-section-title">
+                                            <span class="section-icon">&#128176;</span>
+                                            <span data-i18n="productEdit.priceInfo">Price Information</span>
+                                        </h2>
+                                    </div>
+                                    <div class="form-section-body">
+                                        <div class="form-grid form-grid-3">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" for="price-min">
+                                                    <span data-i18n="modal.priceMin">Min Price (FOB USD)</span>
+                                                    <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                                </label>
+                                                <div class="wd-input-group">
+                                                    <span class="wd-input-prefix">$</span>
+                                                    <input type="number" class="wd-input" id="price-min" step="0.01" min="0">
+                                                </div>
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" for="price-max">
+                                                    <span data-i18n="modal.priceMax">Max Price (FOB USD)</span>
+                                                    <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                                </label>
+                                                <div class="wd-input-group">
+                                                    <span class="wd-input-prefix">$</span>
+                                                    <input type="number" class="wd-input" id="price-max" step="0.01" min="0">
+                                                </div>
+                                            </div>
+                                            <div class="wd-form-group highlight-field">
+                                                <label class="wd-form-label" for="product-moq">
+                                                    <span data-i18n="modal.moqLabel">MOQ (Minimum Order Quantity)</span>
+                                                    <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                                </label>
+                                                <input type="number" class="wd-input" id="product-moq" min="1" placeholder="e.g., 100">
+                                            </div>
+                                        </div>
+                                        <div class="form-grid form-grid-2">
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" for="moq-unit">
+                                                    <span data-i18n="modal.moqUnit">MOQ Unit</span>
+                                                    <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                                </label>
+                                                <select class="wd-input wd-select" id="moq-unit">
+                                                    <option value="">Select...</option>
+                                                    <option value="pieces" data-i18n="units.pieces">Pieces</option>
+                                                    <option value="bottles" data-i18n="units.bottles">Bottles</option>
+                                                    <option value="cases" data-i18n="units.cases">Cases</option>
+                                                    <option value="kg" data-i18n="units.kg">Kg</option>
+                                                    <option value="tons" data-i18n="units.tons">Tons</option>
+                                                    <option value="pallets" data-i18n="units.pallets">Pallets</option>
+                                                </select>
+                                            </div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label" for="lead-time">
+                                                    <span data-i18n="productEdit.leadTime">Lead Time (days)</span>
+                                                    <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                                </label>
+                                                <input type="number" class="wd-input" id="lead-time" min="1" placeholder="e.g., 14">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Details Section -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <h2 class="form-section-title">
+                                            <span class="section-icon">&#128203;</span>
+                                            <span data-i18n="productEdit.details">Details</span>
+                                        </h2>
+                                    </div>
+                                    <div class="form-section-body">
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label">
+                                                <span data-i18n="modal.productCertifications">Product Certifications</span>
+                                                <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                            </label>
+                                            <p class="wd-form-hint" data-i18n="modal.productCertsDesc">Certifications applicable to this product</p>
+                                            <div class="wd-checkbox-grid cert-grid">
+                                                <label class="wd-checkbox-card"><input type="checkbox" name="certs" value="organic"> <span class="wd-checkbox-label">Organic</span></label>
+                                                <label class="wd-checkbox-card"><input type="checkbox" name="certs" value="haccp"> <span class="wd-checkbox-label">HACCP</span></label>
+                                                <label class="wd-checkbox-card"><input type="checkbox" name="certs" value="halal"> <span class="wd-checkbox-label">Halal</span></label>
+                                                <label class="wd-checkbox-card"><input type="checkbox" name="certs" value="kosher"> <span class="wd-checkbox-label">Kosher</span></label>
+                                                <label class="wd-checkbox-card"><input type="checkbox" name="certs" value="vegan"> <span class="wd-checkbox-label">Vegan</span></label>
+                                                <label class="wd-checkbox-card"><input type="checkbox" name="certs" value="non-gmo"> <span class="wd-checkbox-label">Non-GMO</span></label>
+                                                <label class="wd-checkbox-card"><input type="checkbox" name="certs" value="dop"> <span class="wd-checkbox-label">DOP/PDO</span></label>
+                                                <label class="wd-checkbox-card"><input type="checkbox" name="certs" value="igp"> <span class="wd-checkbox-label">IGP/PGI</span></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="wd-form-group">
+                                            <label class="wd-form-label">
+                                                <span data-i18n="modal.productImage">Product Image</span>
+                                                <span class="optional-badge" data-i18n="modal.optional">Optional</span>
+                                            </label>
+                                            <div class="image-upload-container">
+                                                <div class="image-preview" id="image-preview">
+                                                    <div class="image-placeholder" id="image-placeholder">
+                                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                                                            <polyline points="21 15 16 10 5 21"/>
+                                                        </svg>
+                                                        <span data-i18n="productEdit.noImage">No image</span>
+                                                    </div>
+                                                    <img id="preview-img" src="" alt="Product preview" style="display: none;">
+                                                </div>
+                                                <div class="image-upload-actions">
+                                                    <input type="file" id="product-image" accept="image/*" hidden>
+                                                    <label for="product-image" class="btn btn-outline btn-sm">
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                                            <polyline points="17 8 12 3 7 8"/>
+                                                            <line x1="12" y1="3" x2="12" y2="15"/>
+                                                        </svg>
+                                                        <span data-i18n="productEdit.uploadImage">Upload Image</span>
+                                                    </label>
+                                                    <button type="button" class="btn btn-outline btn-sm btn-danger" id="remove-image-btn" style="display: none;">
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <polyline points="3 6 5 6 21 6"/>
+                                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                        </svg>
+                                                        <span data-i18n="productEdit.removeImage">Remove</span>
+                                                    </button>
+                                                    <p class="upload-hint" data-i18n="productEdit.imageHint">PNG, JPG up to 5MB. Recommended: 800x800px</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="form-actions">
+                                    <a href="portal.html#products" class="btn btn-tertiary btn-lg" data-i18n="modal.cancel">Cancel</a>
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                            <polyline points="17 21 17 13 7 13 7 21"/>
+                                            <polyline points="7 3 7 8 15 8"/>
+                                        </svg>
+                                        <span data-i18n="productEdit.saveProduct">Save Product</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script src="i18n.js"></script>
+    <script src="js/product-edit.js"></script>
+    <script>
+        // Initialize language dropdown
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initI18n === 'function') {
+                initI18n();
+            }
+            if (typeof renderLanguageList === 'function') {
+                renderLanguageList();
+            }
+
+            // Load user info
+            const userName = localStorage.getItem('user_name');
+            if (userName) {
+                document.getElementById('user-name').textContent = userName;
+            }
+        });
+
+        // Toggle language dropdown
+        function toggleLanguageDropdown() {
+            const menu = document.getElementById('language-menu');
+            const dropdown = document.getElementById('language-dropdown');
+            menu.classList.toggle('show');
+            dropdown.classList.toggle('active');
+        }
+
+        // Close dropdown on outside click
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('language-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                document.getElementById('language-menu')?.classList.remove('show');
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Filter languages
+        function filterLanguages(value) {
+            if (typeof renderLanguageList === 'function') {
+                renderLanguageList(value);
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('supplier_token');
+            localStorage.removeItem('user_name');
+            localStorage.removeItem('supplier_id');
+            window.location.href = 'portal.html';
+        }
+    </script>
+</body>
+</html>

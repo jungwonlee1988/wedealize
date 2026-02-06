@@ -1342,53 +1342,13 @@ function filterMissing(type) {
 // ==================== Product CRUD ====================
 
 function openAddProductModal() {
-    window._editingProductId = null;
-    document.getElementById('product-modal-title').textContent = 'Add Product';
-    document.getElementById('product-edit-form').reset();
-    // Clear all certification checkboxes
-    document.querySelectorAll('#product-cert-grid input[type="checkbox"]').forEach(cb => cb.checked = false);
-    document.getElementById('product-modal').style.display = 'flex';
+    // Navigate to product edit page for new product
+    window.location.href = 'product-edit.html?id=new';
 }
 
-async function editProduct(productId) {
-    window._editingProductId = productId;
-    document.getElementById('product-modal-title').textContent = 'Edit Product';
-    document.getElementById('product-edit-form').reset();
-    document.querySelectorAll('#product-cert-grid input[type="checkbox"]').forEach(cb => cb.checked = false);
-
-    try {
-        const token = localStorage.getItem('supplier_token');
-        const baseUrl = window.APP_CONFIG?.API_BASE_URL || 'https://supplier-api-blush.vercel.app/api/v1/supplier';
-        const res = await fetch(`${baseUrl}/products/${productId}`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (res.status === 401) { handleSessionExpired(); return; }
-        if (!res.ok) throw new Error('Failed to load product');
-        const product = await res.json();
-
-        document.getElementById('edit-product-name').value = product.name || '';
-        document.getElementById('edit-product-sku').value = product.sku || '';
-        document.getElementById('edit-product-category').value = product.category || '';
-        document.getElementById('edit-product-status').value = product.status || 'active';
-        document.getElementById('edit-product-description').value = product.description || '';
-        document.getElementById('edit-price-min').value = product.min_price || '';
-        document.getElementById('edit-price-max').value = product.max_price || '';
-        document.getElementById('edit-moq').value = product.moq || '';
-        document.getElementById('edit-moq-unit').value = product.moq_unit || '';
-
-        // Set certification checkboxes
-        if (product.certifications && product.certifications.length > 0) {
-            product.certifications.forEach(cert => {
-                const cb = document.querySelector(`#product-cert-grid input[value="${cert}"]`);
-                if (cb) cb.checked = true;
-            });
-        }
-    } catch (e) {
-        console.error('Failed to load product for edit:', e);
-        showToast('Failed to load product data', 'error');
-    }
-
-    document.getElementById('product-modal').style.display = 'flex';
+function editProduct(productId) {
+    // Navigate to product edit page
+    window.location.href = `product-edit.html?id=${productId}`;
 }
 
 function closeProductModal() {
@@ -2440,22 +2400,9 @@ function renderPriceMatchTable() {
     }).join('');
 }
 
-// 상품 가격 편집 모달
+// 상품 가격 편집 - 상세 페이지로 이동
 function editProductPrice(productId) {
-    const product = extractedProducts.find(p => p.id === productId);
-    if (!product) return;
-
-    // 모달 표시 및 데이터 로드
-    const modal = document.getElementById('product-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        document.getElementById('edit-product-name').value = product.name;
-        document.getElementById('edit-price-min').value = product.price?.replace(/[^0-9.]/g, '') || '';
-
-        // 현재 편집 중인 상품 ID 저장
-        modal.dataset.editingProductId = productId;
-        modal.dataset.editingContext = 'price'; // 가격 편집 컨텍스트
-    }
+    window.location.href = `product-edit.html?id=${productId}`;
 }
 
 // ==================== Language Switch ====================

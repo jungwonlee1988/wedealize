@@ -109,63 +109,24 @@ class ProductModule {
     }
 
     /**
-     * Edit product
+     * Edit product - navigate to dedicated edit page
      */
     editProduct(productId) {
-        modal.open('product-modal');
-
-        // Demo data
-        const demoProducts = {
-            1: { name: 'Extra Virgin Olive Oil 500ml', sku: 'OIL-001', moq: 200, certs: ['organic', 'haccp'] },
-            3: { name: 'Aged Parmesan 24 months', sku: 'CHE-003', moq: null, certs: ['dop'] },
-            5: { name: 'Raw Honey 500g', sku: 'HON-005', moq: null, certs: [] }
-        };
-
-        const product = demoProducts[productId] || demoProducts[1];
-
-        const nameInput = $('#edit-product-name');
-        const skuInput = $('#edit-product-sku');
-        const moqInput = $('#edit-moq');
-        const alert = $('#modal-missing-alert');
-
-        if (nameInput) nameInput.value = product.name;
-        if (skuInput) skuInput.value = product.sku;
-        if (moqInput) moqInput.value = product.moq || '';
-
-        if (alert) {
-            alert.style.display = (!product.moq || product.certs.length === 0) ? 'flex' : 'none';
-        }
+        window.location.href = `product-edit.html?id=${productId}`;
     }
 
     /**
-     * Edit extracted product
+     * Edit extracted product - navigate to dedicated edit page
      */
     editExtractedProduct(productId) {
-        console.log('Edit extracted product:', productId);
-        modal.open('product-modal');
+        window.location.href = `product-edit.html?id=${productId}`;
     }
 
     /**
-     * Edit product price
+     * Edit product price - navigate to dedicated edit page
      */
     editProductPrice(productId) {
-        const extractedProducts = store.get('catalog.extractedProducts') || [];
-        const product = extractedProducts.find(p => p.id === productId);
-        if (!product) return;
-
-        modal.open('product-modal');
-
-        const nameInput = $('#edit-product-name');
-        const priceInput = $('#edit-price-min');
-
-        if (nameInput) nameInput.value = product.name;
-        if (priceInput) priceInput.value = product.price?.replace(/[^0-9.]/g, '') || '';
-
-        const modalEl = $('#product-modal');
-        if (modalEl) {
-            modalEl.dataset.editingProductId = productId;
-            modalEl.dataset.editingContext = 'price';
-        }
+        window.location.href = `product-edit.html?id=${productId}`;
     }
 
     /**
