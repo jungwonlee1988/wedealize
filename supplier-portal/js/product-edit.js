@@ -160,10 +160,13 @@
         if (titleEl) {
             titleEl.textContent = 'Product Detail';
         }
+        // Always editable - no view-mode
         const formContainer = document.getElementById('product-form-container');
         if (formContainer) {
-            formContainer.classList.add('view-mode');
+            formContainer.classList.add('edit-mode');
         }
+        const saveBtn = document.getElementById('save-btn');
+        if (saveBtn) saveBtn.style.display = 'inline-flex';
     }
 
     /**
@@ -313,24 +316,6 @@
     /**
      * Toggle edit mode (for detail view)
      */
-    window.toggleEditMode = function() {
-        const toggle = document.getElementById('edit-mode-toggle');
-        const formContainer = document.getElementById('product-form-container');
-        const saveBtn = document.getElementById('save-btn');
-
-        if (!formContainer) return;
-
-        if (toggle && toggle.checked) {
-            formContainer.classList.remove('view-mode');
-            formContainer.classList.add('edit-mode');
-            if (saveBtn) saveBtn.style.display = 'inline-flex';
-        } else {
-            formContainer.classList.remove('edit-mode');
-            formContainer.classList.add('view-mode');
-            if (saveBtn) saveBtn.style.display = 'none';
-        }
-    };
-
     /**
      * Save product changes (for detail edit mode)
      */
@@ -353,13 +338,6 @@
         try {
             await saveProduct(formData);
             showToast('Product updated successfully!', 'success');
-
-            // Switch back to view mode
-            const toggle = document.getElementById('edit-mode-toggle');
-            if (toggle) {
-                toggle.checked = false;
-                toggleEditMode();
-            }
         } catch (error) {
             console.error('Save error:', error);
             showToast(error.message || 'Failed to save product', 'error');
@@ -368,6 +346,27 @@
                 saveBtn.innerHTML = originalText;
                 saveBtn.disabled = false;
             }
+        }
+    };
+
+    window.deleteProductFromDetail = async function() {
+        if (!confirm('Are you sure you want to delete this product?')) return;
+
+        try {
+            const token = localStorage.getItem('supplier_token');
+            const res = await fetch(`${API_BASE_URL}/products/${currentProductId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (res.status === 401) { handleSessionExpired(); return; }
+            if (!res.ok) throw new Error('Failed to delete product');
+
+            showToast('Product deleted', 'success');
+            setTimeout(() => { window.location.href = 'portal.html#product-list'; }, 1000);
+        } catch (error) {
+            console.error('Delete error:', error);
+            showToast(error.message || 'Failed to delete', 'error');
         }
     };
 
@@ -548,12 +547,6 @@
      * Show toast notification
      */
     function showToast(message, type = 'info') {
-        // Use existing toast function if available
-        if (typeof window.showToast === 'function') {
-            window.showToast(message, type);
-            return;
-        }
-
         // Create toast container if not exists
         let container = document.getElementById('toast-container');
         if (!container) {

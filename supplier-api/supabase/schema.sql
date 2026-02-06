@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS products (
     specifications JSONB,
     status VARCHAR(50) DEFAULT 'active',
     completeness INTEGER DEFAULT 0,
+    lead_time INTEGER,
+    notes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

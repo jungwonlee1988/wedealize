@@ -45,8 +45,11 @@
         document.body.classList.add('detail-mode');
         const titleEl = document.getElementById('page-title');
         if (titleEl) titleEl.textContent = 'Certification Detail';
+        // Always editable - no view-mode
         const formContainer = document.getElementById('cert-form-container');
-        if (formContainer) formContainer.classList.add('view-mode');
+        if (formContainer) formContainer.classList.add('edit-mode');
+        const saveBtn = document.getElementById('save-btn');
+        if (saveBtn) saveBtn.style.display = 'inline-flex';
     }
 
     function bindFormEvents() {
@@ -251,23 +254,6 @@
 
     // ---- Edit Mode Toggle ----
 
-    window.toggleEditMode = function() {
-        const toggle = document.getElementById('edit-mode-toggle');
-        const formContainer = document.getElementById('cert-form-container');
-        const saveBtn = document.getElementById('save-btn');
-
-        if (!formContainer) return;
-
-        if (toggle && toggle.checked) {
-            formContainer.classList.remove('view-mode');
-            formContainer.classList.add('edit-mode');
-            if (saveBtn) saveBtn.style.display = 'inline-flex';
-        } else {
-            formContainer.classList.remove('edit-mode');
-            formContainer.classList.add('view-mode');
-            if (saveBtn) saveBtn.style.display = 'none';
-        }
-    };
 
     // ---- Renewal History ----
 

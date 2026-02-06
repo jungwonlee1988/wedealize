@@ -11,16 +11,33 @@ export class CertificationsService {
 
   private async autoExpireCertifications(supabase: any, supplierId: string) {
     const today = new Date().toISOString().split('T')[0];
-    const { error } = await supabase
+
+    // Step 1: Find certs that should be expired
+    const { data: expiring, error: findError } = await supabase
       .from('supplier_certifications')
-      .update({ status: 'expired' })
+      .select('id')
       .eq('supplier_id', supplierId)
       .in('status', ['valid', 'pending'])
-      .not('expiry_date', 'is', null)
       .lt('expiry_date', today);
 
-    if (error) {
-      this.logger.warn('Auto-expire check failed:', error);
+    if (findError) {
+      this.logger.error('Auto-expire find failed:', JSON.stringify(findError));
+      return;
+    }
+
+    if (!expiring || expiring.length === 0) return;
+
+    // Step 2: Update by IDs
+    const ids = expiring.map((c: any) => c.id);
+    const { error: updateError } = await supabase
+      .from('supplier_certifications')
+      .update({ status: 'expired' })
+      .in('id', ids);
+
+    if (updateError) {
+      this.logger.error('Auto-expire update failed:', JSON.stringify(updateError));
+    } else {
+      this.logger.log(`Auto-expired ${ids.length} certification(s): ${ids.join(', ')}`);
     }
   }
 

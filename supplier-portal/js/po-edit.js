@@ -77,7 +77,10 @@
         document.body.classList.remove('new-mode');
         document.body.classList.add('detail-mode');
         document.getElementById('page-title').textContent = 'PO Detail';
-        document.getElementById('po-form-container').classList.add('view-mode');
+        // Always editable - no view-mode
+        document.getElementById('po-form-container').classList.add('edit-mode');
+        const saveBtn = document.getElementById('save-btn');
+        if (saveBtn) saveBtn.style.display = 'inline-flex';
     }
 
     function bindFormEvents() {
@@ -289,22 +292,6 @@
     }
 
     // Global functions
-    window.toggleEditMode = function() {
-        const container = document.getElementById('po-form-container');
-        const toggle = document.getElementById('edit-mode-toggle');
-        const saveBtn = document.getElementById('save-btn');
-
-        if (toggle.checked) {
-            container.classList.remove('view-mode');
-            container.classList.add('edit-mode');
-            saveBtn.style.display = 'inline-flex';
-        } else {
-            container.classList.remove('edit-mode');
-            container.classList.add('view-mode');
-            saveBtn.style.display = 'none';
-        }
-    };
-
     window.savePO = async function() {
         const saveBtn = document.getElementById('save-btn');
         const originalText = saveBtn.innerHTML;
@@ -315,12 +302,8 @@
             const formData = collectFormData();
             await savePOToAPI(formData);
             showToast('Purchase Order updated successfully!', 'success');
-            document.getElementById('edit-mode-toggle').checked = false;
-            toggleEditMode();
         } catch (error) {
             showToast('Changes saved locally', 'success');
-            document.getElementById('edit-mode-toggle').checked = false;
-            toggleEditMode();
         }
 
         saveBtn.innerHTML = originalText;

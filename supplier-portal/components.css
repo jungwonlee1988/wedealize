@@ -1,0 +1,204 @@
+/* WeDealize Design System — Common Components
+ * Shared styles extracted from portal.html and edit pages.
+ * Load after design-system.css, before compact-form.css.
+ */
+
+/* ==================== A. Filter Bar ==================== */
+.wd-filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+}
+.wd-filter-bar .wd-search {
+    width: 280px;
+    flex-shrink: 0;
+}
+.wd-filter-bar .wd-search .wd-input {
+    width: 100%;
+}
+
+/* ==================== B. Clickable Table Row ==================== */
+.wd-table-row-clickable {
+    cursor: pointer;
+}
+.wd-table-row-clickable:hover {
+    background: var(--wd-gray-50);
+}
+.wd-table-row-clickable:active {
+    background: var(--wd-gray-100);
+}
+
+/* ==================== C. Cell Group ==================== */
+.wd-cell-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.wd-cell-thumb {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--wd-gray-100);
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+.wd-cell-primary {
+    font-weight: 500;
+    color: var(--wd-gray-800);
+}
+.wd-cell-secondary {
+    font-size: 0.8rem;
+    color: var(--wd-gray-500);
+}
+
+/* ==================== D. Table Empty State ==================== */
+.wd-table-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--wd-gray-500);
+}
+
+/* ==================== E. Table Action Buttons ==================== */
+.wd-table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ==================== F. Status Bar (detail pages) ==================== */
+.wd-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: var(--wd-gray-50);
+    border-radius: 8px;
+}
+.wd-status-bar-id {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--wd-gray-900);
+}
+.wd-status-bar-date {
+    font-size: 0.85rem;
+    color: var(--wd-gray-500);
+}
+
+/* ==================== G. Page Mode Visibility ==================== */
+/* New vs Detail mode */
+.new-mode-only { display: none; }
+.detail-mode-only { display: none; }
+body.new-mode .new-mode-only { display: block; }
+body.new-mode .detail-mode-only { display: none !important; }
+body.detail-mode .detail-mode-only { display: block; }
+body.detail-mode .new-mode-only { display: none !important; }
+
+/* View vs Edit mode */
+.view-mode .edit-input { display: none !important; }
+.view-mode .view-value { display: block; }
+.edit-mode .edit-input { display: block !important; }
+.edit-mode .view-value { display: none !important; }
+
+/* Edit toggle control */
+.edit-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--wd-gray-500);
+}
+.edit-toggle input { cursor: pointer; }
+
+/* PO-specific: show/hide edit columns in table */
+.edit-mode .edit-col { display: table-cell !important; }
+.view-mode .edit-col { display: none !important; }
+
+/* ==================== H. Summary Row ==================== */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.875rem;
+}
+.summary-row.total {
+    font-weight: 700;
+    font-size: 1rem;
+    border-top: 1px solid var(--wd-gray-200);
+    padding-top: 8px;
+    margin-top: 4px;
+}
+.total-box {
+    background: var(--wd-gray-50);
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-top: 8px;
+}
+
+/* ==================== I. Info Grid / Info Card ==================== */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.info-label {
+    font-size: 0.75rem;
+    color: var(--wd-gray-500);
+    text-transform: uppercase;
+}
+.info-value {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.info-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    background: var(--wd-gray-50);
+    border-radius: 8px;
+}
+.info-avatar {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--wd-primary-light);
+    border-radius: 8px;
+    font-size: 1.2rem;
+}
+.info-details { flex: 1; }
+.info-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+}
+.info-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.8rem;
+    color: var(--wd-gray-600);
+}
+.info-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.info-contact-item svg { color: var(--wd-gray-400); }
+.notes-box {
+    padding: 12px;
+    background: var(--wd-gray-50);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    min-height: 60px;
+}

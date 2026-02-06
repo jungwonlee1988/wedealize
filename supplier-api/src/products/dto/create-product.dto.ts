@@ -48,6 +48,16 @@ export class CreateProductDto {
   @IsString({ each: true })
   certifications?: string[];
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  leadTime?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  notes?: string;
+
   @ApiPropertyOptional({ default: 'active' })
   @IsOptional()
   @IsString()
@@ -100,6 +110,16 @@ export class UpdateProductDto {
   @IsArray()
   @IsString({ each: true })
   certifications?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  leadTime?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  notes?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

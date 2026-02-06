@@ -97,8 +97,11 @@
         document.body.classList.add('detail-mode');
         const pageTitle = document.getElementById('page-title');
         if (pageTitle) pageTitle.textContent = 'Invoice Detail';
+        // Always editable - no view-mode
         const formContainer = document.getElementById('inv-form-container');
-        if (formContainer) formContainer.classList.add('view-mode');
+        if (formContainer) formContainer.classList.add('edit-mode');
+        const saveBtn = document.getElementById('save-btn');
+        if (saveBtn) saveBtn.style.display = 'inline-flex';
     }
 
     function bindFormEvents() {
@@ -361,24 +364,6 @@
     }
 
     // Global functions
-    window.toggleEditMode = function() {
-        const container = document.getElementById('inv-form-container');
-        const toggle = document.getElementById('edit-mode-toggle');
-        const saveBtn = document.getElementById('save-btn');
-
-        if (!container || !toggle) return;
-
-        if (toggle.checked) {
-            container.classList.remove('view-mode');
-            container.classList.add('edit-mode');
-            if (saveBtn) saveBtn.style.display = 'inline-flex';
-        } else {
-            container.classList.remove('edit-mode');
-            container.classList.add('view-mode');
-            if (saveBtn) saveBtn.style.display = 'none';
-        }
-    };
-
     window.saveINV = async function() {
         const saveBtn = document.getElementById('save-btn');
         if (!saveBtn) return;
@@ -391,14 +376,8 @@
             const formData = collectFormData();
             await saveINVToAPI(formData);
             showToast('Invoice updated successfully!', 'success');
-            const toggle = document.getElementById('edit-mode-toggle');
-            if (toggle) toggle.checked = false;
-            toggleEditMode();
         } catch (error) {
             showToast('Changes saved locally', 'success');
-            const toggle = document.getElementById('edit-mode-toggle');
-            if (toggle) toggle.checked = false;
-            toggleEditMode();
         }
 
         saveBtn.innerHTML = originalText;
