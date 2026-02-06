@@ -3733,21 +3733,10 @@ function filterCredits() {
     applyCreditFilters();
 }
 
-// Credit 모달 열기
-function openCreditModal() {
-    const modal = document.getElementById('credit-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-        // 폼 초기화
-        const form = document.getElementById('credit-form');
-        if (form) form.reset();
-        const fileList = document.getElementById('credit-file-list');
-        if (fileList) fileList.innerHTML = '';
-        const productSelect = document.getElementById('credit-product-select');
-        if (productSelect) {
-            productSelect.innerHTML = '<option value="">Select Invoice first...</option>';
-        }
-    }
+// Credit 페이지 열기
+function openCreditPage(creditId) {
+    // Redirect to Credit edit page instead of modal
+    window.location.href = creditId ? `credit-edit.html?id=${creditId}` : 'credit-edit.html?id=new';
 }
 
 // Credit 모달 닫기
