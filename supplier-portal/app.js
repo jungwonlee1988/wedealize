@@ -826,6 +826,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==================== Dashboard Navigation ====================
 
 function showSection(sectionName) {
+    // URL 해시 업데이트
+    if (window.location.hash !== `#${sectionName}`) {
+        history.pushState(null, '', `#${sectionName}`);
+    }
+
     // 패널 전환
     document.querySelectorAll('.dashboard-panel').forEach(panel => {
         panel.classList.remove('active');
@@ -868,6 +873,47 @@ function showSection(sectionName) {
         loadInquiredBuyers();
     }
 }
+
+// 브라우저 뒤로/앞으로 버튼 처리
+window.addEventListener('popstate', () => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+        showSectionFromHash(hash);
+    }
+});
+
+// 해시에서 섹션 표시 (URL 변경 없이)
+function showSectionFromHash(sectionName) {
+    // 패널 전환
+    document.querySelectorAll('.dashboard-panel').forEach(panel => {
+        panel.classList.remove('active');
+    });
+
+    const targetPanel = document.getElementById(`panel-${sectionName}`);
+    if (targetPanel) {
+        targetPanel.classList.add('active');
+    }
+
+    // 네비게이션 상태 업데이트
+    document.querySelectorAll('.wd-nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.section === sectionName) {
+            item.classList.add('active');
+            const navGroup = item.closest('.wd-nav-group');
+            if (navGroup) {
+                navGroup.classList.add('expanded');
+            }
+        }
+    });
+}
+
+// 페이지 로드 시 해시에서 섹션 초기화
+document.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+        showSectionFromHash(hash);
+    }
+});
 
 // 서브메뉴 토글
 function toggleSubmenu(btn) {
