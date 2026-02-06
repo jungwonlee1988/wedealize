@@ -13,6 +13,17 @@
     <script src="https://accounts.google.com/gsi/client" async defer>
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <script>
+        // Prevent login screen flash for logged-in users
+        if (localStorage.getItem('supplier_logged_in') === 'true' && localStorage.getItem('supplier_token')) {
+            document.documentElement.classList.add('logged-in');
+        }
+    </script>
+    <style>
+        html.logged-in #auth-section { display: none !important; }
+        html.logged-in #dashboard-section { display: flex !important; }
+        html.logged-in #user-menu { display: flex !important; }
+    </style>
 </head>
 <body>
     <div class="portal-app">
