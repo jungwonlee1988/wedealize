@@ -7,6 +7,18 @@
     var pendingRegistration = null;
     var verificationTimer = null;
 
+    // === Helpers ===
+    function onLoginSuccess() {
+        // Check for pending team invite — redirect back to accept-invite page
+        var pendingToken = localStorage.getItem('pending_invite_token');
+        if (pendingToken) {
+            localStorage.removeItem('pending_invite_token');
+            window.location.href = 'accept-invite.html?token=' + encodeURIComponent(pendingToken);
+            return;
+        }
+        window.showDashboard();
+    }
+
     // === Constants ===
     var CATEGORY_GROUPS = {
         'Oils & Fats': ['evoo', 'olive-oil', 'seed-oils', 'nut-oils', 'truffle-oil'],
@@ -601,6 +613,17 @@
                 countrySelect.classList.remove('open');
             }
         });
+
+        // Auto-select country from browser locale
+        if (!hiddenInput.value) {
+            var lang = navigator.language || navigator.languages?.[0] || '';
+            var parts = lang.split('-');
+            var code = (parts[1] || '').toUpperCase();
+            if (code) {
+                var match = countryList.querySelector('.wd-country-option[data-value="' + code + '"]');
+                if (match) match.click();
+            }
+        }
     };
 
     // === Category Checkbox Grid ===
