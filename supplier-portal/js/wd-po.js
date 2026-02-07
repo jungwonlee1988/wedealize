@@ -534,12 +534,6 @@
             var statusLabels = {draft:'Draft',pending:'Pending',confirmed:'Confirmed',shipping:'Shipping',delivered:'Delivered',cancelled:'Cancelled'};
             var statusLabel = statusLabels[status] || status;
 
-            var actions = '';
-            if (status === 'draft' || status === 'pending') {
-                actions += '<div class="wd-table-actions"><button class="wd-btn wd-btn-sm wd-btn-outline" onclick="event.stopPropagation();openAddPOModal(\'' + orderId + '\')">Edit</button>';
-                actions += '<button class="wd-btn wd-btn-sm wd-btn-danger-outline" onclick="event.stopPropagation();deletePO(\'' + orderId + '\')">Delete</button></div>';
-            }
-
             return '<tr data-status="' + status + '" data-po="' + poNumber + '" onclick="viewPODetail(\'' + orderId + '\')" class="wd-table-row-clickable">' +
                 '<td>' + poNumber + '</td>' +
                 '<td><span class="wd-badge ' + getStatusBadgeClass(status) + '">' + statusLabel + '</span></td>' +
@@ -549,20 +543,25 @@
                 '<td>' + paymentTerms + '</td>' +
                 '<td>' + incoterms + '</td>' +
                 '<td>' + wdFormatDate(updatedAt) + '</td>' +
-                '<td>' + (actions || '-') + '</td>' +
+                '<td>-</td>' +
             '</tr>';
         }).join('');
     };
 
-    window.deletePO = async function(poId) {
-        if (!confirm('Are you sure you want to delete this PO?')) return;
-        try {
-            await apiCall('/po/' + poId, { method: 'DELETE' });
-            showToast('PO deleted', 'success');
-            window.loadPOListFromAPI();
-        } catch (e) {
-            showToast('Failed to delete PO', 'error');
-        }
+    window.deletePO = function(poId) {
+        showDeleteConfirm({
+            title: 'Delete Purchase Order',
+            message: 'Are you sure you want to delete this PO?<br>This action cannot be undone.',
+            onConfirm: async function() {
+                try {
+                    await apiCall('/po/' + poId, { method: 'DELETE' });
+                    showToast('PO deleted', 'success');
+                    window.loadPOListFromAPI();
+                } catch (e) {
+                    showToast('Failed to delete PO', 'error');
+                }
+            }
+        });
     };
 
     window.editPO = function(poId) {

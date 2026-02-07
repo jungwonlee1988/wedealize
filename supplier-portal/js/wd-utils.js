@@ -250,4 +250,35 @@
         return map[status] || 'wd-badge-outline';
     };
 
+    // === Delete Confirm Modal ===
+
+    var _deleteConfirmCallback = null;
+
+    window.showDeleteConfirm = function(opts) {
+        var modal = document.getElementById('delete-confirm-modal');
+        if (!modal) return;
+
+        var titleEl = document.getElementById('delete-confirm-title');
+        var msgEl = document.getElementById('delete-confirm-message');
+
+        if (titleEl) titleEl.textContent = opts.title || 'Delete Item';
+        if (msgEl) msgEl.innerHTML = opts.message || 'Are you sure you want to delete this item? This action cannot be undone.';
+
+        _deleteConfirmCallback = opts.onConfirm || null;
+        modal.style.display = 'flex';
+    };
+
+    window.closeDeleteConfirmModal = function() {
+        var modal = document.getElementById('delete-confirm-modal');
+        if (modal) modal.style.display = 'none';
+        _deleteConfirmCallback = null;
+    };
+
+    window.executeDeleteConfirm = function() {
+        if (typeof _deleteConfirmCallback === 'function') {
+            _deleteConfirmCallback();
+        }
+        closeDeleteConfirmModal();
+    };
+
 })();

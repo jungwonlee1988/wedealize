@@ -548,6 +548,34 @@
         }
     };
 
+    window.deleteINVFromDetail = function() {
+        if (!currentINVId || isNewMode) return;
+        var invNumber = document.getElementById('inv-number-display')?.textContent || currentINVId;
+        showDeleteConfirm({
+            title: 'Delete Invoice',
+            message: 'Are you sure you want to delete <strong>' + escapeHtml(invNumber) + '</strong>? This action cannot be undone.',
+            onConfirm: async function() {
+                try {
+                    var token = localStorage.getItem('supplier_token');
+                    var response = await fetch(API_BASE_URL + '/invoices/' + currentINVId, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    if (response.status === 401) { handleSessionExpired(); return; }
+                    if (!response.ok && response.status !== 204) {
+                        var err = await response.json().catch(function() { return {}; });
+                        throw new Error(err.message || 'Failed to delete invoice');
+                    }
+                    showToast('Invoice deleted', 'success');
+                    setTimeout(function() { window.location.href = 'portal.html#inv-management'; }, 1000);
+                } catch (error) {
+                    console.error('Delete INV error:', error);
+                    showToast(error.message || 'Failed to delete invoice', 'error');
+                }
+            }
+        });
+    };
+
     window.downloadINV = function() {
         showToast('Preparing download...', 'info');
         setTimeout(() => window.print(), 500);

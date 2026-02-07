@@ -204,16 +204,21 @@
         }
     };
 
-    window.deleteProduct = async function(productId) {
-        if (!confirm('Are you sure you want to delete this product?')) return;
-        try {
-            await apiCall('/products/' + productId, { method: 'DELETE' });
-            showToast('Product deleted', 'success');
-            loadProducts();
-        } catch (e) {
-            console.error('Failed to delete product:', e);
-            showToast('Failed to delete product', 'error');
-        }
+    window.deleteProduct = function(productId) {
+        showDeleteConfirm({
+            title: 'Delete Product',
+            message: 'Are you sure you want to delete this product?<br>This action cannot be undone.',
+            onConfirm: async function() {
+                try {
+                    await apiCall('/products/' + productId, { method: 'DELETE' });
+                    showToast('Product deleted', 'success');
+                    loadProducts();
+                } catch (e) {
+                    console.error('Failed to delete product:', e);
+                    showToast('Failed to delete product', 'error');
+                }
+            }
+        });
     };
 
     window.loadProducts = async function(filter) {

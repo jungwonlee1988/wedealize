@@ -405,6 +405,34 @@
         showToast('File selected: ' + file.name, 'info');
     };
 
+    window.deletePOFromDetail = function() {
+        if (!currentPOId || isNewMode) return;
+        var poNumber = document.getElementById('po-number-display')?.textContent || currentPOId;
+        showDeleteConfirm({
+            title: 'Delete Purchase Order',
+            message: 'Are you sure you want to delete <strong>' + escapeHtml(poNumber) + '</strong>? This action cannot be undone.',
+            onConfirm: async function() {
+                try {
+                    var token = localStorage.getItem('supplier_token');
+                    var response = await fetch(API_BASE_URL + '/po/' + currentPOId, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    if (response.status === 401) { handleSessionExpired(); return; }
+                    if (!response.ok && response.status !== 204) {
+                        var err = await response.json().catch(function() { return {}; });
+                        throw new Error(err.message || 'Failed to delete PO');
+                    }
+                    showToast('Purchase Order deleted', 'success');
+                    setTimeout(function() { window.location.href = 'portal.html#po-management'; }, 1000);
+                } catch (error) {
+                    console.error('Delete PO error:', error);
+                    showToast(error.message || 'Failed to delete PO', 'error');
+                }
+            }
+        });
+    };
+
     window.downloadPO = function() {
         showToast('Preparing download...', 'info');
         setTimeout(() => window.print(), 500);
