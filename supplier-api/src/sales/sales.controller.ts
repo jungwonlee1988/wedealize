@@ -56,6 +56,14 @@ export class SalesController {
     return this.salesService.confirmPO(req.user.id, id);
   }
 
+  @Post('po/:id/cancel')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Cancel PO' })
+  @ApiResponse({ status: 200, description: 'PO cancelled' })
+  async cancelPO(@Request() req, @Param('id') id: string) {
+    return this.salesService.cancelPO(req.user.id, id);
+  }
+
   @Delete('po/:id')
   @ApiOperation({ summary: 'Delete PO' })
   @ApiResponse({ status: 200, description: 'PO deleted' })

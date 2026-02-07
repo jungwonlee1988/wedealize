@@ -119,7 +119,7 @@ export class SalesService {
 
     const totalAmount = dto.items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
     const poNumber = dto.poNumber || await this.generateDocumentNumber(supplierId, 'orders', 'po_number', 'PO', 4);
-    const status = dto.status || POStatus.PENDING;
+    const status = POStatus.RECEIVED;
 
     const { data: order, error: orderError } = await supabase
       .from('orders')
@@ -320,6 +320,10 @@ export class SalesService {
 
   async confirmPO(supplierId: string, poId: string) {
     return this.updatePO(supplierId, poId, { status: POStatus.CONFIRMED } as UpdatePODto);
+  }
+
+  async cancelPO(supplierId: string, poId: string) {
+    return this.updatePO(supplierId, poId, { status: POStatus.CANCELLED } as UpdatePODto);
   }
 
   // ==================== PI CRUD ====================

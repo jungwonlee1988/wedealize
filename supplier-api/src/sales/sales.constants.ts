@@ -1,9 +1,6 @@
 export enum POStatus {
-  DRAFT = 'draft',
-  PENDING = 'pending',
+  RECEIVED = 'received',
   CONFIRMED = 'confirmed',
-  SHIPPING = 'shipping',
-  DELIVERED = 'delivered',
   CANCELLED = 'cancelled',
 }
 

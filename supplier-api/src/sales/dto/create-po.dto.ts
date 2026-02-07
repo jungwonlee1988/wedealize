@@ -116,7 +116,7 @@ export class CreatePODto {
   @IsString()
   notes?: string;
 
-  @ApiPropertyOptional({ default: 'pending' })
+  @ApiPropertyOptional({ default: 'received' })
   @IsOptional()
   @IsString()
   status?: string;
