@@ -2266,9 +2266,9 @@
 
 /* ==================== Checkbox Cards ==================== */
 .wd-checkbox-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: var(--wd-space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .wd-checkbox-card {
@@ -2557,7 +2557,7 @@
     }
 
     .wd-checkbox-grid {
-        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
     }
 }
 
