@@ -202,7 +202,7 @@
      * Render workspace switcher dropdown
      */
     function renderWorkspaces(workspaces) {
-        if (!workspaces || workspaces.length <= 1) return;
+        if (!workspaces || workspaces.length === 0) return;
 
         var switcher = document.getElementById('workspace-switcher');
         if (!switcher) return;
@@ -255,7 +255,7 @@
             var data = await apiCall('/auth/my-workspaces');
             var workspaces = data.workspaces || [];
             console.log('[WS] API returned', workspaces.length, 'workspaces:', JSON.stringify(workspaces.map(function(w) { return w.company_name; })));
-            if (workspaces.length > 1) {
+            if (workspaces.length > 0) {
                 localStorage.setItem('workspaces', JSON.stringify(workspaces));
             } else {
                 localStorage.removeItem('workspaces');
