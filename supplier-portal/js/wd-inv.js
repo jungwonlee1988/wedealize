@@ -380,14 +380,14 @@
     // === PI Filters ===
 
     window.filterPIByTab = function(tabType) {
-        var tabs = document.querySelectorAll('#panel-pi-management .wd-tab');
+        var tabs = document.querySelectorAll('#panel-inv-management .wd-tab');
         tabs.forEach(function(tab) { tab.classList.remove('active'); });
         event.target.classList.add('active');
 
-        var tabFilter = document.getElementById('pi-tab-filter');
+        var tabFilter = document.getElementById('inv-tab-filter');
         if (tabFilter) tabFilter.value = tabType;
 
-        var rows = document.querySelectorAll('#pi-table-body tr');
+        var rows = document.querySelectorAll('#inv-table-body tr');
         rows.forEach(function(row) {
             var rowTab = row.dataset.tab || 'active';
             if (tabType === 'active') {
@@ -400,15 +400,15 @@
 
     window.togglePIStatusFilter = function(event) {
         event.stopPropagation();
-        var dropdown = document.getElementById('pi-status-filter-dropdown');
+        var dropdown = document.getElementById('inv-status-filter-dropdown');
         if (dropdown) dropdown.classList.toggle('show');
-        var paymentDropdown = document.getElementById('pi-payment-filter-dropdown');
+        var paymentDropdown = document.getElementById('inv-payment-filter-dropdown');
         if (paymentDropdown) paymentDropdown.classList.remove('show');
     };
 
     window.applyPIStatusFilter = function(status) {
-        var dropdown = document.getElementById('pi-status-filter-dropdown');
-        var hiddenFilter = document.getElementById('pi-status-filter');
+        var dropdown = document.getElementById('inv-status-filter-dropdown');
+        var hiddenFilter = document.getElementById('inv-status-filter');
         if (dropdown) dropdown.classList.remove('show');
         if (hiddenFilter) hiddenFilter.value = status;
         applyPIFilters();
@@ -416,25 +416,25 @@
 
     window.togglePIPaymentFilter = function(event) {
         event.stopPropagation();
-        var dropdown = document.getElementById('pi-payment-filter-dropdown');
+        var dropdown = document.getElementById('inv-payment-filter-dropdown');
         if (dropdown) dropdown.classList.toggle('show');
-        var statusDropdown = document.getElementById('pi-status-filter-dropdown');
+        var statusDropdown = document.getElementById('inv-status-filter-dropdown');
         if (statusDropdown) statusDropdown.classList.remove('show');
     };
 
     window.applyPIPaymentFilter = function(payment) {
-        var dropdown = document.getElementById('pi-payment-filter-dropdown');
+        var dropdown = document.getElementById('inv-payment-filter-dropdown');
         if (dropdown) dropdown.classList.remove('show');
         window.piPaymentFilter = payment;
         applyPIFilters();
     };
 
     function applyPIFilters() {
-        var tabFilter = document.getElementById('pi-tab-filter')?.value || 'active';
-        var statusFilter = document.getElementById('pi-status-filter')?.value || 'all';
+        var tabFilter = document.getElementById('inv-tab-filter')?.value || 'active';
+        var statusFilter = document.getElementById('inv-status-filter')?.value || 'all';
         var paymentFilter = window.piPaymentFilter || 'all';
 
-        var rows = document.querySelectorAll('#pi-table-body tr');
+        var rows = document.querySelectorAll('#inv-table-body tr');
         rows.forEach(function(row) {
             var rowTab = row.dataset.tab || 'active';
             var rowStatus = row.dataset.status || '';
