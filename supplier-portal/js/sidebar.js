@@ -122,8 +122,11 @@
         }
 
         // Load workspace switcher (apiCall/escapeHtml from wd-utils.js available at call time)
+        console.log('[WS] initSidebar: apiCall available:', typeof apiCall === 'function');
         if (typeof apiCall === 'function') {
             loadWorkspaces();
+        } else {
+            console.warn('[WS] apiCall not available, skipping workspace load');
         }
     };
 
@@ -235,24 +238,32 @@
      * Load workspaces from cache then API
      */
     window.loadWorkspaces = async function() {
+        console.log('[WS] loadWorkspaces called, apiCall:', typeof apiCall, 'escapeHtml:', typeof escapeHtml);
+
         // Render immediately from cache to prevent flicker
         try {
             var cached = localStorage.getItem('workspaces');
+            console.log('[WS] cache:', cached ? 'found (' + JSON.parse(cached).length + ' items)' : 'empty');
             if (cached) renderWorkspaces(JSON.parse(cached));
-        } catch (e) {}
+        } catch (e) {
+            console.error('[WS] cache render error:', e);
+        }
 
         // Then refresh from API
         try {
+            console.log('[WS] calling API /auth/my-workspaces...');
             var data = await apiCall('/auth/my-workspaces');
             var workspaces = data.workspaces || [];
+            console.log('[WS] API returned', workspaces.length, 'workspaces:', JSON.stringify(workspaces.map(function(w) { return w.company_name; })));
             if (workspaces.length > 1) {
                 localStorage.setItem('workspaces', JSON.stringify(workspaces));
             } else {
                 localStorage.removeItem('workspaces');
             }
             renderWorkspaces(workspaces);
+            console.log('[WS] switcher display:', document.getElementById('workspace-switcher')?.style.display);
         } catch (e) {
-            console.error('Failed to load workspaces:', e);
+            console.error('[WS] API error:', e);
         }
     };
 
