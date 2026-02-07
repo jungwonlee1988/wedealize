@@ -7,12 +7,18 @@
     // Sidebar HTML template
     const sidebarHTML = `
         <div class="wd-sidebar-header">
-            <span class="wd-sidebar-logo">WeDealize</span>
             <button class="wd-sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="15 18 9 12 15 6"/>
                 </svg>
             </button>
+        </div>
+        <div class="wd-workspace-switcher" id="workspace-switcher" style="display:none">
+            <button class="wd-workspace-current" id="workspace-current-btn" onclick="toggleWorkspaceMenu()">
+                <span class="wd-workspace-name" id="current-workspace-name">My Workspace</span>
+                <svg class="wd-workspace-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="wd-workspace-menu" id="workspace-menu" style="display:none"></div>
         </div>
         <nav class="wd-sidebar-nav">
             <a class="wd-nav-item" data-section="overview" onclick="navigateTo('overview')">
@@ -175,17 +181,38 @@
     };
 
     /**
-     * Toggle sidebar collapsed state
+     * Toggle workspace dropdown menu
+     */
+    window.toggleWorkspaceMenu = function() {
+        var menu = document.getElementById('workspace-menu');
+        if (menu) {
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+    };
+
+    // Close workspace menu when clicking outside
+    document.addEventListener('click', function(e) {
+        var switcher = document.getElementById('workspace-switcher');
+        if (switcher && !switcher.contains(e.target)) {
+            var menu = document.getElementById('workspace-menu');
+            if (menu) menu.style.display = 'none';
+        }
+    });
+
+    /**
+     * Toggle sidebar collapsed state (saves to localStorage)
      */
     window.toggleSidebar = function() {
         const sidebar = document.querySelector('.wd-sidebar');
         if (sidebar) {
             sidebar.classList.toggle('collapsed');
+            localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
         }
     };
 
     /**
      * Toggle submenu expansion
+     * Handles both .nav-group (legacy) and .wd-nav-group
      */
     window.toggleSubmenu = function(btn) {
         const sidebar = document.querySelector('.wd-sidebar');
@@ -193,22 +220,35 @@
 
         // If collapsed, navigate to first child section
         if (isCollapsed) {
-            const navGroup = btn.closest('.wd-nav-group');
+            const navGroup = btn.closest('.wd-nav-group') || btn.closest('.nav-group');
             if (navGroup) {
-                const firstChild = navGroup.querySelector('.wd-nav-child');
+                const firstChild = navGroup.querySelector('.wd-nav-child, .nav-child');
                 if (firstChild) {
                     const section = firstChild.getAttribute('data-section');
                     if (section) {
                         navigateTo(section);
                         return;
                     }
+                    const onclick = firstChild.getAttribute('onclick');
+                    if (onclick) {
+                        const match = onclick.match(/showSection\(['"]([^'"]+)['"]\)/);
+                        if (match) {
+                            navigateTo(match[1]);
+                            return;
+                        }
+                    }
                 }
             }
             return;
         }
 
-        // Otherwise toggle the submenu
-        const navGroup = btn.closest('.wd-nav-group');
+        // Otherwise toggle the submenu - support both nav-group and wd-nav-group
+        let navGroup = btn.closest('.nav-group');
+        if (navGroup) {
+            navGroup.classList.toggle('expanded');
+            return;
+        }
+        navGroup = btn.closest('.wd-nav-group');
         if (navGroup) {
             navGroup.classList.toggle('expanded');
         }

@@ -4376,6 +4376,113 @@
     padding: 16px 8px;
 }
 
+/* ==================== Workspace Switcher ==================== */
+.wd-workspace-switcher {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--wd-gray-100);
+    position: relative;
+}
+
+.wd-workspace-current {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 10px;
+    background: var(--wd-gray-50);
+    border: 1px solid var(--wd-gray-200);
+    border-radius: var(--radius-200);
+    cursor: pointer;
+    font-size: var(--wd-font-size-sm);
+    font-weight: var(--wd-font-semibold);
+    color: var(--wd-gray-800);
+    transition: all 0.15s ease;
+}
+
+.wd-workspace-current:hover {
+    background: var(--wd-gray-100);
+    border-color: var(--wd-gray-300);
+}
+
+.wd-workspace-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    text-align: left;
+}
+
+.wd-workspace-arrow {
+    flex-shrink: 0;
+    margin-left: 6px;
+    color: var(--wd-gray-400);
+}
+
+.wd-workspace-menu {
+    position: absolute;
+    top: 100%;
+    left: 12px;
+    right: 12px;
+    background: var(--wd-white);
+    border: 1px solid var(--wd-gray-200);
+    border-radius: var(--radius-200);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    margin-top: 4px;
+    padding: 4px;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.wd-workspace-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    background: none;
+    border-radius: var(--radius-100);
+    cursor: pointer;
+    font-size: var(--wd-font-size-sm);
+    color: var(--wd-gray-700);
+    transition: background 0.15s ease;
+    text-align: left;
+}
+
+.wd-workspace-option:hover:not(:disabled) {
+    background: var(--wd-gray-50);
+}
+
+.wd-workspace-option.active {
+    background: var(--wd-blue-50, #eff6ff);
+    color: var(--wd-blue-700, #1d4ed8);
+    cursor: default;
+}
+
+.wd-workspace-option-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.wd-workspace-option-role {
+    font-size: var(--wd-font-size-xs);
+    color: var(--wd-gray-400);
+    margin-left: 8px;
+    flex-shrink: 0;
+    text-transform: capitalize;
+}
+
+.wd-workspace-option.active .wd-workspace-option-role {
+    color: var(--wd-blue-500, #3b82f6);
+}
+
+.wd-sidebar.collapsed .wd-workspace-switcher {
+    display: none;
+}
+
 /* ==================== Enhanced UX/UI V2 ==================== */
 
 /* Enhanced Sidebar Navigation */
