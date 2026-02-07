@@ -4916,6 +4916,12 @@
     cursor: not-allowed;
 }
 
+.wd-select.wd-select-sm {
+    padding: 6px 30px 6px 10px;
+    font-size: var(--wd-font-size-sm);
+    height: 32px;
+}
+
 /* Enhanced Buttons */
 .wd-btn {
     display: inline-flex;
