@@ -20,7 +20,8 @@ const englishTranslations = {
         close: "Close",
         confirm: "Confirm",
         back: "Back",
-        next: "Next"
+        next: "Next",
+        actions: "Actions"
     },
     header: {
         supplierPortal: "Supplier Portal",

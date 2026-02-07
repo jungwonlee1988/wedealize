@@ -55,17 +55,18 @@
                 var isPending = m.status === 'pending';
 
                 // Role: active members get dropdown, pending gets static badge
+                var role = m.role || 'member';
                 var roleCell = '';
                 if (isActive) {
                     roleCell = '<select class="wd-select wd-select-sm" style="width:120px" onchange="updateMemberRole(\'' + m.id + '\', this.value)">' +
-                        '<option value="admin" ' + (m.role === 'admin' ? 'selected' : '') + '>Admin</option>' +
-                        '<option value="member" ' + (m.role === 'member' ? 'selected' : '') + '>Member</option>' +
-                        '<option value="viewer" ' + (m.role === 'viewer' ? 'selected' : '') + '>Viewer</option>' +
+                        '<option value="admin" ' + (role === 'admin' ? 'selected' : '') + '>Admin</option>' +
+                        '<option value="member" ' + (role === 'member' ? 'selected' : '') + '>Member</option>' +
+                        '<option value="viewer" ' + (role === 'viewer' ? 'selected' : '') + '>Viewer</option>' +
                         '</select>';
                 } else {
-                    roleCell = m.role === 'admin'
+                    roleCell = role === 'admin'
                         ? '<span class="wd-badge wd-badge-secondary">Admin</span>'
-                        : m.role === 'viewer'
+                        : role === 'viewer'
                             ? '<span class="wd-badge wd-badge-outline">Viewer</span>'
                             : '<span class="wd-badge wd-badge-outline">Member</span>';
                 }
