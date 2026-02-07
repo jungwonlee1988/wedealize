@@ -58,6 +58,11 @@ export class UpdateCreditDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  invoiceNumber?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   buyerName?: string;
 
   @ApiPropertyOptional()

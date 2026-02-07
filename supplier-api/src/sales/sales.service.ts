@@ -733,6 +733,7 @@ export class SalesService {
     }
 
     const updateData: Record<string, unknown> = {};
+    if (dto.invoiceNumber !== undefined) updateData.invoice_number = dto.invoiceNumber;
     if (dto.buyerName !== undefined) updateData.buyer_name = dto.buyerName;
     if (dto.productName !== undefined) updateData.product_name = dto.productName;
     if (dto.productSku !== undefined) updateData.product_sku = dto.productSku;
