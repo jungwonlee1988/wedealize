@@ -70,14 +70,14 @@
                                 <div class="compact-grid">
                                     <!-- Left Column -->
                                     <div class="compact-column">
-                                        <!-- Invoice & Product -->
+                                        <!-- INV & Product -->
                                         <div class="compact-section">
-                                            <h3 class="compact-section-title"><span class="section-icon">📄</span> Invoice & Product</h3>
+                                            <h3 class="compact-section-title"><span class="section-icon">📄</span> INV & Product</h3>
                                             <div class="compact-row">
                                                 <div class="wd-form-group">
-                                                    <label class="wd-form-label">Invoice <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <select class="wd-input wd-select" id="credit-invoice-select" required onchange="loadInvoiceProducts()">
-                                                        <option value="">Select Invoice...</option>
+                                                    <label class="wd-form-label">INV <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <select class="wd-input wd-select" id="credit-invoice-select" onchange="loadInvoiceProducts()">
+                                                        <option value="">Select INV...</option>
                                                         <option value="INV-2024-0089">INV-2024-0089 - ABC Distribution</option>
                                                         <option value="INV-2024-0088">INV-2024-0088 - XYZ Foods</option>
                                                         <option value="INV-2024-0087">INV-2024-0087 - Global Trade</option>
@@ -85,15 +85,15 @@
                                                 </div>
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Product <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <select class="wd-input wd-select" id="credit-product-select" required>
-                                                        <option value="">Select Invoice first...</option>
+                                                    <select class="wd-input wd-select" id="credit-product-select">
+                                                        <option value="">Select INV first...</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="compact-row">
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Reason <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <select class="wd-input wd-select" id="credit-reason" required>
+                                                    <select class="wd-input wd-select" id="credit-reason">
                                                         <option value="">Select reason...</option>
                                                         <option value="damaged">Damaged packaging</option>
                                                         <option value="quality">Quality issue</option>
@@ -105,14 +105,14 @@
                                                 </div>
                                                 <div class="wd-form-group">
                                                     <label class="wd-form-label">Affected Qty <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                    <input type="number" class="wd-input" id="credit-qty" min="1" required placeholder="Enter quantity">
+                                                    <input type="number" class="wd-input" id="credit-qty" min="1" placeholder="Enter quantity">
                                                 </div>
                                             </div>
                                             <div class="wd-form-group">
                                                 <label class="wd-form-label">Credit Amount (USD) <span class="wd-badge wd-badge-warning">Required</span></label>
                                                 <div style="display: flex; align-items: center; gap: 4px;">
                                                     <span style="font-size: 0.875rem;">$</span>
-                                                    <input type="number" class="wd-input" id="credit-amount" min="0" step="0.01" required placeholder="0.00" style="width: 150px;">
+                                                    <input type="number" class="wd-input" id="credit-amount" min="0" step="0.01" placeholder="0.00" style="width: 150px;">
                                                 </div>
                                             </div>
                                         </div>

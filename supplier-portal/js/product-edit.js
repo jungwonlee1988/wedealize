@@ -335,7 +335,7 @@
         var nameEl = document.getElementById('product-name');
         if (!nameEl?.value?.trim()) {
             markError(nameEl);
-            errors.push('Product Name');
+            errors.push('Item Name');
         }
 
         if (errors.length > 0) {

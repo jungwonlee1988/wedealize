@@ -174,7 +174,7 @@
         var invoiceEl = document.getElementById('credit-invoice-select');
         if (!invoiceEl?.value) {
             markError(invoiceEl);
-            errors.push('Invoice');
+            errors.push('INV');
         }
 
         var productEl = document.getElementById('credit-product-select');
@@ -285,7 +285,7 @@
         const productSelect = document.getElementById('credit-product-select');
 
         if (!invoiceSelect.value) {
-            productSelect.innerHTML = '<option value="">Select Invoice first...</option>';
+            productSelect.innerHTML = '<option value="">Select INV first...</option>';
             return;
         }
 

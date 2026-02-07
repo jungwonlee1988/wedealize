@@ -180,7 +180,7 @@
             const row = document.createElement('tr');
             row.setAttribute('data-row', index);
             row.innerHTML = `
-                <td><input type="text" class="wd-input po-item-name" value="${item.name || item.product_name || ''}" placeholder="Product name"></td>
+                <td><input type="text" class="wd-input po-item-name" value="${item.name || item.product_name || ''}" placeholder="Item name"></td>
                 <td><input type="number" class="wd-input po-item-qty" min="1" value="${qty}" onchange="calculatePOItemSubtotal(${index})"></td>
                 <td><select class="wd-select po-item-unit">
                     <option ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
@@ -259,7 +259,7 @@
 
         var items = document.querySelectorAll('#po-items-tbody tr[data-row]');
         if (items.length === 0) {
-            errors.push('Order Items (at least one)');
+            errors.push('Items (at least one)');
         } else {
             var hasValidItem = false;
             items.forEach(function(row) {
@@ -271,7 +271,7 @@
                 }
             });
             if (!hasValidItem) {
-                errors.push('Product Name in items');
+                errors.push('Item name');
             }
         }
 
@@ -433,7 +433,7 @@
         var row = document.createElement('tr');
         row.setAttribute('data-row', index);
         row.innerHTML = `
-            <td><input type="text" class="wd-input po-item-name" placeholder="Product name" value="${name}"></td>
+            <td><input type="text" class="wd-input po-item-name" placeholder="Item name" value="${name}"></td>
             <td><input type="number" class="wd-input po-item-qty" min="1" value="${qty}" onchange="calculatePOItemSubtotal(${index})"></td>
             <td><select class="wd-select po-item-unit">
                 <option ${unit === 'pcs' ? 'selected' : ''}>pcs</option>

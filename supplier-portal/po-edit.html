@@ -194,16 +194,16 @@
                                         </div>
                                     </div>
 
-                                    <!-- Order Items - Full Width -->
+                                    <!-- Items - Full Width -->
                                     <div class="compact-section items-section">
                                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                            <h3 class="compact-section-title" style="margin-bottom: 0;"><span class="section-icon">📦</span> Order Items (<span id="items-count">1</span>) <span class="wd-badge wd-badge-warning">Required</span></h3>
+                                            <h3 class="compact-section-title" style="margin-bottom: 0;"><span class="section-icon">📦</span> Items (<span id="items-count">1</span>) <span class="wd-badge wd-badge-warning">Required</span></h3>
                                             <button type="button" class="wd-btn wd-btn-outline wd-btn-sm" onclick="addPOItemRow()" style="padding: 4px 8px; font-size: 0.75rem;">+ Add Item</button>
                                         </div>
                                         <table class="wd-table compact-table">
                                             <thead>
                                                 <tr>
-                                                    <th style="width:35%">Product Name</th>
+                                                    <th style="width:35%">Item</th>
                                                     <th style="width:12%">Qty</th>
                                                     <th style="width:12%">Unit</th>
                                                     <th style="width:15%">Price</th>
@@ -213,7 +213,7 @@
                                             </thead>
                                             <tbody id="po-items-tbody">
                                                 <tr data-row="0">
-                                                    <td><input type="text" class="wd-input po-item-name" placeholder="Product name"></td>
+                                                    <td><input type="text" class="wd-input po-item-name" placeholder="Item name"></td>
                                                     <td><input type="number" class="wd-input po-item-qty" min="1" value="1" onchange="calculatePOItemSubtotal(0)"></td>
                                                     <td><select class="wd-select po-item-unit"><option>pcs</option><option>boxes</option><option>cases</option><option>kg</option></select></td>
                                                     <td><input type="number" class="wd-input po-item-price" min="0" step="0.01" value="0" onchange="calculatePOItemSubtotal(0)"></td>

@@ -83,7 +83,7 @@
         document.body.classList.remove('detail-mode');
         document.body.classList.add('new-mode');
         const pageTitle = document.getElementById('page-title');
-        if (pageTitle) pageTitle.textContent = 'Add Invoice';
+        if (pageTitle) pageTitle.textContent = 'Add INV';
 
         // Set default date
         const dateInput = document.getElementById('inv-date');
@@ -128,7 +128,7 @@
         document.body.classList.remove('new-mode');
         document.body.classList.add('detail-mode');
         const pageTitle = document.getElementById('page-title');
-        if (pageTitle) pageTitle.textContent = 'Invoice Detail';
+        if (pageTitle) pageTitle.textContent = 'INV Detail';
         // Always editable - no view-mode
         const formContainer = document.getElementById('inv-form-container');
         if (formContainer) formContainer.classList.add('edit-mode');
@@ -281,7 +281,7 @@
             const row = document.createElement('tr');
             row.setAttribute('data-row', index);
             row.innerHTML = `
-                <td><input type="text" class="wd-input inv-item-name" value="${item.name || item.product_name || ''}" placeholder="Product name"></td>
+                <td><input type="text" class="wd-input inv-item-name" value="${item.name || item.product_name || ''}" placeholder="Item name"></td>
                 <td><input type="number" class="wd-input inv-item-qty" min="1" value="${qty}" onchange="calculateINVItemSubtotal(${index})"></td>
                 <td><select class="wd-select inv-item-unit">
                     <option ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
@@ -335,7 +335,7 @@
             var invDateEl = document.getElementById('inv-date');
             if (!invDateEl?.value) {
                 markError(invDateEl);
-                errors.push('INV Date');
+                errors.push('Issue Date');
             }
         }
 
@@ -343,7 +343,7 @@
         var exporterEl = document.getElementById('inv-exporter-name');
         if (!exporterEl?.value?.trim()) {
             markError(exporterEl);
-            errors.push('Seller Company');
+            errors.push('Exporter Company');
         }
 
         // Buyer name
@@ -365,7 +365,7 @@
         // Items
         var items = document.querySelectorAll('#inv-items-tbody tr[data-row]');
         if (items.length === 0) {
-            errors.push('Invoice Items (at least one)');
+            errors.push('Items (at least one)');
         } else {
             var hasValidItem = false;
             items.forEach(function(row) {
@@ -377,7 +377,7 @@
                 }
             });
             if (!hasValidItem) {
-                errors.push('Product Name in items');
+                errors.push('Item name');
             }
         }
 
@@ -403,13 +403,13 @@
 
         try {
             await saveINVToAPI(formData);
-            showToast('Invoice sent successfully!', 'success');
+            showToast('INV sent successfully!', 'success');
             setTimeout(() => {
                 window.location.href = 'portal.html#inv-management';
             }, 1000);
         } catch (error) {
             console.error('Save error:', error);
-            showToast(error.message || 'Failed to save invoice', 'error');
+            showToast(error.message || 'Failed to save INV', 'error');
         }
 
         submitBtn.innerHTML = originalText;
@@ -497,7 +497,7 @@
 
         if (!response.ok) {
             const err = await response.json().catch(() => ({}));
-            throw new Error(err.message || 'Failed to save invoice');
+            throw new Error(err.message || 'Failed to save INV');
         }
 
         return await response.json();
@@ -517,10 +517,10 @@
         try {
             var formData = collectFormData();
             await saveINVToAPI(formData);
-            showToast('Invoice updated successfully!', 'success');
+            showToast('INV updated successfully!', 'success');
         } catch (error) {
             console.error('Save INV error:', error);
-            showToast(error.message || 'Failed to save invoice', 'error');
+            showToast(error.message || 'Failed to save INV', 'error');
         }
 
         saveBtn.innerHTML = originalText;
@@ -617,7 +617,7 @@
         const subtotal = qty * price;
 
         row.innerHTML = `
-            <td><input type="text" class="wd-input inv-item-name" placeholder="Product name" value="${name}"></td>
+            <td><input type="text" class="wd-input inv-item-name" placeholder="Item name" value="${name}"></td>
             <td><input type="number" class="wd-input inv-item-qty" min="1" value="${qty}" onchange="calculateINVItemSubtotal(${index})"></td>
             <td><select class="wd-select inv-item-unit">
                 <option ${unit === 'pcs' ? 'selected' : ''}>pcs</option>
@@ -689,7 +689,7 @@
 
         try {
             await saveINVToAPI(formData);
-            showToast('Invoice saved as draft', 'success');
+            showToast('INV saved as draft', 'success');
             setTimeout(() => {
                 window.location.href = 'portal.html#inv-management';
             }, 1000);
@@ -703,7 +703,7 @@
         if (!currentINVId || isNewMode) return;
         var invNumber = document.getElementById('inv-number-display')?.textContent || currentINVId;
         showDeleteConfirm({
-            title: 'Delete Invoice',
+            title: 'Delete INV',
             message: 'Are you sure you want to delete <strong>' + escapeHtml(invNumber) + '</strong>? This action cannot be undone.',
             onConfirm: async function() {
                 try {
@@ -715,13 +715,13 @@
                     if (response.status === 401) { handleSessionExpired(); return; }
                     if (!response.ok && response.status !== 204) {
                         var err = await response.json().catch(function() { return {}; });
-                        throw new Error(err.message || 'Failed to delete invoice');
+                        throw new Error(err.message || 'Failed to delete INV');
                     }
-                    showToast('Invoice deleted', 'success');
+                    showToast('INV deleted', 'success');
                     setTimeout(function() { window.location.href = 'portal.html#inv-management'; }, 1000);
                 } catch (error) {
                     console.error('Delete INV error:', error);
-                    showToast(error.message || 'Failed to delete invoice', 'error');
+                    showToast(error.message || 'Failed to delete INV', 'error');
                 }
             }
         });
