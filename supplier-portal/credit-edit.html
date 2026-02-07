@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="components.css">
     <link rel="stylesheet" href="compact-form.css">
 </head>
-<body>
+<body class="new-mode">
     <div class="portal-app">
         <header class="portal-header">
             <div class="header-content">
@@ -41,13 +41,29 @@
                                     <h1 class="page-title">New Credit</h1>
                                 </div>
                                 <div class="page-header-actions">
-                                    <a href="portal.html#credit-management" class="wd-btn wd-btn-outline">Cancel</a>
-                                    <button type="button" onclick="saveCreditAsDraft()" class="wd-btn wd-btn-secondary">Save Draft</button>
-                                    <button type="submit" form="credit-edit-form" class="wd-btn wd-btn-primary">
+                                    <!-- Detail mode actions -->
+                                    <button type="button" onclick="deleteCreditFromDetail()" class="wd-btn wd-btn-outline detail-mode-only" title="Delete" style="color: var(--wd-danger);">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    </button>
+                                    <button type="button" id="save-btn" onclick="saveCreditChanges()" class="wd-btn wd-btn-primary detail-mode-only">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                        Save Changes
+                                    </button>
+                                    <!-- New mode actions -->
+                                    <a href="portal.html#credit-management" class="wd-btn wd-btn-outline new-mode-only">Cancel</a>
+                                    <button type="button" onclick="saveCreditAsDraft()" class="wd-btn wd-btn-secondary new-mode-only">Save Draft</button>
+                                    <button type="submit" form="credit-edit-form" class="wd-btn wd-btn-primary new-mode-only">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                         Submit Credit
                                     </button>
                                 </div>
+                            </div>
+
+                            <!-- Detail Mode: Status Bar -->
+                            <div class="wd-status-bar detail-mode-only">
+                                <span class="wd-status-bar-id" id="credit-number-display">CR-0001</span>
+                                <span class="wd-badge wd-badge-info" id="credit-status-badge">Draft</span>
+                                <span class="wd-status-bar-date" id="credit-date-display"></span>
                             </div>
 
                             <form id="credit-edit-form">
@@ -124,6 +140,26 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div class="wd-modal-overlay" id="delete-confirm-modal" style="display: none;">
+        <div class="wd-modal wd-modal-sm">
+            <div class="wd-alert-modal">
+                <div class="wd-alert-icon wd-alert-icon--danger">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                </div>
+                <h3 class="wd-alert-title" id="delete-confirm-title">Delete Item</h3>
+                <p class="wd-alert-message" id="delete-confirm-message">Are you sure you want to delete this item? This action cannot be undone.</p>
+                <div class="wd-alert-actions">
+                    <button class="wd-btn wd-btn-outline" onclick="closeDeleteConfirmModal()">Cancel</button>
+                    <button class="wd-btn wd-btn-danger" id="delete-confirm-btn" onclick="executeDeleteConfirm()">Delete</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="toast-container"></div>

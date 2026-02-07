@@ -22,12 +22,14 @@
         currentCreditId = urlParams.get('id');
         isNewCredit = !currentCreditId || currentCreditId === 'new';
 
-        if (!isNewCredit) {
+        if (isNewCredit) {
+            document.body.classList.remove('detail-mode');
+            document.body.classList.add('new-mode');
+        } else {
+            document.body.classList.remove('new-mode');
+            document.body.classList.add('detail-mode');
             const titleEl = document.querySelector('.page-title');
-            if (titleEl) {
-                titleEl.textContent = 'Edit Credit';
-                titleEl.setAttribute('data-i18n', 'credit.editCredit');
-            }
+            if (titleEl) titleEl.textContent = 'Credit Detail';
             loadCreditData(currentCreditId);
         }
 
@@ -96,8 +98,16 @@
     }
 
     function populateForm(credit) {
-        const subtitle = document.getElementById('credit-subtitle');
-        if (subtitle) subtitle.textContent = credit.credit_id || '';
+        // Status bar
+        var numberEl = document.getElementById('credit-number-display');
+        if (numberEl) numberEl.textContent = credit.credit_number || currentCreditId;
+        var statusEl = document.getElementById('credit-status-badge');
+        if (statusEl) {
+            statusEl.textContent = credit.status || 'draft';
+            statusEl.className = 'wd-badge ' + (window.getStatusBadgeClass ? getStatusBadgeClass(credit.status) : 'wd-badge-info');
+        }
+        var dateEl = document.getElementById('credit-date-display');
+        if (dateEl) dateEl.textContent = credit.created_at ? wdFormatDate(credit.created_at) : '';
 
         setSelectValue('credit-invoice-select', credit.invoice_number);
         setSelectValue('credit-product-select', credit.product_id);
@@ -288,6 +298,53 @@
     window.removeCreditFile = function(button, filename) {
         uploadedFiles = uploadedFiles.filter(f => f.name !== filename);
         button.closest('.wd-uploaded-file').remove();
+    };
+
+    window.deleteCreditFromDetail = function() {
+        if (!currentCreditId || isNewCredit) return;
+        var creditNumber = document.getElementById('credit-number-display')?.textContent || currentCreditId;
+        showDeleteConfirm({
+            title: 'Delete Credit',
+            message: 'Are you sure you want to delete <strong>' + escapeHtml(creditNumber) + '</strong>? This action cannot be undone.',
+            onConfirm: async function() {
+                try {
+                    var token = localStorage.getItem('supplier_token');
+                    var response = await fetch(API_BASE_URL + '/credits/' + currentCreditId, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    if (response.status === 401) { handleSessionExpired(); return; }
+                    if (!response.ok && response.status !== 204) {
+                        var err = await response.json().catch(function() { return {}; });
+                        throw new Error(err.message || 'Failed to delete credit');
+                    }
+                    showToast('Credit deleted', 'success');
+                    setTimeout(function() { window.location.href = 'portal.html#credit-management'; }, 1000);
+                } catch (error) {
+                    console.error('Delete credit error:', error);
+                    showToast(error.message || 'Failed to delete credit', 'error');
+                }
+            }
+        });
+    };
+
+    window.saveCreditChanges = async function() {
+        var saveBtn = document.getElementById('save-btn');
+        if (!saveBtn) return;
+        var originalText = saveBtn.innerHTML;
+        saveBtn.innerHTML = '<span class="spinner"></span> Saving...';
+        saveBtn.disabled = true;
+
+        try {
+            var formData = collectFormData();
+            await saveCredit(formData);
+            showToast('Credit updated successfully!', 'success');
+        } catch (error) {
+            showToast(error.message || 'Failed to update credit', 'error');
+        }
+
+        saveBtn.innerHTML = originalText;
+        saveBtn.disabled = false;
     };
 
     window.saveCreditAsDraft = async function() {

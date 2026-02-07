@@ -153,7 +153,7 @@ export class SalesController {
   @ApiOperation({ summary: 'Update credit' })
   @ApiResponse({ status: 200, description: 'Credit updated' })
   async updateCredit(@Request() req, @Param('id') id: string, @Body() dto: UpdateCreditDto) {
-    return this.salesService.updateCredit(req.user.id, id, dto);
+    return this.salesService.updateCredit(req.user.id, id, dto, req.user.email);
   }
 
   @Delete('credits/:id')

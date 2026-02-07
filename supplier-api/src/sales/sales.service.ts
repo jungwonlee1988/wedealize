@@ -718,7 +718,7 @@ export class SalesService {
     return data;
   }
 
-  async updateCredit(supplierId: string, creditId: string, dto: UpdateCreditDto) {
+  async updateCredit(supplierId: string, creditId: string, dto: UpdateCreditDto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     const existing = await this.verifyOwnership('credits', creditId, supplierId, 'Credit');
@@ -747,6 +747,18 @@ export class SalesService {
     if (error) {
       this.logger.error('Failed to update credit:', error);
       throw new BadRequestException('Failed to update credit');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'credit.update',
+        category: 'credit',
+        description: `updated credit ${data.credit_number || creditId}`,
+        targetId: creditId,
+        targetName: data.credit_number || creditId,
+      }).catch(err => this.logger.warn('Activity log failed:', err));
     }
 
     return data;

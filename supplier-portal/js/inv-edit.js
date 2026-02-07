@@ -114,7 +114,7 @@
     async function loadINVData(invId) {
         try {
             const token = localStorage.getItem('supplier_token');
-            const response = await fetch(`${API_BASE_URL}/invoices/${invId}`, {
+            const response = await fetch(`${API_BASE_URL}/pi/${invId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
@@ -330,7 +330,7 @@
         const token = localStorage.getItem('supplier_token');
         const endpoint = isNewMode
             ? `${API_BASE_URL}/invoices`
-            : `${API_BASE_URL}/invoices/${currentINVId}`;
+            : `${API_BASE_URL}/pi/${currentINVId}`;
         const method = isNewMode ? 'POST' : 'PATCH';
 
         const response = await fetch(endpoint, {
@@ -557,7 +557,7 @@
             onConfirm: async function() {
                 try {
                     var token = localStorage.getItem('supplier_token');
-                    var response = await fetch(API_BASE_URL + '/invoices/' + currentINVId, {
+                    var response = await fetch(API_BASE_URL + '/pi/' + currentINVId, {
                         method: 'DELETE',
                         headers: { 'Authorization': 'Bearer ' + token }
                     });
