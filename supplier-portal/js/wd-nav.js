@@ -18,6 +18,7 @@
         }
 
         loadDashboardProductStats();
+        if (typeof loadRecentActivity === 'function') loadRecentActivity();
         // loadWorkspaces() is now called from initSidebar() in sidebar.js
     };
 
@@ -93,6 +94,7 @@
                 break;
             case 'settings':
                 if (typeof loadTeamMembers === 'function') loadTeamMembers();
+                if (typeof loadActivityLog === 'function') loadActivityLog(1);
                 break;
         }
     };
@@ -143,6 +145,7 @@
                 break;
             case 'settings':
                 if (typeof loadTeamMembers === 'function') loadTeamMembers();
+                if (typeof loadActivityLog === 'function') loadActivityLog(1);
                 break;
         }
     };
