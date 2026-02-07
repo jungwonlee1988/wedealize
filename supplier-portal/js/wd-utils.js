@@ -50,7 +50,7 @@
 
             clearTimeout(timeoutId);
 
-            if (response.status === 401) {
+            if (response.status === 401 && !endpoint.startsWith('/login') && !endpoint.startsWith('/auth/')) {
                 handleSessionExpired();
                 throw new Error('Session expired');
             }
