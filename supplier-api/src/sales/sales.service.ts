@@ -706,12 +706,17 @@ export class SalesService {
 
     const { data, error } = await supabase
       .from('credits')
-      .select('*, credit_applications(*, proforma_invoices(pi_number, buyer_name))')
+      .select('*')
       .eq('id', creditId)
       .eq('supplier_id', supplierId)
       .single();
 
-    if (error || !data) {
+    if (error) {
+      this.logger.error('getCreditById error:', error.message);
+      throw new NotFoundException('Credit not found');
+    }
+
+    if (!data) {
       throw new NotFoundException('Credit not found');
     }
 
