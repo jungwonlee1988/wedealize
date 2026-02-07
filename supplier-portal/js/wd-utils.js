@@ -139,7 +139,8 @@
         toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);' +
             'background:' + (colors[type] || colors.success) + ';color:white;padding:14px 24px;' +
             'border-radius:8px;display:flex;align-items:center;gap:10px;font-size:0.95rem;' +
-            'z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);animation:slideUp 0.3s ease;';
+            'z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);opacity:1;transition:none;' +
+            'animation:slideUp 0.3s ease forwards;';
 
         toast.querySelector('.toast-close').addEventListener('click', function() {
             _toastProtectedUntil = 0;
