@@ -172,9 +172,19 @@
                     document.querySelector('#signup-state .wd-btn').onclick = function() { window.location.href = 'portal.html'; };
                 }
             } else {
-                // Not logged in — show signup/login guidance
-                document.querySelector('#signup-state .wd-auth-subtitle').textContent =
-                    'This invitation was sent to ' + invitedEmail + '. Please sign up or sign in with that email first, then click the invitation link again.';
+                // Not logged in
+                if (inviteInfo.hasAccount) {
+                    // Already has account — show sign in
+                    document.querySelector('#signup-state .wd-auth-title').textContent = 'Sign In Required';
+                    document.querySelector('#signup-state .wd-auth-subtitle').textContent =
+                        'Please sign in with ' + invitedEmail + ' to accept the invitation from ' + companyName + '.';
+                    document.querySelector('#signup-state .wd-btn').textContent = 'Sign In';
+                    document.querySelector('#signup-state .wd-btn').onclick = function() { window.location.href = 'portal.html'; };
+                } else {
+                    // No account — show sign up
+                    document.querySelector('#signup-state .wd-auth-subtitle').textContent =
+                        'This invitation was sent to ' + invitedEmail + '. Please sign up with that email first, then click the invitation link again.';
+                }
                 showState('signup-state');
             }
         }

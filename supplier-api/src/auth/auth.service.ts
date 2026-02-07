@@ -504,7 +504,7 @@ export class AuthService {
   }
 
   // Get invite info (public, no JWT)
-  async getInviteInfo(token: string): Promise<{ email: string; companyName: string; role: string }> {
+  async getInviteInfo(token: string): Promise<{ email: string; companyName: string; role: string; hasAccount: boolean }> {
     const supabase = this.supabaseService.getAdminClient();
 
     const { data: member, error } = await supabase
@@ -525,10 +525,18 @@ export class AuthService {
       .eq('id', member.supplier_id)
       .single();
 
+    // Check if invited email already has a supplier account
+    const { data: existingAccount } = await supabase
+      .from('suppliers')
+      .select('id')
+      .eq('email', member.email)
+      .maybeSingle();
+
     return {
       email: member.email,
       companyName: supplier?.company_name || '',
       role: member.role,
+      hasAccount: !!existingAccount,
     };
   }
 
