@@ -90,6 +90,38 @@
         if (dateInput && !dateInput.value) {
             dateInput.value = new Date().toISOString().split('T')[0];
         }
+
+        // Load PO list for dropdown
+        loadPODropdownForNew();
+    }
+
+    async function loadPODropdownForNew() {
+        var select = document.getElementById('inv-po-select');
+        if (!select) return;
+        select.innerHTML = '<option value="">Loading POs...</option>';
+        try {
+            const token = localStorage.getItem('supplier_token');
+            const response = await fetch(`${API_BASE_URL}/po`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const pos = await response.json();
+                select.innerHTML = '<option value="">Select PO...</option>';
+                (Array.isArray(pos) ? pos : []).forEach(function(po) {
+                    var opt = document.createElement('option');
+                    opt.value = po.po_number;
+                    opt.textContent = po.po_number + (po.buyer_name ? ' - ' + po.buyer_name : '');
+                    opt.setAttribute('data-buyer', po.buyer_name || '');
+                    select.appendChild(opt);
+                });
+                if (pos.length === 0) {
+                    select.innerHTML = '<option value="">No POs found</option>';
+                }
+            }
+        } catch (e) {
+            console.error('Failed to load POs:', e);
+            select.innerHTML = '<option value="">Failed to load POs</option>';
+        }
     }
 
     function setupDetailMode() {
