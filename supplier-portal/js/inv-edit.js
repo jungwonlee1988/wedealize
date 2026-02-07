@@ -301,8 +301,44 @@
         updateINVSummary();
     }
 
+    function validateRequired() {
+        // Buyer name is required
+        var buyerName = '';
+        if (isNewMode) {
+            var buyerSelect = document.getElementById('inv-buyer-select');
+            buyerName = buyerSelect?.selectedOptions[0]?.text || '';
+            if (buyerName === 'Select buyer...' || buyerName === 'Loading buyers...') buyerName = '';
+        } else {
+            buyerName = document.getElementById('inv-importer-name')?.value?.trim() || '';
+        }
+        if (!buyerName) {
+            showToast('Buyer Company is required', 'error');
+            return false;
+        }
+
+        // At least one item with product name
+        var items = document.querySelectorAll('#inv-items-tbody tr[data-row]');
+        if (items.length === 0) {
+            showToast('At least one item is required', 'error');
+            return false;
+        }
+        var hasValidItem = false;
+        items.forEach(function(row) {
+            var name = row.querySelector('.inv-item-name')?.value?.trim();
+            if (name) hasValidItem = true;
+        });
+        if (!hasValidItem) {
+            showToast('At least one item must have a product name', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
     async function handleFormSubmit(e) {
         e.preventDefault();
+
+        if (!validateRequired()) return;
 
         const invNumber = document.getElementById('inv-number')?.value?.trim();
         const exporterName = document.getElementById('inv-exporter-name')?.value?.trim();
@@ -424,6 +460,8 @@
 
     // Global functions
     window.saveINV = async function() {
+        if (!validateRequired()) return;
+
         const saveBtn = document.getElementById('save-btn');
         if (!saveBtn) return;
 
@@ -599,6 +637,8 @@
     };
 
     window.saveINVAsDraft = async function() {
+        if (!validateRequired()) return;
+
         const formData = collectFormData();
         formData.status = 'draft';
 

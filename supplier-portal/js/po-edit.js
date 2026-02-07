@@ -77,7 +77,6 @@
         document.body.classList.remove('new-mode');
         document.body.classList.add('detail-mode');
         document.getElementById('page-title').textContent = 'PO Detail';
-        // Always editable - no view-mode
         document.getElementById('po-form-container').classList.add('edit-mode');
         const saveBtn = document.getElementById('save-btn');
         if (saveBtn) saveBtn.style.display = 'inline-flex';
@@ -93,7 +92,7 @@
     async function loadPOData(poId) {
         try {
             const token = localStorage.getItem('supplier_token');
-            const response = await fetch(`${API_BASE_URL}/purchase-orders/${poId}`, {
+            const response = await fetch(`${API_BASE_URL}/po/${poId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
@@ -120,34 +119,48 @@
         // Status bar
         document.getElementById('po-number-display').textContent = po.po_number || currentPOId;
         const statusEl = document.getElementById('po-status');
-        statusEl.textContent = po.status || 'Received';
-        statusEl.className = `wd-badge ${po.statusClass || 'wd-badge-info'}`;
-        document.getElementById('po-date-display').textContent = po.date || '';
-
-        // Exporter
-        if (po.exporter) {
-            document.getElementById('exporter-name').value = po.exporter.name || '';
-            document.getElementById('exporter-contact').value = po.exporter.contact || '';
-            document.getElementById('exporter-email').value = po.exporter.email || '';
-            document.getElementById('exporter-phone').value = po.exporter.phone || '';
+        if (statusEl) {
+            var status = po.status || 'Received';
+            statusEl.textContent = status;
+            statusEl.className = 'wd-badge ' + (window.getStatusBadgeClass ? getStatusBadgeClass(status) : 'wd-badge-info');
         }
+        document.getElementById('po-date-display').textContent = po.created_at ? wdFormatDate(po.created_at) : (po.date || '');
 
-        // Importer
-        if (po.importer) {
-            document.getElementById('importer-name').value = po.importer.name || '';
-            document.getElementById('importer-contact').value = po.importer.contact || '';
-            document.getElementById('importer-email').value = po.importer.email || '';
-            document.getElementById('importer-phone').value = po.importer.phone || '';
-        }
+        // PO Number & Date
+        setInputValue('po-number', po.po_number);
+        setInputValue('po-date', po.order_date ? po.order_date.split('T')[0] : '');
+
+        // Exporter (Seller) — API returns flat fields or demo has nested
+        setInputValue('exporter-name', po.exporter_name || (po.exporter && po.exporter.name) || '');
+        setInputValue('exporter-contact', po.exporter_contact || (po.exporter && po.exporter.contact) || '');
+        setInputValue('exporter-email', po.exporter_email || (po.exporter && po.exporter.email) || '');
+        setInputValue('exporter-phone', po.exporter_phone || (po.exporter && po.exporter.phone) || '');
+
+        // Importer (Buyer) — API returns buyer_name etc.
+        setInputValue('importer-name', po.buyer_name || (po.importer && po.importer.name) || '');
+        setInputValue('importer-contact', po.buyer_contact || (po.importer && po.importer.contact) || '');
+        setInputValue('importer-email', po.buyer_email || (po.importer && po.importer.email) || '');
+        setInputValue('importer-phone', po.buyer_phone || (po.importer && po.importer.phone) || '');
 
         // Trade info
-        document.getElementById('incoterms').value = po.incoterms || 'FOB';
-        document.getElementById('payment-terms').value = po.paymentTerms || 'TT';
-        document.getElementById('currency').value = po.currency || 'USD';
-        document.getElementById('notes').value = po.notes || '';
+        setSelectValue('incoterms', po.incoterms);
+        setSelectValue('payment-terms', po.payment_terms || po.paymentTerms);
+        setSelectValue('currency', po.currency);
+        setInputValue('notes', po.notes || '');
 
-        // Items
-        renderItems(po.items || []);
+        // Items — API returns order_items
+        var items = po.order_items || po.items || [];
+        renderItems(items);
+    }
+
+    function setInputValue(id, value) {
+        var el = document.getElementById(id);
+        if (el && value !== null && value !== undefined) el.value = value;
+    }
+
+    function setSelectValue(id, value) {
+        var el = document.getElementById(id);
+        if (el && value) el.value = value;
     }
 
     function renderItems(items) {
@@ -190,102 +203,129 @@
         document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
     }
 
+    // === Validation ===
+
+    function validateRequired() {
+        var buyerName = document.getElementById('importer-name')?.value?.trim();
+        if (!buyerName) {
+            showToast('Buyer Company is required', 'error');
+            document.getElementById('importer-name')?.focus();
+            return false;
+        }
+
+        var items = document.querySelectorAll('#po-items-tbody tr[data-row]');
+        if (items.length === 0) {
+            showToast('At least one item is required', 'error');
+            return false;
+        }
+
+        var hasValidItem = false;
+        items.forEach(function(row) {
+            var name = row.querySelector('.po-item-name')?.value?.trim();
+            if (name) hasValidItem = true;
+        });
+        if (!hasValidItem) {
+            showToast('At least one item with a product name is required', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    // === Form Data ===
+
+    function collectFormData() {
+        var items = [];
+        document.querySelectorAll('#po-items-tbody tr[data-row]').forEach(function(row) {
+            var name = row.querySelector('.po-item-name')?.value;
+            var qty = row.querySelector('.po-item-qty')?.value;
+            var unit = row.querySelector('.po-item-unit')?.value;
+            var price = row.querySelector('.po-item-price')?.value;
+
+            if (name && qty && price) {
+                items.push({
+                    productName: name,
+                    quantity: parseInt(qty),
+                    unit: unit || 'pcs',
+                    unitPrice: parseFloat(price)
+                });
+            }
+        });
+
+        var data = {
+            buyerName: document.getElementById('importer-name')?.value || '',
+            buyerContact: document.getElementById('importer-contact')?.value || undefined,
+            buyerEmail: document.getElementById('importer-email')?.value || undefined,
+            buyerPhone: document.getElementById('importer-phone')?.value || undefined,
+            items: items,
+            currency: document.getElementById('currency')?.value || 'USD',
+            incoterms: document.getElementById('incoterms')?.value || 'FOB',
+            paymentTerms: document.getElementById('payment-terms')?.value || 'TT',
+            notes: document.getElementById('notes')?.value || undefined
+        };
+
+        if (isNewMode) {
+            data.poNumber = document.getElementById('po-number')?.value?.trim() || undefined;
+            data.orderDate = document.getElementById('po-date')?.value || new Date().toISOString().split('T')[0];
+        }
+
+        return data;
+    }
+
+    // === Save ===
+
     async function handleFormSubmit(e) {
         e.preventDefault();
 
-        const poNumber = document.getElementById('po-number')?.value?.trim();
-        const exporterName = document.getElementById('exporter-name').value.trim();
+        if (!validateRequired()) return;
 
-        if (isNewMode && (!poNumber || !exporterName)) {
-            showToast('PO Number and Exporter Company are required', 'warning');
-            return;
-        }
-
-        const formData = collectFormData();
+        var formData = collectFormData();
         formData.status = 'created';
 
-        const submitBtn = document.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
+        var submitBtn = document.querySelector('button[type="submit"]');
+        var originalText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<span class="spinner"></span> Saving...';
         submitBtn.disabled = true;
 
         try {
             await savePOToAPI(formData);
             showToast('Purchase Order saved successfully!', 'success');
-            setTimeout(() => {
+            setTimeout(function() {
                 window.location.href = 'portal.html#po-management';
             }, 1000);
         } catch (error) {
             console.error('Save error:', error);
-            showToast('PO saved locally', 'success');
-            setTimeout(() => {
-                window.location.href = 'portal.html#po-management';
-            }, 1000);
+            showToast(error.message || 'Failed to save PO', 'error');
         }
 
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
     }
 
-    function collectFormData() {
-        const items = [];
-        document.querySelectorAll('#po-items-tbody tr[data-row]').forEach(row => {
-            const name = row.querySelector('.po-item-name')?.value;
-            const qty = row.querySelector('.po-item-qty')?.value;
-            const unit = row.querySelector('.po-item-unit')?.value;
-            const price = row.querySelector('.po-item-price')?.value;
-
-            if (name && qty && price) {
-                items.push({
-                    product_name: name,
-                    quantity: parseInt(qty),
-                    unit: unit,
-                    unit_price: parseFloat(price)
-                });
-            }
-        });
-
-        return {
-            po_number: document.getElementById('po-number')?.value?.trim() || currentPOId,
-            order_date: document.getElementById('po-date')?.value || new Date().toISOString().split('T')[0],
-            exporter: {
-                name: document.getElementById('exporter-name').value,
-                contact: document.getElementById('exporter-contact').value,
-                email: document.getElementById('exporter-email').value,
-                phone: document.getElementById('exporter-phone').value
-            },
-            importer: {
-                name: document.getElementById('importer-name').value,
-                contact: document.getElementById('importer-contact').value,
-                email: document.getElementById('importer-email').value,
-                phone: document.getElementById('importer-phone').value
-            },
-            incoterms: document.getElementById('incoterms').value,
-            payment_terms: document.getElementById('payment-terms').value,
-            currency: document.getElementById('currency').value,
-            notes: document.getElementById('notes').value,
-            items: items
-        };
-    }
-
     async function savePOToAPI(formData) {
-        const token = localStorage.getItem('supplier_token');
-        const endpoint = isNewMode
-            ? `${API_BASE_URL}/purchase-orders`
-            : `${API_BASE_URL}/purchase-orders/${currentPOId}`;
-        const method = isNewMode ? 'POST' : 'PATCH';
+        var token = localStorage.getItem('supplier_token');
+        var endpoint = isNewMode
+            ? `${API_BASE_URL}/po`
+            : `${API_BASE_URL}/po/${currentPOId}`;
+        var method = isNewMode ? 'POST' : 'PATCH';
 
-        const response = await fetch(endpoint, {
+        var response = await fetch(endpoint, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': 'Bearer ' + token
             },
             body: JSON.stringify(formData)
         });
 
+        if (response.status === 401) {
+            handleSessionExpired();
+            throw new Error('Session expired');
+        }
+
         if (!response.ok) {
-            throw new Error('Failed to save PO');
+            var err = await response.json().catch(function() { return {}; });
+            throw new Error(err.message || 'Failed to save PO');
         }
 
         return await response.json();
@@ -293,17 +333,20 @@
 
     // Global functions
     window.savePO = async function() {
-        const saveBtn = document.getElementById('save-btn');
-        const originalText = saveBtn.innerHTML;
+        if (!validateRequired()) return;
+
+        var saveBtn = document.getElementById('save-btn');
+        var originalText = saveBtn.innerHTML;
         saveBtn.innerHTML = '<span class="spinner"></span> Saving...';
         saveBtn.disabled = true;
 
         try {
-            const formData = collectFormData();
+            var formData = collectFormData();
             await savePOToAPI(formData);
             showToast('Purchase Order updated successfully!', 'success');
         } catch (error) {
-            showToast('Changes saved locally', 'success');
+            console.error('Save PO error:', error);
+            showToast(error.message || 'Failed to save PO', 'error');
         }
 
         saveBtn.innerHTML = originalText;
@@ -311,40 +354,45 @@
     };
 
     window.savePOAsDraft = async function() {
-        const formData = collectFormData();
+        if (!validateRequired()) return;
+
+        var formData = collectFormData();
         formData.status = 'draft';
 
         try {
             await savePOToAPI(formData);
             showToast('PO saved as draft', 'success');
-            setTimeout(() => {
+            setTimeout(function() {
                 window.location.href = 'portal.html#po-management';
             }, 1000);
         } catch (error) {
-            showToast('Draft saved locally', 'success');
-            setTimeout(() => {
-                window.location.href = 'portal.html#po-management';
-            }, 1000);
+            console.error('Save draft error:', error);
+            showToast(error.message || 'Failed to save draft', 'error');
         }
     };
 
-    window.addPOItemRow = function(item = null) {
-        const tbody = document.getElementById('po-items-tbody');
-        const index = poItemRowIndex++;
+    window.addPOItemRow = function(item) {
+        var tbody = document.getElementById('po-items-tbody');
+        var index = poItemRowIndex++;
 
-        const row = document.createElement('tr');
+        var name = item ? (item.product_name || item.name || '') : '';
+        var qty = item ? (item.quantity || 1) : 1;
+        var unit = item ? (item.unit || 'pcs') : 'pcs';
+        var price = item ? (item.unit_price || item.price || 0) : 0;
+
+        var row = document.createElement('tr');
         row.setAttribute('data-row', index);
         row.innerHTML = `
-            <td><input type="text" class="wd-input po-item-name" placeholder="Product name" value="${item?.product_name || ''}"></td>
-            <td><input type="number" class="wd-input po-item-qty" min="1" value="${item?.quantity || 1}" onchange="calculatePOItemSubtotal(${index})"></td>
+            <td><input type="text" class="wd-input po-item-name" placeholder="Product name" value="${name}"></td>
+            <td><input type="number" class="wd-input po-item-qty" min="1" value="${qty}" onchange="calculatePOItemSubtotal(${index})"></td>
             <td><select class="wd-select po-item-unit">
-                <option ${(item?.unit === 'pcs' || !item) ? 'selected' : ''}>pcs</option>
-                <option ${item?.unit === 'boxes' ? 'selected' : ''}>boxes</option>
-                <option ${item?.unit === 'bags' ? 'selected' : ''}>bags</option>
-                <option ${item?.unit === 'cases' ? 'selected' : ''}>cases</option>
-                <option ${item?.unit === 'kg' ? 'selected' : ''}>kg</option>
+                <option ${unit === 'pcs' ? 'selected' : ''}>pcs</option>
+                <option ${unit === 'boxes' ? 'selected' : ''}>boxes</option>
+                <option ${unit === 'bags' ? 'selected' : ''}>bags</option>
+                <option ${unit === 'cases' ? 'selected' : ''}>cases</option>
+                <option ${unit === 'kg' ? 'selected' : ''}>kg</option>
             </select></td>
-            <td><input type="number" class="wd-input po-item-price" min="0" step="0.01" value="${item?.unit_price || 0}" onchange="calculatePOItemSubtotal(${index})"></td>
+            <td><input type="number" class="wd-input po-item-price" min="0" step="0.01" value="${price}" onchange="calculatePOItemSubtotal(${index})"></td>
             <td class="po-item-subtotal" style="text-align:right;font-weight:600;">0.00</td>
             <td><button type="button" class="wd-btn-icon" onclick="removePOItemRow(${index})" style="padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
         `;
@@ -353,7 +401,7 @@
     };
 
     window.removePOItemRow = function(index) {
-        const row = document.querySelector(`#po-items-tbody tr[data-row="${index}"]`);
+        var row = document.querySelector('#po-items-tbody tr[data-row="' + index + '"]');
         if (row) {
             row.remove();
             updateTotals();
@@ -361,31 +409,31 @@
     };
 
     window.calculatePOItemSubtotal = function(index) {
-        const row = document.querySelector(`#po-items-tbody tr[data-row="${index}"]`);
+        var row = document.querySelector('#po-items-tbody tr[data-row="' + index + '"]');
         if (!row) return;
 
-        const qty = parseFloat(row.querySelector('.po-item-qty')?.value) || 0;
-        const price = parseFloat(row.querySelector('.po-item-price')?.value) || 0;
-        const subtotal = qty * price;
+        var qty = parseFloat(row.querySelector('.po-item-qty')?.value) || 0;
+        var price = parseFloat(row.querySelector('.po-item-price')?.value) || 0;
+        var subtotal = qty * price;
 
-        const subtotalEl = row.querySelector('.po-item-subtotal');
+        var subtotalEl = row.querySelector('.po-item-subtotal');
         if (subtotalEl) subtotalEl.textContent = subtotal.toFixed(2);
 
         updateTotals();
     };
 
     function updateTotals() {
-        let totalQty = 0;
-        let totalAmount = 0;
+        var totalQty = 0;
+        var totalAmount = 0;
 
-        document.querySelectorAll('#po-items-tbody tr[data-row]').forEach(row => {
-            const qty = parseFloat(row.querySelector('.po-item-qty')?.value) || 0;
-            const price = parseFloat(row.querySelector('.po-item-price')?.value) || 0;
+        document.querySelectorAll('#po-items-tbody tr[data-row]').forEach(function(row) {
+            var qty = parseFloat(row.querySelector('.po-item-qty')?.value) || 0;
+            var price = parseFloat(row.querySelector('.po-item-price')?.value) || 0;
             totalQty += qty;
             totalAmount += qty * price;
         });
 
-        const itemsCount = document.querySelectorAll('#po-items-tbody tr[data-row]').length;
+        var itemsCount = document.querySelectorAll('#po-items-tbody tr[data-row]').length;
         document.getElementById('items-count').textContent = itemsCount;
         document.getElementById('total-qty').textContent = totalQty;
         document.getElementById('total-currency').textContent = document.getElementById('currency').value;
@@ -393,7 +441,7 @@
     }
 
     window.handlePOFileUpload = function(event) {
-        const file = event.target?.files?.[0];
+        var file = event.target?.files?.[0];
         if (!file) return;
 
         if (file.size > 20 * 1024 * 1024) {
@@ -435,7 +483,7 @@
 
     window.downloadPO = function() {
         showToast('Preparing download...', 'info');
-        setTimeout(() => window.print(), 500);
+        setTimeout(function() { window.print(); }, 500);
     };
 
 })();
