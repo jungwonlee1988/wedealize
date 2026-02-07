@@ -364,11 +364,12 @@
         saveBtn.disabled = true;
 
         try {
-            const formData = collectFormData();
+            var formData = collectFormData();
             await saveINVToAPI(formData);
             showToast('Invoice updated successfully!', 'success');
         } catch (error) {
-            showToast('Changes saved locally', 'success');
+            console.error('Save INV error:', error);
+            showToast(error.message || 'Failed to save invoice', 'error');
         }
 
         saveBtn.innerHTML = originalText;

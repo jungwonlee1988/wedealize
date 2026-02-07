@@ -468,12 +468,17 @@ export class SalesService {
 
     const { data, error } = await supabase
       .from('proforma_invoices')
-      .select('*, proforma_invoice_items(*), credit_applications(*, credits(*))')
+      .select('*, proforma_invoice_items(*)')
       .eq('id', piId)
       .eq('supplier_id', supplierId)
       .single();
 
-    if (error || !data) {
+    if (error) {
+      this.logger.error('getPIById error:', error.message);
+      throw new NotFoundException('Proforma invoice not found');
+    }
+
+    if (!data) {
       throw new NotFoundException('Proforma invoice not found');
     }
 
