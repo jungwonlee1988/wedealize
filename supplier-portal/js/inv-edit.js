@@ -299,8 +299,16 @@
             });
         });
 
+        var buyerName = '';
+        if (isNewMode) {
+            var buyerSelect = document.getElementById('inv-buyer-select');
+            buyerName = buyerSelect?.selectedOptions[0]?.text || buyerSelect?.value || '';
+        } else {
+            buyerName = document.getElementById('inv-importer-name')?.value || '';
+        }
+
         var data = {
-            buyerName: document.getElementById('inv-importer-name')?.value || '',
+            buyerName: buyerName,
             buyerEmail: document.getElementById('inv-importer-email')?.value || undefined,
             items: items,
             currency: document.getElementById('inv-currency')?.value || 'USD',
