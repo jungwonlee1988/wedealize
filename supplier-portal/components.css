@@ -203,6 +203,57 @@ body.detail-mode .new-mode-only { display: none !important; }
     min-height: 60px;
 }
 
+/* ==================== J. Alert Modal ==================== */
+.wd-alert-modal {
+    text-align: center;
+    padding: 40px 32px 32px;
+}
+.wd-alert-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+.wd-alert-icon--warning {
+    background: var(--wd-warning-light, #fef3c7);
+    color: var(--wd-warning-dark, #d97706);
+}
+.wd-alert-icon--danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+.wd-alert-icon--info {
+    background: #dbeafe;
+    color: #2563eb;
+}
+.wd-alert-icon--success {
+    background: #d1fae5;
+    color: #059669;
+}
+.wd-alert-title {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--wd-black);
+}
+.wd-alert-message {
+    margin: 0 0 24px;
+    color: var(--wd-gray-500);
+    font-size: 14px;
+    line-height: 1.6;
+}
+.wd-alert-message strong {
+    color: var(--wd-black);
+}
+.wd-alert-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
 /* ==================== K. Loading / Empty States ==================== */
 .wd-loading-message {
     color: var(--wd-gray-400);
