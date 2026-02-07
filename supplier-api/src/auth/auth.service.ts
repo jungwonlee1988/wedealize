@@ -452,6 +452,20 @@ export class AuthService {
       throw new BadRequestException('Supplier not found');
     }
 
+    // Check free plan member limit (owner + active members <= 3)
+    const FREE_PLAN_MEMBER_LIMIT = 3;
+    const { count: activeCount } = await supabase
+      .from('team_members')
+      .select('id', { count: 'exact', head: true })
+      .eq('supplier_id', supplierId)
+      .eq('status', 'active');
+
+    if ((activeCount || 0) + 1 >= FREE_PLAN_MEMBER_LIMIT) {
+      throw new BadRequestException(
+        `현재 신청하신 구독 버전에서는 최대 ${FREE_PLAN_MEMBER_LIMIT}명까지 활성화 가능합니다. 추가하고 싶으시면 유료 구독을 진행해주세요.`,
+      );
+    }
+
     // Check if already a team member
     const { data: existing } = await supabase
       .from('team_members')
