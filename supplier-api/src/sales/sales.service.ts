@@ -150,7 +150,10 @@ export class SalesService {
 
     if (orderError) {
       this.logger.error('Failed to create PO:', orderError);
-      throw new BadRequestException('Failed to create purchase order');
+      const msg = orderError.code === '23505'
+        ? `PO number '${poNumber}' already exists`
+        : orderError.message || 'Failed to create purchase order';
+      throw new BadRequestException(msg);
     }
 
     const itemsToInsert = this.mapPOItems(order.id, dto.items);
