@@ -68,68 +68,74 @@
 
                             <form id="credit-edit-form">
                                 <div class="compact-grid">
-                                    <!-- Invoice & Product -->
-                                    <div class="compact-section">
-                                        <h3 class="compact-section-title"><span class="section-icon">📄</span> Invoice & Product</h3>
-                                        <div class="compact-row">
-                                            <div class="wd-form-group">
-                                                <label class="wd-form-label">Invoice <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                <select class="wd-input wd-select" id="credit-invoice-select" required onchange="loadInvoiceProducts()">
-                                                    <option value="">Select Invoice...</option>
-                                                    <option value="INV-2024-0089">INV-2024-0089 - ABC Distribution</option>
-                                                    <option value="INV-2024-0088">INV-2024-0088 - XYZ Foods</option>
-                                                    <option value="INV-2024-0087">INV-2024-0087 - Global Trade</option>
-                                                </select>
+                                    <!-- Left Column -->
+                                    <div class="compact-column">
+                                        <!-- Invoice & Product -->
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">📄</span> Invoice & Product</h3>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Invoice <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <select class="wd-input wd-select" id="credit-invoice-select" required onchange="loadInvoiceProducts()">
+                                                        <option value="">Select Invoice...</option>
+                                                        <option value="INV-2024-0089">INV-2024-0089 - ABC Distribution</option>
+                                                        <option value="INV-2024-0088">INV-2024-0088 - XYZ Foods</option>
+                                                        <option value="INV-2024-0087">INV-2024-0087 - Global Trade</option>
+                                                    </select>
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Product <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <select class="wd-input wd-select" id="credit-product-select" required>
+                                                        <option value="">Select Invoice first...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="compact-row">
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Reason <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <select class="wd-input wd-select" id="credit-reason" required>
+                                                        <option value="">Select reason...</option>
+                                                        <option value="damaged">Damaged packaging</option>
+                                                        <option value="quality">Quality issue</option>
+                                                        <option value="short">Short shipment</option>
+                                                        <option value="wrong">Wrong product</option>
+                                                        <option value="expired">Expired/Near expiry</option>
+                                                        <option value="other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="wd-form-group">
+                                                    <label class="wd-form-label">Affected Qty <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                    <input type="number" class="wd-input" id="credit-qty" min="1" required placeholder="Enter quantity">
+                                                </div>
                                             </div>
                                             <div class="wd-form-group">
-                                                <label class="wd-form-label">Product <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                <select class="wd-input wd-select" id="credit-product-select" required>
-                                                    <option value="">Select Invoice first...</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="compact-row">
-                                            <div class="wd-form-group">
-                                                <label class="wd-form-label">Reason <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                <select class="wd-input wd-select" id="credit-reason" required>
-                                                    <option value="">Select reason...</option>
-                                                    <option value="damaged">Damaged packaging</option>
-                                                    <option value="quality">Quality issue</option>
-                                                    <option value="short">Short shipment</option>
-                                                    <option value="wrong">Wrong product</option>
-                                                    <option value="expired">Expired/Near expiry</option>
-                                                    <option value="other">Other</option>
-                                                </select>
-                                            </div>
-                                            <div class="wd-form-group">
-                                                <label class="wd-form-label">Affected Qty <span class="wd-badge wd-badge-warning">Required</span></label>
-                                                <input type="number" class="wd-input" id="credit-qty" min="1" required placeholder="Enter quantity">
-                                            </div>
-                                        </div>
-                                        <div class="wd-form-group">
-                                            <label class="wd-form-label">Credit Amount (USD) <span class="wd-badge wd-badge-warning">Required</span></label>
-                                            <div style="display: flex; align-items: center; gap: 4px;">
-                                                <span style="font-size: 0.875rem;">$</span>
-                                                <input type="number" class="wd-input" id="credit-amount" min="0" step="0.01" required placeholder="0.00" style="width: 150px;">
+                                                <label class="wd-form-label">Credit Amount (USD) <span class="wd-badge wd-badge-warning">Required</span></label>
+                                                <div style="display: flex; align-items: center; gap: 4px;">
+                                                    <span style="font-size: 0.875rem;">$</span>
+                                                    <input type="number" class="wd-input" id="credit-amount" min="0" step="0.01" required placeholder="0.00" style="width: 150px;">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Description & Attachments -->
-                                    <div class="compact-section">
-                                        <h3 class="compact-section-title"><span class="section-icon">📝</span> Details & Attachments</h3>
-                                        <div class="wd-form-group" style="margin-bottom: 10px;">
-                                            <label class="wd-form-label">Description</label>
-                                            <textarea class="wd-input wd-textarea" id="credit-description" rows="3" placeholder="Details about the claim..." style="min-height: 70px;"></textarea>
-                                        </div>
-                                        <div class="wd-form-group">
-                                            <label class="wd-form-label">Attachments</label>
-                                            <div class="compact-upload" onclick="document.getElementById('credit-files').click()">
-                                                <input type="file" id="credit-files" multiple accept="image/*,.pdf" style="display:none" onchange="handleCreditFiles(event)">
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                                <p>Click or drop photos/documents here</p>
+                                    <!-- Right Column -->
+                                    <div class="compact-column">
+                                        <!-- Details & Attachments -->
+                                        <div class="compact-section">
+                                            <h3 class="compact-section-title"><span class="section-icon">📝</span> Details & Attachments</h3>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label">Description</label>
+                                                <textarea class="wd-input wd-textarea" id="credit-description" rows="3" placeholder="Details about the claim..."></textarea>
                                             </div>
-                                            <div id="credit-file-list" class="file-list"></div>
+                                            <div class="wd-form-group">
+                                                <label class="wd-form-label">Attachments</label>
+                                                <div class="compact-upload" onclick="document.getElementById('credit-files').click()">
+                                                    <input type="file" id="credit-files" multiple accept="image/*,.pdf" style="display:none" onchange="handleCreditFiles(event)">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                                    <p>Click or drop photos/documents here</p>
+                                                </div>
+                                                <div id="credit-file-list" class="file-list"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

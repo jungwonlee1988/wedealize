@@ -33,8 +33,8 @@
 
         tbody.innerHTML = credits.map(function(credit) {
             var reasonLabel = reasonLabels[credit.reason] || credit.reason || '-';
-            return '<tr data-status="' + credit.status + '" data-tab="' + (credit.status === 'cancelled' ? 'cancelled' : 'active') + '" data-id="' + credit.id + '">' +
-                '<td><a href="#" class="wd-link" onclick="viewCreditDetail(\'' + credit.id + '\')">' + (credit.credit_number || '-') + '</a></td>' +
+            return '<tr data-status="' + credit.status + '" data-tab="' + (credit.status === 'cancelled' ? 'cancelled' : 'active') + '" data-id="' + credit.id + '" onclick="viewCreditDetail(\'' + credit.id + '\')" class="wd-table-row-clickable">' +
+                '<td>' + (credit.credit_number || '-') + '</td>' +
                 '<td>' + (credit.buyer_name || '-') + '</td>' +
                 '<td>' + (credit.invoice_number || '-') + '</td>' +
                 '<td>' + (credit.product_name || '-') + '</td>' +
