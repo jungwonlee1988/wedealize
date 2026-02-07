@@ -340,25 +340,29 @@
         }
     };
 
-    window.deleteProductFromDetail = async function() {
-        if (!confirm('Are you sure you want to delete this product?')) return;
-
-        try {
-            const token = localStorage.getItem('supplier_token');
-            const res = await fetch(`${API_BASE_URL}/products/${currentProductId}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-
-            if (res.status === 401) { handleSessionExpired(); return; }
-            if (!res.ok) throw new Error('Failed to delete product');
-
-            showToast('Product deleted', 'success');
-            setTimeout(() => { window.location.href = 'portal.html#product-list'; }, 1000);
-        } catch (error) {
-            console.error('Delete error:', error);
-            showToast(error.message || 'Failed to delete', 'error');
-        }
+    window.deleteProductFromDetail = function() {
+        if (!currentProductId || isNewMode) return;
+        var productName = document.getElementById('product-name')?.value || currentProductId;
+        showDeleteConfirm({
+            title: 'Delete Product',
+            message: 'Are you sure you want to delete <strong>' + escapeHtml(productName) + '</strong>? This action cannot be undone.',
+            onConfirm: async function() {
+                try {
+                    var token = localStorage.getItem('supplier_token');
+                    var res = await fetch(API_BASE_URL + '/products/' + currentProductId, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    if (res.status === 401) { handleSessionExpired(); return; }
+                    if (!res.ok) throw new Error('Failed to delete product');
+                    showToast('Product deleted', 'success');
+                    setTimeout(function() { window.location.href = 'portal.html#product-list'; }, 1000);
+                } catch (error) {
+                    console.error('Delete error:', error);
+                    showToast(error.message || 'Failed to delete', 'error');
+                }
+            }
+        });
     };
 
     /**

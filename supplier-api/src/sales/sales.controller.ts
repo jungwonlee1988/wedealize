@@ -20,7 +20,7 @@ export class SalesController {
   @ApiOperation({ summary: 'Create a purchase order' })
   @ApiResponse({ status: 201, description: 'PO created' })
   async createPO(@Request() req, @Body() dto: CreatePODto) {
-    return this.salesService.createPO(req.user.id, dto);
+    return this.salesService.createPO(req.user.id, dto, req.user.email);
   }
 
   @Get('po')
@@ -45,7 +45,7 @@ export class SalesController {
   @ApiOperation({ summary: 'Update PO' })
   @ApiResponse({ status: 200, description: 'PO updated' })
   async updatePO(@Request() req, @Param('id') id: string, @Body() dto: UpdatePODto) {
-    return this.salesService.updatePO(req.user.id, id, dto);
+    return this.salesService.updatePO(req.user.id, id, dto, req.user.email);
   }
 
   @Post('po/:id/confirm')
@@ -60,7 +60,7 @@ export class SalesController {
   @ApiOperation({ summary: 'Delete PO' })
   @ApiResponse({ status: 200, description: 'PO deleted' })
   async deletePO(@Request() req, @Param('id') id: string) {
-    return this.salesService.deletePO(req.user.id, id);
+    return this.salesService.deletePO(req.user.id, id, req.user.email);
   }
 
   // ==================== PI Endpoints ====================

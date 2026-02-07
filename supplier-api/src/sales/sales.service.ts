@@ -114,7 +114,7 @@ export class SalesService {
 
   // ==================== PO CRUD ====================
 
-  async createPO(supplierId: string, dto: CreatePODto) {
+  async createPO(supplierId: string, dto: CreatePODto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     const totalAmount = dto.items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
@@ -159,6 +159,18 @@ export class SalesService {
       this.logger.error('Failed to create PO items:', itemsError);
       await supabase.from('orders').delete().eq('id', order.id);
       throw new BadRequestException('Failed to create purchase order items');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'po.create',
+        category: 'po',
+        description: `created PO #${poNumber}`,
+        targetId: order.id,
+        targetName: poNumber,
+      }).catch(err => this.logger.warn('Activity log failed:', err));
     }
 
     return { ...order, items: itemsToInsert };
@@ -208,7 +220,7 @@ export class SalesService {
     return data;
   }
 
-  async updatePO(supplierId: string, poId: string, dto: UpdatePODto) {
+  async updatePO(supplierId: string, poId: string, dto: UpdatePODto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     await this.verifyOwnership('orders', poId, supplierId, 'Purchase order');
@@ -250,13 +262,25 @@ export class SalesService {
       throw new BadRequestException('Failed to update purchase order');
     }
 
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'po.update',
+        category: 'po',
+        description: `updated PO #${data.po_number || poId}`,
+        targetId: poId,
+        targetName: data.po_number || poId,
+      }).catch(err => this.logger.warn('Activity log failed:', err));
+    }
+
     return data;
   }
 
-  async deletePO(supplierId: string, poId: string): Promise<{ message: string }> {
+  async deletePO(supplierId: string, poId: string, actorEmail?: string): Promise<{ message: string }> {
     const supabase = this.supabaseService.getAdminClient();
 
-    await this.verifyOwnership('orders', poId, supplierId, 'Purchase order');
+    const po = await this.getPOById(supplierId, poId);
 
     const { error } = await supabase
       .from('orders')
@@ -266,6 +290,18 @@ export class SalesService {
     if (error) {
       this.logger.error('Failed to delete PO:', error);
       throw new BadRequestException('Failed to delete purchase order');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'po.delete',
+        category: 'po',
+        description: `deleted PO #${po.po_number || poId}`,
+        targetId: poId,
+        targetName: po.po_number || poId,
+      }).catch(err => this.logger.warn('Activity log failed:', err));
     }
 
     return { message: 'Purchase order deleted successfully' };
