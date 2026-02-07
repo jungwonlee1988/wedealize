@@ -109,8 +109,26 @@
         var dateEl = document.getElementById('credit-date-display');
         if (dateEl) dateEl.textContent = credit.created_at ? wdFormatDate(credit.created_at) : '';
 
-        setSelectValue('credit-invoice-select', credit.invoice_number);
-        setSelectValue('credit-product-select', credit.product_name);
+        // Invoice: add option if not in static list
+        var invoiceSelect = document.getElementById('credit-invoice-select');
+        if (credit.invoice_number && invoiceSelect) {
+            var hasInvoice = Array.from(invoiceSelect.options).some(function(o) { return o.value === credit.invoice_number; });
+            if (!hasInvoice) {
+                var opt = document.createElement('option');
+                opt.value = credit.invoice_number;
+                opt.textContent = credit.invoice_number + (credit.buyer_name ? ' - ' + credit.buyer_name : '');
+                invoiceSelect.appendChild(opt);
+            }
+            invoiceSelect.value = credit.invoice_number;
+        }
+
+        // Product: replace placeholder with saved value
+        var productSelect = document.getElementById('credit-product-select');
+        if (credit.product_name && productSelect) {
+            productSelect.innerHTML = '<option value="' + escapeHtml(credit.product_name) + '">' + escapeHtml(credit.product_name) + '</option>';
+            productSelect.value = credit.product_name;
+        }
+
         setSelectValue('credit-reason', credit.reason);
         setInputValue('credit-qty', credit.affected_quantity);
         setInputValue('credit-amount', credit.amount);
