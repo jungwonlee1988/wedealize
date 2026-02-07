@@ -202,3 +202,106 @@ body.detail-mode .new-mode-only { display: none !important; }
     font-size: 0.85rem;
     min-height: 60px;
 }
+
+/* ==================== K. Loading / Empty States ==================== */
+.wd-loading-message {
+    color: var(--wd-gray-400);
+    text-align: center;
+    padding: 40px 0;
+}
+
+.wd-empty-block {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--wd-gray-400);
+}
+
+.wd-empty-block svg {
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.wd-empty-block p {
+    margin: 0 0 8px;
+}
+
+.wd-empty-block p:first-of-type {
+    font-size: 16px;
+}
+
+.wd-empty-block p:last-of-type {
+    font-size: 14px;
+}
+
+/* ==================== L. Inline Select (small) ==================== */
+.wd-select-inline {
+    width: auto;
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+/* ==================== M. Inquiry Message ==================== */
+.wd-inquiry-message {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--wd-gray-600);
+    line-height: 1.5;
+}
+
+/* ==================== N. Subscription Plan Cards ==================== */
+.wd-subscription-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background: var(--wd-gray-50);
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.wd-plans-comparison {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.wd-plan-card {
+    padding: 24px;
+    border: 2px solid var(--wd-gray-200);
+    border-radius: 12px;
+}
+
+.wd-plan-card.wd-plan-recommended {
+    border-color: var(--wd-primary);
+    position: relative;
+}
+
+.wd-plan-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: var(--wd-primary);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.wd-plan-price {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.wd-plan-price span {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--wd-gray-500);
+}
+
+.wd-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
