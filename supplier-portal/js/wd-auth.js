@@ -118,7 +118,7 @@
 
         pendingRegistration = null;
         document.querySelector('.wd-auth-tabs').style.display = 'flex';
-        window.showDashboard();
+        onLoginSuccess();
         showToast('Email verified! Welcome to WeDealize.');
     }
 
@@ -171,7 +171,7 @@
             localStorage.setItem('supplier_email', response.email);
             localStorage.setItem('supplier_name', response.company_name || response.email.split('@')[0]);
 
-            window.showDashboard();
+            onLoginSuccess();
             loadNotifications();
             showToast('Successfully logged in with Google!');
         } catch (error) {
@@ -309,7 +309,7 @@
             localStorage.setItem('supplier_name', response.company_name);
 
             showToast(t('toast.loginSuccess'), 'success');
-            window.showDashboard();
+            onLoginSuccess();
         } catch (apiError) {
             console.error('Login failed:', apiError.message);
 
@@ -323,7 +323,7 @@
                 localStorage.setItem('wedealize_name', email.split('@')[0] || 'Demo User');
 
                 showToast('Demo mode: Logged in successfully!', 'success');
-                window.showDashboard();
+                onLoginSuccess();
                 return;
             }
 
@@ -621,7 +621,18 @@
             var code = (parts[1] || '').toUpperCase();
             if (code) {
                 var match = countryList.querySelector('.wd-country-option[data-value="' + code + '"]');
-                if (match) match.click();
+                if (match) {
+                    hiddenInput.value = code;
+                    var flagImg = match.querySelector('.wd-country-option-flag');
+                    if (flagImg) {
+                        selectedFlag.src = flagImg.src;
+                        selectedFlag.alt = code;
+                        selectedFlag.style.display = 'block';
+                    }
+                    selectedCountry.textContent = match.dataset.name;
+                    selectedCountry.classList.remove('placeholder');
+                    match.classList.add('selected');
+                }
             }
         }
     };
