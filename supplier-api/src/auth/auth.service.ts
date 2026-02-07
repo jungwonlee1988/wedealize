@@ -133,6 +133,11 @@ export class AuthService {
     // Generate JWT
     const token = this.generateToken(supplier);
 
+    // Send welcome email (fire and forget)
+    this.emailService.sendWelcomeEmail(email, companyName).catch(err => {
+      this.logger.warn(`Failed to send welcome email: ${err.message}`);
+    });
+
     return {
       access_token: token,
       supplier_id: supplier.id,
