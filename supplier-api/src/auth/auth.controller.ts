@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Patch, Delete, Body, Param, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto, SendVerificationDto, VerifyEmailDto } from './dto/register.dto';
@@ -60,6 +60,27 @@ export class AuthController {
     return this.authService.resetPassword(dto);
   }
 
+  // ==================== Workspace Switching ====================
+
+  @Get('auth/my-workspaces')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all workspaces accessible by the current user' })
+  @ApiResponse({ status: 200, description: 'Workspaces retrieved' })
+  async getMyWorkspaces(@Request() req) {
+    return this.authService.getMyWorkspaces(req.user.actor_email);
+  }
+
+  @Post('auth/switch-workspace')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Switch to a different workspace' })
+  @ApiResponse({ status: 200, description: 'Workspace switched, new token issued' })
+  async switchWorkspace(@Request() req, @Body() body: { supplierId: string }) {
+    return this.authService.switchWorkspace(req.user.actor_email, body.supplierId);
+  }
+
   // ==================== Team Management ====================
 
   @Post('team/invite')
@@ -70,6 +91,14 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Invitation sent' })
   async inviteTeamMember(@Request() req, @Body() dto: InviteTeamMemberDto) {
     return this.authService.inviteTeamMember(req.user.id, dto);
+  }
+
+  @Get('team/invite-info')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get invitation info by token' })
+  @ApiResponse({ status: 200, description: 'Invitation info retrieved' })
+  async getInviteInfo(@Query('token') token: string) {
+    return this.authService.getInviteInfo(token);
   }
 
   @Post('team/accept-invite')

@@ -290,7 +290,12 @@ export class AuthService {
       .eq('id', payload.sub)
       .single();
 
-    return supplier;
+    if (!supplier) return null;
+
+    return {
+      ...supplier,
+      actor_email: payload.actor_email || supplier.email,
+    };
   }
 
   // Generate JWT token
@@ -302,6 +307,126 @@ export class AuthService {
     };
 
     return this.jwtService.sign(payload);
+  }
+
+  // ==================== Workspace Switching ====================
+
+  // Get all workspaces accessible by the actor
+  async getMyWorkspaces(actorEmail: string): Promise<{ workspaces: any[] }> {
+    const supabase = this.supabaseService.getAdminClient();
+
+    // 1. Own workspace (supplier account)
+    const { data: ownSupplier } = await supabase
+      .from('suppliers')
+      .select('id, company_name')
+      .eq('email', actorEmail)
+      .maybeSingle();
+
+    // 2. Team memberships (active)
+    const { data: memberships } = await supabase
+      .from('team_members')
+      .select('supplier_id, role')
+      .eq('email', actorEmail)
+      .eq('status', 'active');
+
+    const workspaces: any[] = [];
+
+    if (ownSupplier) {
+      workspaces.push({
+        id: ownSupplier.id,
+        company_name: ownSupplier.company_name,
+        role: 'owner',
+        is_own: true,
+      });
+    }
+
+    if (memberships && memberships.length > 0) {
+      // Fetch company names for each membership
+      const supplierIds = memberships.map(m => m.supplier_id);
+      const { data: suppliers } = await supabase
+        .from('suppliers')
+        .select('id, company_name')
+        .in('id', supplierIds);
+
+      const supplierMap = new Map((suppliers || []).map(s => [s.id, s.company_name]));
+
+      for (const m of memberships) {
+        workspaces.push({
+          id: m.supplier_id,
+          company_name: supplierMap.get(m.supplier_id) || 'Unknown',
+          role: m.role,
+          is_own: false,
+        });
+      }
+    }
+
+    return { workspaces };
+  }
+
+  // Switch to a different workspace
+  async switchWorkspace(actorEmail: string, targetSupplierId: string): Promise<{ access_token: string; supplier_id: string; email: string; company_name: string; role: string }> {
+    const supabase = this.supabaseService.getAdminClient();
+
+    // Check if it's the actor's own workspace
+    const { data: ownSupplier } = await supabase
+      .from('suppliers')
+      .select('id, email, company_name')
+      .eq('id', targetSupplierId)
+      .eq('email', actorEmail)
+      .maybeSingle();
+
+    if (ownSupplier) {
+      // Own workspace — standard token
+      const token = this.generateToken(ownSupplier);
+      return {
+        access_token: token,
+        supplier_id: ownSupplier.id,
+        email: ownSupplier.email,
+        company_name: ownSupplier.company_name,
+        role: 'owner',
+      };
+    }
+
+    // Check team membership
+    const { data: membership } = await supabase
+      .from('team_members')
+      .select('supplier_id, role')
+      .eq('email', actorEmail)
+      .eq('supplier_id', targetSupplierId)
+      .eq('status', 'active')
+      .maybeSingle();
+
+    if (!membership) {
+      throw new UnauthorizedException('You do not have access to this workspace');
+    }
+
+    // Get the target workspace info
+    const { data: targetSupplier } = await supabase
+      .from('suppliers')
+      .select('id, email, company_name')
+      .eq('id', targetSupplierId)
+      .single();
+
+    if (!targetSupplier) {
+      throw new NotFoundException('Workspace not found');
+    }
+
+    // Generate token with actor_email
+    const payload = {
+      sub: targetSupplier.id,
+      email: targetSupplier.email,
+      company_name: targetSupplier.company_name,
+      actor_email: actorEmail,
+    };
+    const token = this.jwtService.sign(payload);
+
+    return {
+      access_token: token,
+      supplier_id: targetSupplier.id,
+      email: targetSupplier.email,
+      company_name: targetSupplier.company_name,
+      role: membership.role,
+    };
   }
 
   // ==================== Team Member Management ====================
@@ -377,6 +502,35 @@ export class AuthService {
     return { message: 'Invitation sent successfully', member };
   }
 
+  // Get invite info (public, no JWT)
+  async getInviteInfo(token: string): Promise<{ email: string; companyName: string; role: string }> {
+    const supabase = this.supabaseService.getAdminClient();
+
+    const { data: member, error } = await supabase
+      .from('team_members')
+      .select('email, role, supplier_id')
+      .eq('invite_token', token)
+      .eq('status', 'pending')
+      .single();
+
+    if (error || !member) {
+      throw new BadRequestException('Invalid or expired invitation');
+    }
+
+    // Get company name
+    const { data: supplier } = await supabase
+      .from('suppliers')
+      .select('company_name')
+      .eq('id', member.supplier_id)
+      .single();
+
+    return {
+      email: member.email,
+      companyName: supplier?.company_name || '',
+      role: member.role,
+    };
+  }
+
   // Accept team invite
   async acceptInvite(token: string): Promise<{ message: string; supplier_id: string }> {
     const supabase = this.supabaseService.getAdminClient();
@@ -384,12 +538,13 @@ export class AuthService {
     // Find invite by token
     const { data: member, error: fetchError } = await supabase
       .from('team_members')
-      .select('*, suppliers!team_members_supplier_id_fkey(company_name)')
+      .select('*')
       .eq('invite_token', token)
       .eq('status', 'pending')
       .single();
 
     if (fetchError || !member) {
+      this.logger.error('Accept invite lookup failed:', fetchError?.message);
       throw new BadRequestException('Invalid or expired invitation');
     }
 
@@ -399,6 +554,17 @@ export class AuthService {
     const diffDays = (now.getTime() - invitedAt.getTime()) / (1000 * 60 * 60 * 24);
     if (diffDays > 7) {
       throw new BadRequestException('This invitation has expired');
+    }
+
+    // Check if invited email has a registered account
+    const { data: registeredUser } = await supabase
+      .from('suppliers')
+      .select('id')
+      .eq('email', member.email)
+      .maybeSingle();
+
+    if (!registeredUser) {
+      throw new BadRequestException('Please create an account first before accepting the invitation.');
     }
 
     // Update team member status
