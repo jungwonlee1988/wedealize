@@ -591,6 +591,7 @@
             }
             selectedCountry.textContent = name;
             selectedCountry.classList.remove('placeholder');
+            selectedCountry.removeAttribute('data-i18n');
             countryList.querySelectorAll('.wd-country-option').forEach(function(opt) { opt.classList.remove('selected'); });
             option.classList.add('selected');
             countrySelect.classList.remove('open');
@@ -631,6 +632,7 @@
                     }
                     selectedCountry.textContent = match.dataset.name;
                     selectedCountry.classList.remove('placeholder');
+                    selectedCountry.removeAttribute('data-i18n');
                     match.classList.add('selected');
                 }
             }
