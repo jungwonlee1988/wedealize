@@ -111,7 +111,7 @@
                         </div>
                         <div class="wd-form-group">
                             <label class="wd-form-label" for="login-password" data-i18n="auth.password">Password</label>
-                            <input type="password" class="wd-input" id="login-password" data-i18n-placeholder="auth.enterPassword" placeholder="Enter password" required>
+                            <input type="password" class="wd-input" id="login-password" data-i18n-placeholder="auth.enterPassword" placeholder="Enter password" required autocomplete="current-password">
                         </div>
                         <div class="wd-form-options">
                             <label class="wd-checkbox">
@@ -400,7 +400,7 @@
                         </div>
                         <div class="wd-form-group">
                             <label class="wd-form-label" for="reg-password"><span data-i18n="auth.password">Password</span> *</label>
-                            <input type="password" class="wd-input" id="reg-password" data-i18n-placeholder="auth.minChars" placeholder="Minimum 8 characters" required minlength="8">
+                            <input type="password" class="wd-input" id="reg-password" data-i18n-placeholder="auth.minChars" placeholder="Minimum 8 characters" required minlength="8" autocomplete="new-password">
                         </div>
                         <div class="wd-form-group">
                             <label class="wd-form-label"><span data-i18n="auth.productCategory">Product Categories</span> * <span class="wd-badge wd-badge-outline" id="reg-category-count" style="font-size:11px;margin-left:6px">0 selected</span></label>
@@ -3302,7 +3302,7 @@
     </div>
 
     <script src="i18n.js"></script>
-    <script src="js/sidebar.js?v=2.0"></script>
+    <script src="js/sidebar.js?v=3.0"></script>
     <script src="js/wd-utils.js"></script>
     <script src="js/wd-auth.js"></script>
     <script src="js/wd-nav.js"></script>
