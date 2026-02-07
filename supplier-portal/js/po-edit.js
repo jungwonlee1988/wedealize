@@ -303,6 +303,10 @@
         });
 
         var data = {
+            exporterName: document.getElementById('exporter-name')?.value || undefined,
+            exporterContact: document.getElementById('exporter-contact')?.value || undefined,
+            exporterEmail: document.getElementById('exporter-email')?.value || undefined,
+            exporterPhone: document.getElementById('exporter-phone')?.value || undefined,
             buyerName: document.getElementById('importer-name')?.value || '',
             buyerContact: document.getElementById('importer-contact')?.value || undefined,
             buyerEmail: document.getElementById('importer-email')?.value || undefined,
