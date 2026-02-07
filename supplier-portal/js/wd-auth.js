@@ -338,8 +338,12 @@
             showToast('Verification code sent to your email.');
         } catch (error) {
             console.error('Send verification error:', error);
-            showVerificationForm(email);
-            showToast('Verification code sent to your email.');
+            var msg = error.message || '';
+            if (msg.includes('already registered')) {
+                showToast('This email is already registered. Please log in instead.', 'error');
+            } else {
+                showToast(msg || 'Failed to send verification code.', 'error');
+            }
         }
     };
 
