@@ -266,10 +266,7 @@
             }, 1000);
         } catch (error) {
             console.error('Save error:', error);
-            showToast('Invoice saved locally', 'success');
-            setTimeout(() => {
-                window.location.href = 'portal.html#inv-management';
-            }, 1000);
+            showToast(error.message || 'Failed to save invoice', 'error');
         }
 
         submitBtn.innerHTML = originalText;
@@ -541,10 +538,8 @@
                 window.location.href = 'portal.html#inv-management';
             }, 1000);
         } catch (error) {
-            showToast('Draft saved locally', 'success');
-            setTimeout(() => {
-                window.location.href = 'portal.html#inv-management';
-            }, 1000);
+            console.error('Save draft error:', error);
+            showToast(error.message || 'Failed to save draft', 'error');
         }
     };
 
