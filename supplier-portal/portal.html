@@ -577,7 +577,7 @@
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                                                     <span data-i18n="dashboard.addINV">Add INV</span>
                                                 </button>
-                                                <button class="wd-quick-action-btn" onclick="showSection('catalog-registration')">
+                                                <button class="wd-quick-action-btn" onclick="showSection('catalog')">
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                                     <span data-i18n="dashboard.addProducts">Add Products</span>
                                                 </button>
@@ -2830,6 +2830,7 @@
                             <!-- Settings Tabs -->
                             <div class="wd-tabs wd-px-6">
                                 <button class="wd-tab active" onclick="switchSettingsTab('subscription')" data-i18n="settings.subscriptionTab">Subscription</button>
+                                <button class="wd-tab" onclick="switchSettingsTab('billing')" data-i18n="settings.billingTab">Billing</button>
                                 <button class="wd-tab" onclick="switchSettingsTab('team')" data-i18n="settings.teamTab">Team</button>
                                 <button class="wd-tab" onclick="switchSettingsTab('logs')" data-i18n="settings.logsTab">Activity Log</button>
                             </div>
@@ -2864,67 +2865,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="team-members-tbody">
-                                                    <tr>
-                                                        <td>
-                                                            <div class="wd-member-cell">
-                                                                <div class="wd-member-avatar">JL</div>
-                                                                <div class="wd-member-info">
-                                                                    <span class="wd-member-name">Jungwon Lee</span>
-                                                                    <span class="wd-member-email">jungwon.lee@seller-note.com</span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td><span class="wd-badge wd-badge-primary">Owner</span></td>
-                                                        <td><span class="wd-badge wd-badge-success">Active</span></td>
-                                                        <td>Just now</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="wd-member-cell">
-                                                                <div class="wd-member-avatar">MK</div>
-                                                                <div class="wd-member-info">
-                                                                    <span class="wd-member-name">Minjun Kim</span>
-                                                                    <span class="wd-member-email">minjun@seller-note.com</span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td><span class="wd-badge wd-badge-secondary">Admin</span></td>
-                                                        <td><span class="wd-badge wd-badge-success">Active</span></td>
-                                                        <td>2 hours ago</td>
-                                                        <td>
-                                                            <div class="wd-action-btns">
-                                                                <button class="wd-btn-icon" onclick="editMember('MK')" title="Edit">
-                                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                                </button>
-                                                                <button class="wd-btn-icon wd-btn-icon-danger" onclick="removeMember('MK')" title="Remove">
-                                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="wd-member-cell">
-                                                                <div class="wd-member-avatar wd-avatar-pending">SP</div>
-                                                                <div class="wd-member-info">
-                                                                    <span class="wd-member-name">Sales Person</span>
-                                                                    <span class="wd-member-email">sales@seller-note.com</span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td><span class="wd-badge wd-badge-outline">Member</span></td>
-                                                        <td><span class="wd-badge wd-badge-warning">Pending</span></td>
-                                                        <td>Invite sent</td>
-                                                        <td>
-                                                            <div class="wd-action-btns">
-                                                                <button class="wd-btn-text wd-btn-sm" onclick="resendInvite('SP')">Resend</button>
-                                                                <button class="wd-btn-icon wd-btn-icon-danger" onclick="cancelInvite('SP')" title="Cancel">
-                                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                    <!-- Dynamically loaded by loadTeamMembers() -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -3018,7 +2959,10 @@
                                     </div>
                                 </div>
 
-                                <!-- Billing History -->
+                            </div>
+
+                            <!-- Billing Tab Panel -->
+                            <div class="wd-tab-panel" id="settings-billing-panel">
                                 <div class="wd-card">
                                     <div class="wd-card-header">
                                         <h3 class="wd-card-title" data-i18n="settings.billingHistory">Billing History</h3>
@@ -3358,11 +3302,20 @@
     </div>
 
     <script src="i18n.js"></script>
-    <script src="js/sidebar.js?v=1.1"></script>
-    <!-- Legacy app.js for backward compatibility -->
+    <script src="js/sidebar.js?v=2.0"></script>
+    <script src="js/wd-utils.js"></script>
+    <script src="js/wd-auth.js"></script>
+    <script src="js/wd-nav.js"></script>
+    <script src="js/wd-products.js"></script>
+    <script src="js/wd-catalog.js"></script>
+    <script src="js/wd-po.js"></script>
+    <script src="js/wd-inv.js"></script>
+    <script src="js/wd-credits.js"></script>
+    <script src="js/wd-accounts.js"></script>
+    <script src="js/wd-discovery.js"></script>
+    <script src="js/wd-profile.js"></script>
+    <script src="js/wd-settings.js"></script>
     <script src="app.js"></script>
-    <!-- Modular JS (ES6 modules) - Uncomment to use -->
-    <!-- <script type="module" src="js/app.js"></script> -->
     <script>
         // Initialize language dropdown
         document.addEventListener('DOMContentLoaded', () => {
