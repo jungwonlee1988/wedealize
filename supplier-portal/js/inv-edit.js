@@ -111,6 +111,39 @@
         }
     }
 
+    async function loadPODropdown(currentPONumber) {
+        var select = document.getElementById('inv-linked-po');
+        if (!select) return;
+        try {
+            const token = localStorage.getItem('supplier_token');
+            const response = await fetch(`${API_BASE_URL}/po`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const pos = await response.json();
+                (Array.isArray(pos) ? pos : []).forEach(function(po) {
+                    var opt = document.createElement('option');
+                    opt.value = po.po_number;
+                    opt.textContent = po.po_number + (po.buyer_name ? ' - ' + po.buyer_name : '');
+                    select.appendChild(opt);
+                });
+            }
+        } catch (e) {
+            console.error('Failed to load POs:', e);
+        }
+        if (currentPONumber) {
+            // Ensure the current value exists as an option
+            var hasOption = Array.from(select.options).some(function(o) { return o.value === currentPONumber; });
+            if (!hasOption) {
+                var opt = document.createElement('option');
+                opt.value = currentPONumber;
+                opt.textContent = currentPONumber;
+                select.appendChild(opt);
+            }
+            select.value = currentPONumber;
+        }
+    }
+
     async function loadINVData(invId) {
         try {
             const token = localStorage.getItem('supplier_token');
@@ -120,6 +153,7 @@
             if (response.ok) {
                 const inv = await response.json();
                 populateDetailForm(inv);
+                loadPODropdown(inv.po_number);
                 return;
             }
         } catch (error) {
@@ -136,6 +170,7 @@
             items: [{ name: 'Frozen Butter Croissant Dough (24% Butter)', quantity: 40, unit: 'boxes', price: 20.16 }]
         };
         populateDetailForm(demoData);
+        loadPODropdown(demoData.po_number);
     }
 
     function populateDetailForm(inv) {
@@ -155,8 +190,7 @@
         setInputValue('inv-number', inv.pi_number || inv.inv_number);
         setInputValue('inv-date', inv.pi_date ? inv.pi_date.split('T')[0] : '');
 
-        // Linked PO
-        setInputValue('inv-linked-po', inv.po_number);
+        // Linked PO — set by loadPODropdown() after populateDetailForm()
 
         // Buyer (Importer) — API returns flat fields
         setInputValue('inv-importer-name', inv.buyer_name || (inv.importer && inv.importer.name));
