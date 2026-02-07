@@ -109,6 +109,9 @@
 .compact-form .wd-form-label {
     font-size: 0.75rem;
     margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .compact-form .wd-input,
