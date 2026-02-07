@@ -491,6 +491,7 @@ export class SalesService {
     await this.verifyOwnership('proforma_invoices', piId, supplierId, 'Proforma invoice');
 
     const updateData: Record<string, unknown> = {};
+    if (dto.poNumber !== undefined) updateData.po_number = dto.poNumber;
     if (dto.buyerName !== undefined) updateData.buyer_name = dto.buyerName;
     if (dto.buyerEmail !== undefined) updateData.buyer_email = dto.buyerEmail;
     if (dto.buyerCountry !== undefined) updateData.buyer_country = dto.buyerCountry;

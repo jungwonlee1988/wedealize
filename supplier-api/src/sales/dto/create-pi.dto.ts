@@ -125,6 +125,11 @@ export class UpdatePIDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  poNumber?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   buyerName?: string;
 
   @ApiPropertyOptional()

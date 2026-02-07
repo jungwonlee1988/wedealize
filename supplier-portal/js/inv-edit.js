@@ -156,11 +156,7 @@
         setInputValue('inv-date', inv.pi_date ? inv.pi_date.split('T')[0] : '');
 
         // Linked PO
-        var linkedPO = document.getElementById('linked-po-number');
-        if (linkedPO && inv.po_number) {
-            linkedPO.textContent = inv.po_number;
-            linkedPO.href = 'po-edit.html?id=' + encodeURIComponent(inv.po_number);
-        }
+        setInputValue('inv-linked-po', inv.po_number);
 
         // Buyer (Importer) — API returns flat fields
         setInputValue('inv-importer-name', inv.buyer_name || (inv.importer && inv.importer.name));
@@ -317,10 +313,11 @@
             remarks: document.getElementById('inv-notes')?.value || undefined
         };
 
-        // Only include on create
         if (isNewMode) {
             data.poNumber = document.getElementById('inv-po-select')?.value || undefined;
             data.piDate = document.getElementById('inv-date')?.value || new Date().toISOString().split('T')[0];
+        } else {
+            data.poNumber = document.getElementById('inv-linked-po')?.value || undefined;
         }
 
         if (appliedCredits.length > 0) {
