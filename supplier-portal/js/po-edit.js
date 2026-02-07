@@ -205,30 +205,58 @@
 
     // === Validation ===
 
+    function clearValidationErrors() {
+        document.querySelectorAll('.wd-input-error').forEach(function(el) {
+            el.classList.remove('wd-input-error');
+        });
+    }
+
+    function markError(el) {
+        if (el) {
+            el.classList.add('wd-input-error');
+            el.addEventListener('input', function handler() {
+                el.classList.remove('wd-input-error');
+                el.removeEventListener('input', handler);
+            }, { once: true });
+            el.addEventListener('change', function handler() {
+                el.classList.remove('wd-input-error');
+                el.removeEventListener('change', handler);
+            }, { once: true });
+        }
+    }
+
     function validateRequired() {
-        var buyerName = document.getElementById('importer-name')?.value?.trim();
-        if (!buyerName) {
-            showToast('Buyer Company is required', 'error');
-            document.getElementById('importer-name')?.focus();
-            return false;
+        clearValidationErrors();
+        var errors = [];
+
+        var importerEl = document.getElementById('importer-name');
+        if (!importerEl?.value?.trim()) {
+            markError(importerEl);
+            errors.push('Buyer Company');
         }
 
         var items = document.querySelectorAll('#po-items-tbody tr[data-row]');
         if (items.length === 0) {
-            showToast('At least one item is required', 'error');
-            return false;
+            errors.push('Order Items (at least one)');
+        } else {
+            var hasValidItem = false;
+            items.forEach(function(row) {
+                var nameEl = row.querySelector('.po-item-name');
+                if (nameEl?.value?.trim()) {
+                    hasValidItem = true;
+                } else {
+                    markError(nameEl);
+                }
+            });
+            if (!hasValidItem) {
+                errors.push('Product Name in items');
+            }
         }
 
-        var hasValidItem = false;
-        items.forEach(function(row) {
-            var name = row.querySelector('.po-item-name')?.value?.trim();
-            if (name) hasValidItem = true;
-        });
-        if (!hasValidItem) {
-            showToast('At least one item with a product name is required', 'error');
+        if (errors.length > 0) {
+            showToast('Please fill in required fields: ' + errors.join(', '), 'error');
             return false;
         }
-
         return true;
     }
 

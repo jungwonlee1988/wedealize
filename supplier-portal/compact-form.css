@@ -303,3 +303,13 @@
     background-color: #FEE2E2;
     color: #991B1B;
 }
+
+/* Validation Error State */
+.wd-input-error {
+    border-color: var(--wd-danger) !important;
+    background-color: #FEF2F2 !important;
+}
+
+.wd-input-error:focus {
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+}

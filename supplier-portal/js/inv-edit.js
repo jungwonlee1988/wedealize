@@ -301,37 +301,69 @@
         updateINVSummary();
     }
 
+    function clearValidationErrors() {
+        document.querySelectorAll('.wd-input-error').forEach(function(el) {
+            el.classList.remove('wd-input-error');
+        });
+    }
+
+    function markError(el) {
+        if (el) {
+            el.classList.add('wd-input-error');
+            el.addEventListener('input', function handler() {
+                el.classList.remove('wd-input-error');
+                el.removeEventListener('input', handler);
+            }, { once: true });
+            el.addEventListener('change', function handler() {
+                el.classList.remove('wd-input-error');
+                el.removeEventListener('change', handler);
+            }, { once: true });
+        }
+    }
+
     function validateRequired() {
-        // Buyer name is required
-        var buyerName = '';
+        clearValidationErrors();
+        var errors = [];
+
+        // Buyer name
         if (isNewMode) {
             var buyerSelect = document.getElementById('inv-buyer-select');
-            buyerName = buyerSelect?.selectedOptions[0]?.text || '';
-            if (buyerName === 'Select buyer...' || buyerName === 'Loading buyers...') buyerName = '';
+            var buyerText = buyerSelect?.selectedOptions[0]?.text || '';
+            if (!buyerText || buyerText === 'Select buyer...' || buyerText === 'Loading buyers...') {
+                markError(buyerSelect);
+                errors.push('Buyer Company');
+            }
         } else {
-            buyerName = document.getElementById('inv-importer-name')?.value?.trim() || '';
-        }
-        if (!buyerName) {
-            showToast('Buyer Company is required', 'error');
-            return false;
+            var importerEl = document.getElementById('inv-importer-name');
+            if (!importerEl?.value?.trim()) {
+                markError(importerEl);
+                errors.push('Buyer Company');
+            }
         }
 
-        // At least one item with product name
+        // Items
         var items = document.querySelectorAll('#inv-items-tbody tr[data-row]');
         if (items.length === 0) {
-            showToast('At least one item is required', 'error');
-            return false;
-        }
-        var hasValidItem = false;
-        items.forEach(function(row) {
-            var name = row.querySelector('.inv-item-name')?.value?.trim();
-            if (name) hasValidItem = true;
-        });
-        if (!hasValidItem) {
-            showToast('At least one item must have a product name', 'error');
-            return false;
+            errors.push('Invoice Items (at least one)');
+        } else {
+            var hasValidItem = false;
+            items.forEach(function(row) {
+                var nameEl = row.querySelector('.inv-item-name');
+                if (nameEl?.value?.trim()) {
+                    hasValidItem = true;
+                } else {
+                    markError(nameEl);
+                }
+            });
+            if (!hasValidItem) {
+                errors.push('Product Name in items');
+            }
         }
 
+        if (errors.length > 0) {
+            showToast('Please fill in required fields: ' + errors.join(', '), 'error');
+            return false;
+        }
         return true;
     }
 
