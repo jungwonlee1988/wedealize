@@ -9,7 +9,7 @@
         if (!tbody) return;
 
         try {
-            var invoices = await apiCall('/invoices');
+            var invoices = await apiCall('/pi');
             renderInvoiceListFromAPI(Array.isArray(invoices) ? invoices : []);
         } catch (e) {
             console.error('Failed to load invoices from API:', e);
@@ -30,15 +30,14 @@
             var totalAmount = inv.total_amount ?? 0;
             var currency = inv.currency || 'USD';
 
-            return '<tr data-status="' + inv.status + '" data-id="' + inv.id + '">' +
-                '<td><a href="inv-edit.html?id=' + inv.id + '" class="wd-link">' + (inv.pi_number || '-') + '</a></td>' +
+            return '<tr data-status="' + inv.status + '" data-id="' + inv.id + '" onclick="viewINVDetail(\'' + inv.id + '\')" class="wd-table-row-clickable">' +
+                '<td>' + (inv.pi_number || '-') + '</td>' +
+                '<td><span class="wd-badge ' + getStatusBadgeClass(inv.status) + '">' + (inv.status || 'draft') + '</span></td>' +
+                '<td>' + (inv.payment_status || '-') + '</td>' +
                 '<td>' + (inv.po_number || '-') + '</td>' +
                 '<td>' + (inv.buyer_name || '-') + '</td>' +
                 '<td>' + wdFormatCurrency(totalAmount, currency) + '</td>' +
-                '<td><span class="wd-badge ' + getStatusBadgeClass(inv.status) + '">' + (inv.status || 'draft') + '</span></td>' +
-                '<td>' + (inv.payment_status || '-') + '</td>' +
                 '<td>' + wdFormatDate(inv.created_at) + '</td>' +
-                '<td><button class="wd-btn wd-btn-sm wd-btn-outline" onclick="window.location.href=\'inv-edit.html?id=' + inv.id + '\'">View</button></td>' +
                 '</tr>';
         }).join('');
     }
@@ -99,7 +98,7 @@
         invData.status = 'sent';
 
         try {
-            var endpoint = window._editingINVId ? '/invoices/' + window._editingINVId : '/invoices';
+            var endpoint = window._editingINVId ? '/pi/' + window._editingINVId : '/pi';
             var method = window._editingINVId ? 'PATCH' : 'POST';
 
             await apiCall(endpoint, {
@@ -362,7 +361,7 @@
         invData.status = 'draft';
 
         try {
-            var endpoint = window._editingINVId ? '/invoices/' + window._editingINVId : '/invoices';
+            var endpoint = window._editingINVId ? '/pi/' + window._editingINVId : '/pi';
             var method = window._editingINVId ? 'PATCH' : 'POST';
 
             await apiCall(endpoint, {

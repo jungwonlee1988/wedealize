@@ -329,7 +329,7 @@
     async function saveINVToAPI(formData) {
         const token = localStorage.getItem('supplier_token');
         const endpoint = isNewMode
-            ? `${API_BASE_URL}/invoices`
+            ? `${API_BASE_URL}/pi`
             : `${API_BASE_URL}/pi/${currentINVId}`;
         const method = isNewMode ? 'POST' : 'PATCH';
 
