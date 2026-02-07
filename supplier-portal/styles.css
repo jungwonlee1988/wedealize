@@ -2465,10 +2465,6 @@ body.dashboard-mode .portal-badge {
     display: none !important;
 }
 
-/* Toast info type */
-.toast-info {
-    background: var(--primary) !important;
-}
 
 /* Responsive for catalog steps */
 @media (max-width: 768px) {
@@ -3444,64 +3440,6 @@ body.dashboard-mode .portal-badge {
     gap: 10px;
 }
 
-.toast {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 20px;
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    transform: translateX(100%);
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.toast.show {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.toast-success {
-    border-left: 4px solid var(--success);
-}
-
-.toast-error {
-    border-left: 4px solid var(--danger);
-}
-
-.toast-warning {
-    border-left: 4px solid var(--warning);
-}
-
-.toast-info {
-    border-left: 4px solid var(--info);
-}
-
-.toast-icon {
-    font-size: 1.2rem;
-}
-
-.toast-success .toast-icon {
-    color: var(--success);
-}
-
-.toast-error .toast-icon {
-    color: var(--danger);
-}
-
-.toast-warning .toast-icon {
-    color: var(--warning);
-}
-
-.toast-info .toast-icon {
-    color: var(--info);
-}
-
-.toast-message {
-    font-size: 0.95rem;
-    color: var(--gray-700);
-}
 
 /* Responsive for Product Edit Page */
 @media (max-width: 768px) {

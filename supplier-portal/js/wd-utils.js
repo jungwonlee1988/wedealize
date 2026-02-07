@@ -5,18 +5,7 @@
     // === Constants ===
     var API_TIMEOUT = 15000;
 
-    // === Toast CSS Injection ===
-    var style = document.createElement('style');
-    style.textContent = '\n' +
-        '@keyframes slideUp {\n' +
-        '    from { opacity: 0; transform: translate(-50%, 20px); }\n' +
-        '    to { opacity: 1; transform: translate(-50%, 0); }\n' +
-        '}\n' +
-        '@keyframes fadeOut {\n' +
-        '    from { opacity: 1; }\n' +
-        '    to { opacity: 0; }\n' +
-        '}';
-    document.head.appendChild(style);
+    // Toast styles are in design-system.css (.wd-toast)
 
     // === Session Management ===
 
@@ -120,44 +109,35 @@
         type = type || 'success';
         var now = Date.now();
 
-        // Don't remove a protected (error) toast early
-        var existing = document.querySelector('.toast');
+        var existing = document.querySelector('.wd-toast');
         if (existing && now < _toastProtectedUntil) return;
         if (existing) existing.remove();
         if (_toastTimer) { clearTimeout(_toastTimer); _toastTimer = null; }
 
         var icons = { success: '\u2713', error: '\u2717', warning: '\u26A0', info: '\u2139' };
-        var colors = { success: '#10b981', error: '#ef4444', warning: '#f59e0b', info: '#2563eb' };
         var duration = (type === 'error' || type === 'warning') ? 5000 : 3000;
 
         var toast = document.createElement('div');
-        toast.className = 'toast toast-' + type;
-        toast.innerHTML = '<span class="toast-icon">' + (icons[type] || icons.success) + '</span>' +
-            '<span class="toast-message">' + message + '</span>' +
-            '<button class="toast-close" style="background:none;border:none;color:white;cursor:pointer;margin-left:8px;font-size:18px;line-height:1;opacity:0.8;">\u00D7</button>';
+        toast.className = 'wd-toast wd-toast-' + type;
+        toast.innerHTML = '<span class="wd-toast-icon">' + (icons[type] || icons.success) + '</span>' +
+            '<span class="wd-toast-message">' + message + '</span>' +
+            '<button class="wd-toast-close">\u00D7</button>';
 
-        toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);' +
-            'background:' + (colors[type] || colors.success) + ';color:white;padding:14px 24px;' +
-            'border-radius:8px;display:flex;align-items:center;gap:10px;font-size:0.95rem;' +
-            'z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);opacity:1;transition:none;' +
-            'animation:slideUp 0.3s ease forwards;';
-
-        toast.querySelector('.toast-close').addEventListener('click', function() {
+        function dismissToast() {
             _toastProtectedUntil = 0;
-            toast.style.animation = 'fadeOut 0.3s ease';
+            if (_toastTimer) { clearTimeout(_toastTimer); _toastTimer = null; }
+            toast.classList.add('wd-toast-out');
             setTimeout(function() { toast.remove(); }, 300);
-        });
+        }
 
+        toast.querySelector('.wd-toast-close').addEventListener('click', dismissToast);
         document.body.appendChild(toast);
 
         if (type === 'error' || type === 'warning') {
             _toastProtectedUntil = now + 2000;
         }
 
-        _toastTimer = setTimeout(function() {
-            toast.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(function() { toast.remove(); }, 300);
-        }, duration);
+        _toastTimer = setTimeout(dismissToast, duration);
     };
 
     // === HTML/Text Utilities ===
