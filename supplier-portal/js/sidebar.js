@@ -120,6 +120,11 @@
         if (typeof updateUILanguage === 'function') {
             updateUILanguage();
         }
+
+        // Load workspace switcher (apiCall/escapeHtml from wd-utils.js available at call time)
+        if (typeof apiCall === 'function') {
+            loadWorkspaces();
+        }
     };
 
     /**
@@ -187,6 +192,88 @@
         var menu = document.getElementById('workspace-menu');
         if (menu) {
             menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+    };
+
+    /**
+     * Render workspace switcher dropdown
+     */
+    function renderWorkspaces(workspaces) {
+        if (!workspaces || workspaces.length <= 1) return;
+
+        var switcher = document.getElementById('workspace-switcher');
+        if (!switcher) return;
+        switcher.style.display = 'block';
+
+        var currentId = localStorage.getItem('supplier_id');
+        var currentWs = workspaces.find(function(w) { return w.id === currentId; });
+        var nameEl = document.getElementById('current-workspace-name');
+        if (nameEl && currentWs) {
+            nameEl.textContent = currentWs.company_name;
+        }
+
+        var menu = document.getElementById('workspace-menu');
+        if (!menu) return;
+
+        var html = '';
+        for (var i = 0; i < workspaces.length; i++) {
+            var ws = workspaces[i];
+            var isActive = ws.id === currentId;
+            var roleLabel = ws.is_own ? 'Owner' : ws.role;
+            html += '<button class="wd-workspace-option' + (isActive ? ' active' : '') + '"'
+                + ' onclick="switchWorkspace(\'' + ws.id + '\')"'
+                + (isActive ? ' disabled' : '')
+                + '>'
+                + '<span class="wd-workspace-option-name">' + escapeHtml(ws.company_name) + '</span>'
+                + '<span class="wd-workspace-option-role">' + escapeHtml(roleLabel) + '</span>'
+                + '</button>';
+        }
+        menu.innerHTML = html;
+    }
+
+    /**
+     * Load workspaces from cache then API
+     */
+    window.loadWorkspaces = async function() {
+        // Render immediately from cache to prevent flicker
+        try {
+            var cached = localStorage.getItem('workspaces');
+            if (cached) renderWorkspaces(JSON.parse(cached));
+        } catch (e) {}
+
+        // Then refresh from API
+        try {
+            var data = await apiCall('/auth/my-workspaces');
+            var workspaces = data.workspaces || [];
+            if (workspaces.length > 1) {
+                localStorage.setItem('workspaces', JSON.stringify(workspaces));
+            } else {
+                localStorage.removeItem('workspaces');
+            }
+            renderWorkspaces(workspaces);
+        } catch (e) {
+            console.error('Failed to load workspaces:', e);
+        }
+    };
+
+    /**
+     * Switch to a different workspace
+     */
+    window.switchWorkspace = async function(supplierId) {
+        try {
+            var res = await apiCall('/auth/switch-workspace', {
+                method: 'POST',
+                body: JSON.stringify({ supplierId: supplierId })
+            });
+            localStorage.setItem('supplier_token', res.access_token);
+            localStorage.setItem('supplier_id', res.supplier_id);
+            localStorage.setItem('supplier_name', res.company_name);
+            window.location.reload();
+        } catch (e) {
+            console.error('Failed to switch workspace:', e);
+            if (typeof showToast === 'function') {
+                showToast('Failed to switch workspace', 'error');
+            }
         }
     };
 
