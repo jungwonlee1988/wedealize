@@ -25,6 +25,9 @@
 
     // === Team Management ===
 
+    var FREE_PLAN_MEMBER_LIMIT = 3; // Owner + active team members
+    var _activeTeamCount = 1; // At least owner
+
     window.loadTeamMembers = async function() {
         var tbody = document.getElementById('team-members-tbody');
         if (!tbody) return;
@@ -106,8 +109,11 @@
                     '<td>' + actions + '</td></tr>';
             });
 
+            var activeCount = 1 + memberList.filter(function(m) { return m.status === 'active'; }).length;
+            _activeTeamCount = activeCount;
+
             var countEl = document.getElementById('team-member-count');
-            if (countEl) countEl.textContent = (memberList.length + 1) + ' members';
+            if (countEl) countEl.textContent = activeCount + ' / ' + FREE_PLAN_MEMBER_LIMIT + ' members';
         } catch (err) {
             console.error('Failed to load team members:', err);
         }
@@ -116,6 +122,11 @@
     };
 
     window.openInviteMemberModal = function() {
+        if (_activeTeamCount >= FREE_PLAN_MEMBER_LIMIT) {
+            alert('현재 신청하신 구독 버전에서는 최대 ' + FREE_PLAN_MEMBER_LIMIT + '명까지 활성화 가능합니다. 추가하고 싶으시면 유료 구독을 진행해주세요.');
+            switchSettingsTab('subscription');
+            return;
+        }
         var modal = document.getElementById('invite-member-modal');
         if (modal) {
             modal.style.display = 'flex';
