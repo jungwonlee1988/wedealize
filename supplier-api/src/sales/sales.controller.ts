@@ -70,7 +70,7 @@ export class SalesController {
   @ApiOperation({ summary: 'Create a proforma invoice' })
   @ApiResponse({ status: 201, description: 'PI created' })
   async createPI(@Request() req, @Body() dto: CreatePIDto) {
-    return this.salesService.createPI(req.user.id, dto);
+    return this.salesService.createPI(req.user.id, dto, req.user.email);
   }
 
   @Get('pi')
@@ -96,7 +96,7 @@ export class SalesController {
   @ApiOperation({ summary: 'Update PI' })
   @ApiResponse({ status: 200, description: 'PI updated' })
   async updatePI(@Request() req, @Param('id') id: string, @Body() dto: UpdatePIDto) {
-    return this.salesService.updatePI(req.user.id, id, dto);
+    return this.salesService.updatePI(req.user.id, id, dto, req.user.email);
   }
 
   @Post('pi/:id/send')
@@ -104,14 +104,14 @@ export class SalesController {
   @ApiOperation({ summary: 'Send PI to buyer (draft → sent)' })
   @ApiResponse({ status: 200, description: 'PI sent' })
   async sendPI(@Request() req, @Param('id') id: string) {
-    return this.salesService.sendPI(req.user.id, id);
+    return this.salesService.sendPI(req.user.id, id, req.user.email);
   }
 
   @Delete('pi/:id')
   @ApiOperation({ summary: 'Delete/cancel PI' })
   @ApiResponse({ status: 200, description: 'PI deleted' })
   async deletePI(@Request() req, @Param('id') id: string) {
-    return this.salesService.deletePI(req.user.id, id);
+    return this.salesService.deletePI(req.user.id, id, req.user.email);
   }
 
   // ==================== Credit Endpoints ====================
@@ -121,7 +121,7 @@ export class SalesController {
   @ApiOperation({ summary: 'Create a credit' })
   @ApiResponse({ status: 201, description: 'Credit created' })
   async createCredit(@Request() req, @Body() dto: CreateCreditDto) {
-    return this.salesService.createCredit(req.user.id, dto);
+    return this.salesService.createCredit(req.user.id, dto, req.user.email);
   }
 
   @Get('credits')
@@ -160,6 +160,6 @@ export class SalesController {
   @ApiOperation({ summary: 'Delete credit' })
   @ApiResponse({ status: 200, description: 'Credit deleted' })
   async deleteCredit(@Request() req, @Param('id') id: string) {
-    return this.salesService.deleteCredit(req.user.id, id);
+    return this.salesService.deleteCredit(req.user.id, id, req.user.email);
   }
 }

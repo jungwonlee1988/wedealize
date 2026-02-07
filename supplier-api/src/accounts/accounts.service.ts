@@ -1,14 +1,18 @@
 import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
 import { SupabaseService } from '../config/supabase.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { CreateAccountDto, UpdateAccountDto } from './dto/create-account.dto';
 
 @Injectable()
 export class AccountsService {
   private readonly logger = new Logger(AccountsService.name);
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private activityLogsService: ActivityLogsService,
+  ) {}
 
-  async createAccount(supplierId: string, dto: CreateAccountDto) {
+  async createAccount(supplierId: string, dto: CreateAccountDto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     const { data, error } = await supabase
@@ -33,6 +37,18 @@ export class AccountsService {
     if (error) {
       this.logger.error('Failed to create account:', error);
       throw new BadRequestException('Failed to create account');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'account.create',
+        category: 'account',
+        description: `created account '${dto.companyName}'`,
+        targetId: data.id,
+        targetName: dto.companyName,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
     }
 
     return data;
@@ -80,7 +96,7 @@ export class AccountsService {
     return data;
   }
 
-  async updateAccount(supplierId: string, accountId: string, dto: UpdateAccountDto) {
+  async updateAccount(supplierId: string, accountId: string, dto: UpdateAccountDto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     await this.getAccountById(supplierId, accountId);
@@ -110,13 +126,25 @@ export class AccountsService {
       throw new BadRequestException('Failed to update account');
     }
 
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'account.update',
+        category: 'account',
+        description: `updated account '${data.company_name}'`,
+        targetId: accountId,
+        targetName: data.company_name,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
+    }
+
     return data;
   }
 
-  async deleteAccount(supplierId: string, accountId: string): Promise<{ message: string }> {
+  async deleteAccount(supplierId: string, accountId: string, actorEmail?: string): Promise<{ message: string }> {
     const supabase = this.supabaseService.getAdminClient();
 
-    await this.getAccountById(supplierId, accountId);
+    const account = await this.getAccountById(supplierId, accountId);
 
     const { error } = await supabase
       .from('accounts')
@@ -126,6 +154,18 @@ export class AccountsService {
     if (error) {
       this.logger.error('Failed to delete account:', error);
       throw new BadRequestException('Failed to delete account');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'account.delete',
+        category: 'account',
+        description: `deleted account '${account.company_name}'`,
+        targetId: accountId,
+        targetName: account.company_name,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
     }
 
     return { message: 'Account deleted successfully' };

@@ -8,10 +8,12 @@ import { AccountsModule } from './accounts/accounts.module';
 import { ProductsModule } from './products/products.module';
 import { CatalogUploadsModule } from './catalog-uploads/catalog-uploads.module';
 import { CertificationsModule } from './certifications/certifications.module';
+import { ActivityLogsModule } from './activity-logs/activity-logs.module';
 
 @Module({
   imports: [
     AppConfigModule,
+    ActivityLogsModule,
     AuthModule,
     AdminModule,
     SalesModule,

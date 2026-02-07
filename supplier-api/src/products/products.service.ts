@@ -1,12 +1,16 @@
 import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
 import { SupabaseService } from '../config/supabase.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { CreateProductDto, UpdateProductDto } from './dto/create-product.dto';
 
 @Injectable()
 export class ProductsService {
   private readonly logger = new Logger(ProductsService.name);
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private activityLogsService: ActivityLogsService,
+  ) {}
 
   private calculateCompleteness(product: Record<string, any>): number {
     const fields = ['name', 'sku', 'category', 'description', 'min_price', 'max_price', 'moq', 'moq_unit'];
@@ -16,7 +20,7 @@ export class ProductsService {
     return Math.round(((filled + (hasCerts ? 1 : 0)) / total) * 100);
   }
 
-  async createProduct(supplierId: string, dto: CreateProductDto) {
+  async createProduct(supplierId: string, dto: CreateProductDto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     const row: Record<string, any> = {
@@ -47,10 +51,22 @@ export class ProductsService {
       throw new BadRequestException('Failed to create product');
     }
 
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'product.create',
+        category: 'product',
+        description: `created product '${dto.name}'`,
+        targetId: data.id,
+        targetName: dto.name,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
+    }
+
     return data;
   }
 
-  async bulkCreateProducts(supplierId: string, dtos: CreateProductDto[]) {
+  async bulkCreateProducts(supplierId: string, dtos: CreateProductDto[], actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     const rows = dtos.map((dto) => {
@@ -81,7 +97,19 @@ export class ProductsService {
       throw new BadRequestException('Failed to bulk create products');
     }
 
-    return { products: data || [], count: (data || []).length };
+    const count = (data || []).length;
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'product.bulk_create',
+        category: 'product',
+        description: `bulk created ${count} products from catalog`,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
+    }
+
+    return { products: data || [], count };
   }
 
   async getProducts(supplierId: string, query: { status?: string; search?: string }) {
@@ -130,7 +158,7 @@ export class ProductsService {
     return data;
   }
 
-  async updateProduct(supplierId: string, productId: string, dto: UpdateProductDto) {
+  async updateProduct(supplierId: string, productId: string, dto: UpdateProductDto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     await this.getProductById(supplierId, productId);
@@ -166,13 +194,25 @@ export class ProductsService {
       throw new BadRequestException('Failed to update product');
     }
 
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'product.update',
+        category: 'product',
+        description: `updated product '${data.name}'`,
+        targetId: productId,
+        targetName: data.name,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
+    }
+
     return data;
   }
 
-  async deleteProduct(supplierId: string, productId: string): Promise<{ message: string }> {
+  async deleteProduct(supplierId: string, productId: string, actorEmail?: string): Promise<{ message: string }> {
     const supabase = this.supabaseService.getAdminClient();
 
-    await this.getProductById(supplierId, productId);
+    const product = await this.getProductById(supplierId, productId);
 
     const { error } = await supabase
       .from('products')
@@ -182,6 +222,18 @@ export class ProductsService {
     if (error) {
       this.logger.error('Failed to delete product:', error);
       throw new BadRequestException('Failed to delete product');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'product.delete',
+        category: 'product',
+        description: `deleted product '${product.name}'`,
+        targetId: productId,
+        targetName: product.name,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
     }
 
     return { message: 'Product deleted successfully' };

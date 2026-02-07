@@ -265,6 +265,21 @@ CREATE TABLE IF NOT EXISTS buyer_inquiry_products (
     UNIQUE(inquiry_id, product_id)
 );
 
+-- Activity Logs table
+CREATE TABLE IF NOT EXISTS activity_logs (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    supplier_id UUID REFERENCES suppliers(id) ON DELETE CASCADE,
+    actor_email VARCHAR(255) NOT NULL,
+    actor_name VARCHAR(255),
+    action_type VARCHAR(50) NOT NULL,
+    category VARCHAR(30) NOT NULL,
+    description TEXT,
+    target_id UUID,
+    target_name VARCHAR(255),
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_suppliers_category_gin ON suppliers USING GIN (category);
 CREATE INDEX IF NOT EXISTS idx_products_supplier ON products(supplier_id);
@@ -290,6 +305,9 @@ CREATE INDEX IF NOT EXISTS idx_buyer_inquiries_status ON buyer_inquiries(status)
 CREATE INDEX IF NOT EXISTS idx_buyer_inquiry_products_inquiry ON buyer_inquiry_products(inquiry_id);
 CREATE INDEX IF NOT EXISTS idx_buyer_inquiry_products_product ON buyer_inquiry_products(product_id);
 CREATE INDEX IF NOT EXISTS idx_cert_renewals_cert ON certification_renewals(certification_id);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_supplier ON activity_logs(supplier_id);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_category ON activity_logs(category);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_created ON activity_logs(supplier_id, created_at DESC);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE suppliers ENABLE ROW LEVEL SECURITY;
@@ -308,6 +326,7 @@ ALTER TABLE accounts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE buyer_inquiries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE buyer_inquiry_products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE certification_renewals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies (suppliers can only access their own data)
 -- Note: Service role key bypasses RLS, so backend API can access all data

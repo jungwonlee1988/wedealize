@@ -125,7 +125,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Update team member role' })
   @ApiResponse({ status: 200, description: 'Team member updated' })
   async updateTeamMember(@Request() req, @Param('id') memberId: string, @Body() dto: UpdateTeamMemberDto) {
-    return this.authService.updateTeamMember(req.user.id, memberId, dto);
+    return this.authService.updateTeamMember(req.user.id, memberId, dto, req.user.email);
   }
 
   @Delete('team/members/:id')
@@ -134,7 +134,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Remove team member' })
   @ApiResponse({ status: 200, description: 'Team member removed' })
   async removeTeamMember(@Request() req, @Param('id') memberId: string) {
-    return this.authService.removeTeamMember(req.user.id, memberId);
+    return this.authService.removeTeamMember(req.user.id, memberId, req.user.email);
   }
 
   @Post('team/resend-invite/:id')

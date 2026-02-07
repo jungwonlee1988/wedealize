@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { SupabaseService } from '../config/supabase.service';
 import { EmailService } from './email.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { RegisterDto, SendVerificationDto, VerifyEmailDto } from './dto/register.dto';
 import { LoginDto, GoogleAuthDto, ForgotPasswordDto, ResetPasswordDto } from './dto/login.dto';
 import { InviteTeamMemberDto, UpdateTeamMemberDto } from './dto/invite.dto';
@@ -18,6 +19,7 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ConfigService,
     private emailService: EmailService,
+    private activityLogsService: ActivityLogsService,
   ) {}
 
   // Generate 6-digit verification code
@@ -519,6 +521,15 @@ export class AuthService {
       inviteLink,
     );
 
+    this.activityLogsService.log({
+      supplierId,
+      actorEmail: inviter.email,
+      actionType: 'team.invite',
+      category: 'team',
+      description: `invited ${dto.email} as ${dto.role}`,
+      targetName: dto.email,
+    }).catch(err => this.logger.warn('Activity log failed:', err.message));
+
     return { message: 'Invitation sent successfully', member };
   }
 
@@ -611,6 +622,15 @@ export class AuthService {
       throw new BadRequestException('Failed to accept invitation');
     }
 
+    this.activityLogsService.log({
+      supplierId: member.supplier_id,
+      actorEmail: member.email,
+      actionType: 'team.accept',
+      category: 'team',
+      description: `accepted team invitation`,
+      targetName: member.email,
+    }).catch(err => this.logger.warn('Activity log failed:', err.message));
+
     return {
       message: 'Invitation accepted successfully',
       supplier_id: member.supplier_id,
@@ -636,13 +656,13 @@ export class AuthService {
   }
 
   // Update team member role
-  async updateTeamMember(supplierId: string, memberId: string, dto: UpdateTeamMemberDto): Promise<{ message: string }> {
+  async updateTeamMember(supplierId: string, memberId: string, dto: UpdateTeamMemberDto, actorEmail?: string): Promise<{ message: string }> {
     const supabase = this.supabaseService.getAdminClient();
 
     // Verify member belongs to this supplier
     const { data: member } = await supabase
       .from('team_members')
-      .select('id, role')
+      .select('id, role, email')
       .eq('id', memberId)
       .eq('supplier_id', supplierId)
       .single();
@@ -661,17 +681,29 @@ export class AuthService {
       throw new BadRequestException('Failed to update team member');
     }
 
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'team.role_update',
+        category: 'team',
+        description: `changed ${member.email} role to ${dto.role}`,
+        targetId: memberId,
+        targetName: member.email,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
+    }
+
     return { message: 'Team member updated successfully' };
   }
 
   // Remove team member
-  async removeTeamMember(supplierId: string, memberId: string): Promise<{ message: string }> {
+  async removeTeamMember(supplierId: string, memberId: string, actorEmail?: string): Promise<{ message: string }> {
     const supabase = this.supabaseService.getAdminClient();
 
     // Verify member belongs to this supplier
     const { data: member } = await supabase
       .from('team_members')
-      .select('id')
+      .select('id, email')
       .eq('id', memberId)
       .eq('supplier_id', supplierId)
       .single();
@@ -688,6 +720,18 @@ export class AuthService {
     if (error) {
       this.logger.error('Failed to remove team member:', error);
       throw new BadRequestException('Failed to remove team member');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'team.remove',
+        category: 'team',
+        description: `removed ${member.email}`,
+        targetId: memberId,
+        targetName: member.email,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
     }
 
     return { message: 'Team member removed successfully' };

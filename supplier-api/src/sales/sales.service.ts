@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
 import { SupabaseService } from '../config/supabase.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { CreatePIDto, UpdatePIDto } from './dto/create-pi.dto';
 import { CreatePODto, UpdatePODto } from './dto/create-po.dto';
 import { CreateCreditDto, UpdateCreditDto } from './dto/create-credit.dto';
@@ -26,7 +27,10 @@ interface POItemInput {
 export class SalesService {
   private readonly logger = new Logger(SalesService.name);
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private activityLogsService: ActivityLogsService,
+  ) {}
 
   // ==================== Private Helpers ====================
 
@@ -273,7 +277,7 @@ export class SalesService {
 
   // ==================== PI CRUD ====================
 
-  async createPI(supplierId: string, dto: CreatePIDto) {
+  async createPI(supplierId: string, dto: CreatePIDto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     const subtotal = dto.items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
@@ -355,6 +359,18 @@ export class SalesService {
       await this.applyCreditsToPI(supabase, pi.id, dto.appliedCredits);
     }
 
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'pi.create',
+        category: 'pi',
+        description: `created PI #${piNumber}`,
+        targetId: pi.id,
+        targetName: piNumber,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
+    }
+
     return { ...pi, items: itemsToInsert };
   }
 
@@ -428,7 +444,7 @@ export class SalesService {
     return data;
   }
 
-  async updatePI(supplierId: string, piId: string, dto: UpdatePIDto) {
+  async updatePI(supplierId: string, piId: string, dto: UpdatePIDto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     await this.verifyOwnership('proforma_invoices', piId, supplierId, 'Proforma invoice');
@@ -490,17 +506,43 @@ export class SalesService {
       throw new BadRequestException('Failed to update proforma invoice');
     }
 
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'pi.update',
+        category: 'pi',
+        description: `updated PI #${data.pi_number}`,
+        targetId: piId,
+        targetName: data.pi_number,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
+    }
+
     return data;
   }
 
-  async sendPI(supplierId: string, piId: string) {
-    return this.updatePI(supplierId, piId, { status: PIStatus.SENT });
+  async sendPI(supplierId: string, piId: string, actorEmail?: string) {
+    const data = await this.updatePI(supplierId, piId, { status: PIStatus.SENT });
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'pi.send',
+        category: 'pi',
+        description: `sent PI #${data.pi_number}`,
+        targetId: piId,
+        targetName: data.pi_number,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
+    }
+
+    return data;
   }
 
-  async deletePI(supplierId: string, piId: string): Promise<{ message: string }> {
+  async deletePI(supplierId: string, piId: string, actorEmail?: string): Promise<{ message: string }> {
     const supabase = this.supabaseService.getAdminClient();
 
-    await this.verifyOwnership('proforma_invoices', piId, supplierId, 'Proforma invoice');
+    const pi = await this.getPIById(supplierId, piId);
 
     await this.removeCreditsFromPI(supabase, piId);
 
@@ -512,6 +554,18 @@ export class SalesService {
     if (error) {
       this.logger.error('Failed to delete PI:', error);
       throw new BadRequestException('Failed to delete proforma invoice');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'pi.delete',
+        category: 'pi',
+        description: `deleted PI #${pi.pi_number}`,
+        targetId: piId,
+        targetName: pi.pi_number,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
     }
 
     return { message: 'Proforma invoice deleted successfully' };
@@ -539,7 +593,7 @@ export class SalesService {
 
   // ==================== Credit CRUD ====================
 
-  async createCredit(supplierId: string, dto: CreateCreditDto) {
+  async createCredit(supplierId: string, dto: CreateCreditDto, actorEmail?: string) {
     const supabase = this.supabaseService.getAdminClient();
 
     const creditNumber = await this.generateDocumentNumber(supplierId, 'credits', 'credit_number', 'CR', 3);
@@ -567,6 +621,18 @@ export class SalesService {
     if (error) {
       this.logger.error('Failed to create credit:', error);
       throw new BadRequestException('Failed to create credit');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'credit.create',
+        category: 'credit',
+        description: `created credit $${dto.amount.toLocaleString()} for ${dto.buyerName}`,
+        targetId: data.id,
+        targetName: creditNumber,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
     }
 
     return data;
@@ -650,7 +716,7 @@ export class SalesService {
     return data;
   }
 
-  async deleteCredit(supplierId: string, creditId: string): Promise<{ message: string }> {
+  async deleteCredit(supplierId: string, creditId: string, actorEmail?: string): Promise<{ message: string }> {
     const supabase = this.supabaseService.getAdminClient();
 
     const existing = await this.verifyOwnership('credits', creditId, supplierId, 'Credit');
@@ -658,6 +724,9 @@ export class SalesService {
     if (existing.status === CreditStatus.USED) {
       throw new BadRequestException('Cannot delete a used credit. Cancel the PI application first.');
     }
+
+    // Fetch credit details before deleting
+    const credit = await this.getCreditById(supplierId, creditId);
 
     const { error } = await supabase
       .from('credits')
@@ -667,6 +736,18 @@ export class SalesService {
     if (error) {
       this.logger.error('Failed to delete credit:', error);
       throw new BadRequestException('Failed to delete credit');
+    }
+
+    if (actorEmail) {
+      this.activityLogsService.log({
+        supplierId,
+        actorEmail,
+        actionType: 'credit.delete',
+        category: 'credit',
+        description: `deleted credit $${credit.amount}`,
+        targetId: creditId,
+        targetName: credit.credit_number,
+      }).catch(err => this.logger.warn('Activity log failed:', err.message));
     }
 
     return { message: 'Credit deleted successfully' };

@@ -16,7 +16,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Create a product' })
   @ApiResponse({ status: 201, description: 'Product created' })
   async createProduct(@Request() req, @Body() dto: CreateProductDto) {
-    return this.productsService.createProduct(req.user.id, dto);
+    return this.productsService.createProduct(req.user.id, dto, req.user.email);
   }
 
   @Post('products/bulk')
@@ -27,7 +27,7 @@ export class ProductsController {
     @Request() req,
     @Body(new ParseArrayPipe({ items: CreateProductDto })) dtos: CreateProductDto[],
   ) {
-    return this.productsService.bulkCreateProducts(req.user.id, dtos);
+    return this.productsService.bulkCreateProducts(req.user.id, dtos, req.user.email);
   }
 
   @Get('products')
@@ -52,13 +52,13 @@ export class ProductsController {
   @ApiOperation({ summary: 'Update product' })
   @ApiResponse({ status: 200, description: 'Product updated' })
   async updateProduct(@Request() req, @Param('id') id: string, @Body() dto: UpdateProductDto) {
-    return this.productsService.updateProduct(req.user.id, id, dto);
+    return this.productsService.updateProduct(req.user.id, id, dto, req.user.email);
   }
 
   @Delete('products/:id')
   @ApiOperation({ summary: 'Delete product' })
   @ApiResponse({ status: 200, description: 'Product deleted' })
   async deleteProduct(@Request() req, @Param('id') id: string) {
-    return this.productsService.deleteProduct(req.user.id, id);
+    return this.productsService.deleteProduct(req.user.id, id, req.user.email);
   }
 }
