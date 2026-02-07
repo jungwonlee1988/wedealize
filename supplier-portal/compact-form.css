@@ -306,7 +306,7 @@
 
 /* Validation Error State */
 .wd-input-error {
-    border-color: var(--wd-danger) !important;
+    border-color: #EF4444 !important;
     background-color: #FEF2F2 !important;
 }
 
