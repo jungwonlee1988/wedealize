@@ -110,9 +110,9 @@
         if (dateEl) dateEl.textContent = credit.created_at ? wdFormatDate(credit.created_at) : '';
 
         setSelectValue('credit-invoice-select', credit.invoice_number);
-        setSelectValue('credit-product-select', credit.product_id);
+        setSelectValue('credit-product-select', credit.product_name);
         setSelectValue('credit-reason', credit.reason);
-        setInputValue('credit-qty', credit.quantity);
+        setInputValue('credit-qty', credit.affected_quantity);
         setInputValue('credit-amount', credit.amount);
         setInputValue('credit-description', credit.description);
     }
@@ -168,14 +168,16 @@
     }
 
     function collectFormData() {
+        var invoiceSelect = document.getElementById('credit-invoice-select');
+        var productSelect = document.getElementById('credit-product-select');
         return {
-            invoice_number: document.getElementById('credit-invoice-select').value,
-            product_id: document.getElementById('credit-product-select').value,
+            invoiceNumber: invoiceSelect.value,
+            buyerName: invoiceSelect.options[invoiceSelect.selectedIndex]?.text?.split(' - ')[1] || '',
+            productName: productSelect.options[productSelect.selectedIndex]?.text || '',
             reason: document.getElementById('credit-reason').value,
-            quantity: parseInt(document.getElementById('credit-qty').value),
+            affectedQuantity: parseInt(document.getElementById('credit-qty').value),
             amount: parseFloat(document.getElementById('credit-amount').value),
-            description: document.getElementById('credit-description').value.trim(),
-            attachments: uploadedFiles.map(f => f.name)
+            description: document.getElementById('credit-description').value.trim()
         };
     }
 
