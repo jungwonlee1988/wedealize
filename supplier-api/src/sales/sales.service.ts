@@ -132,6 +132,10 @@ export class SalesService {
         buyer_phone: dto.buyerPhone || null,
         buyer_address: dto.buyerAddress || null,
         buyer_country: dto.buyerCountry || null,
+        exporter_name: dto.exporterName || null,
+        exporter_contact: dto.exporterContact || null,
+        exporter_email: dto.exporterEmail || null,
+        exporter_phone: dto.exporterPhone || null,
         order_date: dto.orderDate || new Date().toISOString(),
         total_amount: totalAmount,
         currency: dto.currency || 'USD',
@@ -233,6 +237,10 @@ export class SalesService {
     if (dto.buyerPhone !== undefined) updateData.buyer_phone = dto.buyerPhone;
     if (dto.buyerAddress !== undefined) updateData.buyer_address = dto.buyerAddress;
     if (dto.buyerCountry !== undefined) updateData.buyer_country = dto.buyerCountry;
+    if (dto.exporterName !== undefined) updateData.exporter_name = dto.exporterName;
+    if (dto.exporterContact !== undefined) updateData.exporter_contact = dto.exporterContact;
+    if (dto.exporterEmail !== undefined) updateData.exporter_email = dto.exporterEmail;
+    if (dto.exporterPhone !== undefined) updateData.exporter_phone = dto.exporterPhone;
     if (dto.orderDate !== undefined) updateData.order_date = dto.orderDate;
     if (dto.currency !== undefined) updateData.currency = dto.currency;
     if (dto.incoterms !== undefined) updateData.incoterms = dto.incoterms;

@@ -67,6 +67,26 @@ export class CreatePODto {
 
   @ApiPropertyOptional()
   @IsOptional()
+  @IsString()
+  exporterName?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  exporterContact?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  exporterEmail?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  exporterPhone?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsDateString()
   orderDate?: string;
 
@@ -137,6 +157,26 @@ export class UpdatePODto {
   @IsOptional()
   @IsString()
   buyerCountry?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  exporterName?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  exporterContact?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  exporterEmail?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  exporterPhone?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
