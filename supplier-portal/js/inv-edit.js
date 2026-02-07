@@ -325,6 +325,27 @@
         clearValidationErrors();
         var errors = [];
 
+        // New mode: INV Number, Date
+        if (isNewMode) {
+            var invNumberEl = document.getElementById('inv-number');
+            if (!invNumberEl?.value?.trim()) {
+                markError(invNumberEl);
+                errors.push('INV Number');
+            }
+            var invDateEl = document.getElementById('inv-date');
+            if (!invDateEl?.value) {
+                markError(invDateEl);
+                errors.push('INV Date');
+            }
+        }
+
+        // Seller (Exporter) Company
+        var exporterEl = document.getElementById('inv-exporter-name');
+        if (!exporterEl?.value?.trim()) {
+            markError(exporterEl);
+            errors.push('Seller Company');
+        }
+
         // Buyer name
         if (isNewMode) {
             var buyerSelect = document.getElementById('inv-buyer-select');
@@ -371,14 +392,6 @@
         e.preventDefault();
 
         if (!validateRequired()) return;
-
-        const invNumber = document.getElementById('inv-number')?.value?.trim();
-        const exporterName = document.getElementById('inv-exporter-name')?.value?.trim();
-
-        if (isNewMode && (!invNumber || !exporterName)) {
-            showToast('INV Number and Seller Company are required', 'warning');
-            return;
-        }
 
         const formData = collectFormData();
         formData.status = 'sent';

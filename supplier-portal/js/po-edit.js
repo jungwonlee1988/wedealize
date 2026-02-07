@@ -229,6 +229,28 @@
         clearValidationErrors();
         var errors = [];
 
+        // New mode: PO Number, Order Date
+        if (isNewMode) {
+            var poNumberEl = document.getElementById('po-number');
+            if (!poNumberEl?.value?.trim()) {
+                markError(poNumberEl);
+                errors.push('PO Number');
+            }
+            var poDateEl = document.getElementById('po-date');
+            if (!poDateEl?.value) {
+                markError(poDateEl);
+                errors.push('Order Date');
+            }
+        }
+
+        // Exporter Company
+        var exporterEl = document.getElementById('exporter-name');
+        if (!exporterEl?.value?.trim()) {
+            markError(exporterEl);
+            errors.push('Exporter Company');
+        }
+
+        // Importer (Buyer) Company
         var importerEl = document.getElementById('importer-name');
         if (!importerEl?.value?.trim()) {
             markError(importerEl);

@@ -149,19 +149,69 @@
         }
     }
 
+    function clearValidationErrors() {
+        document.querySelectorAll('.wd-input-error').forEach(function(el) {
+            el.classList.remove('wd-input-error');
+        });
+    }
+
+    function markError(el) {
+        if (el) {
+            el.classList.add('wd-input-error');
+            el.addEventListener('input', function handler() {
+                el.classList.remove('wd-input-error');
+            }, { once: true });
+            el.addEventListener('change', function handler() {
+                el.classList.remove('wd-input-error');
+            }, { once: true });
+        }
+    }
+
+    function validateRequired() {
+        clearValidationErrors();
+        var errors = [];
+
+        var invoiceEl = document.getElementById('credit-invoice-select');
+        if (!invoiceEl?.value) {
+            markError(invoiceEl);
+            errors.push('Invoice');
+        }
+
+        var productEl = document.getElementById('credit-product-select');
+        if (!productEl?.value) {
+            markError(productEl);
+            errors.push('Product');
+        }
+
+        var reasonEl = document.getElementById('credit-reason');
+        if (!reasonEl?.value) {
+            markError(reasonEl);
+            errors.push('Reason');
+        }
+
+        var qtyEl = document.getElementById('credit-qty');
+        if (!qtyEl?.value) {
+            markError(qtyEl);
+            errors.push('Quantity');
+        }
+
+        var amountEl = document.getElementById('credit-amount');
+        if (!amountEl?.value) {
+            markError(amountEl);
+            errors.push('Amount');
+        }
+
+        if (errors.length > 0) {
+            showToast('Please fill in required fields: ' + errors.join(', '), 'error');
+            return false;
+        }
+        return true;
+    }
+
     async function handleFormSubmit(e) {
         e.preventDefault();
 
-        const invoiceSelect = document.getElementById('credit-invoice-select');
-        const productSelect = document.getElementById('credit-product-select');
-        const reason = document.getElementById('credit-reason').value;
-        const qty = document.getElementById('credit-qty').value;
-        const amount = document.getElementById('credit-amount').value;
-
-        if (!invoiceSelect.value || !productSelect.value || !reason || !qty || !amount) {
-            showToast('Please fill in all required fields', 'warning');
-            return;
-        }
+        if (!validateRequired()) return;
 
         const formData = collectFormData();
         formData.status = 'submitted';
@@ -349,6 +399,8 @@
     };
 
     window.saveCreditChanges = async function() {
+        if (!validateRequired()) return;
+
         var saveBtn = document.getElementById('save-btn');
         if (!saveBtn) return;
         var originalText = saveBtn.innerHTML;
@@ -368,6 +420,8 @@
     };
 
     window.saveCreditAsDraft = async function() {
+        if (!validateRequired()) return;
+
         const formData = collectFormData();
         formData.status = 'draft';
 

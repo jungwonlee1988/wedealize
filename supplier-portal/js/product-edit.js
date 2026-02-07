@@ -310,14 +310,45 @@
     /**
      * Save product changes (for detail edit mode)
      */
-    window.saveProductChanges = async function() {
-        const formData = collectFormData();
+    function clearValidationErrors() {
+        document.querySelectorAll('.wd-input-error').forEach(function(el) {
+            el.classList.remove('wd-input-error');
+        });
+    }
 
-        // Validate
-        if (!formData.name) {
-            showToast('Product name is required', 'warning');
-            return;
+    function markError(el) {
+        if (el) {
+            el.classList.add('wd-input-error');
+            el.addEventListener('input', function handler() {
+                el.classList.remove('wd-input-error');
+            }, { once: true });
+            el.addEventListener('change', function handler() {
+                el.classList.remove('wd-input-error');
+            }, { once: true });
         }
+    }
+
+    function validateRequired() {
+        clearValidationErrors();
+        var errors = [];
+
+        var nameEl = document.getElementById('product-name');
+        if (!nameEl?.value?.trim()) {
+            markError(nameEl);
+            errors.push('Product Name');
+        }
+
+        if (errors.length > 0) {
+            showToast('Please fill in required fields: ' + errors.join(', '), 'error');
+            return false;
+        }
+        return true;
+    }
+
+    window.saveProductChanges = async function() {
+        if (!validateRequired()) return;
+
+        const formData = collectFormData();
 
         const saveBtn = document.getElementById('save-btn');
         const originalText = saveBtn ? saveBtn.innerHTML : '';
@@ -371,14 +402,7 @@
     async function handleFormSubmit(e) {
         e.preventDefault();
 
-        // Validate required fields
-        const name = document.getElementById('product-name').value.trim();
-
-        if (!name) {
-            showToast('Product name is required', 'warning');
-            document.getElementById('product-name').focus();
-            return;
-        }
+        if (!validateRequired()) return;
 
         // Collect form data
         const formData = collectFormData();
