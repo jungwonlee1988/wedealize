@@ -123,8 +123,8 @@
 
     window.openInviteMemberModal = function() {
         if (_activeTeamCount >= FREE_PLAN_MEMBER_LIMIT) {
-            alert('현재 신청하신 구독 버전에서는 최대 ' + FREE_PLAN_MEMBER_LIMIT + '명까지 활성화 가능합니다. 추가하고 싶으시면 유료 구독을 진행해주세요.');
-            switchSettingsTab('subscription');
+            var limitModal = document.getElementById('team-limit-modal');
+            if (limitModal) limitModal.style.display = 'flex';
             return;
         }
         var modal = document.getElementById('invite-member-modal');
@@ -133,6 +133,12 @@
             var form = document.getElementById('invite-member-form');
             if (form) form.reset();
         }
+    };
+
+    window.closeTeamLimitModal = function(goToSubscription) {
+        var limitModal = document.getElementById('team-limit-modal');
+        if (limitModal) limitModal.style.display = 'none';
+        if (goToSubscription) switchSettingsTab('subscription');
     };
 
     window.closeInviteMemberModal = function() {
