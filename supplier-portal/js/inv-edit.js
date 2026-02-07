@@ -140,24 +140,35 @@
 
     function populateDetailForm(inv) {
         // Status bar
-        const invNumberDisplay = document.getElementById('inv-number-display');
-        if (invNumberDisplay) invNumberDisplay.textContent = inv.inv_number || currentINVId;
-        const statusEl = document.getElementById('inv-status');
+        var invNumberDisplay = document.getElementById('inv-number-display');
+        if (invNumberDisplay) invNumberDisplay.textContent = inv.pi_number || inv.inv_number || currentINVId;
+        var statusEl = document.getElementById('inv-status');
         if (statusEl) {
-            statusEl.textContent = inv.status || 'Sent';
-            statusEl.className = `wd-badge ${inv.statusClass || 'wd-badge-info'}`;
+            var status = inv.status || 'draft';
+            statusEl.textContent = status;
+            statusEl.className = 'wd-badge ' + (window.getStatusBadgeClass ? getStatusBadgeClass(status) : 'wd-badge-info');
         }
-        const invDateDisplay = document.getElementById('inv-date-display');
-        if (invDateDisplay) invDateDisplay.textContent = inv.date || '';
+        var invDateDisplay = document.getElementById('inv-date-display');
+        if (invDateDisplay) invDateDisplay.textContent = inv.created_at ? wdFormatDate(inv.created_at) : (inv.date || '');
+
+        // Basic Info
+        setInputValue('inv-number', inv.pi_number || inv.inv_number);
+        setInputValue('inv-date', inv.pi_date ? inv.pi_date.split('T')[0] : '');
 
         // Linked PO
-        const linkedPO = document.getElementById('linked-po-number');
+        var linkedPO = document.getElementById('linked-po-number');
         if (linkedPO && inv.po_number) {
             linkedPO.textContent = inv.po_number;
-            linkedPO.href = `po-edit.html?id=${encodeURIComponent(inv.po_number)}`;
+            linkedPO.href = 'po-edit.html?id=' + encodeURIComponent(inv.po_number);
         }
 
-        // Exporter (Seller)
+        // Buyer (Importer) — API returns flat fields
+        setInputValue('inv-importer-name', inv.buyer_name || (inv.importer && inv.importer.name));
+        setInputValue('inv-importer-contact', inv.buyer_contact || (inv.importer && inv.importer.contact));
+        setInputValue('inv-importer-email', inv.buyer_email || (inv.importer && inv.importer.email));
+        setInputValue('inv-importer-phone', inv.buyer_phone || (inv.importer && inv.importer.phone));
+
+        // Exporter (Seller) — API returns created_by or supplier info
         if (inv.exporter) {
             setInputValue('inv-exporter-name', inv.exporter.name);
             setInputValue('inv-exporter-contact', inv.exporter.contact);
@@ -165,24 +176,16 @@
             setInputValue('inv-exporter-phone', inv.exporter.phone);
         }
 
-        // Importer (Buyer)
-        if (inv.importer) {
-            setInputValue('inv-importer-name', inv.importer.name);
-            setInputValue('inv-importer-contact', inv.importer.contact);
-            setInputValue('inv-importer-email', inv.importer.email);
-            setInputValue('inv-importer-phone', inv.importer.phone);
-        }
-
         // Trade info
         setSelectValue('inv-incoterms', inv.incoterms);
-        setSelectValue('inv-payment-terms', inv.paymentTerms);
+        setSelectValue('inv-payment-terms', inv.payment_method || inv.paymentTerms);
         setSelectValue('inv-currency', inv.currency);
-        setInputValue('inv-due-date', inv.dueDate);
-        setInputValue('inv-delivery-date', inv.deliveryDate);
-        setInputValue('inv-notes', inv.notes);
+        setInputValue('inv-due-date', inv.valid_until ? inv.valid_until.split('T')[0] : (inv.dueDate || ''));
+        setInputValue('inv-notes', inv.remarks || inv.notes);
 
-        // Items
-        renderItems(inv.items || []);
+        // Items — API returns proforma_invoice_items
+        var items = inv.proforma_invoice_items || inv.items || [];
+        renderItems(items);
     }
 
     function setInputValue(id, value) {
@@ -274,56 +277,52 @@
     }
 
     function collectFormData() {
-        const items = [];
-        document.querySelectorAll('#inv-items-tbody tr[data-row]').forEach(row => {
-            const name = row.querySelector('.inv-item-name')?.value;
-            const qty = row.querySelector('.inv-item-qty')?.value;
-            const unit = row.querySelector('.inv-item-unit')?.value;
-            const price = row.querySelector('.inv-item-price')?.value;
+        var items = [];
+        document.querySelectorAll('#inv-items-tbody tr[data-row]').forEach(function(row) {
+            var name = row.querySelector('.inv-item-name')?.value;
+            var qty = row.querySelector('.inv-item-qty')?.value;
+            var unit = row.querySelector('.inv-item-unit')?.value;
+            var price = row.querySelector('.inv-item-price')?.value;
 
             if (name && qty && price) {
                 items.push({
-                    product_name: name,
+                    productName: name,
                     quantity: parseInt(qty),
-                    unit: unit,
-                    unit_price: parseFloat(price)
+                    unit: unit || 'pcs',
+                    unitPrice: parseFloat(price)
                 });
             }
         });
 
-        const appliedCredits = [];
-        document.querySelectorAll('.inv-credit-check:checked').forEach(checkbox => {
+        var appliedCredits = [];
+        document.querySelectorAll('.inv-credit-check:checked').forEach(function(checkbox) {
             appliedCredits.push({
-                credit_id: checkbox.value,
+                creditId: checkbox.value,
                 amount: parseFloat(checkbox.dataset.amount)
             });
         });
 
-        return {
-            inv_number: document.getElementById('inv-number')?.value?.trim() || currentINVId,
-            inv_date: document.getElementById('inv-date')?.value || new Date().toISOString().split('T')[0],
-            po_number: document.getElementById('inv-po-select')?.value || '',
-            exporter: {
-                name: document.getElementById('inv-exporter-name')?.value || '',
-                contact: document.getElementById('inv-exporter-contact')?.value || '',
-                email: document.getElementById('inv-exporter-email')?.value || '',
-                phone: document.getElementById('inv-exporter-phone')?.value || ''
-            },
-            importer: {
-                name: document.getElementById('inv-importer-name')?.value || '',
-                contact: document.getElementById('inv-importer-contact')?.value || '',
-                email: document.getElementById('inv-importer-email')?.value || '',
-                phone: document.getElementById('inv-importer-phone')?.value || ''
-            },
-            incoterms: document.getElementById('inv-incoterms')?.value || 'FOB',
-            payment_terms: document.getElementById('inv-payment-terms')?.value || 'TT',
-            currency: document.getElementById('inv-currency')?.value || 'USD',
-            due_date: document.getElementById('inv-due-date')?.value || '',
-            delivery_date: document.getElementById('inv-delivery-date')?.value || '',
-            notes: document.getElementById('inv-notes')?.value || '',
+        var data = {
+            buyerName: document.getElementById('inv-importer-name')?.value || '',
+            buyerEmail: document.getElementById('inv-importer-email')?.value || undefined,
             items: items,
-            applied_credits: appliedCredits
+            currency: document.getElementById('inv-currency')?.value || 'USD',
+            incoterms: document.getElementById('inv-incoterms')?.value || 'FOB',
+            paymentMethod: document.getElementById('inv-payment-terms')?.value || 'TT',
+            remarks: document.getElementById('inv-notes')?.value || undefined
         };
+
+        // Only include on create
+        if (isNewMode) {
+            data.poNumber = document.getElementById('inv-po-select')?.value || undefined;
+            data.piDate = document.getElementById('inv-date')?.value || new Date().toISOString().split('T')[0];
+        }
+
+        if (appliedCredits.length > 0) {
+            data.appliedCredits = appliedCredits;
+        }
+
+        return data;
     }
 
     async function saveINVToAPI(formData) {
