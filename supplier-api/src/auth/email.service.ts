@@ -73,11 +73,11 @@ export class EmailService {
       <div class="footer-tagline">Your Gateway to the <span>Korean F&amp;B Market</span></div>
       <div class="footer-divider"></div>
       <div class="footer-links">
-        <a href="#" class="footer-link">Help Center</a>
+        <a href="mailto:cs@wedealize.com" class="footer-link">Help Center</a>
         <span class="footer-sep">&middot;</span>
-        <a href="#" class="footer-link">Privacy Policy</a>
+        <a href="${this.frontendUrl}/privacy" class="footer-link">Privacy Policy</a>
         <span class="footer-sep">&middot;</span>
-        <a href="#" class="footer-link">Terms of Service</a>
+        <a href="${this.frontendUrl}/terms" class="footer-link">Terms of Service</a>
       </div>
       <div class="footer-contact">
         Need help? Contact us at <a href="mailto:cs@wedealize.com">cs@wedealize.com</a>
@@ -408,7 +408,7 @@ ${extraCss}
       return false;
     }
 
-    const dashboardLink = this.frontendUrl;
+    const dashboardLink = `${this.frontendUrl}/portal.html`;
 
     const extraCss = `
       .cta-wrapper { margin-bottom: 36px; }
