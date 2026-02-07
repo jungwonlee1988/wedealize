@@ -648,12 +648,17 @@
         var container = document.getElementById(containerId);
         if (!container) return;
         var selected = selectedSlugs || [];
-        var html = '';
+        var html = '<div class="wd-cat-selected-tags" id="cat-selected-tags"></div>';
         for (var group in CATEGORY_GROUPS) {
             var slugs = CATEGORY_GROUPS[group];
-            html += '<div class="wd-category-group" data-group="' + group + '">';
+            var hasChecked = slugs.some(function(s) { return selected.includes(s); });
+            html += '<div class="wd-category-group" data-group="' + group + '" data-group-lower="' + group.toLowerCase() + '">';
+            html += '<div class="wd-cat-group-header" onclick="toggleCategoryGroup(this)">';
+            html += '<span class="wd-cat-group-arrow' + (hasChecked ? ' open' : '') + '">&#9654;</span>';
             html += '<h5 class="wd-category-group-title">' + group + '</h5>';
-            html += '<div class="wd-checkbox-grid">';
+            html += '<span class="wd-cat-group-count" data-group-count="' + group + '"></span>';
+            html += '</div>';
+            html += '<div class="wd-checkbox-grid"' + (hasChecked ? '' : ' style="display:none"') + '>';
             for (var i = 0; i < slugs.length; i++) {
                 var slug = slugs[i];
                 var checked = selected.includes(slug) ? 'checked' : '';
@@ -668,10 +673,56 @@
         updateRegCategoryCount();
     };
 
+    window.toggleCategoryGroup = function(header) {
+        var grid = header.nextElementSibling;
+        var arrow = header.querySelector('.wd-cat-group-arrow');
+        if (grid.style.display === 'none') {
+            grid.style.display = '';
+            arrow.classList.add('open');
+        } else {
+            grid.style.display = 'none';
+            arrow.classList.remove('open');
+        }
+    };
+
     window.updateRegCategoryCount = function() {
-        var count = document.querySelectorAll('#reg-categories-container input:checked').length;
+        var checked = document.querySelectorAll('#reg-categories-container input:checked');
+        var count = checked.length;
         var badge = document.getElementById('reg-category-count');
         if (badge) badge.textContent = count + ' selected';
+
+        // Update group counts
+        for (var group in CATEGORY_GROUPS) {
+            var slugs = CATEGORY_GROUPS[group];
+            var groupCount = 0;
+            slugs.forEach(function(slug) {
+                var cb = document.querySelector('#reg-categories-container input[value="' + slug + '"]');
+                if (cb && cb.checked) groupCount++;
+            });
+            var countEl = document.querySelector('[data-group-count="' + group + '"]');
+            if (countEl) countEl.textContent = groupCount > 0 ? groupCount : '';
+        }
+
+        // Render selected tags
+        var tagsContainer = document.getElementById('cat-selected-tags');
+        if (tagsContainer) {
+            if (count === 0) {
+                tagsContainer.innerHTML = '';
+                return;
+            }
+            var tagsHtml = '';
+            checked.forEach(function(cb) {
+                var label = CATEGORY_LABELS[cb.value] || cb.value;
+                tagsHtml += '<span class="wd-cat-tag">' + label +
+                    '<button type="button" onclick="removeCategoryTag(\'' + cb.value + '\')">\u00D7</button></span>';
+            });
+            tagsContainer.innerHTML = tagsHtml;
+        }
+    };
+
+    window.removeCategoryTag = function(slug) {
+        var cb = document.querySelector('#reg-categories-container input[value="' + slug + '"]');
+        if (cb) { cb.checked = false; updateRegCategoryCount(); }
     };
 
     window.filterRegCategories = function(query) {
@@ -679,15 +730,24 @@
         var container = document.getElementById('reg-categories-container');
         if (!container) return;
         container.querySelectorAll('.wd-category-group').forEach(function(group) {
+            var groupName = group.getAttribute('data-group-lower') || '';
+            var groupMatch = !q || groupName.includes(q);
             var anyVisible = false;
+            var grid = group.querySelector('.wd-checkbox-grid');
+            var arrow = group.querySelector('.wd-cat-group-arrow');
             group.querySelectorAll('.wd-checkbox-card').forEach(function(card) {
                 var label = card.getAttribute('data-label') || '';
                 var slug = card.getAttribute('data-slug') || '';
-                var match = !q || label.includes(q) || slug.includes(q);
+                var match = groupMatch || label.includes(q) || slug.includes(q);
                 card.style.display = match ? '' : 'none';
                 if (match) anyVisible = true;
             });
             group.style.display = anyVisible ? '' : 'none';
+            // Auto expand matching groups when searching
+            if (q && anyVisible && grid) {
+                grid.style.display = '';
+                if (arrow) arrow.classList.add('open');
+            }
         });
     };
 

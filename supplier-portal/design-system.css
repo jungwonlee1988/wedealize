@@ -2191,16 +2191,77 @@
 
 /* ==================== Category Groups ==================== */
 .wd-category-group {
-    margin-bottom: var(--wd-space-4);
+    margin-bottom: 4px;
+}
+
+.wd-cat-group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 4px;
+    cursor: pointer;
+    user-select: none;
+    border-radius: var(--wd-radius-md);
+}
+.wd-cat-group-header:hover {
+    background: var(--wd-gray-50);
+}
+
+.wd-cat-group-arrow {
+    font-size: 10px;
+    color: var(--wd-gray-400);
+    transition: transform 0.2s ease;
+}
+.wd-cat-group-arrow.open {
+    transform: rotate(90deg);
 }
 
 .wd-category-group-title {
-    font-size: var(--wd-font-size-xs);
+    font-size: var(--wd-font-size-sm);
     font-weight: var(--wd-font-semibold);
+    color: var(--wd-gray-700);
+    margin: 0;
+}
+
+.wd-cat-group-count {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--wd-primary-dark, #b8960a);
+    min-width: 14px;
+}
+
+/* Selected tags */
+.wd-cat-selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+.wd-cat-selected-tags:empty { margin-bottom: 0; }
+
+.wd-cat-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: var(--wd-primary-bg, #fff9e0);
+    border: 1px solid var(--wd-primary);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--wd-gray-800);
+}
+.wd-cat-tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
     color: var(--wd-gray-500);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: var(--wd-space-2);
+    padding: 0;
+}
+.wd-cat-tag button:hover {
+    color: var(--wd-gray-900);
 }
 
 /* ==================== Checkbox Cards ==================== */
