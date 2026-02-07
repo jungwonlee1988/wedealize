@@ -463,17 +463,6 @@
     }
 
     /**
-     * Handle session expired
-     */
-    function handleSessionExpired() {
-        localStorage.removeItem('supplier_token');
-        showToast('Session expired. Please login again.', 'warning');
-        setTimeout(() => {
-            window.location.href = 'portal.html';
-        }, 1500);
-    }
-
-    /**
      * Handle image upload
      */
     function handleImageUpload(e) {
@@ -532,46 +521,6 @@
         }
         if (removeBtn) removeBtn.style.display = 'none';
         if (imageInput) imageInput.value = '';
-    }
-
-    /**
-     * Show toast notification
-     */
-    function showToast(message, type = 'info') {
-        // Create toast container if not exists
-        let container = document.getElementById('toast-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'toast-container';
-            document.body.appendChild(container);
-        }
-
-        // Create toast element
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-
-        const icons = {
-            success: '&#10003;',
-            error: '&#10007;',
-            warning: '&#9888;',
-            info: '&#8505;'
-        };
-
-        toast.innerHTML = `
-            <span class="toast-icon">${icons[type] || icons.info}</span>
-            <span class="toast-message">${message}</span>
-        `;
-
-        container.appendChild(toast);
-
-        // Show animation
-        setTimeout(() => toast.classList.add('show'), 10);
-
-        // Auto remove
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
     }
 
 })();

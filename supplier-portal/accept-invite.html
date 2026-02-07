@@ -128,17 +128,54 @@
                 return;
             }
 
-            // Check if user is already logged in
-            const token = localStorage.getItem('wedealize_token');
+            // Fetch invite info from backend
+            let inviteInfo;
+            try {
+                const res = await fetch(API_BASE_URL + '/team/invite-info?token=' + encodeURIComponent(inviteToken));
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.message || 'Invalid invitation');
+                }
+                inviteInfo = await res.json();
+            } catch (e) {
+                document.getElementById('error-message').textContent = e.message || 'This invitation link is invalid or has expired.';
+                showState('error-state');
+                return;
+            }
+
+            const invitedEmail = inviteInfo.email;
+            const companyName = inviteInfo.companyName;
+
+            // Check if user is logged in
+            const token = localStorage.getItem('supplier_token');
 
             if (token) {
-                // User is logged in, try to accept directly
-                showState('login-state');
-                document.getElementById('invite-details').textContent = 'Click the button below to accept the invitation and join the team.';
+                // Decode JWT to get logged-in email
+                let loggedInEmail = '';
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    loggedInEmail = payload.email || '';
+                } catch (e) { /* ignore */ }
+
+                if (loggedInEmail.toLowerCase() === invitedEmail.toLowerCase()) {
+                    // Logged-in email matches invited email — show accept button
+                    showState('login-state');
+                    document.getElementById('invite-details').textContent =
+                        'You have been invited to join ' + companyName + ' as ' + inviteInfo.role + '. Click the button below to accept.';
+                } else {
+                    // Logged in as different account
+                    showState('signup-state');
+                    document.querySelector('#signup-state .wd-auth-title').textContent = 'Different Account';
+                    document.querySelector('#signup-state .wd-auth-subtitle').textContent =
+                        'This invitation was sent to ' + invitedEmail + ', but you are logged in as ' + loggedInEmail + '. Please log out and sign in with the correct account.';
+                    document.querySelector('#signup-state .wd-btn').textContent = 'Go to Sign In';
+                    document.querySelector('#signup-state .wd-btn').onclick = function() { window.location.href = 'portal.html'; };
+                }
             } else {
-                // User needs to sign up or log in first
-                // Try to accept anyway — backend will validate
-                await acceptInvitation();
+                // Not logged in — show signup/login guidance
+                document.querySelector('#signup-state .wd-auth-subtitle').textContent =
+                    'This invitation was sent to ' + invitedEmail + '. Please sign up or sign in with that email first, then click the invitation link again.';
+                showState('signup-state');
             }
         }
 

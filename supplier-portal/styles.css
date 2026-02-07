@@ -97,7 +97,6 @@ body {
 /* 대시보드 모드일 때 로고 영역 스타일 */
 body.dashboard-mode .logo {
     background: var(--white);
-    border-right: 1px solid var(--gray-200);
 }
 
 body.dashboard-mode .logo img {

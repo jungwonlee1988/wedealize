@@ -355,14 +355,6 @@
         return await response.json();
     }
 
-    function handleSessionExpired() {
-        localStorage.removeItem('supplier_token');
-        showToast('Session expired. Please login again.', 'warning');
-        setTimeout(() => {
-            window.location.href = 'portal.html';
-        }, 1500);
-    }
-
     // Global functions
     window.saveINV = async function() {
         const saveBtn = document.getElementById('save-btn');
@@ -561,29 +553,4 @@
         setTimeout(() => window.print(), 500);
     };
 
-    function showToast(message, type = 'info') {
-        if (typeof window.showToast === 'function') {
-            window.showToast(message, type);
-            return;
-        }
-
-        let container = document.getElementById('toast-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'toast-container';
-            document.body.appendChild(container);
-        }
-
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        const icons = { success: '✓', error: '✗', warning: '⚠', info: 'ℹ' };
-        toast.innerHTML = `<span class="toast-icon">${icons[type] || icons.info}</span><span class="toast-message">${message}</span>`;
-        container.appendChild(toast);
-
-        setTimeout(() => toast.classList.add('show'), 10);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
 })();

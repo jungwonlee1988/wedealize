@@ -71,6 +71,9 @@
             case 'product-list':
                 if (typeof loadProducts === 'function') loadProducts();
                 break;
+            case 'catalog':
+                if (typeof loadUploadHistory === 'function') loadUploadHistory();
+                break;
             case 'po-management':
                 if (typeof loadPOListFromAPI === 'function') loadPOListFromAPI();
                 break;
@@ -86,18 +89,12 @@
             case 'buyer-discovery':
                 if (typeof loadInquiredBuyers === 'function') loadInquiredBuyers();
                 break;
-            case 'inquiries':
-                if (typeof loadInquiriesFromAPI === 'function') loadInquiriesFromAPI();
-                break;
             case 'profile':
                 if (typeof loadCompanyCerts === 'function') loadCompanyCerts();
                 break;
             case 'settings':
                 if (typeof loadTeamMembers === 'function') loadTeamMembers();
                 break;
-        }
-        if (sectionName === 'catalog') {
-            if (typeof loadUploadHistory === 'function') loadUploadHistory();
         }
     };
 
@@ -125,6 +122,9 @@
             case 'product-list':
                 if (typeof loadProducts === 'function') loadProducts();
                 break;
+            case 'catalog':
+                if (typeof loadUploadHistory === 'function') loadUploadHistory();
+                break;
             case 'po-management':
                 if (typeof loadPOListFromAPI === 'function') loadPOListFromAPI();
                 break;
@@ -139,9 +139,6 @@
                 break;
             case 'buyer-discovery':
                 if (typeof loadInquiredBuyers === 'function') loadInquiredBuyers();
-                break;
-            case 'inquiries':
-                if (typeof loadInquiriesFromAPI === 'function') loadInquiriesFromAPI();
                 break;
             case 'profile':
                 if (typeof loadCompanyCerts === 'function') loadCompanyCerts();
