@@ -173,6 +173,8 @@
                 }
             } else {
                 // Not logged in
+                // Save invite token so login flow can redirect back
+                localStorage.setItem('pending_invite_token', inviteToken);
                 if (inviteInfo.hasAccount) {
                     // Already has account — show sign in
                     document.querySelector('#signup-state .wd-auth-title').textContent = 'Sign In Required';
