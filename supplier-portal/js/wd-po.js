@@ -289,7 +289,7 @@
             paymentTerms: document.getElementById('add-po-payment-terms')?.value || undefined,
             items: items,
             notes: document.getElementById('add-po-notes')?.value || undefined,
-            status: 'pending'
+            status: 'received'
         };
 
         try {
@@ -309,40 +309,7 @@
         }
     };
 
-    window.savePOAsDraft = async function() {
-        var items = window.collectPOItems();
-        var poData = {
-            poNumber: document.getElementById('add-po-number')?.value || undefined,
-            orderDate: document.getElementById('add-po-date')?.value || undefined,
-            buyerName: document.getElementById('add-po-buyer-company')?.value || '',
-            buyerContact: document.getElementById('add-po-buyer-contact')?.value || undefined,
-            buyerEmail: document.getElementById('add-po-buyer-email')?.value || undefined,
-            buyerPhone: document.getElementById('add-po-buyer-phone')?.value || undefined,
-            buyerAddress: document.getElementById('add-po-buyer-address')?.value || undefined,
-            currency: document.getElementById('add-po-currency')?.value || 'USD',
-            incoterms: document.getElementById('add-po-incoterms')?.value || undefined,
-            paymentTerms: document.getElementById('add-po-payment-terms')?.value || undefined,
-            items: items,
-            notes: document.getElementById('add-po-notes')?.value || undefined,
-            status: 'draft'
-        };
-
-        try {
-            var endpoint = window._editingPOId ? '/po/' + window._editingPOId : '/po';
-            var method = window._editingPOId ? 'PATCH' : 'POST';
-
-            await apiCall(endpoint, {
-                method: method,
-                body: JSON.stringify(poData)
-            });
-
-            showToast('PO saved as draft!', 'success');
-            window.closeAddPOModal();
-            if (typeof window.loadPOListFromAPI === 'function') window.loadPOListFromAPI();
-        } catch (e) {
-            showToast(e.message || 'Failed to save draft', 'error');
-        }
-    };
+    // savePOAsDraft removed — PO status is now always 'received' on create
 
     window.addPOItemRow = function() {
         var tbody = document.getElementById('add-po-items-tbody');
@@ -531,7 +498,7 @@
             var updatedAt = order.updated_at || order.created_at || '';
             var orderId = order.id || '';
 
-            var statusLabels = {draft:'Draft',pending:'Pending',confirmed:'Confirmed',shipping:'Shipping',delivered:'Delivered',cancelled:'Cancelled'};
+            var statusLabels = {received:'Received',confirmed:'Confirmed',cancelled:'Cancelled',draft:'Draft',pending:'Received',shipping:'Shipping',delivered:'Delivered'};
             var statusLabel = statusLabels[status] || status;
 
             return '<tr data-status="' + status + '" data-po="' + poNumber + '" onclick="viewPODetail(\'' + orderId + '\')" class="wd-table-row-clickable">' +

@@ -12,7 +12,7 @@
     // Demo PO data for detail view
     const demoPOData = {
         'PO-2026-0051': {
-            po_number: 'PO-2026-0051', status: 'Draft', statusClass: 'wd-badge-gray', date: '2026.02.05 09:30',
+            po_number: 'PO-2026-0051', status: 'received', statusClass: 'wd-badge-info', date: '2026.02.05 09:30',
             exporter: { name: 'DELIFRANCE', contact: 'Anne, CHU', email: 'anne.chu@delifrance.com', phone: '+33 6 73 18 08 52' },
             importer: { name: 'SELLER-NOTE.CO.,LTD', contact: 'Jay', email: 'jay@seller-note.com', phone: '+82 10 2638 7225' },
             incoterms: 'FCA', paymentTerms: 'TT', currency: 'EUR', notes: '',
@@ -334,7 +334,6 @@
         if (!validateRequired()) return;
 
         var formData = collectFormData();
-        formData.status = 'created';
 
         var submitBtn = document.querySelector('button[type="submit"]');
         var originalText = submitBtn.innerHTML;
@@ -407,22 +406,51 @@
         saveBtn.disabled = false;
     };
 
-    window.savePOAsDraft = async function() {
-        if (!validateRequired()) return;
-
-        var formData = collectFormData();
-        formData.status = 'draft';
-
+    window.confirmPOFromDetail = async function() {
+        if (!currentPOId || isNewMode) return;
         try {
-            await savePOToAPI(formData);
-            showToast('PO saved as draft', 'success');
-            setTimeout(function() {
-                window.location.href = 'portal.html#po-management';
-            }, 1000);
+            var token = localStorage.getItem('supplier_token');
+            var response = await fetch(API_BASE_URL + '/po/' + currentPOId + '/confirm', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (response.status === 401) { handleSessionExpired(); return; }
+            if (!response.ok) {
+                var err = await response.json().catch(function() { return {}; });
+                throw new Error(err.message || 'Failed to confirm PO');
+            }
+            showToast('PO confirmed', 'success');
+            setTimeout(function() { location.reload(); }, 1000);
         } catch (error) {
-            console.error('Save draft error:', error);
-            showToast(error.message || 'Failed to save draft', 'error');
+            showToast(error.message || 'Failed to confirm PO', 'error');
         }
+    };
+
+    window.cancelPOFromDetail = async function() {
+        if (!currentPOId || isNewMode) return;
+        var poNumber = document.getElementById('po-number-display')?.textContent || currentPOId;
+        showDeleteConfirm({
+            title: 'Cancel PO',
+            message: 'Are you sure you want to cancel <strong>' + escapeHtml(poNumber) + '</strong>?',
+            onConfirm: async function() {
+                try {
+                    var token = localStorage.getItem('supplier_token');
+                    var response = await fetch(API_BASE_URL + '/po/' + currentPOId + '/cancel', {
+                        method: 'POST',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    if (response.status === 401) { handleSessionExpired(); return; }
+                    if (!response.ok) {
+                        var err = await response.json().catch(function() { return {}; });
+                        throw new Error(err.message || 'Failed to cancel PO');
+                    }
+                    showToast('PO cancelled', 'success');
+                    setTimeout(function() { location.reload(); }, 1000);
+                } catch (error) {
+                    showToast(error.message || 'Failed to cancel PO', 'error');
+                }
+            }
+        });
     };
 
     window.addPOItemRow = function(item) {
