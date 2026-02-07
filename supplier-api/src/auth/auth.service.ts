@@ -44,7 +44,8 @@ export class AuthService {
 
     // Generate verification code
     const code = this.generateVerificationCode();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    const expiryMs = this.configService.get<number>('business.verificationCodeExpiryMs') || 600000;
+    const expiresAt = new Date(Date.now() + expiryMs);
 
     // Delete any existing verification codes for this email
     await supabase
@@ -552,7 +553,8 @@ export class AuthService {
     const invitedAt = new Date(member.invited_at);
     const now = new Date();
     const diffDays = (now.getTime() - invitedAt.getTime()) / (1000 * 60 * 60 * 24);
-    if (diffDays > 7) {
+    const inviteExpiryDays = this.configService.get<number>('business.teamInviteExpiryDays') || 7;
+    if (diffDays > inviteExpiryDays) {
       throw new BadRequestException('This invitation has expired');
     }
 

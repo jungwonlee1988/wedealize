@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { SupabaseService } from '../config/supabase.service';
 import { UpdateSupplierDto } from './dto/admin-supplier.dto';
 
@@ -82,7 +82,7 @@ export class AdminService {
 
     if (error) {
       this.logger.error('Failed to fetch suppliers:', error);
-      throw new Error('Failed to fetch suppliers');
+      throw new BadRequestException('Failed to fetch suppliers');
     }
 
     const total = count || 0;
@@ -251,7 +251,7 @@ export class AdminService {
 
     if (error) {
       this.logger.error('Failed to update supplier:', error);
-      throw new Error('Failed to update supplier');
+      throw new BadRequestException('Failed to update supplier');
     }
 
     return data;
@@ -279,7 +279,7 @@ export class AdminService {
 
     if (error) {
       this.logger.error('Failed to toggle supplier status:', error);
-      throw new Error('Failed to toggle supplier status');
+      throw new BadRequestException('Failed to toggle supplier status');
     }
 
     return data;
@@ -305,7 +305,7 @@ export class AdminService {
 
     if (error) {
       this.logger.error('Failed to delete supplier:', error);
-      throw new Error('Failed to delete supplier');
+      throw new BadRequestException('Failed to delete supplier');
     }
 
     return { message: `Supplier "${existing.company_name}" deleted successfully` };
@@ -524,7 +524,7 @@ export class AdminService {
 
     if (error) {
       this.logger.error('Failed to export suppliers:', error);
-      throw new Error('Failed to export suppliers');
+      throw new BadRequestException('Failed to export suppliers');
     }
 
     // Build CSV

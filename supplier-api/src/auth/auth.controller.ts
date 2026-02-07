@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { RegisterDto, SendVerificationDto, VerifyEmailDto } from './dto/register.dto';
 import { LoginDto, GoogleAuthDto, ForgotPasswordDto, ResetPasswordDto } from './dto/login.dto';
 import { InviteTeamMemberDto, AcceptInviteDto, UpdateTeamMemberDto } from './dto/invite.dto';
+import { SwitchWorkspaceDto } from './dto/workspace.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('Authentication')
@@ -77,8 +78,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Switch to a different workspace' })
   @ApiResponse({ status: 200, description: 'Workspace switched, new token issued' })
-  async switchWorkspace(@Request() req, @Body() body: { supplierId: string }) {
-    return this.authService.switchWorkspace(req.user.actor_email, body.supplierId);
+  async switchWorkspace(@Request() req, @Body() dto: SwitchWorkspaceDto) {
+    return this.authService.switchWorkspace(req.user.actor_email, dto.supplierId);
   }
 
   // ==================== Team Management ====================

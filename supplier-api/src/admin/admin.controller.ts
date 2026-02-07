@@ -1,26 +1,16 @@
 import {
-  Controller, Get, Patch, Delete, Query, Param, Body, Headers, Header,
-  UnauthorizedException,
+  Controller, Get, Patch, Delete, Query, Param, Body, Header, UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiResponse, ApiParam } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
 import { AdminService, SupplierListQuery } from './admin.service';
 import { UpdateSupplierDto } from './dto/admin-supplier.dto';
+import { AdminKeyGuard } from './guards/admin-key.guard';
 
 @ApiTags('Admin')
 @Controller('api/v1/admin')
+@UseGuards(AdminKeyGuard)
 export class AdminController {
-  constructor(
-    private readonly adminService: AdminService,
-    private readonly configService: ConfigService,
-  ) {}
-
-  private validateAdminKey(adminKey: string): void {
-    const validKey = this.configService.get<string>('adminKey') || 'wedealize-admin-2024';
-    if (adminKey !== validKey) {
-      throw new UnauthorizedException('Invalid admin key');
-    }
-  }
+  constructor(private readonly adminService: AdminService) {}
 
   // ───── Supplier List & Filters ─────
 
@@ -34,7 +24,6 @@ export class AdminController {
   @ApiQuery({ name: 'startDate', required: false, type: String })
   @ApiQuery({ name: 'endDate', required: false, type: String })
   async getSuppliers(
-    @Headers('x-admin-key') adminKey: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
     @Query('search') search?: string,
@@ -43,8 +32,6 @@ export class AdminController {
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
   ) {
-    this.validateAdminKey(adminKey);
-
     const query: SupplierListQuery = {
       page: page ? parseInt(page, 10) : 1,
       limit: limit ? parseInt(limit, 10) : 20,
@@ -60,22 +47,19 @@ export class AdminController {
 
   @Get('suppliers/stats')
   @ApiOperation({ summary: 'Get supplier statistics' })
-  async getSupplierStats(@Headers('x-admin-key') adminKey: string) {
-    this.validateAdminKey(adminKey);
+  async getSupplierStats() {
     return this.adminService.getSupplierStats();
   }
 
   @Get('suppliers/countries')
   @ApiOperation({ summary: 'Get list of unique countries' })
-  async getCountries(@Headers('x-admin-key') adminKey: string) {
-    this.validateAdminKey(adminKey);
+  async getCountries() {
     return this.adminService.getCountries();
   }
 
   @Get('suppliers/categories')
   @ApiOperation({ summary: 'Get list of unique categories' })
-  async getCategories(@Headers('x-admin-key') adminKey: string) {
-    this.validateAdminKey(adminKey);
+  async getCategories() {
     return this.adminService.getCategories();
   }
 
@@ -89,12 +73,10 @@ export class AdminController {
   @ApiQuery({ name: 'country', required: false, type: String })
   @ApiQuery({ name: 'category', required: false, type: String })
   async exportSuppliers(
-    @Headers('x-admin-key') adminKey: string,
     @Query('search') search?: string,
     @Query('country') country?: string,
     @Query('category') category?: string,
   ) {
-    this.validateAdminKey(adminKey);
     return this.adminService.exportSuppliers({ search, country, category });
   }
 
@@ -103,11 +85,7 @@ export class AdminController {
   @Get('suppliers/:id')
   @ApiOperation({ summary: 'Get supplier detail with related counts' })
   @ApiParam({ name: 'id', type: String })
-  async getSupplierDetail(
-    @Headers('x-admin-key') adminKey: string,
-    @Param('id') id: string,
-  ) {
-    this.validateAdminKey(adminKey);
+  async getSupplierDetail(@Param('id') id: string) {
     return this.adminService.getSupplierDetail(id);
   }
 
@@ -115,11 +93,9 @@ export class AdminController {
   @ApiOperation({ summary: 'Update supplier info' })
   @ApiParam({ name: 'id', type: String })
   async updateSupplier(
-    @Headers('x-admin-key') adminKey: string,
     @Param('id') id: string,
     @Body() dto: UpdateSupplierDto,
   ) {
-    this.validateAdminKey(adminKey);
     return this.adminService.updateSupplier(id, dto);
   }
 
@@ -127,22 +103,16 @@ export class AdminController {
   @ApiOperation({ summary: 'Toggle supplier active status' })
   @ApiParam({ name: 'id', type: String })
   async toggleSupplierStatus(
-    @Headers('x-admin-key') adminKey: string,
     @Param('id') id: string,
     @Body('isActive') isActive: boolean,
   ) {
-    this.validateAdminKey(adminKey);
     return this.adminService.toggleSupplierStatus(id, isActive);
   }
 
   @Delete('suppliers/:id')
   @ApiOperation({ summary: 'Permanently delete a supplier' })
   @ApiParam({ name: 'id', type: String })
-  async deleteSupplier(
-    @Headers('x-admin-key') adminKey: string,
-    @Param('id') id: string,
-  ) {
-    this.validateAdminKey(adminKey);
+  async deleteSupplier(@Param('id') id: string) {
     return this.adminService.deleteSupplier(id);
   }
 
@@ -150,8 +120,7 @@ export class AdminController {
 
   @Get('stats/platform')
   @ApiOperation({ summary: 'Get platform-wide statistics' })
-  async getPlatformStats(@Headers('x-admin-key') adminKey: string) {
-    this.validateAdminKey(adminKey);
+  async getPlatformStats() {
     return this.adminService.getPlatformStats();
   }
 
@@ -160,11 +129,9 @@ export class AdminController {
   @ApiQuery({ name: 'period', required: false, enum: ['daily', 'weekly', 'monthly'] })
   @ApiQuery({ name: 'days', required: false, type: Number })
   async getSignupTrends(
-    @Headers('x-admin-key') adminKey: string,
     @Query('period') period?: string,
     @Query('days') days?: string,
   ) {
-    this.validateAdminKey(adminKey);
     return this.adminService.getSignupTrends(
       period || 'daily',
       days ? parseInt(days, 10) : 30,
@@ -173,8 +140,7 @@ export class AdminController {
 
   @Get('stats/distributions')
   @ApiOperation({ summary: 'Get category and country distribution data' })
-  async getDistributions(@Headers('x-admin-key') adminKey: string) {
-    this.validateAdminKey(adminKey);
+  async getDistributions() {
     return this.adminService.getDistributions();
   }
 
@@ -183,11 +149,7 @@ export class AdminController {
   @Get('activity/recent')
   @ApiOperation({ summary: 'Get recent activity feed' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  async getRecentActivity(
-    @Headers('x-admin-key') adminKey: string,
-    @Query('limit') limit?: string,
-  ) {
-    this.validateAdminKey(adminKey);
+  async getRecentActivity(@Query('limit') limit?: string) {
     return this.adminService.getRecentActivity(limit ? parseInt(limit, 10) : 20);
   }
 }

@@ -29,7 +29,15 @@ export default () => ({
 
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
 
-  anthropic: { apiKey: process.env.ANTHROPIC_API_KEY || '' },
+  anthropic: {
+    apiKey: process.env.ANTHROPIC_API_KEY || '',
+    model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929',
+  },
 
   adminKey: process.env.ADMIN_KEY || 'wedealize-admin-2024',
+
+  business: {
+    verificationCodeExpiryMs: 10 * 60 * 1000,
+    teamInviteExpiryDays: 7,
+  },
 });
